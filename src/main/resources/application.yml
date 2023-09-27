@@ -1,0 +1,27 @@
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/testDB?useSSL=false&serverTimezone=UTC
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+logging:
+  level:
+    root: INFO
+  pattern:
+    file: '%-5level %d{yy-MM-dd HH:mm:SSS}[%thread] %logger[%thod:%line] - %msg%n'
+  file:
+    name: ./logs/oDuck.log
+  logback:
+    rollingpolicy:
+      max-file-size: 100KB #default 10M
+      max-history: 30 #default 7
+      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz
