@@ -1,4 +1,4 @@
-package io.oduck.api.golbal.audit;
+package io.oduck.api.global.audit;
 
 import java.time.LocalDateTime;
 
