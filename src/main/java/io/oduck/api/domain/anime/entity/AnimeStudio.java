@@ -2,7 +2,6 @@ package io.oduck.api.domain.anime.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import io.oduck.api.domain.studio.entity.Studio;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

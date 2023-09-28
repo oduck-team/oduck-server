@@ -3,9 +3,10 @@ package io.oduck.api.domain.anime.entity;
 import io.oduck.api.domain.attractionPoint.entity.AttractionPoint;
 import io.oduck.api.domain.bookmark.entity.Bookmark;
 import io.oduck.api.domain.review.entity.ShortReview;
+import io.oduck.api.domain.starRating.entity.StarRating;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
-import java.util.Set;
+import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 
 import io.oduck.api.domain.anime.dto.AnimeReq;
@@ -73,29 +74,28 @@ public class Anime extends DeletableEntity {
   private Series series;
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
-  private Set<AnimeOriginalAuthor> animeOriginalAuthors;
+  private List<AnimeOriginalAuthor> animeOriginalAuthors;
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
-  private Set<AnimeStudio> animeStudios;
+  private List<AnimeStudio> animeStudios;
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
-  private Set<AnimeVoiceActor> animeVoiceActors;
+  private List<AnimeVoiceActor> animeVoiceActors;
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
-  private Set<AnimeGenre> animeGenres;
+  private List<AnimeGenre> animeGenres;
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
-  private Set<Bookmark> bookMarks;
+  private List<Bookmark> bookMarks;
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
-  private Set<ShortReview> shortReviews;
+  private List<ShortReview> shortReviews;
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
-  private Set<Rating> ratings;
+  private List<StarRating> starRatings;
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
-  private Set<AttractionPoint> attractionPoints;
-
+  private List<AttractionPoint> attractionPoints;
 
   static public Anime creatAnime(AnimeReq req, Series series) {
     Anime anime = new Anime();

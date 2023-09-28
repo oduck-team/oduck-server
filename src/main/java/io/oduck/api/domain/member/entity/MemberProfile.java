@@ -2,6 +2,8 @@ package io.oduck.api.domain.member.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -29,11 +32,16 @@ public class MemberProfile {
   @Column(nullable = false, length = 50)
   private String info;
 
+  @Enumerated(EnumType.STRING)
   private Role role;
 
+  @Column(length = 100)
   private String thumbnail;
 
-  private String backgrounImage;
+  @Column(length = 100)
+  private String backgroundImage;
 
+  @Column(nullable = false)
+  @ColumnDefault("0")
   private Long point;
 }

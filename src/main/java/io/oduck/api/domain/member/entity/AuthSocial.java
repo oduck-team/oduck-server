@@ -1,6 +1,5 @@
 package io.oduck.api.domain.member.entity;
 
-import aj.org.objectweb.asm.Type;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

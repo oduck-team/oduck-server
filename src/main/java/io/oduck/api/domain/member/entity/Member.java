@@ -1,11 +1,13 @@
 package io.oduck.api.domain.member.entity;
 
+import io.oduck.api.domain.attractionPoint.entity.AttractionPoint;
 import io.oduck.api.domain.bookmark.entity.Bookmark;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.reviewLike.entity.ShortReviewLike;
+import io.oduck.api.domain.starRating.entity.StarRating;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import java.util.Set;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -38,11 +40,17 @@ public class Member {
   private MemberProfile memberProfile;
 
   @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
-  private Set<Bookmark> bookMarks;
+  private List<Bookmark> bookMarks;
 
   @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
-  private Set<ShortReview> shortReviews;
+  private List<ShortReview> shortReviews;
 
   @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
-  private Set<ShortReviewLike> shortReviewLikes;
+  private List<ShortReviewLike> shortReviewLikes;
+
+  @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
+  private List<StarRating> starRatings;
+
+  @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
+  private List<AttractionPoint> attractionPoints;
 }

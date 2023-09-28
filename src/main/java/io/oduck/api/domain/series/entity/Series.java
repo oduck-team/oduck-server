@@ -9,7 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import java.util.Set;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,5 +26,5 @@ public class Series extends DeletableEntity {
   private String title;
 
   @OneToMany(mappedBy = "series", cascade = CascadeType.PERSIST)
-  private Set<Anime> animes;
+  private List<Anime> animes;
 }

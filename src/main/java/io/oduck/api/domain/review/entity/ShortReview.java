@@ -13,7 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import java.util.Set;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,5 +40,5 @@ public class ShortReview {
   private boolean has_spoiler;
 
   @OneToMany(mappedBy = "shortReview", cascade = CascadeType.PERSIST)
-  private Set<ShortReviewLike> shortReviewLikes;
+  private List<ShortReviewLike> shortReviewLikes;
 }
