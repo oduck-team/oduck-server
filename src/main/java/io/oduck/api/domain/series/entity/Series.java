@@ -1,11 +1,15 @@
 package io.oduck.api.domain.series.entity;
 
-import io.oduck.api.golbal.audit.DeletableEntity;
+import io.oduck.api.domain.anime.entity.Anime;
+import io.oduck.api.global.audit.DeletableEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,9 +24,6 @@ public class Series extends DeletableEntity {
   @Column(nullable = false, length = 50)
   private String title;
 
-  static public Series create(String title) {
-    Series series = new Series();
-    series.title = title;
-    return series;
-  }
+  @OneToMany(mappedBy = "series", cascade = CascadeType.PERSIST)
+  private Set<Anime> animes;
 }

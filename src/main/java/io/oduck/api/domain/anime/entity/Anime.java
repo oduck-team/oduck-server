@@ -1,10 +1,16 @@
 package io.oduck.api.domain.anime.entity;
 
+import io.oduck.api.domain.attractionPoint.entity.AttractionPoint;
+import io.oduck.api.domain.bookmark.entity.Bookmark;
+import io.oduck.api.domain.review.entity.ShortReview;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+import java.util.Set;
 import org.hibernate.annotations.ColumnDefault;
 
 import io.oduck.api.domain.anime.dto.AnimeReq;
 import io.oduck.api.domain.series.entity.Series;
-import io.oduck.api.golbal.audit.DeletableEntity;
+import io.oduck.api.global.audit.DeletableEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -65,6 +71,31 @@ public class Anime extends DeletableEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "series_id")
   private Series series;
+
+  @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
+  private Set<AnimeOriginalAuthor> animeOriginalAuthors;
+
+  @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
+  private Set<AnimeStudio> animeStudios;
+
+  @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
+  private Set<AnimeVoiceActor> animeVoiceActors;
+
+  @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
+  private Set<AnimeGenre> animeGenres;
+
+  @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
+  private Set<Bookmark> bookMarks;
+
+  @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
+  private Set<ShortReview> shortReviews;
+
+  @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
+  private Set<Rating> ratings;
+
+  @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
+  private Set<AttractionPoint> attractionPoints;
+
 
   static public Anime creatAnime(AnimeReq req, Series series) {
     Anime anime = new Anime();
