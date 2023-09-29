@@ -4,6 +4,7 @@ import io.oduck.api.domain.attractionPoint.entity.AttractionPoint;
 import io.oduck.api.domain.bookmark.entity.Bookmark;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.starRating.entity.StarRating;
+import io.oduck.api.global.audit.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
 import java.util.List;
@@ -11,7 +12,6 @@ import org.hibernate.annotations.ColumnDefault;
 
 import io.oduck.api.domain.anime.dto.AnimeReq;
 import io.oduck.api.domain.series.entity.Series;
-import io.oduck.api.global.audit.DeletableEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class Anime extends DeletableEntity {
+public class Anime extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

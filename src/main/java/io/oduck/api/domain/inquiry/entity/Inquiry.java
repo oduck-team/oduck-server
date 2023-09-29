@@ -7,8 +7,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Getter
@@ -32,4 +34,8 @@ public class Inquiry {
 
   @Enumerated(EnumType.STRING)
   private Result result;
+
+  @CreationTimestamp
+  @Column(nullable = false, updatable = false)
+  protected LocalDateTime createdAt;
 }

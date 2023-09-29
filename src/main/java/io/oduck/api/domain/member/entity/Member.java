@@ -5,6 +5,7 @@ import io.oduck.api.domain.bookmark.entity.Bookmark;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.reviewLike.entity.ShortReviewLike;
 import io.oduck.api.domain.starRating.entity.StarRating;
+import io.oduck.api.global.audit.BaseEntity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.List;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

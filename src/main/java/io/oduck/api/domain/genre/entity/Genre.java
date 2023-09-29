@@ -1,6 +1,7 @@
 package io.oduck.api.domain.genre.entity;
 
 import io.oduck.api.domain.anime.entity.AnimeGenre;
+import io.oduck.api.global.audit.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class Genre {
+public class Genre extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

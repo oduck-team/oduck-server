@@ -2,6 +2,7 @@ package io.oduck.api.domain.starRating.entity;
 
 import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.member.entity.Member;
+import io.oduck.api.global.audit.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class StarRating {
+public class StarRating extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

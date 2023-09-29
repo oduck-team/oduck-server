@@ -2,6 +2,7 @@ package io.oduck.api.domain.attractionPoint.entity;
 
 import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.member.entity.Member;
+import io.oduck.api.global.audit.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class AttractionPoint {
+public class AttractionPoint extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

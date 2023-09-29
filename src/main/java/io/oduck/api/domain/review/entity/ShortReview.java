@@ -3,6 +3,7 @@ package io.oduck.api.domain.review.entity;
 import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.reviewLike.entity.ShortReviewLike;
+import io.oduck.api.global.audit.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class ShortReview {
+public class ShortReview extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

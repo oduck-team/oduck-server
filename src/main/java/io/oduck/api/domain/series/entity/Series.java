@@ -1,7 +1,7 @@
 package io.oduck.api.domain.series.entity;
 
 import io.oduck.api.domain.anime.entity.Anime;
-import io.oduck.api.global.audit.DeletableEntity;
+import io.oduck.api.global.audit.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class Series extends DeletableEntity {
+public class Series extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
