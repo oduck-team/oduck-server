@@ -129,7 +129,7 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.item.activity.reviews").exists())
                 .andExpect(jsonPath("$.item.activity.threads").exists())
                 .andExpect(jsonPath("$.item.activity.likes").exists())
-                .andDo(document("getMemberByName/success",
+                .andDo(document("getProfileByName/success",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     pathParameters(
@@ -202,7 +202,7 @@ public class MemberControllerTest {
             // then
             actions
                 .andExpect(status().isNoContent())
-                .andDo(document("patchMember/success",
+                .andDo(document("patchProfile/success",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestFields(
