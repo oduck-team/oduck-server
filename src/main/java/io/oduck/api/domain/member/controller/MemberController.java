@@ -49,7 +49,7 @@ public class MemberController {
     // 회원 프로필 수정
     @PatchMapping
     public ResponseEntity<?> patchProfile(
-            @RequestBody PatchReq body
+            @RequestBody @Valid PatchReq body
     // TODO: 인증 정보 추가
     ) {
         // TODO: 회원 정보 수정 로직 구현
