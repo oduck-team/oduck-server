@@ -1,6 +1,6 @@
 package io.oduck.api.e2e.member;
 
-import static io.oduck.api.config.RestDocsConfig.field;
+import static io.oduck.api.global.config.RestDocsConfig.field;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;

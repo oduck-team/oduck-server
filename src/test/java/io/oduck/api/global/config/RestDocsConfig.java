@@ -1,4 +1,4 @@
-package io.oduck.api.config;
+package io.oduck.api.global.config;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import static org.springframework.restdocs.snippet.Attributes.Attribute;
