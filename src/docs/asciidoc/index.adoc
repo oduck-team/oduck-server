@@ -28,40 +28,40 @@ include::{snippets}/postMember/success/http-response.adoc[]
 === GET api/v1/members/:name
 
 .curl-request
-include::{snippets}/getMemberByName/success/curl-request.adoc[]
+include::{snippets}/getProfileByName/success/curl-request.adoc[]
 
 .http-request
-include::{snippets}/getMemberByName/success/http-request.adoc[]
+include::{snippets}/getProfileByName/success/http-request.adoc[]
 
 .request-param
-include::{snippets}/getMemberByName/success/path-parameters.adoc[]
+include::{snippets}/getProfileByName/success/path-parameters.adoc[]
 
 ==== 성공시
 .http-response
-include::{snippets}/getMemberByName/success/http-response.adoc[]
+include::{snippets}/getProfileByName/success/http-response.adoc[]
 
 .response-body
-include::{snippets}/getMemberByName/success/response-body.adoc[]
+include::{snippets}/getProfileByName/success/response-body.adoc[]
 
 .response-fields
-include::{snippets}/getMemberByName/success/response-fields.adoc[]
+include::{snippets}/getProfileByName/success/response-fields.adoc[]
 
 ==== 실패시
 
 === PATCH api/v1/members
 .curl-request
-include::{snippets}/patchMember/success/curl-request.adoc[]
+include::{snippets}/patchProfile/success/curl-request.adoc[]
 
 .http-request
-include::{snippets}/patchMember/success/http-request.adoc[]
+include::{snippets}/patchProfile/success/http-request.adoc[]
 
 .request-body
-include::{snippets}/patchMember/success/request-body.adoc[]
+include::{snippets}/patchProfile/success/request-body.adoc[]
 
 .request-fields
-include::{snippets}/patchMember/success/request-fields.adoc[]
+include::{snippets}/patchProfile/success/request-fields.adoc[]
 
 ==== 성공시
 
 .http-response
-include::{snippets}/patchMember/success/http-response.adoc[]
+include::{snippets}/patchProfile/success/http-response.adoc[]
