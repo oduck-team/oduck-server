@@ -1,0 +1,67 @@
+= oDuckio Documentation
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: API 목록
+:source-highlighter: prettify
+
+== members
+=== POST api/v1/members
+.curl-request
+include::{snippets}/postMember/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/postMember/success/http-request.adoc[]
+
+.request-body
+include::{snippets}/postMember/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/postMember/success/request-fields.adoc[]
+==== 성공시
+
+.http-response
+include::{snippets}/postMember/success/http-response.adoc[]
+
+==== 실패시
+
+=== GET api/v1/members/:name
+
+.curl-request
+include::{snippets}/getMemberByName/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getMemberByName/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/getMemberByName/success/path-parameters.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/getMemberByName/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getMemberByName/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getMemberByName/success/response-fields.adoc[]
+
+==== 실패시
+
+=== PATCH api/v1/members
+.curl-request
+include::{snippets}/patchMember/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchMember/success/http-request.adoc[]
+
+.request-body
+include::{snippets}/patchMember/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/patchMember/success/request-fields.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/patchMember/success/http-response.adoc[]
