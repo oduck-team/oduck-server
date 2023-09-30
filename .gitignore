@@ -8,6 +8,7 @@ build/
 */.DS_Store
 *.log
 *.gz
+src/main/resources/static/docs/index.html
 
 ### STS ###
 .apt_generated
