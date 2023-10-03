@@ -20,7 +20,7 @@ public class AnimeRes {
         private Long animeId;
         private String title;
         private String thumbnail;
-        private BroadCast broadCast;
+        private Broadcast broadcast;
         private String summary;
         private int episodeCount;
         private Rating rating;
@@ -36,7 +36,7 @@ public class AnimeRes {
 
     @Getter
     @Builder
-    public static class BroadCast {
+    public static class Broadcast {
         private BroadcastType broadcastType;
         private int year;
         private Quarter quarter;

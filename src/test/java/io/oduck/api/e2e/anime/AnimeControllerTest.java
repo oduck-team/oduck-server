@@ -58,9 +58,9 @@ public class AnimeControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.item.anime.title").exists())
                 .andExpect(jsonPath("$.item.anime.thumbnail").exists())
-                .andExpect(jsonPath("$.item.anime.broadCast.broadcastType").exists())
-                .andExpect(jsonPath("$.item.anime.broadCast.year").exists())
-                .andExpect(jsonPath("$.item.anime.broadCast.quarter").exists())
+                .andExpect(jsonPath("$.item.anime.broadcast.broadcastType").exists())
+                .andExpect(jsonPath("$.item.anime.broadcast.year").exists())
+                .andExpect(jsonPath("$.item.anime.broadcast.quarter").exists())
                 .andExpect(jsonPath("$.item.anime.summary").exists())
                 .andExpect(jsonPath("$.item.anime.episodeCount").exists())
                 .andExpect(jsonPath("$.item.anime.rating").exists())
@@ -100,16 +100,16 @@ public class AnimeControllerTest {
                         fieldWithPath("item.anime.thumbnail")
                             .type(JsonFieldType.STRING)
                             .description("애니 이미지, 경로로 저장됨"),
-                        fieldWithPath("item.anime.broadCast")
+                        fieldWithPath("item.anime.broadcast")
                             .type(JsonFieldType.OBJECT)
                             .description("애니 방송 관련 정보"),
-                        fieldWithPath("item.anime.broadCast.broadcastType")
+                        fieldWithPath("item.anime.broadcast.broadcastType")
                             .type(JsonFieldType.STRING)
                             .description("작품의 출시 방식. TVA, OVA, ONA, MOV가 있음"),
-                        fieldWithPath("item.anime.broadCast.year")
+                        fieldWithPath("item.anime.broadcast.year")
                             .type(JsonFieldType.NUMBER)
                             .description("작품의 출시 년도"),
-                        fieldWithPath("item.anime.broadCast.quarter")
+                        fieldWithPath("item.anime.broadcast.quarter")
                             .type(JsonFieldType.STRING)
                             .description("작품의 출시 분기"),
                         fieldWithPath("item.anime.summary")
