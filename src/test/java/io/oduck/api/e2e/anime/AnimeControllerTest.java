@@ -82,7 +82,7 @@ public class AnimeControllerTest {
                     preprocessResponse(prettyPrint()),
                     pathParameters(
                         parameterWithName("animeId")
-                            .description("애니 아이디")
+                            .description("애니의 고유 식별자")
                     ),
                     responseFields(
                         fieldWithPath("item")
@@ -91,6 +91,9 @@ public class AnimeControllerTest {
                         fieldWithPath("item.anime")
                             .type(JsonFieldType.OBJECT)
                             .description("애니 정보"),
+                        fieldWithPath("item.anime.animeId")
+                            .type(JsonFieldType.NUMBER)
+                            .description("애니의 고유 식별자"),
                         fieldWithPath("item.anime.title")
                             .type(JsonFieldType.STRING)
                             .description("애니 제목"),
