@@ -1,5 +1,6 @@
-package io.oduck.api.domain.member.entity;
+package io.oduck.api.global.security.auth.entity;
 
+import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.global.audit.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
