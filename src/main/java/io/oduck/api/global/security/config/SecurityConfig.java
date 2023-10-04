@@ -8,6 +8,7 @@ import io.oduck.api.global.security.handler.ForbiddenHandler;
 import io.oduck.api.global.security.handler.LoginFailureHandler;
 import io.oduck.api.global.security.handler.LoginSuccessHandler;
 import io.oduck.api.global.security.auth.service.CustomOAuth2UserService;
+import io.oduck.api.global.security.handler.LogoutHandler;
 import io.oduck.api.global.security.handler.UnauthorizedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
+    private final LogoutHandler logoutHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
@@ -66,8 +68,9 @@ public class SecurityConfig {
         http
             .authorizeRequests((authorizeRequests) ->
                 authorizeRequests
-                    .requestMatchers("/auth/status").hasAuthority(Role.MEMBER.name())
-                    .requestMatchers("docs/index.html").hasAuthority(Role.ADMIN.name())
+                    .requestMatchers("/auth/status").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+//                    .requestMatchers("docs/index.html").hasAuthority(Role.ADMIN.name())
+                    .requestMatchers("oduckdmin/*").hasAuthority(Role.ADMIN.name())
                     .anyRequest().permitAll()
             );
 
@@ -75,7 +78,7 @@ public class SecurityConfig {
         http
             .logout((logout) -> logout
                 .logoutUrl("/auth/logout")
-                .logoutSuccessUrl("/")
+                .logoutSuccessHandler(logoutHandler)
                 .deleteCookies("oDuckio.sid")
                 .invalidateHttpSession(true)
                 .permitAll(false)
