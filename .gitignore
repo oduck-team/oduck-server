@@ -9,6 +9,7 @@ build/
 *.log
 *.gz
 src/main/resources/static/docs/index.html
+application-*.yml
 
 ### STS ###
 .apt_generated
