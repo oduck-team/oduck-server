@@ -5,7 +5,7 @@ import io.oduck.api.global.security.auth.entity.SocialType;
 import io.oduck.api.global.security.userInfo.GoogleUserInfo;
 import io.oduck.api.global.security.userInfo.KakaoUserInfo;
 import io.oduck.api.global.security.userInfo.NaverUserInfo;
-import io.oduck.api.global.security.userInfo.UserInfo;
+import io.oduck.api.global.security.userInfo.SocialUserInfo;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,12 +18,12 @@ import lombok.Getter;
 public class OAuthAttributes {
 
     private String nameAttributeKey; // OAuth2 로그인 진행 시 키가 되는 필드 값, PK와 같은 의미
-    private UserInfo userInfo; // 소셜 타입별 로그인 유저 정보(닉네임, 이메일, 프로필 사진 등등)
+    private SocialUserInfo socialUserInfo; // 소셜 타입별 로그인 유저 정보(닉네임, 이메일, 프로필 사진 등등)
 
     @Builder
-    public OAuthAttributes(String nameAttributeKey, UserInfo userInfo) {
+    public OAuthAttributes(String nameAttributeKey, SocialUserInfo socialUserInfo) {
         this.nameAttributeKey = nameAttributeKey;
-        this.userInfo = userInfo;
+        this.socialUserInfo = socialUserInfo;
     }
 
     /**
@@ -47,21 +47,21 @@ public class OAuthAttributes {
     private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
             .nameAttributeKey(userNameAttributeName)
-            .userInfo(new KakaoUserInfo(attributes))
+            .socialUserInfo(new KakaoUserInfo(attributes))
             .build();
     }
 
     public static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
             .nameAttributeKey(userNameAttributeName)
-            .userInfo(new GoogleUserInfo(attributes))
+            .socialUserInfo(new GoogleUserInfo(attributes))
             .build();
     }
 
     public static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
             .nameAttributeKey(userNameAttributeName)
-            .userInfo(new NaverUserInfo(attributes))
+            .socialUserInfo(new NaverUserInfo(attributes))
             .build();
     }
 
@@ -72,11 +72,11 @@ public class OAuthAttributes {
      * email에는 UUID로 중복 없는 랜덤 값 생성
      * role은 GUEST로 설정
      */
-    public AuthSocial toEntity(SocialType socialType, UserInfo userInfo) {
+    public AuthSocial toEntity(SocialType socialType, SocialUserInfo socialUserInfo) {
         return AuthSocial.builder()
             .socialType(socialType)
-            .socialId(userInfo.getId())
-            .email(userInfo.getEmail())
+            .socialId(socialUserInfo.getId())
+            .email(socialUserInfo.getEmail())
             .build();
     }
 }
