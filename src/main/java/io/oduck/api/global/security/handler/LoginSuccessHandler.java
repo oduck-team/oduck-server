@@ -22,12 +22,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
         Authentication authentication) throws IOException, ServletException {
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-//        request.getSession().setMaxInactiveInterval(1800);
-
-        log.info("OAuth2 Login 성공!");
-
         response.sendRedirect(BASE_URL);
     }
 }

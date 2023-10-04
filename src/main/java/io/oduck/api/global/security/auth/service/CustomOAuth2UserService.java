@@ -85,7 +85,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .memberProfile(memberProfile)
                 .build();
 
-        return memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
+        log.info("Member Created! {}", savedMember.getId());
+        return savedMember;
     }
 
     private SocialType getSocialType(String registrationId) {
