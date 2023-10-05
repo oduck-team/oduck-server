@@ -63,6 +63,9 @@ public class Anime extends BaseEntity {
   @ColumnDefault("0")
   private long reviewCount;
 
+  @ColumnDefault("0")
+  private long bookmarkCount;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "series_id")
   private Series series;
