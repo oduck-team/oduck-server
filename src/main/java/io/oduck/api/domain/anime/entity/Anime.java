@@ -1,10 +1,6 @@
 package io.oduck.api.domain.anime.entity;
 
-import io.oduck.api.domain.attractionPoint.entity.AttractionPoint;
-import io.oduck.api.domain.bookmark.entity.Bookmark;
-import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.series.entity.Series;
-import io.oduck.api.domain.starRating.entity.StarRating;
 import io.oduck.api.global.audit.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -82,16 +78,4 @@ public class Anime extends BaseEntity {
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
   private List<AnimeGenre> animeGenres;
-
-  @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
-  private List<Bookmark> bookMarks;
-
-  @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
-  private List<ShortReview> shortReviews;
-
-  @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
-  private List<StarRating> starRatings;
-
-  @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST)
-  private List<AttractionPoint> attractionPoints;
 }
