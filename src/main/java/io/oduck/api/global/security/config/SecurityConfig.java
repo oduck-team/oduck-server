@@ -66,7 +66,7 @@ public class SecurityConfig {
 
         // 인가 설정
         http
-            .authorizeRequests((authorizeRequests) ->
+            .authorizeHttpRequests((authorizeRequests) ->
                 authorizeRequests
                     .requestMatchers("/auth/status").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
 //                    .requestMatchers("docs/index.html").hasAuthority(Role.ADMIN.name())
