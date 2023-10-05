@@ -71,12 +71,6 @@ public class AnimeControllerTest {
                 .andExpect(jsonPath("$.item.anime.studios").exists())
                 .andExpect(jsonPath("$.item.anime.reviewCount").exists())
                 .andExpect(jsonPath("$.item.anime.bookmarkCount").exists())
-                .andExpect(jsonPath("$.item.score.starRatingScoreAverage").exists())
-                .andExpect(jsonPath("$.item.score.selectedDrawingCount").exists())
-                .andExpect(jsonPath("$.item.score.selectedStoryCount").exists())
-                .andExpect(jsonPath("$.item.score.selectedMusicCount").exists())
-                .andExpect(jsonPath("$.item.score.selectedCharacterCount").exists())
-                .andExpect(jsonPath("$.item.score.selectedVoiceActorCount").exists())
                 .andDo(document("getAnimeById/success",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
@@ -138,31 +132,10 @@ public class AnimeControllerTest {
                             .description("애니의 제작사."),
                         fieldWithPath("item.anime.reviewCount")
                             .type(JsonFieldType.NUMBER)
-                            .description("애니의 리뷰 개수. 리뷰 개수는 짧은 리뷰와 장문 리뷰를 합친 값"),
+                            .description("애니의 리뷰 개수."),
                         fieldWithPath("item.anime.bookmarkCount")
                             .type(JsonFieldType.NUMBER)
-                            .description("애니의 덕후 수. 덕후는 북마크의 개념."),
-                        fieldWithPath("item.score")
-                            .type(JsonFieldType.OBJECT)
-                            .description("애니 별점 및 입덕 포인트 정보"),
-                        fieldWithPath("item.score.starRatingScoreAverage")
-                            .type(JsonFieldType.NUMBER)
-                            .description("애니 별점 평균"),
-                        fieldWithPath("item.score.selectedDrawingCount")
-                            .type(JsonFieldType.NUMBER)
-                            .description("입덕 포인트 중 작화를 선택한 수"),
-                        fieldWithPath("item.score.selectedStoryCount")
-                            .type(JsonFieldType.NUMBER)
-                            .description("입덕 포인트 중 스토리를 선택한 수"),
-                        fieldWithPath("item.score.selectedMusicCount")
-                            .type(JsonFieldType.NUMBER)
-                            .description("입덕 포인트 중 음악을 선택한 수"),
-                        fieldWithPath("item.score.selectedCharacterCount")
-                            .type(JsonFieldType.NUMBER)
-                            .description("입덕 포인트 중 캐릭터를 선택한 수"),
-                        fieldWithPath("item.score.selectedVoiceActorCount")
-                            .type(JsonFieldType.NUMBER)
-                            .description("입덕 포인트 중 성우를 선택한 수")
+                            .description("애니의 덕후 수.")
                     )
                 ));
 
