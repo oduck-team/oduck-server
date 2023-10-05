@@ -3,7 +3,6 @@ package io.oduck.api.domain.anime.service;
 import io.oduck.api.domain.anime.dto.AnimeRes;
 import io.oduck.api.domain.anime.dto.AnimeRes.Anime;
 import io.oduck.api.domain.anime.dto.AnimeRes.Broadcast;
-import io.oduck.api.domain.anime.dto.AnimeRes.Score;
 import io.oduck.api.domain.anime.entity.BroadcastType;
 import io.oduck.api.domain.anime.entity.Quarter;
 import io.oduck.api.domain.anime.entity.Rating;
@@ -18,22 +17,9 @@ public class AnimeServiceStub implements AnimeService{
     @Override
     public AnimeRes getAnimeById(Long animeId) {
         Anime anime = createAnime(animeId);
-        Score score = createScore();
 
         return AnimeRes.builder()
             .anime(anime)
-            .score(score)
-            .build();
-    }
-
-    private Score createScore() {
-        return Score.builder()
-            .starRatingScoreAverage(9.2)
-            .selectedDrawingCount(174)
-            .selectedStoryCount(52)
-            .selectedMusicCount(0)
-            .selectedCharacterCount(31)
-            .selectedVoiceActorCount(77)
             .build();
     }
 
