@@ -59,11 +59,21 @@ public class Member extends BaseEntity {
   private List<AttractionPoint> attractionPoints;
 
   @Builder
-  public Member(Long id, LoginType loginType, AuthSocial authSocial, MemberProfile memberProfile) {
+  public Member(Long id, LoginType loginType, AuthSocial authSocial,  AuthLocal authLocal, MemberProfile memberProfile) {
     this.id = id;
     this.loginType = loginType;
     this.authSocial = authSocial;
-    authSocial.setMember(this);
+
+    if (authSocial != null) {
+      authSocial.setMember(this);
+    }
+
+    this.authLocal = authLocal;
+
+    if (authLocal != null) {
+      authLocal.setMember(this);
+    }
+
     this.memberProfile = memberProfile;
     memberProfile.setMember(this);
   }
