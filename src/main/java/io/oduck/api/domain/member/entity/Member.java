@@ -6,6 +6,8 @@ import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.reviewLike.entity.ShortReviewLike;
 import io.oduck.api.domain.starRating.entity.StarRating;
 import io.oduck.api.global.audit.BaseEntity;
+import io.oduck.api.global.security.auth.entity.AuthLocal;
+import io.oduck.api.global.security.auth.entity.AuthSocial;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.List;
@@ -17,6 +19,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -54,4 +57,14 @@ public class Member extends BaseEntity {
 
   @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
   private List<AttractionPoint> attractionPoints;
+
+  @Builder
+  public Member(Long id, LoginType loginType, AuthSocial authSocial, MemberProfile memberProfile) {
+    this.id = id;
+    this.loginType = loginType;
+    this.authSocial = authSocial;
+    authSocial.setMember(this);
+    this.memberProfile = memberProfile;
+    memberProfile.setMember(this);
+  }
 }

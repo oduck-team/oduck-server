@@ -1,0 +1,9 @@
+.git
+*dockerfile*
+build
+data
+logs
+.gitignore
+bin
+.vscode
+.idea
