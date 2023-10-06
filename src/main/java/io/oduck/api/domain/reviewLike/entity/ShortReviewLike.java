@@ -2,6 +2,7 @@ package io.oduck.api.domain.reviewLike.entity;
 
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.review.entity.ShortReview;
+import io.oduck.api.global.audit.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,7 +19,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Entity
 @Getter
 @NoArgsConstructor
-public class ShortReviewLike {
+public class ShortReviewLike extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +32,4 @@ public class ShortReviewLike {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
   private Member member;
-
-  @CreationTimestamp
-  @Column(nullable = false, updatable = false)
-  protected LocalDateTime createdAt;
 }
