@@ -29,9 +29,9 @@ public class MemberController {
     public ResponseEntity<?> PostMember(
             @RequestBody @Valid CreateReq body) {
         // TODO: 회원 가입 로직 구현
-        // memberService.signUpByLocal(body);
+        memberService.signUpByLocal(body);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.created(null).build();
     }
 
     // 이름으로 회원 프로필 조회
