@@ -65,3 +65,25 @@ include::{snippets}/patchProfile/success/request-fields.adoc[]
 
 .http-response
 include::{snippets}/patchProfile/success/http-response.adoc[]
+
+== animes
+=== GET api/v1/animes/:id
+
+.curl-request
+include::{snippets}/getAnimeById/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getAnimeById/success/http-request.adoc[]
+
+include::{snippets}/getAnimeById/success/path-parameters.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/getAnimeById/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getAnimeById/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getAnimeById/success/response-fields.adoc[]
+==== 실패 시
