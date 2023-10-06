@@ -76,7 +76,7 @@ public class MemberControllerTest {
             // then
             // 응답 결과 검증 후 문서화
             actions
-                    .andExpect(status().isOk())
+                    .andExpect(status().isCreated())
                     .andDo(document("postMember/success",
                             preprocessRequest(prettyPrint()),
                             preprocessResponse(prettyPrint()),
