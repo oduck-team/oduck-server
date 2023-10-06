@@ -12,7 +12,6 @@ import lombok.Getter;
 @Builder
 public class AnimeRes {
     private Anime anime;
-    private Score score;
 
     @Getter
     @Builder
@@ -40,16 +39,5 @@ public class AnimeRes {
         private BroadcastType broadcastType;
         private int year;
         private Quarter quarter;
-    }
-
-    @Getter
-    @Builder
-    public static class Score {
-        private Double starRatingScoreAverage;
-        private int selectedDrawingCount;
-        private int selectedStoryCount;
-        private int selectedMusicCount;
-        private int selectedCharacterCount;
-        private int selectedVoiceActorCount;
     }
 }
