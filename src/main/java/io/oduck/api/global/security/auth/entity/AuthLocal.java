@@ -22,7 +22,8 @@ public class AuthLocal extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToOne(fetch = FetchType.LAZY)
+  // TODO
+  @OneToOne
   @JoinColumn(name = "member_id")
   private Member member;
 
