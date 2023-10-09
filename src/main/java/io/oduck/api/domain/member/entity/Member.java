@@ -19,6 +19,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Member extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +36,10 @@ public class Member extends BaseEntity {
 
   @Enumerated(EnumType.STRING)
   private LoginType loginType;
+
+  @Enumerated(EnumType.STRING)
+  @Builder.Default
+  private Role role = Role.MEMBER;
 
   @OneToOne(mappedBy = "member", cascade = CascadeType.PERSIST)
   private AuthSocial authSocial;
@@ -59,8 +66,9 @@ public class Member extends BaseEntity {
   private List<AttractionPoint> attractionPoints;
 
   @Builder
-  public Member(Long id, LoginType loginType, AuthSocial authSocial,  AuthLocal authLocal, MemberProfile memberProfile) {
+  public Member(Long id, Role role, LoginType loginType, AuthSocial authSocial,  AuthLocal authLocal, MemberProfile memberProfile) {
     this.id = id;
+    this.role = role;
     this.loginType = loginType;
     this.authSocial = authSocial;
 
