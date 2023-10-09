@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class SocialLoginService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final MemberRepository memberRepository;
     private final AuthSocialRepository authSocialRepository;
@@ -59,9 +59,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         httpSession.setAttribute("user", new SessionUser(member.getId(), LoginType.SOCIAL));
 
         return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(member.getMemberProfile().getRole().toString())),
+                Collections.singleton(new SimpleGrantedAuthority(member.getRole().toString())),
                 oAuth2User.getAttributes(),
-                attributes.getNameAttributeKey());
+                attributes.getNameAttributeKey()
+                );
     }
 
     private Member getOrSaveMember(AuthSocial authSocial) {
