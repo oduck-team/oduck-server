@@ -10,8 +10,6 @@ import io.oduck.api.global.security.auth.dto.AuthResDto.Status;
 import io.oduck.api.global.security.auth.dto.LocalAuthDto;
 import io.oduck.api.global.security.auth.dto.SessionUser;
 import io.oduck.api.global.security.auth.entity.AuthLocal;
-import io.oduck.api.global.security.auth.entity.AuthSocial;
-import io.oduck.api.global.security.auth.entity.SocialType;
 import io.oduck.api.global.security.auth.repository.AuthLocalRepository;
 import io.oduck.api.global.security.auth.repository.AuthSocialRepository;
 import jakarta.servlet.http.HttpSession;
@@ -30,7 +28,20 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final AuthLocalRepository authLocalRepository;
     private final AuthenticationManager authenticationManager;
+    private final MemberProfileRepository memberProfileRepository;
     private final HttpSession httpSession;
+
+    public Status getStatus(Long memberId) {
+        MemberProfile memberProfile = memberProfileRepository.findByMemberId(memberId)
+            .orElseThrow(() -> new NotFoundException("Member"));
+
+        return Status.builder()
+            .name(memberProfile.getName())
+            .description(memberProfile.getInfo())
+            .thumbnail(memberProfile.getThumbnail())
+            .point(memberProfile.getPoint())
+            .build();
+    }
 
     public AuthLocal getAuthLocal(String email) {
         return authLocalRepository.findByEmail(email)

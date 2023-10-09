@@ -1,7 +1,6 @@
 package io.oduck.api.global.security.auth.controller;
 
 import io.oduck.api.global.common.SingleResponse;
-import io.oduck.api.global.exception.UnauthorizedException;
 import io.oduck.api.global.security.auth.dto.AuthResDto.Status;
 import io.oduck.api.global.security.auth.dto.LocalAuthDto;
 import io.oduck.api.global.security.auth.dto.SessionUser;
@@ -32,14 +31,12 @@ public class AuthController {
     }
 
     @GetMapping("/status")
-    public String status(
+    public ResponseEntity<?> status(
         @LoginUser SessionUser user
     ) {
 
-        if (user == null) {
-            throw new UnauthorizedException("Unauthorized");
-        }
+        Status res = authService.getStatus(user.getId());
 
-        return "success";
+        return ResponseEntity.ok(SingleResponse.of(res));
     }
 }
