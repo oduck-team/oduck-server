@@ -4,7 +4,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.oduck.api.domain.member.entity.Role;
-import io.oduck.api.global.security.filter.LocalAuthenticationFilter;
+//import io.oduck.api.global.security.filter.LocalAuthenticationFilter;
 import io.oduck.api.global.security.handler.ForbiddenHandler;
 import io.oduck.api.global.security.handler.LoginFailureHandler;
 import io.oduck.api.global.security.handler.LoginSuccessHandler;
@@ -23,16 +23,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.SecurityContextRepository;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+//import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+//import org.springframework.security.web.context.SecurityContextRepository;
+//import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
-    private final ObjectMapper objectMapper;
+//    private final ObjectMapper objectMapper;
     private final LogoutHandler logoutHandler;
     private final SocialLoginService socialLoginService;
     private final LoginSuccessHandler loginSuccessHandler;
@@ -91,8 +91,8 @@ public class SecurityConfig {
             );
 
         // Custom Configurer : LocalAuthenticationFilter 를 등록하는 역할
-        http
-            .apply(new CustomFilterConfigurer());
+//        http
+//            .apply(new CustomFilterConfigurer());
 
         // OAuth2 로그인 설정
         http
@@ -135,38 +135,38 @@ public class SecurityConfig {
     }
 
 //    // Custom Configurer : CustomFilterConfigurer 는 직접 구현한 필터인 JwtAuthenticationFilter 를 등록하는 역할
-    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
+//    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
         // AbstractHttpConfigurer 를 상속하여 구현
         // AbstractHttpConfigurer<AbstractHttpConfigurer 를 상속하는 타입, HttpSecurityBuilder 를 상속하는 타입> 을 지정
 
         // configure() 메서드를 오버라이드해서 Configuration 을 커스터마이징
-        @Override
-        public void configure(HttpSecurity builder) throws Exception {
-
-            // getSharedObject() 를 통해서 Spring Security 의 설정을 구성하는 SecurityConfigurer 간에 공유되는 객체를 획득가능
-            // getSharedObject(AuthenticationManager.class)를 통해 AuthenticationManager 객체 획득
-            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
-
-            // LocalAuthenticationFilter 생성
-            LocalAuthenticationFilter localAuthenticationFilter = new LocalAuthenticationFilter(authenticationManager, objectMapper);
-
-            // url과 httpMethod 를 통해 요청을 필터링하는데 사용할 RequestMatcher 를 지정
-            localAuthenticationFilter.setRequiresAuthenticationRequestMatcher(
-                new AntPathRequestMatcher("/auth/login", "POST")
-            );
-
-            // 인증에 성공하면 SecurityContext 에 Authentication 객체를 저장하고 로드하는데,
-            // 이러한 역할을 SecurityContextRepository 클래스에서 담당.
-            SecurityContextRepository contextRepository = new HttpSessionSecurityContextRepository();
-            localAuthenticationFilter.setSecurityContextRepository(contextRepository);
-
-            // 추가 처리 Custom Handler 를 필터에 등록
-            localAuthenticationFilter.setAuthenticationSuccessHandler(loginSuccessHandler);
-            localAuthenticationFilter.setAuthenticationFailureHandler(loginFailureHandler);
-
-            // Spring Security Filter Chain에 추가
-            builder
-                .addFilter(localAuthenticationFilter);
-        }
-    }
+//        @Override
+//        public void configure(HttpSecurity builder) throws Exception {
+//
+//            // getSharedObject() 를 통해서 Spring Security 의 설정을 구성하는 SecurityConfigurer 간에 공유되는 객체를 획득가능
+//            // getSharedObject(AuthenticationManager.class)를 통해 AuthenticationManager 객체 획득
+//            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+//
+//            // LocalAuthenticationFilter 생성
+//            LocalAuthenticationFilter localAuthenticationFilter = new LocalAuthenticationFilter(authenticationManager, objectMapper);
+//
+//            // url과 httpMethod 를 통해 요청을 필터링하는데 사용할 RequestMatcher 를 지정
+//            localAuthenticationFilter.setRequiresAuthenticationRequestMatcher(
+//                new AntPathRequestMatcher("/auth/login", "POST")
+//            );
+//
+//            // 인증에 성공하면 SecurityContext 에 Authentication 객체를 저장하고 로드하는데,
+//            // 이러한 역할을 SecurityContextRepository 클래스에서 담당.
+//            SecurityContextRepository contextRepository = new HttpSessionSecurityContextRepository();
+//            localAuthenticationFilter.setSecurityContextRepository(contextRepository);
+//
+//            // 추가 처리 Custom Handler 를 필터에 등록
+//            localAuthenticationFilter.setAuthenticationSuccessHandler(loginSuccessHandler);
+//            localAuthenticationFilter.setAuthenticationFailureHandler(loginFailureHandler);
+//
+//            // Spring Security Filter Chain에 추가
+//            builder
+//                .addFilter(localAuthenticationFilter);
+//        }
+//    }
 }
