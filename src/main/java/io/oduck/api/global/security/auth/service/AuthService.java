@@ -7,11 +7,10 @@ import io.oduck.api.domain.member.repository.MemberProfileRepository;
 import io.oduck.api.global.exception.NotFoundException;
 import io.oduck.api.global.exception.UnauthorizedException;
 import io.oduck.api.global.security.auth.dto.AuthResDto.Status;
+import io.oduck.api.global.security.auth.dto.AuthUser;
 import io.oduck.api.global.security.auth.dto.LocalAuthDto;
-import io.oduck.api.global.security.auth.dto.SessionUser;
 import io.oduck.api.global.security.auth.entity.AuthLocal;
 import io.oduck.api.global.security.auth.repository.AuthLocalRepository;
-import io.oduck.api.global.security.auth.repository.AuthSocialRepository;
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -62,7 +61,7 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
             SecurityContextHolder.getContext());
-        httpSession.setAttribute("user", new SessionUser(authLocal.getMember().getId(), LoginType.LOCAL));
+        httpSession.setAttribute("user", new AuthUser(authLocal.getMember().getId(), LoginType.LOCAL));
     }
 
     private String extractPasswordIfAdmin(Role role, String password) {
