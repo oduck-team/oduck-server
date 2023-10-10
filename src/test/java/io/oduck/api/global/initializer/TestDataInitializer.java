@@ -6,6 +6,7 @@ import io.oduck.api.domain.member.entity.MemberProfile;
 import io.oduck.api.domain.member.entity.Role;
 import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.global.security.auth.entity.AuthLocal;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,8 +22,9 @@ public class TestDataInitializer {
         this.memberRepository = memberRepository;
     }
 
-    // TODO: Test Data Helper로 분리하기
-    public Member saveTestMember() {
+    @PostConstruct
+    public void saveTestMember() {
+        // TODO: Test Data들 Helper로 분리하기
         Member member = Member.builder()
             .loginType(LoginType.LOCAL)
             .role(Role.MEMBER)
@@ -43,7 +45,6 @@ public class TestDataInitializer {
         member.setAuthLocal(authLocal);
         member.setMemberProfile(memberProfile);
 
-        Member savedMember = memberRepository.save(member);
-        return savedMember;
+        memberRepository.save(member);
     }
 }
