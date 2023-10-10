@@ -23,6 +23,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 //import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 //import org.springframework.security.web.context.SecurityContextRepository;
 //import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -85,7 +86,7 @@ public class SecurityConfig {
             .logout((logout) ->
                 logout
                     .logoutUrl("/auth/logout")
-                    // .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))
                     .logoutSuccessHandler(logoutHandler).deleteCookies("oDuckio.sid")
                     .invalidateHttpSession(true).permitAll(false)
             );
