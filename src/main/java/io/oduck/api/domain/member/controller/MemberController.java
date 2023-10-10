@@ -5,6 +5,8 @@ import io.oduck.api.domain.member.dto.MemberReqDto.PatchReq;
 import io.oduck.api.domain.member.dto.MemberResDto.MemberProfileRes;
 import io.oduck.api.domain.member.service.MemberService;
 import io.oduck.api.global.common.SingleResponse;
+import io.oduck.api.global.security.auth.dto.AuthUser;
+import io.oduck.api.global.security.auth.dto.LoginUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +39,8 @@ public class MemberController {
     // 이름으로 회원 프로필 조회
     @GetMapping("/{name}")
     public ResponseEntity<?> getProfileByName(
-            @PathVariable("name") String name
-    // TODO: 인증 정보 추가
+            @PathVariable("name") String name,
+            @LoginUser AuthUser user
     ) {
         // TODO: 회원 프로필 조회 로직 구현
         MemberProfileRes res = memberService.getProfileByName(name);
