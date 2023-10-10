@@ -61,12 +61,6 @@ public class AuthControllerTest {
 
     private final String BASE_URL = "/auth";
 
-    @BeforeAll
-    public static void setUp(
-        @Autowired TestDataInitializer testDataInitializer) {
-        testDataInitializer.saveTestMember();
-    }
-
     @Nested
     @DisplayName("로컬 회원 인증")
     class PostLogin {
