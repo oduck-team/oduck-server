@@ -59,7 +59,7 @@ public class MemberControllerTest {
             // given
             // TODO: 회원 가입에 필요한 데이터
             CreateReq body = CreateReq.builder()
-                    .email("bob@gmail.com")
+                    .email("john@gmail.com")
                     .password("Qwer1234!")
                     .build();
 
