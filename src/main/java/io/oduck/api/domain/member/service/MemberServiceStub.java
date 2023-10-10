@@ -53,9 +53,10 @@ public class MemberServiceStub implements MemberService {
 
             Member member = Member.builder()
                 .loginType(LoginType.LOCAL)
-                .authLocal(authLocal)
-                .memberProfile(memberProfile)
                 .build();
+
+            member.setAuthLocal(authLocal);
+            member.setMemberProfile(memberProfile);
 
             Member savedMember = memberRepository.save(member);
             log.info("Member Created! {}", savedMember.getId());
