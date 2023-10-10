@@ -33,14 +33,14 @@ public class WithMemberDetailsSecurityContextFactory implements
         SecurityContext context = this.securityContextHolderStrategy.createEmptyContext();
         context.setAuthentication(authentication);
 
-        session = new MockHttpSession();
-        AuthUser user = new AuthUser(1L, LoginType.LOCAL);
-        servletRequest = new MockHttpServletRequest();
-        servletRequest.setSession(session);
-
-        session.setAttribute("user", user);
-
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(servletRequest));
+//        session = new MockHttpSession();
+//        AuthUser user = new AuthUser(1L, LoginType.LOCAL);
+//        servletRequest = new MockHttpServletRequest();
+//        servletRequest.setSession(session);
+//
+//        session.setAttribute("user", user);
+//
+//        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(servletRequest));
         return context;
     }
 }
