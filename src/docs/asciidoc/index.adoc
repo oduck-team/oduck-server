@@ -81,6 +81,9 @@ include::{snippets}/getProfileByName/success/http-request.adoc[]
 .request-param
 include::{snippets}/getProfileByName/success/path-parameters.adoc[]
 
+.request-headers
+include::{snippets}/getProfileByName/success/request-headers.adoc[]
+
 ==== 성공시
 .http-response
 include::{snippets}/getProfileByName/success/http-response.adoc[]
