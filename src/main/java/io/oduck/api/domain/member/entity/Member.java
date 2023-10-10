@@ -26,9 +26,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
 public class Member extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,18 +71,29 @@ public class Member extends BaseEntity {
     this.role = role;
     this.loginType = loginType;
     this.authSocial = authSocial;
+    this.authLocal = authLocal;
+    this.memberProfile = memberProfile;
+  }
 
-    if (authSocial != null) {
+  // TODO: set 말고 다른 이름으로 변경하기
+  public void setAuthSocial(AuthSocial authSocial) {
+    this.authSocial = authSocial;
+    if(authSocial != null) {
       authSocial.setMember(this);
     }
+  }
 
+  public void setAuthLocal(AuthLocal authLocal) {
     this.authLocal = authLocal;
-
-    if (authLocal != null) {
+    if(authLocal != null) {
       authLocal.setMember(this);
     }
+  }
 
+  public void setMemberProfile(MemberProfile memberProfile) {
     this.memberProfile = memberProfile;
-    memberProfile.setMember(this);
+    if(memberProfile != null) {
+      memberProfile.setMember(this);
+    }
   }
 }
