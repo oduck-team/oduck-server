@@ -3,7 +3,7 @@ package io.oduck.api.global.security.auth.controller;
 import io.oduck.api.global.common.SingleResponse;
 import io.oduck.api.global.security.auth.dto.AuthResDto.Status;
 import io.oduck.api.global.security.auth.dto.LocalAuthDto;
-import io.oduck.api.global.security.auth.dto.SessionUser;
+import io.oduck.api.global.security.auth.dto.AuthUser;
 import io.oduck.api.global.security.auth.dto.LoginUser;
 import io.oduck.api.global.security.auth.service.AuthService;
 import java.net.URI;
@@ -32,7 +32,7 @@ public class AuthController {
 
     @GetMapping("/status")
     public ResponseEntity<?> status(
-        @LoginUser SessionUser user
+        @LoginUser AuthUser user
     ) {
 
         Status res = authService.getStatus(user.getId());
