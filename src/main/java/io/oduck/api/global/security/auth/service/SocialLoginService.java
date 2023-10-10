@@ -2,7 +2,8 @@ package io.oduck.api.global.security.auth.service;
 
 import static io.oduck.api.global.utils.NameGenerator.generateNickname;
 
-import io.oduck.api.global.security.auth.dto.SessionUser;
+import io.oduck.api.global.security.auth.dto.AuthUser;
+import io.oduck.api.global.security.auth.dto.CustomOAuth2User;
 import io.oduck.api.global.security.auth.entity.AuthSocial;
 import io.oduck.api.domain.member.entity.LoginType;
 import io.oduck.api.domain.member.entity.Member;
@@ -56,9 +57,10 @@ public class SocialLoginService implements OAuth2UserService<OAuth2UserRequest, 
         AuthSocial authSocial = attributes.toEntity(socialType, attributes.getSocialUserInfo());
 
         Member member = getOrSaveMember(authSocial);
-        httpSession.setAttribute("user", new SessionUser(member.getId(), LoginType.SOCIAL));
+        httpSession.setAttribute("user", new AuthUser(member.getId(), LoginType.SOCIAL));
 
-        return new DefaultOAuth2User(
+        return new CustomOAuth2User(
+                member.getId(),
                 Collections.singleton(new SimpleGrantedAuthority(member.getRole().toString())),
                 oAuth2User.getAttributes(),
                 attributes.getNameAttributeKey()
@@ -81,10 +83,11 @@ public class SocialLoginService implements OAuth2UserService<OAuth2UserRequest, 
                 .build();
 
         Member member = Member.builder()
-                .loginType(LoginType.SOCIAL)
-                .authSocial(authSocial)
-                .memberProfile(memberProfile)
-                .build();
+            .loginType(LoginType.SOCIAL)
+            .build();
+
+        member.setAuthSocial(authSocial);
+        member.setMemberProfile(memberProfile);
 
         Member savedMember = memberRepository.save(member);
         log.info("Member Created! {}", savedMember.getId());
