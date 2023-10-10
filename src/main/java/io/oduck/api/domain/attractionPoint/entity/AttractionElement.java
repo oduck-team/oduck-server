@@ -1,7 +1,7 @@
 package io.oduck.api.domain.attractionPoint.entity;
 
 public enum AttractionElement {
-  ART,
+  DRAWING,
   STORY,
   MUSIC,
   CHARACTER,
