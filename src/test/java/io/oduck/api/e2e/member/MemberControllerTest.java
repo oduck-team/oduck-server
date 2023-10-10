@@ -1,6 +1,8 @@
 package io.oduck.api.e2e.member;
 
 import static io.oduck.api.global.config.RestDocsConfig.field;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -27,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -71,7 +74,8 @@ public class MemberControllerTest {
                     post("/members")
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
-                            .content(content));
+                            .content(content)
+            );
 
             // then
             // 응답 결과 검증 후 문서화
@@ -112,8 +116,10 @@ public class MemberControllerTest {
             // 요청 실행
             ResultActions actions = mockMvc.perform(
                     get("/members" + "/{name}", name)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+            );
 
             // then
             // 응답 결과 검증 후 문서화
@@ -135,6 +141,12 @@ public class MemberControllerTest {
                             pathParameters(
                                     parameterWithName("name")
                                             .description("회원 이름")),
+                            requestHeaders(
+                                headerWithName(HttpHeaders.COOKIE)
+                                    .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                    .optional()
+                                    .description("Header Cookie, 세션 쿠키")
+                            ),
                             responseFields(
                                     fieldWithPath("item")
                                             .type(JsonFieldType.OBJECT)
