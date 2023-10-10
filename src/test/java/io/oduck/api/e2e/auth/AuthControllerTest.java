@@ -56,9 +56,6 @@ public class AuthControllerTest {
     @Autowired
     private Gson gson;
 
-    @Mock
-    MockHttpSession httpsession;
-
     private final String BASE_URL = "/auth";
 
     @Nested
