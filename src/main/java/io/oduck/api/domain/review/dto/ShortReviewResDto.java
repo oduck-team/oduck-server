@@ -1,8 +1,5 @@
 package io.oduck.api.domain.review.dto;
 
-import io.oduck.api.domain.anime.entity.Anime;
-import io.oduck.api.domain.member.entity.MemberProfile;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;

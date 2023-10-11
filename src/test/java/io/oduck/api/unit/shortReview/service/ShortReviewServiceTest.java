@@ -1,9 +1,7 @@
 package io.oduck.api.unit.shortReview.service;
 
-import io.oduck.api.domain.review.dto.ShortReviewReqDto.PostShortReviewReq;
 import io.oduck.api.domain.review.dto.ShortReviewResDto;
 import io.oduck.api.domain.review.service.ShortReviewServiceStub;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -11,8 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatNoException;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
