@@ -7,9 +7,7 @@ services:
       - '6379:6379'
 
   spring:
-    build:
-      context: .
-      dockerfile: ./dockerfile-dev
+    image: fabeejoo/oduckio-spring
     container_name: oDuckio-spring
     depends_on:
       - redis

@@ -19,3 +19,22 @@
 > # docker-compose 종료 및 컨테이너 삭제
 > docker-compose down
 > ```
+
+# Dockerfile 빌드 및 푸시 방법
+
+> ```bash
+> # 도커 빌드
+> # docker build -f {dockerfile} -t {dockerHubName}/{imageName}:{tag} {path}
+>
+> docker build -f dockerfile-dev -t fabeejoo/oduckio-spring .
+>
+> # 도커 컨테이터 실행
+> # docker run -p {hostPort}:{containerPort} {dockerHubName}/{imageName}:{tag}
+>
+> docker run -d -p 8000:8000 fabeejoo/oduckio-spring
+>
+> # 도커 푸시
+> # docker push {dockerHubName}/{imageName}:{tag}
+>
+> docker push fabeejoo/oduckio-spring
+> ```
