@@ -32,7 +32,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @SpringBootTest
-@ActiveProfiles("test")
 public class AnimeControllerTest {
 
     @Autowired
