@@ -8,6 +8,7 @@ import io.oduck.api.global.security.auth.dto.LoginUser;
 import io.oduck.api.global.security.auth.service.AuthService;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,13 +22,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
+    @Value("${config.base.url}")
+    private String BASE_URL;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(
         @RequestBody LocalAuthDto localAuthDto
     ) {
 
         authService.login(localAuthDto);
-        return ResponseEntity.status(302).location(URI.create("http://localhost:5173")).build();
+        return ResponseEntity.status(302).location(URI.create(BASE_URL + "/auth/callback")).build();
     }
 
     @GetMapping("/status")
