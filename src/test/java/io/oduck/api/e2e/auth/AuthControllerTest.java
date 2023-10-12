@@ -14,6 +14,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
@@ -129,35 +130,37 @@ public class AuthControllerTest {
             );
 
             // then
-            actions.andExpect(status().isOk())
-                    .andDo(
-                        document("getStatus/success",
-                            preprocessRequest(prettyPrint()),
-                            preprocessResponse(prettyPrint()),
-                            requestHeaders(
-                                headerWithName(HttpHeaders.COOKIE)
-                                    .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
-                                    .description("Header Cookie, 세션 쿠키")
-                            ),
-                            responseFields(
-                                fieldWithPath("item")
-                                    .type(JsonFieldType.OBJECT)
-                                    .description("조회 데이터"),
-                                fieldWithPath("item.name")
-                                    .type(JsonFieldType.STRING)
-                                    .description("회원 이름"),
-                                fieldWithPath("item.description")
-                                    .type(JsonFieldType.STRING)
-                                    .description("자기 소개"),
-                                fieldWithPath("item.thumbnail")
-                                    .type(JsonFieldType.STRING)
-                                    .description("프로필 이미지"),
-                                fieldWithPath("item.point")
-                                    .type(JsonFieldType.NUMBER)
-                                    .description("회원 포인트")
-                            )
+            actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").exists())
+                .andExpect(jsonPath("$.description").exists())
+                .andExpect(jsonPath("$.thumbnail").exists())
+                .andExpect(jsonPath("$.point").exists())
+                .andDo(
+                    document("getStatus/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                            headerWithName(HttpHeaders.COOKIE)
+                                .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                .description("Header Cookie, 세션 쿠키")
+                        ),
+                        responseFields(
+                            fieldWithPath("name")
+                                .type(JsonFieldType.STRING)
+                                .description("회원 이름"),
+                            fieldWithPath("description")
+                                .type(JsonFieldType.STRING)
+                                .description("자기 소개"),
+                            fieldWithPath("thumbnail")
+                                .type(JsonFieldType.STRING)
+                                .description("프로필 이미지"),
+                            fieldWithPath("point")
+                                .type(JsonFieldType.NUMBER)
+                                .description("회원 포인트")
                         )
-                    );
+                    )
+                );
         }
     }
 }

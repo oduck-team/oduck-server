@@ -125,16 +125,16 @@ public class MemberControllerTest {
             // 응답 결과 검증 후 문서화
             actions
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.item.name").exists())
-                    .andExpect(jsonPath("$.item.isMine").exists())
-                    .andExpect(jsonPath("$.item.description").exists())
-                    .andExpect(jsonPath("$.item.thumbnail").exists())
-                    .andExpect(jsonPath("$.item.backgroundImage").exists())
-                    .andExpect(jsonPath("$.item.point").exists())
-                    .andExpect(jsonPath("$.item.activity").hasJsonPath())
-                    .andExpect(jsonPath("$.item.activity.reviews").exists())
-                    .andExpect(jsonPath("$.item.activity.threads").exists())
-                    .andExpect(jsonPath("$.item.activity.likes").exists())
+                    .andExpect(jsonPath("$.name").exists())
+                    .andExpect(jsonPath("$.isMine").exists())
+                    .andExpect(jsonPath("$.description").exists())
+                    .andExpect(jsonPath("$.thumbnail").exists())
+                    .andExpect(jsonPath("$.backgroundImage").exists())
+                    .andExpect(jsonPath("$.point").exists())
+                    .andExpect(jsonPath("$.activity").hasJsonPath())
+                    .andExpect(jsonPath("$.activity.reviews").exists())
+                    .andExpect(jsonPath("$.activity.threads").exists())
+                    .andExpect(jsonPath("$.activity.likes").exists())
                     .andDo(document("getProfileByName/success",
                             preprocessRequest(prettyPrint()),
                             preprocessResponse(prettyPrint()),
@@ -148,37 +148,34 @@ public class MemberControllerTest {
                                     .description("Header Cookie, 세션 쿠키")
                             ),
                             responseFields(
-                                    fieldWithPath("item")
-                                            .type(JsonFieldType.OBJECT)
-                                            .description("조회 데이터"),
-                                    fieldWithPath("item.name")
+                                    fieldWithPath("name")
                                             .type(JsonFieldType.STRING)
                                             .description("회원 이름"),
-                                    fieldWithPath("item.isMine")
+                                    fieldWithPath("isMine")
                                             .type(JsonFieldType.BOOLEAN)
                                             .description("본인 여부(본인 프로필 조회시 true)"),
-                                    fieldWithPath("item.description")
+                                    fieldWithPath("description")
                                             .type(JsonFieldType.STRING)
                                             .description("자기 소개"),
-                                    fieldWithPath("item.thumbnail")
+                                    fieldWithPath("thumbnail")
                                             .type(JsonFieldType.STRING)
                                             .description("프로필 이미지"),
-                                    fieldWithPath("item.backgroundImage")
+                                    fieldWithPath("backgroundImage")
                                             .type(JsonFieldType.STRING)
                                             .description("프로필 배경 이미지"),
-                                    fieldWithPath("item.point")
+                                    fieldWithPath("point")
                                             .type(JsonFieldType.NUMBER)
                                             .description("회원 포인트"),
-                                    fieldWithPath("item.activity")
+                                    fieldWithPath("activity")
                                             .type(JsonFieldType.OBJECT)
                                             .description("회원 활동"),
-                                    fieldWithPath("item.activity.reviews")
+                                    fieldWithPath("activity.reviews")
                                             .type(JsonFieldType.NUMBER)
                                             .description("작성한 리뷰 갯수"),
-                                    fieldWithPath("item.activity.threads")
+                                    fieldWithPath("activity.threads")
                                             .type(JsonFieldType.NUMBER)
                                             .description("작성한 쓰레드 갯수"),
-                                    fieldWithPath("item.activity.likes")
+                                    fieldWithPath("activity.likes")
                                             .type(JsonFieldType.NUMBER)
                                             .description("받은 좋아요 갯수"))));
         }
