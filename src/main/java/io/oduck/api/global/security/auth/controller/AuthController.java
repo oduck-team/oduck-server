@@ -31,7 +31,7 @@ public class AuthController {
     ) {
 
         authService.login(localAuthDto);
-        return ResponseEntity.status(302).location(URI.create(BASE_URL + "/auth/callback")).build();
+        return ResponseEntity.created(null).build();
     }
 
     @GetMapping("/status")
