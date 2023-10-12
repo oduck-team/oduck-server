@@ -36,7 +36,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.ActiveProfiles;
@@ -83,7 +82,7 @@ public class AuthControllerTest {
 
             // then
             actions
-                .andExpect(status().is3xxRedirection())
+                .andExpect(status().isCreated())
                 .andDo(
                     document("postLogin/success",
                         preprocessRequest(prettyPrint()),
@@ -101,8 +100,6 @@ public class AuthControllerTest {
                                     "숫자, 영문대소문자, 특수문자(!@#$%^&*()-_=+)를 포함한 8~20자리"))
                                 .description("로그인에 필요한 비밀 번호")),
                         responseHeaders(
-                            headerWithName(HttpHeaders.LOCATION) // 헤더 이름
-                                .description("Header Location, 리소스의 URL"),
                             headerWithName(HttpHeaders.SET_COOKIE) // 헤더 이름
                                 .description("Header Set-Cookie, 세션 쿠키")
                         )
