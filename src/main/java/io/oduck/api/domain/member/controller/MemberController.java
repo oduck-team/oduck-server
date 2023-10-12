@@ -38,14 +38,14 @@ public class MemberController {
 
     // 이름으로 회원 프로필 조회
     @GetMapping("/{name}")
-    public ResponseEntity<?> getProfileByName(
+    public ResponseEntity<MemberProfileRes> getProfileByName(
             @PathVariable("name") String name,
             @LoginUser AuthUser user
     ) {
         // TODO: 회원 프로필 조회 로직 구현
         MemberProfileRes res = memberService.getProfileByName(name);
 
-        return ResponseEntity.ok(SingleResponse.of(res));
+        return ResponseEntity.ok(res);
     }
 
     // 회원 프로필 수정

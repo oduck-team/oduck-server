@@ -31,12 +31,12 @@ public class AuthController {
     }
 
     @GetMapping("/status")
-    public ResponseEntity<?> status(
+    public ResponseEntity<Status> status(
         @LoginUser AuthUser user
     ) {
 
         Status res = authService.getStatus(user.getId());
 
-        return ResponseEntity.ok(SingleResponse.of(res));
+        return ResponseEntity.ok(res);
     }
 }
