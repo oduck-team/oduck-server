@@ -19,13 +19,16 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Member extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +36,10 @@ public class Member extends BaseEntity {
 
   @Enumerated(EnumType.STRING)
   private LoginType loginType;
+
+  @Enumerated(EnumType.STRING)
+  @Builder.Default
+  private Role role = Role.MEMBER;
 
   @OneToOne(mappedBy = "member", cascade = CascadeType.PERSIST)
   private AuthSocial authSocial;
@@ -59,12 +66,34 @@ public class Member extends BaseEntity {
   private List<AttractionPoint> attractionPoints;
 
   @Builder
-  public Member(Long id, LoginType loginType, AuthSocial authSocial, MemberProfile memberProfile) {
+  public Member(Long id, Role role, LoginType loginType, AuthSocial authSocial,  AuthLocal authLocal, MemberProfile memberProfile) {
     this.id = id;
+    this.role = role;
     this.loginType = loginType;
     this.authSocial = authSocial;
-    authSocial.setMember(this);
+    this.authLocal = authLocal;
     this.memberProfile = memberProfile;
-    memberProfile.setMember(this);
+  }
+
+  // TODO: set 말고 다른 이름으로 변경하기
+  public void setAuthSocial(AuthSocial authSocial) {
+    this.authSocial = authSocial;
+    if(authSocial != null) {
+      authSocial.setMember(this);
+    }
+  }
+
+  public void setAuthLocal(AuthLocal authLocal) {
+    this.authLocal = authLocal;
+    if(authLocal != null) {
+      authLocal.setMember(this);
+    }
+  }
+
+  public void setMemberProfile(MemberProfile memberProfile) {
+    this.memberProfile = memberProfile;
+    if(memberProfile != null) {
+      memberProfile.setMember(this);
+    }
   }
 }

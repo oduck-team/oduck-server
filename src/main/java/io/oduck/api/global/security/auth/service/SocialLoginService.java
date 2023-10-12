@@ -2,7 +2,8 @@ package io.oduck.api.global.security.auth.service;
 
 import static io.oduck.api.global.utils.NameGenerator.generateNickname;
 
-import io.oduck.api.global.security.auth.dto.SessionUser;
+import io.oduck.api.global.security.auth.dto.AuthUser;
+import io.oduck.api.global.security.auth.dto.CustomOAuth2User;
 import io.oduck.api.global.security.auth.entity.AuthSocial;
 import io.oduck.api.domain.member.entity.LoginType;
 import io.oduck.api.domain.member.entity.Member;
@@ -29,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class SocialLoginService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final MemberRepository memberRepository;
     private final AuthSocialRepository authSocialRepository;
@@ -56,12 +57,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         AuthSocial authSocial = attributes.toEntity(socialType, attributes.getSocialUserInfo());
 
         Member member = getOrSaveMember(authSocial);
-        httpSession.setAttribute("user", new SessionUser(member.getId(), LoginType.SOCIAL));
+        httpSession.setAttribute("user", new AuthUser(member.getId(), LoginType.SOCIAL));
 
-        return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(member.getMemberProfile().getRole().toString())),
+        return new CustomOAuth2User(
+                member.getId(),
+                Collections.singleton(new SimpleGrantedAuthority(member.getRole().toString())),
                 oAuth2User.getAttributes(),
-                attributes.getNameAttributeKey());
+                attributes.getNameAttributeKey()
+                );
     }
 
     private Member getOrSaveMember(AuthSocial authSocial) {
@@ -80,10 +83,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .build();
 
         Member member = Member.builder()
-                .loginType(LoginType.SOCIAL)
-                .authSocial(authSocial)
-                .memberProfile(memberProfile)
-                .build();
+            .loginType(LoginType.SOCIAL)
+            .build();
+
+        member.setAuthSocial(authSocial);
+        member.setMemberProfile(memberProfile);
 
         Member savedMember = memberRepository.save(member);
         log.info("Member Created! {}", savedMember.getId());

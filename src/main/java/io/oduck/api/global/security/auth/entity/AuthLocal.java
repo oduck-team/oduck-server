@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,13 +22,25 @@ public class AuthLocal extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToOne(fetch = FetchType.LAZY)
+  // TODO
+  @OneToOne
   @JoinColumn(name = "member_id")
   private Member member;
 
-  @Column(nullable = false, length = 100)
+  @Column(nullable = false, length = 100, unique = true)
   private String email;
 
   @Column(nullable = false, length = 75)
   private String password;
+
+  @Builder
+  public AuthLocal(Member member, String email, String password) {
+    this.member = member;
+    this.email = email;
+    this.password = password;
+  }
+
+  public void setMember(Member member) {
+    this.member = member;
+  }
 }

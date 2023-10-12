@@ -1,24 +1,46 @@
 package io.oduck.api.global.security.auth.controller;
 
-import io.oduck.api.global.exception.UnauthorizedException;
-import io.oduck.api.global.security.auth.dto.SessionUser;
+import io.oduck.api.global.common.SingleResponse;
+import io.oduck.api.global.security.auth.dto.AuthResDto.Status;
+import io.oduck.api.global.security.auth.dto.LocalAuthDto;
+import io.oduck.api.global.security.auth.dto.AuthUser;
 import io.oduck.api.global.security.auth.dto.LoginUser;
+import io.oduck.api.global.security.auth.service.AuthService;
+import java.net.URI;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
-    @GetMapping("/status")
-    public String status(
-        @LoginUser SessionUser user
+    private final AuthService authService;
+
+    @Value("${config.base.url}")
+    private String BASE_URL;
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(
+        @RequestBody LocalAuthDto localAuthDto
     ) {
 
-        if (user == null) {
-            throw new UnauthorizedException("Unauthorized");
-        }
+        authService.login(localAuthDto);
+        return ResponseEntity.status(302).location(URI.create(BASE_URL + "/auth/callback")).build();
+    }
 
-        return "success";
+    @GetMapping("/status")
+    public ResponseEntity<Status> status(
+        @LoginUser AuthUser user
+    ) {
+
+        Status res = authService.getStatus(user.getId());
+
+        return ResponseEntity.ok(res);
     }
 }

@@ -5,6 +5,51 @@
 :toc-title: API 목록
 :source-highlighter: prettify
 
+== auth
+=== POST api/v1/auth/login
+.curl-request
+include::{snippets}/postLogin/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/postLogin/success/http-request.adoc[]
+
+.request-body
+include::{snippets}/postLogin/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/postLogin/success/request-fields.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/postLogin/success/http-response.adoc[]
+
+.response-headers
+include::{snippets}/postLogin/success/response-headers.adoc[]
+
+==== 실패시
+
+=== GET api/v1/auth/status
+.curl-request
+include::{snippets}/getStatus/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getStatus/success/http-request.adoc[]
+
+.request-headers
+include::{snippets}/getStatus/success/request-headers.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/getStatus/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getStatus/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getStatus/success/response-fields.adoc[]
+
+==== 실패시
+
 == members
 === POST api/v1/members
 .curl-request
@@ -36,6 +81,9 @@ include::{snippets}/getProfileByName/success/http-request.adoc[]
 .request-param
 include::{snippets}/getProfileByName/success/path-parameters.adoc[]
 
+.request-headers
+include::{snippets}/getProfileByName/success/request-headers.adoc[]
+
 ==== 성공시
 .http-response
 include::{snippets}/getProfileByName/success/http-response.adoc[]
@@ -65,6 +113,8 @@ include::{snippets}/patchProfile/success/request-fields.adoc[]
 
 .http-response
 include::{snippets}/patchProfile/success/http-response.adoc[]
+
+==== 실패시
 
 == animes
 === GET api/v1/animes/:id

@@ -38,10 +38,6 @@ public class MemberProfile extends BaseEntity {
   @Builder.Default
   private String info = "";
 
-  @Enumerated(EnumType.STRING)
-  @Builder.Default
-  private Role role = Role.MEMBER;
-
   @Column(length = 100)
   @Builder.Default
   private String thumbnail = "";
@@ -61,7 +57,6 @@ public class MemberProfile extends BaseEntity {
     this.id = id;
     this.name = name;
     this.info = info;
-    this.role = role;
     this.thumbnail = thumbnail;
     this.backgroundImage = backgroundImage;
     this.point = point;
