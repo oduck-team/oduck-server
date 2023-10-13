@@ -4,6 +4,10 @@ import io.oduck.api.domain.review.dto.ShortReviewResDto;
 import io.oduck.api.domain.review.dto.ShortReviewResDto.MemberProfile;
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReview;
 import java.util.ArrayList;
+import java.util.List;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,12 +15,19 @@ public class ShortReviewServiceStub implements ShortReviewService{
 
     @Override
     public ShortReviewResDto getShortReviews(Long animeId) {
-        ArrayList<ShortReview> list = new ArrayList<>();
-        ShortReview shortReview =  createReview(animeId);
-        list.add(shortReview);
+        List<ShortReview> shortReviewList = new ArrayList<>();
+
+        for(int i = 0; i < 10; i++){
+            ShortReview shortReview =  createReview(animeId);
+            shortReviewList.add(shortReview);
+        }
+        //slice객체 만들기
+        PageRequest pageable = PageRequest.of(0,10);
+        Slice<ShortReview> slice = new SliceImpl<>(shortReviewList,pageable,true);
+
         return ShortReviewResDto
                    .builder()
-                   .shortReview(list)
+                   .shortReviews(slice)
                    .build();
     }
 
@@ -27,7 +38,7 @@ public class ShortReviewServiceStub implements ShortReviewService{
                    .animeId(1L)
                    .content("최고의 반전의 반전")
                    .score(5)
-                   .hasSpoiler(false)
+                   .hasSpoiler(true)
                    .shortReviewLikeCount(100)
                    .member(getMemberProfile())
                    .build();
