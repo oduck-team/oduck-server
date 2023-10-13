@@ -1,23 +1,29 @@
 package io.oduck.api.domain.review.dto;
 
-import java.util.List;
+import io.oduck.api.global.common.EntityBased;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.Slice;
 
 @Getter
 @Builder
 public class ShortReviewResDto {
-    private List<ShortReview> shortReview;
+    private Slice<ShortReview> shortReviews;
 
     @Getter
     @Builder
-    public static class ShortReview{
+    public static class ShortReview implements EntityBased {
         private Long animeId;
         private String content;
         private boolean hasSpoiler;
         private int score;
         private int shortReviewLikeCount;
         private MemberProfile member;
+
+        @Override
+        public Long getId() {
+            return this.getAnimeId();
+        }
     }
 
     @Builder
