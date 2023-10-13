@@ -33,9 +33,7 @@ public class ShortReviewServiceTest {
 
             //then
             assertDoesNotThrow(() -> shortReviewService.getShortReviews(animeId));
-            assertEquals(response.getShortReview().get(0).getAnimeId(),animeId);
+            assertEquals(response.getShortReviews().getContent().get(0).getAnimeId(),animeId);
         }
     }
-
-
 }
