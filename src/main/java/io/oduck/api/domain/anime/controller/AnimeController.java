@@ -2,7 +2,6 @@ package io.oduck.api.domain.anime.controller;
 
 import io.oduck.api.domain.anime.dto.AnimeRes;
 import io.oduck.api.domain.anime.service.AnimeService;
-import io.oduck.api.global.common.SingleResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ public class AnimeController {
         // TODO: 애니 조회 로직 구현
         AnimeRes res = animeService.getAnimeById(animeId);
         return ResponseEntity
-            .ok(SingleResponse.of(res));
+            .ok(res);
     }
 
     // TODO: 애니 검색 결과 페이징

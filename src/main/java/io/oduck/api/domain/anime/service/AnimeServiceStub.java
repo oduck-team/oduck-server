@@ -2,7 +2,10 @@ package io.oduck.api.domain.anime.service;
 
 import io.oduck.api.domain.anime.dto.AnimeRes;
 import io.oduck.api.domain.anime.dto.AnimeRes.Anime;
-import io.oduck.api.domain.anime.dto.AnimeRes.Broadcast;
+import io.oduck.api.domain.anime.entity.AnimeGenre;
+import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
+import io.oduck.api.domain.anime.entity.AnimeStudio;
+import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
 import io.oduck.api.domain.anime.entity.BroadcastType;
 import io.oduck.api.domain.anime.entity.Quarter;
 import io.oduck.api.domain.anime.entity.Rating;
@@ -25,10 +28,12 @@ public class AnimeServiceStub implements AnimeService{
 
     private Anime createAnime(Long animeId) {
         return Anime.builder()
-            .animeId(animeId)
+            .id(animeId)
             .title("귀멸의 칼날: 도공 마을편")
             .thumbnail("https://image파일경로/uuid.jpg")
-            .broadcast(getBroadcast())
+            .broadcastType(BroadcastType.TVA)
+            .year(2023)
+            .quarter(Quarter.Q2)
             .summary(
                 "113년 만에 상현 혈귀가 죽자 분개한 무잔은 나머지 상현 혈귀들에게 또 다른 명령을 내린다! 한편, 규타로와의 전투 도중 검이 심하게 손상된 탄지로에게 하가네즈카는 대 격노하고 탄지로는 그 검을 만든 대장장이 하가네즈카 호타루에게 검이 어떻게 심하게 손상되었는지 설명하기 위해 도공 마을을 방문한다. 탄지로가 검이 수리되기를 기다리는 동안, 상현 혈귀 한텐구와 쿗코가 숨겨진 마을인 ‘도공 마을'을 습격한다. 공격할 때마다 분열해서 위력이 커지는 한텐구로 인해 탄지로와 겐야는 고전을 면치 못한다. 한편, 타인에 대한 관심이 희박한 하주 토키토 무이치로는 혈귀들에게 공격당하고 있는 코테츠를 목격하는데….")
             .episodeCount(11)
@@ -41,15 +46,6 @@ public class AnimeServiceStub implements AnimeService{
             .reviewCount(172)
             .bookmarkCount(72)
             .build();
-    }
-
-    private Broadcast getBroadcast() {
-        return Broadcast.builder()
-            .broadcastType(BroadcastType.TVA)
-            .year(2023)
-            .quarter(Quarter.Q2)
-            .build();
-
     }
 
     private List<String> getStudios() {
