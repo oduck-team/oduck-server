@@ -4,7 +4,6 @@ import io.oduck.api.domain.member.entity.LoginType;
 import io.oduck.api.domain.member.entity.MemberProfile;
 import io.oduck.api.domain.member.entity.Role;
 import io.oduck.api.domain.member.repository.MemberProfileRepository;
-import io.oduck.api.global.exception.NotFoundException;
 import io.oduck.api.global.exception.UnauthorizedException;
 import io.oduck.api.global.security.auth.dto.AuthResDto.Status;
 import io.oduck.api.global.security.auth.dto.AuthUser;
@@ -32,7 +31,7 @@ public class AuthService {
 
     public Status getStatus(Long memberId) {
         MemberProfile memberProfile = memberProfileRepository.findByMemberId(memberId)
-            .orElseThrow(() -> new NotFoundException("Member"));
+            .orElseThrow(() -> new UnauthorizedException("UnAuthorized"));
 
         return Status.builder()
             .name(memberProfile.getName())
@@ -44,12 +43,11 @@ public class AuthService {
 
     public AuthLocal getAuthLocal(String email) {
         return authLocalRepository.findByEmail(email)
-            .orElseThrow(() -> new NotFoundException("Member"));
+            .orElseThrow(() -> new UnauthorizedException("UnAuthorized"));
     }
 
     public void login(LocalAuthDto localAuthDto) {
         String username = localAuthDto.getEmail();
-
 
         AuthLocal authLocal = getAuthLocal(username);
         Role role = authLocal.getMember().getRole();
