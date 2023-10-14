@@ -38,7 +38,7 @@ public class ShortReview extends BaseEntity {
   private String content;
 
   @Column(nullable = false)
-  private boolean has_spoiler;
+  private boolean hasSpoiler;
 
   @OneToMany(mappedBy = "shortReview", cascade = CascadeType.PERSIST)
   private List<ShortReviewLike> shortReviewLikes;
