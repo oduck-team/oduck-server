@@ -1,5 +1,7 @@
 package io.oduck.api.domain.anime.service;
 
+import io.oduck.api.domain.anime.dto.AnimeReq.PatchAnimeReq;
+import io.oduck.api.domain.anime.dto.AnimeReq.PostReq;
 import io.oduck.api.domain.anime.dto.AnimeRes;
 import io.oduck.api.domain.anime.dto.AnimeRes.Anime;
 import io.oduck.api.domain.anime.entity.AnimeGenre;
@@ -10,6 +12,7 @@ import io.oduck.api.domain.anime.entity.BroadcastType;
 import io.oduck.api.domain.anime.entity.Quarter;
 import io.oduck.api.domain.anime.entity.Rating;
 import io.oduck.api.domain.anime.entity.Status;
+import io.oduck.api.domain.series.entity.Series;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -18,12 +21,47 @@ import org.springframework.stereotype.Service;
 public class AnimeServiceStub implements AnimeService{
 
     @Override
+    public Long save(PostReq req) {
+        return 1L;
+    }
+
+    @Override
     public AnimeRes getAnimeById(Long animeId) {
         Anime anime = createAnime(animeId);
 
         return AnimeRes.builder()
             .anime(anime)
             .build();
+    }
+
+    @Override
+    public void update(Long animeId, PatchAnimeReq req) {
+
+    }
+
+    @Override
+    public void updateAnimeOriginalAuthors(Long animeId, List<AnimeOriginalAuthor> originalAuthors) {
+
+    }
+
+    @Override
+    public void updateAnimeStudios(Long animeId, List<AnimeStudio> animeStudios) {
+
+    }
+
+    @Override
+    public void updateAnimeVoiceActors(Long animeId, List<AnimeVoiceActor> animeVoiceActors) {
+
+    }
+
+    @Override
+    public void updateAnimeGenres(Long animeId, List<AnimeGenre> animeGenres) {
+
+    }
+
+    @Override
+    public void update(Long animeId, Series series) {
+
     }
 
     private Anime createAnime(Long animeId) {
