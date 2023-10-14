@@ -32,7 +32,7 @@ public class AnimeServiceTest {
             AnimeRes response = animeService.getAnimeById(animeId);
 
             //then
-            assertThat(response.getAnime().getAnimeId()).isEqualTo(animeId);
+            assertThat(response.getAnime().getId()).isEqualTo(animeId);
             assertThatNoException();
         }
     }
