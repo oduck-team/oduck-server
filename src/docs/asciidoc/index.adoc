@@ -164,6 +164,9 @@ include::{snippets}/getShortReviews/success/response-fields.adoc[]
 
 .http-response
 include::{snippets}/getShortReviews/success/http-response.adoc[]
+
+==== 실패시
+
 ==== 실패시
 
 == admin
