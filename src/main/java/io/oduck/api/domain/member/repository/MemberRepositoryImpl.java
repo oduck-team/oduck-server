@@ -4,18 +4,9 @@ import static io.oduck.api.domain.member.entity.QMemberProfile.memberProfile;
 import static io.oduck.api.domain.review.entity.QShortReview.shortReview;
 import static io.oduck.api.domain.reviewLike.entity.QShortReviewLike.shortReviewLike;
 
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.*;
-import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import io.oduck.api.domain.member.dto.MemberDslDto.MemberActivity;
 import io.oduck.api.domain.member.dto.MemberDslDto.ProfileWithoutActivity;
-import io.oduck.api.domain.member.dto.MemberResDto.MemberProfileRes;
-import io.oduck.api.domain.member.entity.QMemberProfile;
-import io.oduck.api.domain.review.entity.QShortReview;
-import io.oduck.api.global.utils.QueryDslUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -49,17 +40,13 @@ class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public MemberActivity selectActivityByMemberId(Long id) {
-        NumberExpression<Long> reviewCount = shortReview.id.count();
-        NumberExpression<Long> reviewLikeCount = shortReviewLike.id.count();
-
-        MemberActivity activity = (MemberActivity) query
-            .select(reviewCount.as("reviews"), reviewLikeCount.sum().as("likes"))
+    public Long countLikesByMemberId(Long id) {
+        Long likesCount = query
+            .select(shortReviewLike.id.count())
             .from(shortReview)
-            .join(shortReviewLike).on(shortReviewLike.shortReview.id.eq(shortReview.id))
+            .join(shortReviewLike).on(shortReview.id.eq(shortReviewLike.shortReview.id))
             .where(shortReview.member.id.eq(id))
-            .groupBy(shortReview.id)
             .fetchOne();
-        return activity;
+        return likesCount;
     }
 }
