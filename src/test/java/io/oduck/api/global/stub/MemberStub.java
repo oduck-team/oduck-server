@@ -30,7 +30,7 @@ public class MemberStub {
         MemberProfile memberProfile1 = MemberProfile.builder()
             .name("admin")
             .info("admin info")
-            .thumbnail("admin thumbnail")
+            .thumbnail("http://thumbnail.com")
             .point(0L)
             .build();
 
@@ -51,7 +51,7 @@ public class MemberStub {
         MemberProfile memberProfile2 = MemberProfile.builder()
             .name("john")
             .info("john info")
-            .thumbnail("john thumbnail")
+            .thumbnail("http://thumbnail.com")
             .point(0L)
             .build();
 
@@ -72,7 +72,7 @@ public class MemberStub {
         MemberProfile memberProfile3 = MemberProfile.builder()
             .name("david")
             .info("david info")
-            .thumbnail("david thumbnail")
+            .thumbnail("http://thumbnail.com")
             .point(0L)
             .build();
 
