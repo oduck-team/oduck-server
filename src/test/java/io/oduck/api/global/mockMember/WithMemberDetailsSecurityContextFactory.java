@@ -1,8 +1,6 @@
-package io.oduck.api.global.MockMember;
+package io.oduck.api.global.mockMember;
 
-import io.oduck.api.domain.member.entity.LoginType;
 import io.oduck.api.global.security.auth.dto.CustomUserDetails;
-import io.oduck.api.global.security.auth.dto.AuthUser;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,8 +9,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 public class WithMemberDetailsSecurityContextFactory implements
     WithSecurityContextFactory<WithCustomMockMember> {
