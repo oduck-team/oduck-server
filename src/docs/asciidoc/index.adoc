@@ -137,3 +137,31 @@ include::{snippets}/getAnimeById/success/response-body.adoc[]
 .response-fields
 include::{snippets}/getAnimeById/success/response-fields.adoc[]
 ==== 실패 시
+
+
+== shortReview
+
+=== GET api/v1/short-review/animeId/1
+
+.curl-request
+include::{snippets}/getShortReviews/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getShortReviews/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/getShortReviews/success/path-parameters.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/getShortReviews/success/response-fields.adoc[]
+
+.response-body
+include::{snippets}/getShortReviews/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getShortReviews/success/response-fields.adoc[]
+
+.http-response
+include::{snippets}/getShortReviews/success/http-response.adoc[]
+==== 실패시
