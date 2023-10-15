@@ -18,18 +18,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import io.oduck.api.domain.member.entity.LoginType;
 import io.oduck.api.domain.member.entity.Role;
-import io.oduck.api.global.initializer.TestDataInitializer;
-import io.oduck.api.global.MockMember.WithCustomMockMember;
-import io.oduck.api.global.security.auth.dto.AuthUser;
+import io.oduck.api.global.mockMember.WithCustomMockMember;
 import io.oduck.api.global.security.auth.dto.LocalAuthDto;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -67,7 +62,7 @@ public class AuthControllerTest {
         void postLogin() throws Exception {
             // given
             LocalAuthDto localAuthDto = LocalAuthDto.builder()
-                .email("bob@gmail.com")
+                .email("oduckdmin@gmail.com")
                 .password("Qwer!234")
                 .build();
 
