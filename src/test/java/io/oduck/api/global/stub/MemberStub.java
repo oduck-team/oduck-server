@@ -15,7 +15,7 @@ public class MemberStub {
         return members;
     }
 
-    public void init() {
+    public MemberStub() {
         // Member1
         Member member1 = Member.builder()
             .loginType(LoginType.LOCAL)
