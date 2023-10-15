@@ -82,7 +82,7 @@ public class MemberServiceStub implements MemberService {
             .thumbnail("썸네일")
             .backgroundImage("배경 이미지")
             .activity(activity)
-            .point(0)
+            .point(0L)
             .build();
 
         return memberProfile;

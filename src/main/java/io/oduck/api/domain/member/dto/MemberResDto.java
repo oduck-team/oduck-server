@@ -14,11 +14,11 @@ public class MemberResDto {
         private String thumbnail;
         private String backgroundImage;
         private Activity activity;
-        private int point;
+        private Long point;
 
         @Builder
         public MemberProfileRes(boolean isMine, String name, String description, String thumbnail,
-            String backgroundImage, Activity activity, int point) {
+            String backgroundImage, Activity activity, Long point) {
             this.isMine = isMine;
             this.name = name;
             this.description = description;
