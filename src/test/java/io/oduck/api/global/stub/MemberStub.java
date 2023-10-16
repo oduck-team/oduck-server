@@ -81,4 +81,8 @@ public class MemberStub {
 
         members.addAll(List.of(member1, member2, member3));
     }
+
+    public Member getMember() {
+        return members.get(0);
+    }
 }
