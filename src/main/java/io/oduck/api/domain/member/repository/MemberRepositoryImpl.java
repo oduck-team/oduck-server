@@ -7,6 +7,7 @@ import static io.oduck.api.domain.reviewLike.entity.QShortReviewLike.shortReview
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.oduck.api.domain.member.dto.MemberDslDto.ProfileWithoutActivity;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -20,8 +21,8 @@ class MemberRepositoryImpl implements MemberRepositoryCustom {
 
 
     @Override
-    public ProfileWithoutActivity selectProfileByName(String name) {
-        ProfileWithoutActivity memberProfileRes = query
+    public Optional<ProfileWithoutActivity> selectProfileByName(String name) {
+        return Optional.ofNullable(query
             .select(
                 Projections.constructor(
                     ProfileWithoutActivity.class,
@@ -35,18 +36,28 @@ class MemberRepositoryImpl implements MemberRepositoryCustom {
             )
             .from(memberProfile)
             .where(memberProfile.name.eq(name))
-            .fetchOne();
-        return memberProfileRes;
+            .fetchOne());
     }
 
     @Override
     public Long countLikesByMemberId(Long id) {
-        Long likesCount = query
+        Long likeCount = query
             .select(shortReviewLike.id.count())
             .from(shortReview)
             .join(shortReviewLike).on(shortReview.id.eq(shortReviewLike.shortReview.id))
             .where(shortReview.member.id.eq(id))
             .fetchOne();
-        return likesCount;
+        return likeCount;
+    }
+
+    @Override
+    public Long countReviewsByMemberId(Long id) {
+        Long reviewCount = query
+            .select(shortReview.id.count())
+            .from(shortReview)
+            .where(shortReview.member.id.eq(id))
+            .fetchOne();
+
+        return reviewCount;
     }
 }
