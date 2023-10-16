@@ -36,12 +36,12 @@ public class MemberResDto {
     @Getter
     @NoArgsConstructor
     public static class Activity {
-        private int reviews;
-        private int threads;
-        private int likes;
+        private long reviews;
+        private long threads;
+        private long likes;
 
         @Builder
-        public Activity(int reviews, int threads, int likes) {
+        public Activity(long reviews, long threads, long likes) {
             this.reviews = reviews;
             this.threads = threads;
             this.likes = likes;
