@@ -110,7 +110,7 @@ public class MemberControllerTest {
         void getProfileByName() throws Exception {
             // given
             // 회원 프로필 조회에 필요한 데이터
-            String name = "이름";
+            String name = "john";
 
             // when
             // 요청 실행
@@ -228,4 +228,8 @@ public class MemberControllerTest {
 
         // TODO: 회원 프로필 수정 실패시
     }
+
+    // TODO: 회원이 작성한 리뷰 목록
+
+    // TODO: 회원 북마크 애니 목록
 }
