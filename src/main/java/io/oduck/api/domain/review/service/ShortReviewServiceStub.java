@@ -35,6 +35,7 @@ public class ShortReviewServiceStub implements ShortReviewService{
 
         return ShortReview
                    .builder()
+                   .reviewId(1L)
                    .animeId(1L)
                    .content("최고의 반전의 반전")
                    .score(5)
