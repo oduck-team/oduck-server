@@ -43,7 +43,7 @@ public class MemberController {
             @LoginUser AuthUser user
     ) {
         // TODO: 회원 프로필 조회 로직 구현
-        MemberProfileRes res = memberService.getProfileByName(name);
+        MemberProfileRes res = memberService.getProfileByName(name, user == null ? 0L : user.getId());
 
         return ResponseEntity.ok(res);
     }
