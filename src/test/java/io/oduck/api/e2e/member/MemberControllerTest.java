@@ -1,6 +1,7 @@
 package io.oduck.api.e2e.member;
 
 import static io.oduck.api.global.config.RestDocsConfig.field;
+import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -21,6 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.google.gson.Gson;
 import io.oduck.api.domain.member.dto.MemberReqDto.CreateReq;
 import io.oduck.api.domain.member.dto.MemberReqDto.PatchReq;
+import io.oduck.api.domain.member.entity.Role;
+import io.oduck.api.global.mockMember.WithCustomMockMember;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -105,9 +108,10 @@ public class MemberControllerTest {
     @DisplayName("회원 프로필 조회")
     class GetProfileByName {
 
-        @DisplayName("회원 이름으로 프로필 조회 성공시 200 OK 반환")
+        @DisplayName("본인 프로필 조회 성공시 200 OK 반환, isMine = true")
         @Test
-        void getProfileByName() throws Exception {
+        @WithCustomMockMember(id = 2L, email = "john", password = "Qwer!234", role = Role.MEMBER)
+        void getProfileByNameIfMine() throws Exception {
             // given
             // 회원 프로필 조회에 필요한 데이터
             String name = "john";
@@ -126,7 +130,7 @@ public class MemberControllerTest {
             actions
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.name").exists())
-                    .andExpect(jsonPath("$.isMine").exists())
+                    .andExpect(jsonPath("$.isMine").value(true))
                     .andExpect(jsonPath("$.description").exists())
                     .andExpect(jsonPath("$.thumbnail").exists())
                     .andExpect(jsonPath("$.backgroundImage").exists())
@@ -135,7 +139,7 @@ public class MemberControllerTest {
                     .andExpect(jsonPath("$.activity.reviews").exists())
                     .andExpect(jsonPath("$.activity.threads").exists())
                     .andExpect(jsonPath("$.activity.likes").exists())
-                    .andDo(document("getProfileByName/success",
+                    .andDo(document("getProfileByName/successIfMine",
                             preprocessRequest(prettyPrint()),
                             preprocessResponse(prettyPrint()),
                             pathParameters(
@@ -180,7 +184,134 @@ public class MemberControllerTest {
                                             .description("받은 좋아요 갯수"))));
         }
 
+        @DisplayName("타인 프로필 조회 성공시 200 OK 반환, isMine = false")
+        @Test
+        @WithCustomMockMember(id = 2L, email = "john", password = "Qwer!234", role = Role.MEMBER)
+        void getProfileByNameIfOthers() throws Exception {
+            // given
+            // 회원 프로필 조회에 필요한 데이터
+            String name = "david";
+
+            // when
+            // 요청 실행
+            ResultActions actions = mockMvc.perform(
+                get("/members" + "/{name}", name)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+            );
+
+            // then
+            // 응답 결과 검증 후 문서화
+            actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").exists())
+                .andExpect(jsonPath("$.isMine").value(false))
+                .andExpect(jsonPath("$.description").exists())
+                .andExpect(jsonPath("$.thumbnail").exists())
+                .andExpect(jsonPath("$.backgroundImage").exists())
+                .andExpect(jsonPath("$.point").exists())
+                .andExpect(jsonPath("$.activity").hasJsonPath())
+                .andExpect(jsonPath("$.activity.reviews").exists())
+                .andExpect(jsonPath("$.activity.threads").exists())
+                .andExpect(jsonPath("$.activity.likes").exists())
+                .andDo(document("getProfileByName/successIfOthers",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("name")
+                            .description("회원 이름")),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.COOKIE)
+                            .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                            .optional()
+                            .description("Header Cookie, 세션 쿠키")
+                    ),
+                    responseFields(
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .description("회원 이름"),
+                        fieldWithPath("isMine")
+                            .type(JsonFieldType.BOOLEAN)
+                            .description("본인 여부(본인 프로필 조회시 true)"),
+                        fieldWithPath("description")
+                            .type(JsonFieldType.STRING)
+                            .description("자기 소개"),
+                        fieldWithPath("thumbnail")
+                            .type(JsonFieldType.STRING)
+                            .description("프로필 이미지"),
+                        fieldWithPath("backgroundImage")
+                            .type(JsonFieldType.STRING)
+                            .description("프로필 배경 이미지"),
+                        fieldWithPath("point")
+                            .type(JsonFieldType.NUMBER)
+                            .description("회원 포인트"),
+                        fieldWithPath("activity")
+                            .type(JsonFieldType.OBJECT)
+                            .description("회원 활동"),
+                        fieldWithPath("activity.reviews")
+                            .type(JsonFieldType.NUMBER)
+                            .description("작성한 리뷰 갯수"),
+                        fieldWithPath("activity.threads")
+                            .type(JsonFieldType.NUMBER)
+                            .description("작성한 쓰레드 갯수"),
+                        fieldWithPath("activity.likes")
+                            .type(JsonFieldType.NUMBER)
+                            .description("받은 좋아요 갯수"))));
+        }
+
         // TODO: 회원 프로필 조회 실패시
+
+        @DisplayName("존재하지 않는 회원 프로필 조회 성공시 404 NotFound 반환")
+        @Test
+        @WithCustomMockMember(id = 2L, email = "john", password = "Qwer!234", role = Role.MEMBER)
+        void getProfileByName() throws Exception {
+            // given
+            // 회원 프로필 조회에 필요한 데이터
+            String name = "notExistName";
+
+            // when
+            // 요청 실행
+            ResultActions actions = mockMvc.perform(
+                get("/members" + "/{name}", name)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+            );
+
+            // then
+            // 응답 결과 검증 후 문서화
+            actions
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.fieldErrors").value(equalTo(null)))
+                .andExpect(jsonPath("$.violationErrors").value(equalTo(null)))
+                .andDo(document("getProfileByName/failure",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("name")
+                            .description("회원 이름")),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.COOKIE)
+                            .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                            .optional()
+                            .description("Header Cookie, 세션 쿠키")
+                    ),
+                    responseFields(
+                        fieldWithPath("message")
+                            .type(JsonFieldType.STRING)
+                            .description("응답 메시지"),
+                        fieldWithPath("fieldErrors")
+                            .type(JsonFieldType.NULL)
+                            .description("api 요청 필드 오류"),
+                        fieldWithPath("violationErrors")
+                            .type(JsonFieldType.NULL)
+                            .description("api 요청 규칙 위반 오류")
+                    )
+                )
+            );
+        }
     }
 
     @Nested
