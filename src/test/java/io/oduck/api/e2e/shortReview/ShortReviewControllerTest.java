@@ -1,19 +1,26 @@
 package io.oduck.api.e2e.shortReview;
 
+import static io.oduck.api.global.config.RestDocsConfig.field;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.snippet.Attributes.attributes;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 
 
 import com.google.gson.Gson;
+import io.oduck.api.domain.review.dto.ShortReviewReqDto.PatchShortReviewReq;
+import io.oduck.api.domain.review.dto.ShortReviewReqDto.PostShortReviewReq;
+import io.oduck.api.global.utils.ShortReviewTestUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -63,6 +70,7 @@ public class ShortReviewControllerTest {
             //then
             actions
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[0].reviewId").exists())
                 .andExpect(jsonPath("$.items[0].animeId").exists())
                 .andExpect(jsonPath("$.items[0].content").exists())
                 .andExpect(jsonPath("$.items[0].hasSpoiler").exists())
@@ -81,6 +89,9 @@ public class ShortReviewControllerTest {
                         fieldWithPath("items")
                             .type(JsonFieldType.ARRAY)
                             .description("조회 데이터"),
+                        fieldWithPath("items[].reviewId")
+                            .type(JsonFieldType.NUMBER)
+                            .description("리뷰 고유 식별자"),
                         fieldWithPath("items[].animeId")
                             .type(JsonFieldType.NUMBER)
                             .description("애니 고유 식별자"),
