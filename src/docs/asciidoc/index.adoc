@@ -73,28 +73,46 @@ include::{snippets}/postMember/success/http-response.adoc[]
 === GET api/v1/members/:name
 
 .curl-request
-include::{snippets}/getProfileByName/success/curl-request.adoc[]
+include::{snippets}/getProfileByName/successIfMine/curl-request.adoc[]
 
 .http-request
-include::{snippets}/getProfileByName/success/http-request.adoc[]
+include::{snippets}/getProfileByName/successIfMine/http-request.adoc[]
 
 .request-param
-include::{snippets}/getProfileByName/success/path-parameters.adoc[]
+include::{snippets}/getProfileByName/successIfMine/path-parameters.adoc[]
 
 .request-headers
-include::{snippets}/getProfileByName/success/request-headers.adoc[]
+include::{snippets}/getProfileByName/successIfMine/request-headers.adoc[]
 
-==== 성공시
+==== 성공시(본인 프로필 조회)
 .http-response
-include::{snippets}/getProfileByName/success/http-response.adoc[]
+include::{snippets}/getProfileByName/successIfMine/http-response.adoc[]
 
 .response-body
-include::{snippets}/getProfileByName/success/response-body.adoc[]
+include::{snippets}/getProfileByName/successIfMine/response-body.adoc[]
 
 .response-fields
-include::{snippets}/getProfileByName/success/response-fields.adoc[]
+include::{snippets}/getProfileByName/successIfMine/response-fields.adoc[]
 
-==== 실패시
+==== 성공시(타인 프로필 조회)
+.http-response
+include::{snippets}/getProfileByName/successIfOthers/http-response.adoc[]
+
+.response-body
+include::{snippets}/getProfileByName/successIfOthers/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getProfileByName/successIfOthers/response-fields.adoc[]
+
+==== 실패시(존재하지 않는 회원 조회)
+.http-response
+include::{snippets}/getProfileByName/failure/http-response.adoc[]
+
+.response-body
+include::{snippets}/getProfileByName/failure/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getProfileByName/failure/response-fields.adoc[]
 
 === PATCH api/v1/members
 .curl-request
