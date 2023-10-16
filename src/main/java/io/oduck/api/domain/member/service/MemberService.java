@@ -8,7 +8,7 @@ public interface MemberService {
     void signUpByLocal(CreateReq createReq);
 
     // 이름으로 회원 프로필 조회 로직
-    MemberProfileRes getProfileByName(String name);
+    MemberProfileRes getProfileByName(String name, Long memberId);
 
     // 회원 정보 수정 로직
     // void updateProfile(PatchReq body);
