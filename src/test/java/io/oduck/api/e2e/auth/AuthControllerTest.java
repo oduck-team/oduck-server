@@ -109,7 +109,7 @@ public class AuthControllerTest {
 
         @DisplayName("인증된 회원일시 200 OK 및 회원 정보 반환")
         @Test
-        @WithCustomMockMember(id = 1L, email = "bob", password = "Qwer!234", role = Role.MEMBER)
+        @WithCustomMockMember(id = 1L, email = "admin", password = "Qwer!234", role = Role.MEMBER)
         void getAuthStatus() throws Exception {
             // given
 
