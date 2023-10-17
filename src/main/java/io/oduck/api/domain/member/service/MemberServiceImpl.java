@@ -73,11 +73,14 @@ public class MemberServiceImpl implements MemberService{
         if (memberProfile == null) {
             throw new NotFoundException("Member");
         }
-        Long likesCount = memberRepository.countLikesByMemberId(memberProfile.getMemberId());
         Long reviewsCount = memberRepository.countReviewsByMemberId(memberProfile.getMemberId());
+        Long bookmarksCount = memberRepository.countBookmarksByMemberId(memberProfile.getMemberId());
+        Long likesCount = memberRepository.countLikesByMemberId(memberProfile.getMemberId());
+
+
         Activity activity = Activity.builder()
             .reviews(reviewsCount)
-            .threads(0L)
+            .bookmarks(bookmarksCount)
             .likes(likesCount)
             .build();
 
