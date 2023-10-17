@@ -88,6 +88,65 @@ public class Anime extends BaseEntity {
   private List<AnimeGenre> animeGenres = new ArrayList<>();
 
   /**
+   * 비즈니스 메소드
+   */
+  // 조회수 증가
+  public void increaseViewCount(){
+    viewCount++;
+  }
+
+  // 조회수 감소
+  public void decreaseViewCount(){
+    viewCount--;
+  }
+
+  // 리뷰수 증가(짧은 리뷰, 장문 리뷰)
+  public void increaseReviewCount(){
+    reviewCount++;
+  }
+
+  // 리뷰수 감소(짧은 리뷰, 장문 리뷰)
+  public void decreaseReviewCount(){
+    reviewCount--;
+  }
+
+  // 북마크수 증가
+  public void increaseBookmarkCount(){
+    bookmarkCount++;
+  }
+
+  // 북마크수 감소
+  public void decreaseBookmarkCount(){
+    bookmarkCount--;
+  }
+
+  // 애니 공개 전환
+  public void releaseAnime(){
+    isReleased = true;
+  }
+
+  // 비공개 전환
+  public void setPrivateAnime(){
+    isReleased = false;
+  }
+
+  // 평가할 때 점수 합산(별점)
+  public void increaseStarRatingScore(int score){
+    if(score <= 0){
+      throw new IllegalArgumentException("음수는 올 수 없습니다.");
+    }
+    starRatingScoreTotal += score;
+  }
+
+  // 평가를 지웠을 때 점수 합산(별점)
+  public void decreaseStarRatingScore(int score){
+    if(score <= 0){
+      throw new IllegalArgumentException("음수는 올 수 없습니다.");
+    }
+    starRatingScoreTotal -= score;
+  }
+
+  /**
    * 연관 관계 관련한 메소드
    */
   // 애니와 원작 작가의 연결 엔티티의 애니 연관 관계 추가 로직
@@ -169,7 +228,6 @@ public class Anime extends BaseEntity {
       addAnimeGenre(animeGenre);
     }
   }
-
 
   public static Anime createAnime(String title, String summary, BroadcastType broadcastType, int episodeCount,
       String thumbnail, int year, Quarter quarter, Rating rating, Status status,
