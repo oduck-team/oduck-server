@@ -134,4 +134,94 @@ public class ShortReviewControllerTest {
             //TODO : 조회 실패 시
         }
     }
+
+    @Nested
+    @DisplayName("짧은 리뷰 작성")
+    class PostShortReviews{
+
+        @DisplayName("리뷰 작성 성공시 Http Status 200 ok 반환")
+        @Test
+        void postShortReview() throws Exception{
+            //given
+            PostShortReviewReq req = ShortReviewTestUtils.createPostShoreReviewReq();
+            String content = gson.toJson(req);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                post("/short-reviews")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(content));
+
+            //then
+            actions
+                .andExpect(status().isOk())
+                .andDo(document("postShortReview/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(attributes(key("title").value("Fields for shortReview creation")),
+                            fieldWithPath("memberId")
+                                .type(JsonFieldType.NUMBER)
+                                .attributes(field("constraints", "숫자만 가능합니다."))
+                                .description("리뷰를 등록할 회원의 고유 식별 번호"),
+                            fieldWithPath("animeId")
+                                .type(JsonFieldType.NUMBER)
+                                .attributes(field("constraints", "숫자만 가능합니다."))
+                                .description("리뷰를 등록할 애니 고유 식별 번호"),
+                            fieldWithPath("hasSpoiler")
+                                .type(JsonFieldType.BOOLEAN)
+                                .attributes(field("constraints", "true 또는 false."))
+                                .description("스포일러 유무"),
+                            fieldWithPath("content")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "최소 10에서 100자 까지 입력 가능합니다."))
+                            .description("짧은 리뷰 내용"))
+                    )
+                );
+        }
+        //TODO: 리뷰 작성 실패 시
+    }
+
+    @Nested
+    @DisplayName("짧은 리뷰 수정")
+    class PatchShortReview{
+
+        @DisplayName("짧은 리뷰 수정 성공시 Http Status 204 반환")
+        @Test
+        void patchShortReview() throws Exception{
+            //given
+            Long reviewId = 1L;
+            PatchShortReviewReq req = ShortReviewTestUtils.createPatchShortReview();
+            String content = gson.toJson(req);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                patch("/short-reviews/{reviewId}", reviewId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(content)
+            );
+
+            //then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(document("patchShortReviewReq/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("reviewId")
+                            .description("리뷰 식별자")
+                    ),
+                    requestFields(attributes(key("title").value("Fields for shortreview creation")),
+                        fieldWithPath("hasSpoiler")
+                            .type(JsonFieldType.BOOLEAN)
+                            .attributes(field("constraints", "true 또는 false."))
+                            .description("스포일러 유무"),
+                        fieldWithPath("content")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "최소 10에서 100자 까지 입력 가능합니다."))
+                            .description("짧은 리뷰 내용"))
+                ));
+        }
+    }
 }
