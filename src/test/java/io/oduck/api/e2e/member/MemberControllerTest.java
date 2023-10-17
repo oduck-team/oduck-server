@@ -190,7 +190,7 @@ public class MemberControllerTest {
         void getProfileByNameIfOthers() throws Exception {
             // given
             // 회원 프로필 조회에 필요한 데이터
-            String name = "david";
+            String name = "admin";
 
             // when
             // 요청 실행
@@ -318,14 +318,15 @@ public class MemberControllerTest {
     @DisplayName("회원 정보 수정")
     class PatchProfile {
 
-        @DisplayName("회원 가입 성공시 201 Created 반환")
+        @DisplayName("회원 프로필 수정 성공시 204 NoContent 응답")
         @Test
-        void patchProfile() throws Exception {
+        @WithCustomMockMember(id = 3L, email = "david", password = "Qwer!234", role = Role.MEMBER)
+        void patchProfileSuccess() throws Exception {
             // given
             // 회원 정보 수정에 필요한 데이터
             PatchReq body = PatchReq.builder()
-                    .name("bob")
-                    .description("hello, world!")
+                    .name("데이비드")
+                    .description("new david description")
                     .build();
 
             String content = gson.toJson(body);
@@ -335,14 +336,21 @@ public class MemberControllerTest {
                     patch("/members")
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
                             .content(content));
 
             // then
             actions
                     .andExpect(status().isNoContent())
-                    .andDo(document("patchProfile/success",
+                    .andDo(
+                        document("patchProfile/success",
                             preprocessRequest(prettyPrint()),
                             preprocessResponse(prettyPrint()),
+                            requestHeaders(
+                                headerWithName(HttpHeaders.COOKIE)
+                                    .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                    .description("Header Cookie, 세션 쿠키")
+                            ),
                             requestFields(
                                     attributes(key("title")
                                             .value("Fields for member creation")),
@@ -354,10 +362,140 @@ public class MemberControllerTest {
                                     fieldWithPath("description")
                                             .type(JsonFieldType.STRING)
                                             .attributes(field("constraints", "문자열 0-100자"))
-                                            .description("자기 소개 변경시 필요한 내용"))));
+                                            .description("자기 소개 변경시 필요한 내용")
+                            )
+                        )
+                    );
         }
 
-        // TODO: 회원 프로필 수정 실패시
+        @DisplayName("회원 프로필 수정 기존 이름과 같을 시 400 BadRequest 응답")
+        @Test
+        @WithCustomMockMember(id = 1L, email = "admin", password = "Qwer!234", role = Role.MEMBER)
+        void updateProfileFailureWhenSameNameAsBefore() throws Exception {
+            PatchReq body = PatchReq.builder()
+                .name("admin")
+                .description("new admin description")
+                .build();
+
+            String content = gson.toJson(body);
+
+            // when
+            ResultActions actions = mockMvc.perform(
+                patch("/members")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+                    .content(content));
+
+            // then
+            actions
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.fieldErrors").value(equalTo(null)))
+                .andExpect(jsonPath("$.violationErrors").value(equalTo(null)))
+                .andDo(
+                    document("patchProfile/failureWhenSameNameAsBefore",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                            headerWithName(HttpHeaders.COOKIE)
+                                .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                .description("Header Cookie, 세션 쿠키")
+                        ),
+                        requestFields(
+                            attributes(key("title")
+                                .value("Fields for member creation")),
+                            fieldWithPath("name")
+                                .type(JsonFieldType.STRING)
+                                .attributes(
+                                    field("constraints", "한,영소문자, 숫자 포함 2-10자. ^[0-9A-Za-z가-힣]{2,10}$"))
+                                .description("이름 변경시 필요한 이름"),
+                            fieldWithPath("description")
+                                .type(JsonFieldType.STRING)
+                                .attributes(field("constraints", "문자열 0-100자"))
+                                .description("자기 소개 변경시 필요한 내용")
+                        ),
+                        responseFields(
+                            attributes(key("title")
+                                .value("Fields for member creation")),
+                            fieldWithPath("message")
+                                .type(JsonFieldType.STRING)
+                                .description("예외 메시지"),
+                            fieldWithPath("fieldErrors")
+                                .type(JsonFieldType.NULL)
+                                .description("api 요청 필드 오류"),
+                            fieldWithPath("violationErrors")
+                                .type(JsonFieldType.NULL)
+                                .description("api 요청 규칙 위반 오류")
+                        )
+                    )
+                );
+        }
+
+        @DisplayName("회원 프로필 수정 이름 중복시 409 Confilct 응답")
+        @Test
+        @WithCustomMockMember(id = 3L, email = "david", password = "Qwer!234", role = Role.MEMBER)
+        void updateProfileFailureWhenSameNameAsAlreadyExist() throws Exception {
+            PatchReq body = PatchReq.builder()
+                .name("admin")
+                .description("new david description")
+                .build();
+
+            String content = gson.toJson(body);
+
+            // when
+            ResultActions actions = mockMvc.perform(
+                patch("/members")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+                    .content(content));
+
+            // then
+            actions
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.fieldErrors").value(equalTo(null)))
+                .andExpect(jsonPath("$.violationErrors").value(equalTo(null)))
+                .andDo(
+                    document("patchProfile/failureWhenSameNameAsAlreadyExist",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                            headerWithName(HttpHeaders.COOKIE)
+                                .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                .description("Header Cookie, 세션 쿠키")
+                        ),
+                        requestFields(
+                            attributes(key("title")
+                                .value("Fields for member creation")),
+                            fieldWithPath("name")
+                                .type(JsonFieldType.STRING)
+                                .attributes(
+                                    field("constraints",
+                                        "한,영소문자, 숫자 포함 2-10자. ^[0-9A-Za-z가-힣]{2,10}$"))
+                                .description("이름 변경시 필요한 이름"),
+                            fieldWithPath("description")
+                                .type(JsonFieldType.STRING)
+                                .attributes(field("constraints", "문자열 0-100자"))
+                                .description("자기 소개 변경시 필요한 내용")
+                        ),
+                        responseFields(
+                            attributes(key("title")
+                                .value("Fields for member creation")),
+                            fieldWithPath("message")
+                                .type(JsonFieldType.STRING)
+                                .description("예외 메시지"),
+                            fieldWithPath("fieldErrors")
+                                .type(JsonFieldType.NULL)
+                                .description("api 요청 필드 오류"),
+                            fieldWithPath("violationErrors")
+                                .type(JsonFieldType.NULL)
+                                .description("api 요청 규칙 위반 오류")
+                        )
+                    )
+                );
+        }
     }
 
     // TODO: 회원이 작성한 리뷰 목록
