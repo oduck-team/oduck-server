@@ -51,11 +51,11 @@ public class MemberController {
     // 회원 프로필 수정
     @PatchMapping
     public ResponseEntity<?> patchProfile(
-            @RequestBody @Valid PatchReq body
-    // TODO: 인증 정보 추가
+        @RequestBody @Valid PatchReq body,
+        @LoginUser AuthUser user
     ) {
         // TODO: 회원 정보 수정 로직 구현
-        // memberService.updateProfile(body);
+        memberService.updateProfile(body, user.getId());
 
         return ResponseEntity.noContent().build();
     }
