@@ -95,11 +95,6 @@ public class Anime extends BaseEntity {
     viewCount++;
   }
 
-  // 조회수 감소
-  public void decreaseViewCount(){
-    viewCount--;
-  }
-
   // 리뷰수 증가(짧은 리뷰, 장문 리뷰)
   public void increaseReviewCount(){
     reviewCount++;
