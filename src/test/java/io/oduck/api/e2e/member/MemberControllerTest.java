@@ -137,7 +137,7 @@ public class MemberControllerTest {
                     .andExpect(jsonPath("$.point").exists())
                     .andExpect(jsonPath("$.activity").hasJsonPath())
                     .andExpect(jsonPath("$.activity.reviews").exists())
-                    .andExpect(jsonPath("$.activity.threads").exists())
+                    .andExpect(jsonPath("$.activity.bookmarks").exists())
                     .andExpect(jsonPath("$.activity.likes").exists())
                     .andDo(document("getProfileByName/successIfMine",
                             preprocessRequest(prettyPrint()),
@@ -176,9 +176,9 @@ public class MemberControllerTest {
                                     fieldWithPath("activity.reviews")
                                             .type(JsonFieldType.NUMBER)
                                             .description("작성한 리뷰 갯수"),
-                                    fieldWithPath("activity.threads")
+                                    fieldWithPath("activity.bookmarks")
                                             .type(JsonFieldType.NUMBER)
-                                            .description("작성한 쓰레드 갯수"),
+                                            .description("입덕 애니 갯수"),
                                     fieldWithPath("activity.likes")
                                             .type(JsonFieldType.NUMBER)
                                             .description("받은 좋아요 갯수"))));
@@ -213,7 +213,7 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.point").exists())
                 .andExpect(jsonPath("$.activity").hasJsonPath())
                 .andExpect(jsonPath("$.activity.reviews").exists())
-                .andExpect(jsonPath("$.activity.threads").exists())
+                .andExpect(jsonPath("$.activity.bookmarks").exists())
                 .andExpect(jsonPath("$.activity.likes").exists())
                 .andDo(document("getProfileByName/successIfOthers",
                     preprocessRequest(prettyPrint()),
@@ -252,9 +252,9 @@ public class MemberControllerTest {
                         fieldWithPath("activity.reviews")
                             .type(JsonFieldType.NUMBER)
                             .description("작성한 리뷰 갯수"),
-                        fieldWithPath("activity.threads")
+                        fieldWithPath("activity.bookmarks")
                             .type(JsonFieldType.NUMBER)
-                            .description("작성한 쓰레드 갯수"),
+                            .description("입덕한 애니 갯수"),
                         fieldWithPath("activity.likes")
                             .type(JsonFieldType.NUMBER)
                             .description("받은 좋아요 갯수"))));
