@@ -207,6 +207,9 @@ include::{snippets}/patchShortReviewReq/success/request-fields.adoc[]
 .http-response
 include::{snippets}/patchShortReviewReq/success/http-response.adoc[]
 
+
+==== 실패시
+
 ==== 실패시
 
 == admin
