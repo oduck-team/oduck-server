@@ -37,13 +37,13 @@ public class MemberResDto {
     @NoArgsConstructor
     public static class Activity {
         private long reviews;
-        private long threads;
+        private long bookmarks;
         private long likes;
 
         @Builder
-        public Activity(long reviews, long threads, long likes) {
+        public Activity(long reviews, long bookmarks, long likes) {
             this.reviews = reviews;
-            this.threads = threads;
+            this.bookmarks = bookmarks;
             this.likes = likes;
         }
     }
