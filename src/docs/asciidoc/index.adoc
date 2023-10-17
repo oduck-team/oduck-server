@@ -121,6 +121,9 @@ include::{snippets}/patchProfile/success/curl-request.adoc[]
 .http-request
 include::{snippets}/patchProfile/success/http-request.adoc[]
 
+.request-header
+include::{snippets}/patchProfile/success/request-headers.adoc[]
+
 .request-body
 include::{snippets}/patchProfile/success/request-body.adoc[]
 
@@ -132,7 +135,13 @@ include::{snippets}/patchProfile/success/request-fields.adoc[]
 .http-response
 include::{snippets}/patchProfile/success/http-response.adoc[]
 
-==== 실패시
+==== 실패시(기존 이름과 같을 경우)
+.http-response
+include::{snippets}/patchProfile/failureWhenSameNameAsBefore/http-response.adoc[]
+
+==== 실패시(이름 중복시)
+.http-response
+include::{snippets}/patchProfile/failureWhenSameNameAsAlreadyExist/http-response.adoc[]
 
 == animes
 === GET api/v1/animes/:id
