@@ -4,11 +4,13 @@ import static io.oduck.api.global.utils.NameGenerator.generateNickname;
 
 import io.oduck.api.domain.member.dto.MemberDslDto.ProfileWithoutActivity;
 import io.oduck.api.domain.member.dto.MemberReqDto.CreateReq;
+import io.oduck.api.domain.member.dto.MemberReqDto.PatchReq;
 import io.oduck.api.domain.member.dto.MemberResDto.Activity;
 import io.oduck.api.domain.member.dto.MemberResDto.MemberProfileRes;
 import io.oduck.api.domain.member.entity.LoginType;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.entity.MemberProfile;
+import io.oduck.api.domain.member.repository.MemberProfileRepository;
 import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.global.exception.BadRequestException;
 import io.oduck.api.global.exception.ConflictException;
@@ -29,6 +31,7 @@ public class MemberServiceImpl implements MemberService{
     private final PasswordEncoder passwordEncoder;
     private final AuthLocalRepository authLocalRepository;
     private final MemberRepository memberRepository;
+    private final MemberProfileRepository memberProfileRepository;
 
     @Transactional
     @Override
@@ -56,8 +59,8 @@ public class MemberServiceImpl implements MemberService{
                 .loginType(LoginType.LOCAL)
                 .build();
 
-            member.setAuthLocal(authLocal);
-            member.setMemberProfile(memberProfile);
+            member.relateAuthLocal(authLocal);
+            member.relateMemberProfile(memberProfile);
 
             Member savedMember = memberRepository.save(member);
             log.info("Member Created! {}", savedMember.getId());
@@ -97,10 +100,54 @@ public class MemberServiceImpl implements MemberService{
         return memberProfileRes;
     }
 
+    @Override
+    public void updateProfile(PatchReq body, Long memberId) {
+        MemberProfile memberProfile = getProfileByMemberId(memberId);
+
+        // Null 체크
+        Optional
+            .ofNullable(body.getName())
+            .ifPresent(
+                name -> {
+                    // 이전 이름과 같은지 체크
+                    if (memberProfile.getName().equals(name)) {
+                        throw new BadRequestException("Same name as before.");
+                    }
+
+                    // 이름 중복 체크
+                    checkDuplicatedName(name);
+
+                    memberProfile.updateName(name);
+                }
+            );
+
+        // Null 체크
+        Optional
+            .ofNullable(body.getDescription())
+            .ifPresent(
+                memberProfile::updateInfo
+            );
+
+        memberProfileRepository.save(memberProfile);
+    }
+
+    private MemberProfile getProfileByMemberId(Long memberId) {
+        return memberProfileRepository.findByMemberId(memberId)
+            .orElseThrow(
+                () -> new NotFoundException("Member")
+            );
+    }
+
     private ProfileWithoutActivity getProfileWithoutActivity(String name) {
         return memberRepository.selectProfileByName(name)
             .orElseThrow(
                 () -> new NotFoundException("Member")
             );
+    }
+
+    private void checkDuplicatedName(String name) {
+        if (memberProfileRepository.existsByName(name)) {
+            throw new ConflictException("Name");
+        }
     }
 }
