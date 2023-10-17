@@ -4,14 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import io.oduck.api.domain.anime.repository.AnimeRepository;
 import io.oduck.api.domain.member.dto.MemberDslDto.ProfileWithoutActivity;
 import io.oduck.api.domain.member.entity.LoginType;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.entity.MemberProfile;
 import io.oduck.api.domain.member.entity.Role;
+import io.oduck.api.domain.member.repository.MemberProfileRepository;
 import io.oduck.api.domain.member.repository.MemberRepository;
-import io.oduck.api.domain.review.repository.ShortReviewRepository;
 import io.oduck.api.global.security.auth.entity.AuthLocal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -30,9 +29,7 @@ public class MemberRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
     @Autowired
-    AnimeRepository animeRepository;
-    @Autowired
-    ShortReviewRepository shortReviewRepository;
+    MemberProfileRepository memberProfileRepository;
 
     @DisplayName("로컬 회원 저장")
     @Nested
@@ -58,8 +55,8 @@ public class MemberRepositoryTest {
                 .point(0L)
                 .build();
 
-            member.setAuthLocal(authLocal);
-            member.setMemberProfile(memberProfile);
+            member.relateAuthLocal(authLocal);
+            member.relateMemberProfile(memberProfile);
 
             // when
             Member savedMember = memberRepository.save(member);
@@ -155,7 +152,29 @@ public class MemberRepositoryTest {
         }
     }
 
-    // TODO: 회원 프로필 수정
+    @DisplayName("프로필 수정")
+    @Nested
+    class updateMemberProfile {
+        @DisplayName("회원 ID로 프로필 수정 성공")
+        @Test
+        void updateMemberProfileSuccess() {
+            // given
+            Long memberId = 3L;
+            String name = "new name";
+            String info = "new info";
+            MemberProfile memberProfile = memberProfileRepository.findByMemberId(memberId).orElse(null);
+            memberProfile.updateName(name);
+            memberProfile.updateInfo(info);
+
+            // when
+            MemberProfile updatedMemberProfile = memberProfileRepository.save(memberProfile);
+
+            // then
+            assertNotNull(updatedMemberProfile);
+            assertEquals(name, updatedMemberProfile.getName());
+            assertEquals(info, updatedMemberProfile.getInfo());
+        }
+    }
 
     // TODO: 회원이 작성한 리뷰 목록
 
