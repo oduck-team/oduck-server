@@ -6,7 +6,8 @@ import java.util.Optional;
 public interface MemberRepositoryCustom {
     Optional<ProfileWithoutActivity> selectProfileByName(String name);
 
-    Long countLikesByMemberId(Long id);
-
     Long countReviewsByMemberId(Long id);
+    Long countBookmarksByMemberId(Long id);
+
+    Long countLikesByMemberId(Long id);
 }

@@ -1,11 +1,13 @@
 package io.oduck.api.domain.member.repository;
 
+import static io.oduck.api.domain.bookmark.entity.QBookmark.bookmark;
 import static io.oduck.api.domain.member.entity.QMemberProfile.memberProfile;
 import static io.oduck.api.domain.review.entity.QShortReview.shortReview;
 import static io.oduck.api.domain.reviewLike.entity.QShortReviewLike.shortReviewLike;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import io.oduck.api.domain.bookmark.entity.QBookmark;
 import io.oduck.api.domain.member.dto.MemberDslDto.ProfileWithoutActivity;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +50,17 @@ class MemberRepositoryImpl implements MemberRepositoryCustom {
             .where(shortReview.member.id.eq(id))
             .fetchOne();
         return likeCount;
+    }
+
+    @Override
+    public Long countBookmarksByMemberId(Long id) {
+        Long bookmarkCount = query
+            .select(bookmark.id.count())
+            .from(bookmark)
+            .where(bookmark.member.id.eq(id))
+            .fetchOne();
+
+        return bookmarkCount;
     }
 
     @Override
