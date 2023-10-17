@@ -16,10 +16,12 @@ public class AnimeRes {
     @Getter
     @Builder
     public static class Anime {
-        private Long animeId;
+        private Long id;
         private String title;
         private String thumbnail;
-        private Broadcast broadcast;
+        private BroadcastType broadcastType;
+        private int year;
+        private Quarter quarter;
         private String summary;
         private int episodeCount;
         private Rating rating;
@@ -31,13 +33,5 @@ public class AnimeRes {
         private List<String> studios;
         private long reviewCount;
         private long bookmarkCount;
-    }
-
-    @Getter
-    @Builder
-    public static class Broadcast {
-        private BroadcastType broadcastType;
-        private int year;
-        private Quarter quarter;
     }
 }

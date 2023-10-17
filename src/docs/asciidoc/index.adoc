@@ -191,4 +191,166 @@ include::{snippets}/getShortReviews/success/response-fields.adoc[]
 
 .http-response
 include::{snippets}/getShortReviews/success/http-response.adoc[]
+
+==== 실패시
+
+==== 실패시
+
+== admin
+
+=== POST api/v1/oduckdmin/animes
+.curl-request
+include::{snippets}/postAnime/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/postAnime/success/http-request.adoc[]
+
+.request-body
+include::{snippets}/postAnime/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/postAnime/success/request-fields.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/postAnime/success/http-response.adoc[]
+
+==== 실패시
+
+=== PATCH api/v1/oduckdmin/animes/:id
+.curl-request
+include::{snippets}/patchAnime/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchAnime/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/patchAnime/success/path-parameters.adoc[]
+
+.request-body
+include::{snippets}/patchAnime/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/patchAnime/success/request-fields.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/patchAnime/success/http-response.adoc[]
+
+==== 실패시
+
+=== PATCH api/v1/oduckdmin/animes/:id/original-authors
+.curl-request
+include::{snippets}/patchAnimeOriginalAuthors/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchAnimeOriginalAuthors/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/patchAnimeOriginalAuthors/success/path-parameters.adoc[]
+
+.request-body
+include::{snippets}/patchAnimeOriginalAuthors/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/patchAnimeOriginalAuthors/success/request-fields.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/patchAnimeOriginalAuthors/success/http-response.adoc[]
+
+==== 실패시
+
+=== PATCH api/v1/oduckdmin/animes/:id/studios
+.curl-request
+include::{snippets}/patchAnimeStudios/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchAnimeStudios/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/patchAnimeStudios/success/path-parameters.adoc[]
+
+.request-body
+include::{snippets}/patchAnimeStudios/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/patchAnimeStudios/success/request-fields.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/patchAnimeStudios/success/http-response.adoc[]
+
+==== 실패시
+
+=== PATCH api/v1/oduckdmin/animes/:id/voice-actors
+.curl-request
+include::{snippets}/patchAnimeVoiceActors/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchAnimeVoiceActors/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/patchAnimeVoiceActors/success/path-parameters.adoc[]
+
+.request-body
+include::{snippets}/patchAnimeVoiceActors/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/patchAnimeVoiceActors/success/request-fields.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/patchAnimeVoiceActors/success/http-response.adoc[]
+
+==== 실패시
+
+=== PATCH api/v1/oduckdmin/animes/:id/genres
+.curl-request
+include::{snippets}/patchAnimeGenres/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchAnimeGenres/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/patchAnimeGenres/success/path-parameters.adoc[]
+
+.request-body
+include::{snippets}/patchAnimeGenres/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/patchAnimeGenres/success/request-fields.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/patchAnimeGenres/success/http-response.adoc[]
+
+==== 실패시
+
+=== PATCH api/v1/oduckdmin/animes/:id/series
+.curl-request
+include::{snippets}/patchAnimeSeries/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchAnimeSeries/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/patchAnimeSeries/success/path-parameters.adoc[]
+
+.request-body
+include::{snippets}/patchAnimeSeries/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/patchAnimeSeries/success/request-fields.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/patchAnimeSeries/success/http-response.adoc[]
+
 ==== 실패시

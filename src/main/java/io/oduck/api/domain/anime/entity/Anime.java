@@ -35,7 +35,7 @@ public class Anime extends BaseEntity {
   @Column(nullable = false, length = 50)
   private String title;
 
-  @Column(nullable = false, length = 255)
+  @Column(nullable = false, length = 600)
   private String summary;
 
   @Enumerated(EnumType.STRING)
@@ -47,6 +47,7 @@ public class Anime extends BaseEntity {
   @Column(nullable = true, length = 500)
   private String thumbnail;
 
+  @Column(name = "release_year")
   private int year;
 
   @Enumerated(EnumType.STRING)
