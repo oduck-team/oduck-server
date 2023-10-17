@@ -1,6 +1,7 @@
 package io.oduck.api.domain.anime.entity;
 
 import io.oduck.api.domain.voiceActor.entity.VoiceActor;
+import io.oduck.api.global.audit.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AnimeVoiceActor {
+public class AnimeVoiceActor extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,7 @@
 package io.oduck.api.domain.anime.entity;
 
 import io.oduck.api.domain.originalAuthor.entity.OriginalAuthor;
+import io.oduck.api.global.audit.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AnimeOriginalAuthor {
+public class AnimeOriginalAuthor extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
