@@ -86,8 +86,8 @@ public class SocialLoginService implements OAuth2UserService<OAuth2UserRequest, 
             .loginType(LoginType.SOCIAL)
             .build();
 
-        member.setAuthSocial(authSocial);
-        member.setMemberProfile(memberProfile);
+        member.relateAuthSocial(authSocial);
+        member.relateMemberProfile(memberProfile);
 
         Member savedMember = memberRepository.save(member);
         log.info("Member Created! {}", savedMember.getId());

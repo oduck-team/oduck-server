@@ -47,7 +47,7 @@ public class AuthSocial extends BaseEntity {
     this.socialType = socialType;
   }
 
-  public void setMember(Member member) {
+  public void relateMember(Member member) {
     this.member = member;
   }
 }

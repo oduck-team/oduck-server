@@ -34,8 +34,8 @@ public class MemberStub {
             .point(0L)
             .build();
 
-        member1.setAuthLocal(authLocal1);
-        member1.setMemberProfile(memberProfile1);
+        member1.relateAuthLocal(authLocal1);
+        member1.relateMemberProfile(memberProfile1);
 
         // member2
         Member member2 = Member.builder()
@@ -55,8 +55,8 @@ public class MemberStub {
             .point(0L)
             .build();
 
-        member2.setAuthLocal(authLocal2);
-        member2.setMemberProfile(memberProfile2);
+        member2.relateAuthLocal(authLocal2);
+        member2.relateMemberProfile(memberProfile2);
 
         // member3
         Member member3 = Member.builder()
@@ -76,8 +76,8 @@ public class MemberStub {
             .point(0L)
             .build();
 
-        member3.setAuthLocal(authLocal3);
-        member3.setMemberProfile(memberProfile3);
+        member3.relateAuthLocal(authLocal3);
+        member3.relateMemberProfile(memberProfile3);
 
         members.addAll(List.of(member1, member2, member3));
     }
