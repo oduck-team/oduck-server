@@ -31,7 +31,7 @@ public class MemberReqDto {
     public static class PatchReq {
 
         @NotBlank
-        @Pattern(regexp = "^[0-9A-Za-z가-힣]{2,10}$",
+        @Pattern(regexp = "^[0-9A-Za-z가-힣_]{2,10}$",
                 message = "이름은 2~10자리의 한글, 영문, 숫자여야 합니다.")
         private String name;
 
