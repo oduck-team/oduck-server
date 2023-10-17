@@ -15,13 +15,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Anime extends BaseEntity {
 
   @Id
@@ -31,7 +35,7 @@ public class Anime extends BaseEntity {
   @Column(nullable = false, length = 50)
   private String title;
 
-  @Column(nullable = false, length = 255)
+  @Column(nullable = false, length = 600)
   private String summary;
 
   @Enumerated(EnumType.STRING)
@@ -43,6 +47,7 @@ public class Anime extends BaseEntity {
   @Column(nullable = true, length = 500)
   private String thumbnail;
 
+  @Column(name = "release_year")
   private int year;
 
   @Enumerated(EnumType.STRING)
