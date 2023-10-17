@@ -121,6 +121,23 @@ public class MemberRepositoryTest {
         }
     }
 
+    @DisplayName("내가 입덕한 애니 수 조회")
+    @Nested
+    class countBookmarksByMemberId {
+        @DisplayName("회원 ID로 입덕한 애니 수 조회 성공")
+        @Test
+        void countBookmarksByMemberIdSuccess() {
+            // given
+            Long memberId = 1L;
+
+            // when
+            Long likesCount = memberRepository.countBookmarksByMemberId(memberId);
+
+            // then
+            assertNotNull(likesCount);
+        }
+    }
+
     @DisplayName("내가 작성한 리뷰 수 조회")
     @Nested
     class countReviewByMemberId {
@@ -131,10 +148,10 @@ public class MemberRepositoryTest {
             Long memberId = 1L;
 
             // when
-            Long likesCount = memberRepository.countLikesByMemberId(memberId);
+            Long bookmarksCount = memberRepository.countBookmarksByMemberId(memberId);
 
             // then
-            assertNotNull(likesCount);
+            assertNotNull(bookmarksCount);
         }
     }
 
