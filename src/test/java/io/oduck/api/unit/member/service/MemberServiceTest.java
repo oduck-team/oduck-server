@@ -6,20 +6,24 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import io.oduck.api.domain.member.dto.MemberDslDto.ProfileWithoutActivity;
+import io.oduck.api.domain.member.dto.MemberReqDto.PatchReq;
 import io.oduck.api.domain.member.dto.MemberResDto.MemberProfileRes;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.entity.MemberProfile;
+import io.oduck.api.domain.member.repository.MemberProfileRepository;
 import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.domain.member.service.MemberServiceImpl;
+import io.oduck.api.global.exception.BadRequestException;
+import io.oduck.api.global.exception.ConflictException;
 import io.oduck.api.global.exception.NotFoundException;
 import io.oduck.api.global.stub.MemberStub;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -35,6 +39,8 @@ public class MemberServiceTest {
 
     @Mock
     MemberRepository memberRepository;
+    @Mock
+    MemberProfileRepository memberProfileRepository;
 
     // TODO: 회원 가입
     // TODO: 회원 가입 실패(이메일 중복, 비밀번호 유효성 등)
@@ -106,8 +112,83 @@ public class MemberServiceTest {
         }
     }
 
-    // TODO: 회원 정보 수정
-    // TODO: 회원 정보 수정 실패(닉네임 중복 등)
+    @Nested
+    @DisplayName("회원 프로필 수정")
+    class updateProfile {
+        @DisplayName("회원 프로필 수정 성공")
+        @Test
+        void updateProfileSuccess() {
+            // given
+            Member member = new MemberStub().getMember();
+            MemberProfile memberProfile = member.getMemberProfile();
+            PatchReq patchReq = PatchReq.builder()
+                .name("newName")
+                .description("newDescription")
+                .build();
+            MemberProfile updatedMemberProfile = MemberProfile.builder()
+                .member(member)
+                .name(patchReq.getName())
+                .info(patchReq.getDescription())
+                .build();
+
+            given(memberProfileRepository.findByMemberId(anyLong())).willReturn(Optional.ofNullable(memberProfile));
+            given(memberProfileRepository.existsByName(anyString())).willReturn(false);
+            given(memberProfileRepository.save(any(MemberProfile.class))).willReturn(updatedMemberProfile);
+
+            // when
+            // then
+            assertDoesNotThrow(() -> memberService.updateProfile(patchReq, 1L));
+        }
+        @DisplayName("회원 프로필 수정시 실패. 이전 이름과 동일한 이름일때")
+        @Test
+        void updateProfileFailureWhenSameNameAsBefore() {
+            // given
+            Member member = new MemberStub().getMember();
+            MemberProfile memberProfile = member.getMemberProfile();
+            PatchReq patchReq = PatchReq.builder()
+                .name(memberProfile.getName())
+                .description("newDescription")
+                .build();
+            MemberProfile updatedMemberProfile = MemberProfile.builder()
+                .member(member)
+                .name(patchReq.getName())
+                .info(patchReq.getDescription())
+                .build();
+
+            given(memberProfileRepository.findByMemberId(anyLong())).willReturn(Optional.ofNullable(memberProfile));
+
+            // when
+            // then
+            assertThrows(BadRequestException.class,
+                () -> memberService.updateProfile(patchReq, 1L)
+            );
+        }
+        @DisplayName("회원 프로필 수정시 실패. 중복 이름 존재시")
+        @Test
+        void updateProfileFailureWhenSameNameAsAlreadyExist() {
+            // given
+            Member member = new MemberStub().getMember();
+            MemberProfile memberProfile = member.getMemberProfile();
+            PatchReq patchReq = PatchReq.builder()
+                .name("newName")
+                .description("newDescription")
+                .build();
+            MemberProfile updatedMemberProfile = MemberProfile.builder()
+                .member(member)
+                .name(patchReq.getName())
+                .info(patchReq.getDescription())
+                .build();
+
+            given(memberProfileRepository.findByMemberId(anyLong())).willReturn(Optional.ofNullable(memberProfile));
+            given(memberProfileRepository.existsByName(anyString())).willReturn(true);
+
+            // when
+            // then
+            assertThrows(ConflictException.class,
+                () -> memberService.updateProfile(patchReq, 1L)
+            );
+        }
+    }
 
     // TODO: 회원이 작성한 리뷰 목록
 
