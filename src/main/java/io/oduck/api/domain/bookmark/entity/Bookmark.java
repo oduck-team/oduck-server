@@ -38,4 +38,12 @@ public class Bookmark {
   @CreationTimestamp
   @Column(nullable = false, updatable = false)
   protected LocalDateTime createdAt;
+
+  public void relateAnime(Anime anime) {
+        this.anime = anime;
+    }
+
+  public void relateMemer(Member member) {
+    this.member = member;
+  }
 }
