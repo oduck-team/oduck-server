@@ -134,6 +134,7 @@ public class Anime extends BaseEntity {
       throw new IllegalArgumentException("음수는 올 수 없습니다.");
     }
     starRatingScoreTotal += score;
+    increaseStarRatingCount();
   }
 
   // 평가를 지웠을 때 점수 합산(별점)
@@ -142,6 +143,15 @@ public class Anime extends BaseEntity {
       throw new IllegalArgumentException("음수는 올 수 없습니다.");
     }
     starRatingScoreTotal -= score;
+    decreaseStarRatingCount();
+  }
+
+  private void increaseStarRatingCount() {
+    starRatingCount++;
+  }
+
+  private void decreaseStarRatingCount() {
+    starRatingCount--;
   }
 
   /**
