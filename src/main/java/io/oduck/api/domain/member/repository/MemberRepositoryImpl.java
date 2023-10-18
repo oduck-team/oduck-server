@@ -7,7 +7,6 @@ import static io.oduck.api.domain.reviewLike.entity.QShortReviewLike.shortReview
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import io.oduck.api.domain.bookmark.entity.QBookmark;
 import io.oduck.api.domain.member.dto.MemberDslDto.ProfileWithoutActivity;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
