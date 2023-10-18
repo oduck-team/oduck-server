@@ -85,6 +85,7 @@ public class MemberServiceImpl implements MemberService{
             .reviews(reviewsCount)
             .bookmarks(bookmarksCount)
             .likes(likesCount)
+            .point(memberProfile.getPoint())
             .build();
 
         MemberProfileRes memberProfileRes = MemberProfileRes. builder()
@@ -93,7 +94,6 @@ public class MemberServiceImpl implements MemberService{
             .description(memberProfile.getDescription())
             .thumbnail(memberProfile.getThumbnail())
             .backgroundImage (memberProfile.getBackgroundImage())
-            .point(memberProfile.getPoint())
             .activity(activity)
             .build();
 

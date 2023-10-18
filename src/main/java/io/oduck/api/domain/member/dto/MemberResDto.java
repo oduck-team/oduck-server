@@ -14,18 +14,16 @@ public class MemberResDto {
         private String thumbnail;
         private String backgroundImage;
         private Activity activity;
-        private Long point;
 
         @Builder
         public MemberProfileRes(boolean isMine, String name, String description, String thumbnail,
-            String backgroundImage, Activity activity, Long point) {
+            String backgroundImage, Activity activity) {
             this.isMine = isMine;
             this.name = name;
             this.description = description;
             this.thumbnail = thumbnail;
             this.backgroundImage = backgroundImage;
             this.activity = activity;
-            this.point = point;
         }
 
         public boolean getIsMine() {
@@ -39,12 +37,14 @@ public class MemberResDto {
         private long reviews;
         private long bookmarks;
         private long likes;
+        private long point;
 
         @Builder
-        public Activity(long reviews, long bookmarks, long likes) {
+        public Activity(long reviews, long bookmarks, long likes, long point) {
             this.reviews = reviews;
             this.bookmarks = bookmarks;
             this.likes = likes;
+            this.point = point;
         }
     }
 }
