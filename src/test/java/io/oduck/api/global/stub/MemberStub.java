@@ -85,4 +85,7 @@ public class MemberStub {
     public Member getMember() {
         return members.get(0);
     }
+    public List<Member> getMemberList() {
+        return members;
+    }
 }
