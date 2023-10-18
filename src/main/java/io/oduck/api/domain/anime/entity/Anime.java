@@ -189,7 +189,7 @@ public class Anime extends BaseEntity {
     return !elements.isEmpty();
   }
 
-  public void assignAnimeOriginalAuthors(List<AnimeOriginalAuthor> animeOriginalAuthors){
+  public void updateAnimeOriginalAuthors(List<AnimeOriginalAuthor> animeOriginalAuthors){
     // 만약 현재 animeOriginalAuthors에 값이 존재한다면 List를 비운다.
     // (orphanRemoval = true 설정으로 AnimeOriginalAuthor 테이블의 값들이 delete됨)
     if(isEntityListElementsExist(this.animeOriginalAuthors)){
@@ -201,7 +201,7 @@ public class Anime extends BaseEntity {
     }
   }
 
-  public void assignAnimeStudios(List<AnimeStudio> animeStudios) {
+  public void updateAnimeStudios(List<AnimeStudio> animeStudios) {
     // 만약 현재 animeStudios에 값이 존재한다면 List를 비운다.
     // (orphanRemoval = true 설정으로 AnimeStudio 테이블의 값들이 delete됨)
     if(isEntityListElementsExist(this.animeStudios)){
@@ -213,7 +213,7 @@ public class Anime extends BaseEntity {
     }
   }
 
-  public void assignAnimeVoiceActors(List<AnimeVoiceActor> animeVoiceActors) {
+  public void updateAnimeVoiceActors(List<AnimeVoiceActor> animeVoiceActors) {
     // 만약 현재 animeVoiceActors의 값이 존재한다면 List를 비운다.
     // (orphanRemoval = true 설정으로 animeVoiceActor 테이블의 값들이 delete됨)
     if(isEntityListElementsExist(this.animeVoiceActors)){
@@ -225,7 +225,7 @@ public class Anime extends BaseEntity {
     }
   }
 
-  public void assignAnimeGenre(List<AnimeGenre> animeGenres) {
+  public void updateAnimeGenre(List<AnimeGenre> animeGenres) {
     // 만약 현재 animeGenre의 값이 존재한다면 List를 비운다.
     // (orphanRemoval = true 설정으로 animeGenre의 테이블의 값들이 delete됨)
     if(isEntityListElementsExist(this.animeGenres)){
@@ -259,10 +259,10 @@ public class Anime extends BaseEntity {
     anime.starRatingCount = 0;
     
     // 연결 엔티티 설정
-    anime.assignAnimeOriginalAuthors(animeOriginalAuthors);
-    anime.assignAnimeStudios(animeStudios);
-    anime.assignAnimeVoiceActors(animeVoiceActors);
-    anime.assignAnimeGenre(animeGenres);
+    anime.updateAnimeOriginalAuthors(animeOriginalAuthors);
+    anime.updateAnimeStudios(animeStudios);
+    anime.updateAnimeVoiceActors(animeVoiceActors);
+    anime.updateAnimeGenre(animeGenres);
     
     // 시리즈 설정
     anime.series = series;
