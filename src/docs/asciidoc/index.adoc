@@ -168,7 +168,7 @@ include::{snippets}/getAnimeById/success/response-fields.adoc[]
 
 == shortReview
 
-=== GET api/v1/short-review/animeId/1
+=== GET api/v1/short-reviews/animeId/1
 
 .curl-request
 include::{snippets}/getShortReviews/success/curl-request.adoc[]
@@ -176,7 +176,7 @@ include::{snippets}/getShortReviews/success/curl-request.adoc[]
 .http-request
 include::{snippets}/getShortReviews/success/http-request.adoc[]
 
-.request-param
+.path-parameters
 include::{snippets}/getShortReviews/success/path-parameters.adoc[]
 
 ==== 성공시
@@ -191,6 +191,49 @@ include::{snippets}/getShortReviews/success/response-fields.adoc[]
 
 .http-response
 include::{snippets}/getShortReviews/success/http-response.adoc[]
+==== 실패시
+
+=== POST api/v1/short-reviews/1
+
+.curl-request
+include::{snippets}/postShortReview/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/postShortReview/success/http-request.adoc[]
+
+.request-body
+include::{snippets}/postShortReview/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/postShortReview/success/request-fields.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/postShortReview/success/http-response.adoc[]
+
+==== 실패시
+
+=== PATCH api/v1/short-reviews/1
+
+.curl-request
+include::{snippets}/patchShortReviewReq/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchShortReviewReq/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/patchShortReviewReq/success/path-parameters.adoc[]
+
+.request-body
+include::{snippets}/patchShortReviewReq/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/patchShortReviewReq/success/request-fields.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/patchShortReviewReq/success/http-response.adoc[]
+
 
 ==== 실패시
 

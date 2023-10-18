@@ -13,6 +13,7 @@ public class ShortReviewResDto {
     @Getter
     @Builder
     public static class ShortReview implements EntityBased {
+        private Long reviewId;
         private Long animeId;
         private String content;
         private boolean hasSpoiler;
@@ -22,7 +23,7 @@ public class ShortReviewResDto {
 
         @Override
         public Long getId() {
-            return this.getAnimeId();
+            return this.getReviewId();
         }
     }
 
