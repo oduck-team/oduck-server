@@ -71,6 +71,9 @@ public class Anime extends BaseEntity {
   @ColumnDefault("0")
   private long starRatingScoreTotal;
 
+  @ColumnDefault("0")
+  private long starRatingCount;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "series_id")
   private Series series;
@@ -242,6 +245,8 @@ public class Anime extends BaseEntity {
     anime.viewCount = 0;
     anime.reviewCount = 0;
     anime.bookmarkCount = 0;
+    anime.starRatingScoreTotal = 0;
+    anime.starRatingCount = 0;
     
     // 연결 엔티티 설정
     anime.assignAnimeOriginalAuthors(animeOriginalAuthors);
