@@ -1,13 +1,15 @@
 package io.oduck.api.domain.member.controller;
 
+import io.oduck.api.domain.bookmark.dto.BookmarkResDto.BookmarkRes;
+import io.oduck.api.domain.bookmark.service.BookmarkService;
 import io.oduck.api.domain.member.dto.MemberReqDto.CreateReq;
 import io.oduck.api.domain.member.dto.MemberReqDto.PatchReq;
 import io.oduck.api.domain.member.dto.MemberResDto.MemberProfileRes;
 import io.oduck.api.domain.member.service.MemberService;
-import io.oduck.api.global.common.SingleResponse;
 import io.oduck.api.global.security.auth.dto.AuthUser;
 import io.oduck.api.global.security.auth.dto.LoginUser;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MemberController {
     private final MemberService memberService;
+    private final BookmarkService bookmarkService;
 
     // 로컬 회원 가입
     @PostMapping
@@ -60,7 +63,19 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    // 회원이 작성한 리뷰 목록
-
-    // 회원 북마크 애니 목록
+    @GetMapping("/{id}/bookmarks")
+    public ResponseEntity<?> getBookmaks(
+        @PathVariable("id") Long id
+    ) {
+        // TODO: slice 및 정렬 구현
+        List<BookmarkRes> res = bookmarkService.getBookmarksByMemberId(id);
+        return ResponseEntity.ok(res);
+    }
+//
+//    @GetMapping("/{name}/short-reviews")
+//    public ResponseEntity<?> getShortReviews(
+//        @LoginUser AuthUser user
+//    ) {
+//        return ResponseEntity.ok(SliceResponse.of());
+//    }
 }
