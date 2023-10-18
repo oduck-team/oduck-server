@@ -1,0 +1,37 @@
+package io.oduck.api.domain.review.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
+
+public class ShortReviewReqDto {
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class PostShortReviewReq{
+        private Long memberId;
+        private Long animeId;
+        private boolean hasSpoiler;
+        @NotBlank
+        @Length(min = 10, max = 100,
+            message = "최소 10에서 100자 까지 입력 가능합니다.")
+        private String content;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class PatchShortReviewReq{
+        private boolean hasSpoiler;
+        @NotBlank
+        @Length(min = 10, max = 100,
+            message = "최소 10에서 100자 까지 입력 가능합니다.")
+        private String content;
+    }
+}
