@@ -134,11 +134,11 @@ public class MemberControllerTest {
                     .andExpect(jsonPath("$.description").exists())
                     .andExpect(jsonPath("$.thumbnail").exists())
                     .andExpect(jsonPath("$.backgroundImage").exists())
-                    .andExpect(jsonPath("$.point").exists())
                     .andExpect(jsonPath("$.activity").hasJsonPath())
                     .andExpect(jsonPath("$.activity.reviews").exists())
                     .andExpect(jsonPath("$.activity.bookmarks").exists())
                     .andExpect(jsonPath("$.activity.likes").exists())
+                    .andExpect(jsonPath("$.activity.point").exists())
                     .andDo(document("getProfileByName/successIfMine",
                             preprocessRequest(prettyPrint()),
                             preprocessResponse(prettyPrint()),
@@ -152,36 +152,39 @@ public class MemberControllerTest {
                                     .description("Header Cookie, 세션 쿠키")
                             ),
                             responseFields(
-                                    fieldWithPath("name")
-                                            .type(JsonFieldType.STRING)
-                                            .description("회원 이름"),
-                                    fieldWithPath("isMine")
-                                            .type(JsonFieldType.BOOLEAN)
-                                            .description("본인 여부(본인 프로필 조회시 true)"),
-                                    fieldWithPath("description")
-                                            .type(JsonFieldType.STRING)
-                                            .description("자기 소개"),
-                                    fieldWithPath("thumbnail")
-                                            .type(JsonFieldType.STRING)
-                                            .description("프로필 이미지"),
-                                    fieldWithPath("backgroundImage")
-                                            .type(JsonFieldType.STRING)
-                                            .description("프로필 배경 이미지"),
-                                    fieldWithPath("point")
-                                            .type(JsonFieldType.NUMBER)
-                                            .description("회원 포인트"),
-                                    fieldWithPath("activity")
-                                            .type(JsonFieldType.OBJECT)
-                                            .description("회원 활동"),
-                                    fieldWithPath("activity.reviews")
-                                            .type(JsonFieldType.NUMBER)
-                                            .description("작성한 리뷰 갯수"),
-                                    fieldWithPath("activity.bookmarks")
-                                            .type(JsonFieldType.NUMBER)
-                                            .description("입덕 애니 갯수"),
-                                    fieldWithPath("activity.likes")
-                                            .type(JsonFieldType.NUMBER)
-                                            .description("받은 좋아요 갯수"))));
+                                fieldWithPath("name")
+                                    .type(JsonFieldType.STRING)
+                                    .description("회원 이름"),
+                                fieldWithPath("isMine")
+                                    .type(JsonFieldType.BOOLEAN)
+                                    .description("본인 여부(본인 프로필 조회시 true)"),
+                                fieldWithPath("description")
+                                    .type(JsonFieldType.STRING)
+                                    .description("자기 소개"),
+                                fieldWithPath("thumbnail")
+                                    .type(JsonFieldType.STRING)
+                                    .description("프로필 이미지"),
+                                fieldWithPath("backgroundImage")
+                                    .type(JsonFieldType.STRING)
+                                    .description("프로필 배경 이미지"),
+                                fieldWithPath("activity")
+                                    .type(JsonFieldType.OBJECT)
+                                    .description("회원 활동"),
+                                fieldWithPath("activity.reviews")
+                                    .type(JsonFieldType.NUMBER)
+                                    .description("작성한 리뷰 갯수"),
+                                fieldWithPath("activity.bookmarks")
+                                    .type(JsonFieldType.NUMBER)
+                                    .description("입덕 애니 갯수"),
+                                fieldWithPath("activity.likes")
+                                    .type(JsonFieldType.NUMBER)
+                                    .description("받은 좋아요 갯수"),
+                                fieldWithPath("activity.point")
+                                    .type(JsonFieldType.NUMBER)
+                                    .description("회원 포인트")
+                            )
+                        )
+                    );
         }
 
         @DisplayName("타인 프로필 조회 성공시 200 OK 반환, isMine = false")
@@ -210,11 +213,11 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.description").exists())
                 .andExpect(jsonPath("$.thumbnail").exists())
                 .andExpect(jsonPath("$.backgroundImage").exists())
-                .andExpect(jsonPath("$.point").exists())
                 .andExpect(jsonPath("$.activity").hasJsonPath())
                 .andExpect(jsonPath("$.activity.reviews").exists())
                 .andExpect(jsonPath("$.activity.bookmarks").exists())
                 .andExpect(jsonPath("$.activity.likes").exists())
+                .andExpect(jsonPath("$.activity.point").exists())
                 .andDo(document("getProfileByName/successIfOthers",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
@@ -243,9 +246,6 @@ public class MemberControllerTest {
                         fieldWithPath("backgroundImage")
                             .type(JsonFieldType.STRING)
                             .description("프로필 배경 이미지"),
-                        fieldWithPath("point")
-                            .type(JsonFieldType.NUMBER)
-                            .description("회원 포인트"),
                         fieldWithPath("activity")
                             .type(JsonFieldType.OBJECT)
                             .description("회원 활동"),
@@ -257,7 +257,13 @@ public class MemberControllerTest {
                             .description("입덕한 애니 갯수"),
                         fieldWithPath("activity.likes")
                             .type(JsonFieldType.NUMBER)
-                            .description("받은 좋아요 갯수"))));
+                            .description("받은 좋아요 갯수"),
+                        fieldWithPath("activity.point")
+                            .type(JsonFieldType.NUMBER)
+                            .description("회원 포인트")
+                    )
+                )
+            );
         }
 
         // TODO: 회원 프로필 조회 실패시

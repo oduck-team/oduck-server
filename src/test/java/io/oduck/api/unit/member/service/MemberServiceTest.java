@@ -59,6 +59,7 @@ public class MemberServiceTest {
             .description(memberProfile.getInfo())
             .thumbnail(memberProfile.getThumbnail())
             .backgroundImage(memberProfile.getBackgroundImage())
+            .point(memberProfile.getPoint())
             .build();
 
         @DisplayName("본인 프로필 조회 성공시 오류 없이 회원 프로필 반환")
