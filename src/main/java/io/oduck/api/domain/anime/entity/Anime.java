@@ -237,6 +237,23 @@ public class Anime extends BaseEntity {
     }
   }
 
+  public void update(String title, String summary, BroadcastType broadcastType, int episodeCount,
+      String thumbnail, int year, Quarter quarter, Rating rating, Status status){
+    this.title = title;
+    this.summary = summary;
+    this.broadcastType = broadcastType;
+    this.episodeCount = episodeCount;
+    this.thumbnail = thumbnail;
+    this.year = year;
+    this.quarter = quarter;
+    this.rating = rating;
+    this.status = status;
+  }
+
+  public void update(Series series){
+    this.series = series;
+  }
+
   public static Anime createAnime(String title, String summary, BroadcastType broadcastType, int episodeCount,
       String thumbnail, int year, Quarter quarter, Rating rating, Status status,
       List<AnimeOriginalAuthor> animeOriginalAuthors, List<AnimeStudio> animeStudios, List<AnimeVoiceActor> animeVoiceActors, List<AnimeGenre> animeGenres, Series series) {
