@@ -1,11 +1,17 @@
 package io.oduck.api.domain.bookmark.service;
 
+import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
+
 import io.oduck.api.domain.bookmark.dto.BookmarkDslDto.BookmarkDsl;
+import io.oduck.api.domain.bookmark.dto.BookmarkReqDto.Sort;
 import io.oduck.api.domain.bookmark.dto.BookmarkResDto.BookmarkRes;
 import io.oduck.api.domain.bookmark.repository.BookmarkRepository;
+import io.oduck.api.global.common.OrderDirection;
+import io.oduck.api.global.common.SliceResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -14,11 +20,21 @@ import org.springframework.stereotype.Service;
 public class BookmarkServiceImpl implements BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     @Override
-    public List<BookmarkRes> getBookmarksByMemberId(Long memberId) {
-        List<BookmarkDsl> bookmarks = bookmarkRepository.selectBookmarks(memberId);
-        List<BookmarkRes> bookmarkRes = bookmarks.stream()
+    public SliceResponse<BookmarkRes> getBookmarksByMemberId(Long memberId, String cursor, Sort sort, OrderDirection order, int size) {
+        Slice<BookmarkDsl> bookmarks = bookmarkRepository.selectBookmarks(
+            memberId,
+            cursor,
+            applyPageableForNonOffset(
+                sort.getSort(),
+                order.getOrder(),
+                size
+            )
+        );
+
+        List<BookmarkRes> bookmarkRes = bookmarks.getContent().stream()
             .map(BookmarkRes::of)
             .toList();
-        return bookmarkRes;
+
+        return SliceResponse.of(bookmarks, bookmarkRes);
     }
 }
