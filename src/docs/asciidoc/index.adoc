@@ -181,7 +181,7 @@ include::{snippets}/getShortReviews/success/path-parameters.adoc[]
 
 ==== 성공시
 .http-response
-include::{snippets}/getShortReviews/success/response-fields.adoc[]
+include::{snippets}/getShortReviews/success/http-response.adoc[]
 
 .response-body
 include::{snippets}/getShortReviews/success/response-body.adoc[]
