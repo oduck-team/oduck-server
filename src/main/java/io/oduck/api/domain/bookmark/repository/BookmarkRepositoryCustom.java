@@ -1,14 +1,9 @@
 package io.oduck.api.domain.bookmark.repository;
 
-import static io.oduck.api.domain.anime.entity.QAnime.anime;
-import static io.oduck.api.domain.bookmark.entity.QBookmark.bookmark;
-import static io.oduck.api.domain.member.entity.QMember.member;
-import static io.oduck.api.domain.starRating.entity.QStarRating.starRating;
-
-import com.querydsl.core.types.Projections;
 import io.oduck.api.domain.bookmark.dto.BookmarkDslDto.BookmarkDsl;
-import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface BookmarkRepositoryCustom {
-    List<BookmarkDsl> selectBookmarks(Long memberId) ;
+    Slice<BookmarkDsl> selectBookmarks(Long memberId, String cursor, Pageable pageable);
 }
