@@ -4,13 +4,19 @@ import io.oduck.api.domain.bookmark.dto.BookmarkResDto.BookmarkRes;
 import io.oduck.api.domain.bookmark.service.BookmarkService;
 import io.oduck.api.domain.member.dto.MemberReqDto.CreateReq;
 import io.oduck.api.domain.member.dto.MemberReqDto.PatchReq;
+import io.oduck.api.domain.bookmark.dto.BookmarkReqDto.Sort;
 import io.oduck.api.domain.member.dto.MemberResDto.MemberProfileRes;
 import io.oduck.api.domain.member.service.MemberService;
+import io.oduck.api.global.common.OrderDirection;
+import io.oduck.api.global.common.SliceResponse;
 import io.oduck.api.global.security.auth.dto.AuthUser;
 import io.oduck.api.global.security.auth.dto.LoginUser;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
@@ -65,10 +72,14 @@ public class MemberController {
 
     @GetMapping("/{id}/bookmarks")
     public ResponseEntity<?> getBookmaks(
-        @PathVariable("id") Long id
-    ) {
+        @PathVariable("id") Long id,
+        @RequestParam(required = false) String cursor,
+        @RequestParam(required = false, defaultValue = "latest") Sort sort,
+        @RequestParam(required = false, defaultValue = "DESC") OrderDirection order,
+        @RequestParam(required = false, defaultValue = "10") @Min(1) @Max(100) int size
+        ) {
         // TODO: slice 및 정렬 구현
-        List<BookmarkRes> res = bookmarkService.getBookmarksByMemberId(id);
+        SliceResponse<BookmarkRes> res = bookmarkService.getBookmarksByMemberId(id, cursor, sort, order, size);
         return ResponseEntity.ok(res);
     }
 //
