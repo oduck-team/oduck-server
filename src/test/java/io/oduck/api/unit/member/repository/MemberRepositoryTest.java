@@ -44,14 +44,14 @@ public class MemberRepositoryTest {
                 .build();
 
             AuthLocal authLocal = AuthLocal.builder()
-                .email("bob@gmail.com")
+                .email("michael@gmail.com")
                 .password("{bcrypt}$2a$10$C0G6uQz.MzfsSH7BZFRBz.MPBmFSV2zAloqqBIwaUpxnmMgCQK..i")
                 .build();
 
             MemberProfile memberProfile = MemberProfile.builder()
-                .name("bob")
-                .info("bob info")
-                .thumbnail("bob thumbnail")
+                .name("michael")
+                .info("michael info")
+                .thumbnail("michael thumbnail")
                 .point(0L)
                 .build();
 

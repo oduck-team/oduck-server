@@ -1,5 +1,6 @@
 package io.oduck.api.unit.bookmark.repository;
 
+import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import io.oduck.api.domain.bookmark.dto.BookmarkDslDto.BookmarkDsl;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
@@ -30,15 +33,15 @@ public class BookmarkRepositoryTest {
         void selectBookmarksSuccess() {
             // given
             Long memberId = 1L;
+            Pageable pageable = applyPageableForNonOffset("createdAt", "desc", 10);
 
             // when
-            List<BookmarkDsl> bookmarks = memberRepository.selectBookmarks(memberId);
+            Slice<BookmarkDsl> bookmarks = memberRepository.selectBookmarks(memberId, null, pageable);
 
             assertNotNull(bookmarks);
-            assertNotNull(bookmarks.get(0).getAnimeId());
-            assertNotNull(bookmarks.get(0).getTitle());
-            assertNotNull(bookmarks.get(0).getThumbnail());
-            assertNotNull(bookmarks.get(0).getMyScore());
+            assertNotNull(bookmarks.getContent().get(0).getAnimeId());
+            assertNotNull(bookmarks.getContent().get(0).getTitle());
+            assertNotNull(bookmarks.getContent().get(0).getThumbnail());
         }
     }
 

@@ -133,7 +133,7 @@ public class MemberControllerTest {
                     .andExpect(jsonPath("$.isMine").value(true))
                     .andExpect(jsonPath("$.description").exists())
                     .andExpect(jsonPath("$.thumbnail").exists())
-                    .andExpect(jsonPath("$.backgroundImage").exists())
+                    .andExpect(jsonPath("$.backgroundImage").value(equalTo(null)))
                     .andExpect(jsonPath("$.activity").hasJsonPath())
                     .andExpect(jsonPath("$.activity.reviews").exists())
                     .andExpect(jsonPath("$.activity.bookmarks").exists())
@@ -165,7 +165,7 @@ public class MemberControllerTest {
                                     .type(JsonFieldType.STRING)
                                     .description("프로필 이미지"),
                                 fieldWithPath("backgroundImage")
-                                    .type(JsonFieldType.STRING)
+                                    .type(JsonFieldType.NULL)
                                     .description("프로필 배경 이미지"),
                                 fieldWithPath("activity")
                                     .type(JsonFieldType.OBJECT)
@@ -212,7 +212,7 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.isMine").value(false))
                 .andExpect(jsonPath("$.description").exists())
                 .andExpect(jsonPath("$.thumbnail").exists())
-                .andExpect(jsonPath("$.backgroundImage").exists())
+                .andExpect(jsonPath("$.backgroundImage").value(equalTo(null)))
                 .andExpect(jsonPath("$.activity").hasJsonPath())
                 .andExpect(jsonPath("$.activity.reviews").exists())
                 .andExpect(jsonPath("$.activity.bookmarks").exists())
@@ -244,7 +244,7 @@ public class MemberControllerTest {
                             .type(JsonFieldType.STRING)
                             .description("프로필 이미지"),
                         fieldWithPath("backgroundImage")
-                            .type(JsonFieldType.STRING)
+                            .type(JsonFieldType.NULL)
                             .description("프로필 배경 이미지"),
                         fieldWithPath("activity")
                             .type(JsonFieldType.OBJECT)

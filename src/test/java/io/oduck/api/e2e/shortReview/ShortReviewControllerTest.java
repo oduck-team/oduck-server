@@ -78,6 +78,7 @@ public class ShortReviewControllerTest {
                 .andExpect(jsonPath("$.items[0].shortReviewLikeCount").exists())
                 .andExpect(jsonPath("$.items[0].member.name").exists())
                 .andExpect(jsonPath("$.items[0].member.thumbnail").exists())
+                .andExpect(jsonPath("$.hasNext").exists())
                 .andDo(document("getShortReviews/success",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
@@ -108,8 +109,8 @@ public class ShortReviewControllerTest {
                             .type(JsonFieldType.NUMBER)
                             .description("리뷰 좋아요 수")
                         ,fieldWithPath("items[].member")
-                             .type(JsonFieldType.OBJECT)
-                             .description("회원 관련 데이터"),
+                            .type(JsonFieldType.OBJECT)
+                            .description("회원 관련 데이터"),
                         fieldWithPath("items[].member.name")
                             .type(JsonFieldType.STRING)
                             .description("회원 이름"),
@@ -125,9 +126,9 @@ public class ShortReviewControllerTest {
                         fieldWithPath("lastId")
                             .type(JsonFieldType.NUMBER)
                             .description("마지막 아이템의 id"),
-                        fieldWithPath("lastPage")
+                        fieldWithPath("hasNext")
                             .type(JsonFieldType.BOOLEAN)
-                            .description("마지막 페이지일 경우, true 반환.")
+                            .description("마지막 페이지일 경우, false 반환.")
 
                     )
                 ));
