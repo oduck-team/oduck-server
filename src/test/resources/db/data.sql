@@ -17,6 +17,10 @@ VALUES(0, 1, '2023-10-11 21:05:31.859', '2023-10-11 21:05:31.859', '스파패', 
 INSERT INTO anime(episode_count, is_released, created_at, updated_at, title, thumbnail, broadcast_type, quarter, rating, status, summary, release_year)
 VALUES(0, 1, '2023-10-12 21:05:31.859', '2023-10-12 21:05:31.859', '귀멸칼날', 'http://thumbnail.com', 'TVA', 'Q3', 'ALL', 'ONGOING', '3', 2022);
 
+INSERT INTO series(created_at, title, updated_at) VALUES('2023-10-10 21:05:31.859', '귀멸의 칼날', '2023-10-10 21:05:31.859');
+INSERT INTO series(created_at, title, updated_at) VALUES('2023-10-10 21:05:31.859', '원피스', '2023-10-10 21:05:31.859');
+INSERT INTO series(created_at, title, updated_at) VALUES('2023-10-10 21:05:31.859', '나루토', '2023-10-10 21:05:31.859');
+
 INSERT INTO bookmark(anime_id, created_at, member_id) VALUES(1, '2023-10-10 21:05:31.859', 1);
 INSERT INTO bookmark(anime_id, created_at, member_id) VALUES(2, '2023-10-11 21:05:31.859', 1);
 INSERT INTO bookmark(anime_id, created_at, member_id) VALUES(3, '2023-10-12 21:05:31.859', 1);
