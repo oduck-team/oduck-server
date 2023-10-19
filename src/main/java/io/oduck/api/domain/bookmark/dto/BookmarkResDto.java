@@ -1,6 +1,7 @@
 package io.oduck.api.domain.bookmark.dto;
 
 import io.oduck.api.domain.bookmark.dto.BookmarkDslDto.BookmarkDsl;
+import io.oduck.api.global.common.EntityBased;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +13,7 @@ public class BookmarkResDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class BookmarkRes {
+    public static class BookmarkRes implements EntityBased {
         private Long animeId;
         private String title;
         private String thumbnail;
@@ -27,6 +28,11 @@ public class BookmarkResDto {
                 .myScore(bookmarkDsl.getMyScore())
                 .createdAt(bookmarkDsl.getCreatedAt())
                 .build();
+        }
+
+        @Override
+        public Long getId() {
+            return this.animeId;
         }
     }
 }
