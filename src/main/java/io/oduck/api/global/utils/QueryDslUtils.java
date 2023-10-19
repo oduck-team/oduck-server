@@ -4,34 +4,35 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberPath;
-import java.util.ArrayList;
+import com.querydsl.jpa.impl.JPAQuery;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-// QueryDsl 정렬 기준 생성용 클래스
 @Component
 public class QueryDslUtils {
-    // pageable에서 sort 객체로 OrderSpecifier를 생성하여 반환.
-    public OrderSpecifier[] getAllOrderSpecifiers(Pageable pageable, Path path) {
-        List<OrderSpecifier> orders = convertToDslOrder(pageable, path);
-        return orders.toArray(OrderSpecifier[]::new);
+    // JPAQuery를 이용하여 Slice를 생성하여 반환.
+    public static <T> Slice<T> fetchSliceByCursor(Path path, JPAQuery<T> query, Pageable pageable) {
+        Sort.Order order = pageable.getSort().iterator().next();
+
+        int pageSize = pageable.getPageSize();
+
+        List<T> content = query
+            .orderBy(getOrderSpecifier(order, path))
+            .limit(pageSize + 1)
+            .fetch();
+
+        return new SliceImpl<>(content, pageable, isHasNext(pageSize, content));
     }
 
-    // Sort 객체에 Order가 존재할 때 QueryDSL Order로 변환
-    private static List<OrderSpecifier> convertToDslOrder(Pageable pageable, Path path) {
-        List<OrderSpecifier> orders = new ArrayList<>();
-        if (!pageable.getSort().isEmpty()) {
-            for (Sort.Order order : pageable.getSort()) {
-                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
+    // sort.order 객체로 OrderSpecifier를 생성하여 반환.
+    public static OrderSpecifier<?> getOrderSpecifier(Sort.Order order, Path path) {
 
-                OrderSpecifier<?> orderBy = createOrderSpecifier(direction, path, order.getProperty());
-                orders.add(orderBy);
-            }
-        }
-        return orders;
+        Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
+        return createOrderSpecifier(direction, path, order.getProperty());
     }
 
     private static OrderSpecifier<?> createOrderSpecifier(Order order, Path<?> parent, String fieldName) {
@@ -39,5 +40,15 @@ public class QueryDslUtils {
         Path<Object> fieldPath = Expressions.path(Object.class, parent, fieldName);
 
         return new OrderSpecifier(order, fieldPath);
+    }
+
+    private static <T> boolean isHasNext(int pageSize, List<T> content) {
+//        boolean hasNext = pageSize <= content.size();
+        boolean hasNext = false;
+        if (pageSize <= content.size()) {
+            hasNext = true;
+            content.remove(pageSize);
+        }
+        return hasNext;
     }
 }
