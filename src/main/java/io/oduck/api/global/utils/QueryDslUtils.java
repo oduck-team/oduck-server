@@ -45,7 +45,7 @@ public class QueryDslUtils {
     private static <T> boolean isHasNext(int pageSize, List<T> content) {
 //        boolean hasNext = pageSize <= content.size();
         boolean hasNext = false;
-        if (pageSize <= content.size()) {
+        if (pageSize < content.size()) {
             hasNext = true;
             content.remove(pageSize);
         }
