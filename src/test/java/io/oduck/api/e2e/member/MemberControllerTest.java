@@ -14,6 +14,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -504,7 +505,183 @@ public class MemberControllerTest {
         }
     }
 
-    // TODO: 회원이 작성한 리뷰 목록
+    @DisplayName("회원의 북마크 애니 목록 조회")
+    @Nested
+    class GetBookmarks {
+        @DisplayName("회원의 북마크 애니 목록 조회 성공시 200 OK 응답")
+        @Test
+        void getBookmarksSuccess() throws Exception {
+            // given
+            // 회원의 북마크 애니 목록 조회에 필요한 데이터
+            int size = 2;
+            String sort = "latest";
+            String order = "desc";
 
-    // TODO: 회원 북마크 애니 목록
+            // when
+            ResultActions actions = mockMvc.perform(
+                get("/members/{memberId}/bookmarks", 1)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .param("size", String.valueOf(size))
+                    .param("sort", sort)
+                    .param("direction", order)
+            );
+
+            // then
+            actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").isArray())
+                .andExpect(jsonPath("$.items[0].animeId").exists())
+                .andExpect(jsonPath("$.items[0].title").exists())
+                .andExpect(jsonPath("$.items[0].thumbnail").exists())
+                .andExpect(jsonPath("$.size").exists())
+                .andExpect(jsonPath("$.lastId").exists())
+                .andExpect(jsonPath("$.hasNext").exists())
+                .andDo(
+                    document("getBookmarks/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                            parameterWithName("memberId")
+                                .description("회원 id")),
+                        queryParameters(
+                            parameterWithName("size")
+                                .attributes(field("constraints", "1-100, 기본 10"))
+                                .optional()
+                                .description("한 페이지에 보여줄 아이템의 개수"),
+                            parameterWithName("sort")
+                                .attributes(field("constraints", "latest"))
+                                .optional()
+                                .description("정렬 기준"),
+                            parameterWithName("direction")
+                                .attributes(field("constraints", "asc, desc"))
+                                .optional()
+                                .description("정렬 방향"),
+                            parameterWithName("cursor")
+                                .optional()
+                                .description("마지막 아이템 id")
+                        ),
+                        responseFields(
+                            fieldWithPath("items")
+                                .type(JsonFieldType.ARRAY)
+                                .description("애니 리스트"),
+                            fieldWithPath("items[].animeId")
+                                .type(JsonFieldType.NUMBER)
+                                .description("애니 id"),
+                            fieldWithPath("items[].title")
+                                .type(JsonFieldType.STRING)
+                                .description("애니 제목"),
+                            fieldWithPath("items[].thumbnail")
+                                .type(JsonFieldType.STRING)
+                                .description("애니 썸네일"),
+                            fieldWithPath("items[].myScore")
+                                .type(JsonFieldType.NUMBER)
+                                .description("해당 회원이 애니에 매긴 별점. 없을 경우 -1"),
+                            fieldWithPath("items[].createdAt")
+                                .type(JsonFieldType.STRING)
+                                .description("애니 북마크 생성 날짜"),
+                            fieldWithPath("size")
+                                .type(JsonFieldType.NUMBER)
+                                .description("한 페이지에 보여줄 아이템의 개수"),
+                            fieldWithPath("hasNext")
+                                .type(JsonFieldType.BOOLEAN)
+                                .description("마지막 페이지 여부"),
+                            fieldWithPath("lastId")
+                                .type(JsonFieldType.NUMBER)
+                                .description("마지막 아이템 id, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 -1")
+                        )
+                    )
+                );
+        }
+
+        @DisplayName("회원의 북마크 애니 목록 조회 성공시 200 OK 응답")
+        @Test
+        void getBookmarksSuccessWithCursor() throws Exception {
+            // given
+            // 회원의 북마크 애니 목록 조회에 필요한 데이터
+            int size = 2;
+            String sort = "latest";
+            String order = "desc";
+            String cursor = "2";
+
+            // when
+            ResultActions actions = mockMvc.perform(
+                get("/members/{memberId}/bookmarks", 1)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .param("size", String.valueOf(size))
+                    .param("sort", sort)
+                    .param("direction", order)
+                    .param("cursor", cursor)
+            );
+
+            // then
+            actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").isArray())
+                .andExpect(jsonPath("$.items[0].animeId").exists())
+                .andExpect(jsonPath("$.items[0].title").exists())
+                .andExpect(jsonPath("$.items[0].thumbnail").exists())
+                .andExpect(jsonPath("$.size").exists())
+                .andExpect(jsonPath("$.lastId").exists())
+                .andExpect(jsonPath("$.hasNext").exists())
+                .andDo(
+                    document("getBookmarks/successWithCursor",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                            parameterWithName("memberId")
+                                .description("회원 id")),
+                        queryParameters(
+                            parameterWithName("size")
+                                .attributes(field("constraints", "1-100, 기본 10"))
+                                .optional()
+                                .description("한 페이지에 보여줄 아이템의 개수"),
+                            parameterWithName("sort")
+                                .attributes(field("constraints", "latest"))
+                                .optional()
+                                .description("정렬 기준"),
+                            parameterWithName("direction")
+                                .attributes(field("constraints", "asc, desc"))
+                                .optional()
+                                .description("정렬 방향"),
+                            parameterWithName("cursor")
+                                .optional()
+                                .description("마지막 아이템 id")
+                        ),
+                        responseFields(
+                            fieldWithPath("items")
+                                .type(JsonFieldType.ARRAY)
+                                .description("애니 리스트"),
+                            fieldWithPath("items[].animeId")
+                                .type(JsonFieldType.NUMBER)
+                                .description("애니 id"),
+                            fieldWithPath("items[].title")
+                                .type(JsonFieldType.STRING)
+                                .description("애니 제목"),
+                            fieldWithPath("items[].thumbnail")
+                                .type(JsonFieldType.STRING)
+                                .description("애니 썸네일"),
+                            fieldWithPath("items[].myScore")
+                                .type(JsonFieldType.NUMBER)
+                                .description("해당 회원이 애니에 매긴 별점. 없을 경우 -1"),
+                            fieldWithPath("items[].createdAt")
+                                .type(JsonFieldType.STRING)
+                                .description("애니 북마크 생성 날짜"),
+                            fieldWithPath("size")
+                                .type(JsonFieldType.NUMBER)
+                                .description("한 페이지에 보여줄 아이템의 개수"),
+                            fieldWithPath("hasNext")
+                                .type(JsonFieldType.BOOLEAN)
+                                .description("마지막 페이지 여부"),
+                            fieldWithPath("lastId")
+                                .type(JsonFieldType.NUMBER)
+                                .description("마지막 아이템 id, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 -1")
+                        )
+                    )
+                );
+        }
+    }
+
+    // TODO: 회원 리뷰 목록 조회
 }
