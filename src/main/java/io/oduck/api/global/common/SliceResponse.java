@@ -18,7 +18,7 @@ public class SliceResponse<T extends EntityBased> {
 
         if (!items.isEmpty() && !hasNext) {
             T lastItem = items.get(items.size() - 1);
-            lastId = lastItem.getId();
+            lastId = lastItem.bringId();
         }
     }
 
@@ -29,8 +29,9 @@ public class SliceResponse<T extends EntityBased> {
 
         if (!items.isEmpty() && hasNext) {
             T lastItem = items.get(items.size() - 1);
-            long lastId = lastItem.getId();
-            this.lastId = lastId;
+            this.lastId = lastItem.bringId();
+        } else {
+            this.lastId = -1L;
         }
     }
 

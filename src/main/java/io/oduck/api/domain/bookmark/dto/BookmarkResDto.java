@@ -21,17 +21,18 @@ public class BookmarkResDto {
         private LocalDateTime createdAt;
 
         public static BookmarkRes of(BookmarkDsl bookmarkDsl) {
+
             return BookmarkRes.builder()
                 .animeId(bookmarkDsl.getAnimeId())
                 .title(bookmarkDsl.getTitle())
                 .thumbnail(bookmarkDsl.getThumbnail())
-                .myScore(bookmarkDsl.getMyScore())
+                .myScore(bookmarkDsl.getMyScore() == null ? -1 : bookmarkDsl.getMyScore())
                 .createdAt(bookmarkDsl.getCreatedAt())
                 .build();
         }
 
         @Override
-        public Long getId() {
+        public Long bringId() {
             return this.animeId;
         }
     }
