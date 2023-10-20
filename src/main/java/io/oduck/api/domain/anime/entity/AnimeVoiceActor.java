@@ -1,9 +1,8 @@
 package io.oduck.api.domain.anime.entity;
 
-import jakarta.persistence.Column;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import io.oduck.api.domain.voiceActor.entity.VoiceActor;
+import io.oduck.api.global.audit.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -11,11 +10,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor
-public class AnimeVoiceActor {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class AnimeVoiceActor extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +33,19 @@ public class AnimeVoiceActor {
 
   @Column(nullable = false, length = 100)
   private String part;
+
+  public void setAnime(Anime anime) {
+    this.anime = anime;
+  }
+
+  /**
+   * M:N 관계 연결 테이블(연결 엔티티) 생성 시 빌더를 사용하면 애니의 연관 관계도 생성할 때 추가할 수 있어
+   * 생성 메소드로 구현
+   */
+  public static AnimeVoiceActor createAnimeVoiceActor(String part, VoiceActor voiceActor) {
+    AnimeVoiceActor animeVoiceActor = new AnimeVoiceActor();
+    animeVoiceActor.part = part;
+    animeVoiceActor.voiceActor = voiceActor;
+    return animeVoiceActor;
+  }
 }
