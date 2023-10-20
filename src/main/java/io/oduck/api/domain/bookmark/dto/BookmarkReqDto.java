@@ -7,7 +7,7 @@ public class BookmarkReqDto {
     @Getter
     @AllArgsConstructor
     public enum Sort {
-        LATEST("createdAt"),
+        CREATED_AT("createdAt"),
         TITLE("title"),
         SCORE("score");
 
