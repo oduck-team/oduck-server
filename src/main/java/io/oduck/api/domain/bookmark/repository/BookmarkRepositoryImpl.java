@@ -12,6 +12,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.oduck.api.domain.bookmark.dto.BookmarkDslDto.BookmarkDsl;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,5 +78,26 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom{
         } else {
             return bookmark.id.lt(Long.parseLong(cursor));
         }
+
+//        switch (property) {
+//            case "score":
+//                if (direction == Direction.ASC) {
+//                    return starRating.score.gt(Double.parseDouble(cursor));
+//                } else {
+//                    return starRating.score.lt(Double.parseDouble(cursor));
+//                }
+//            case "title":
+//                if (direction == Direction.ASC) {
+//                    return anime.title.gt(cursor);
+//                } else {
+//                    return anime.title.lt(cursor);
+//                }
+//            default:
+//                if (direction == Direction.ASC) {
+//                    return bookmark.createdAt.gt(LocalDateTime.parse(cursor));
+//                } else {
+//                    return bookmark.createdAt.lt(LocalDateTime.parse(cursor));
+//                }
+//        }
     }
 }
