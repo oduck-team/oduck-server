@@ -72,7 +72,7 @@ public class MemberController {
     public ResponseEntity<?> getBookmaks(
         @PathVariable("id") Long id,
         @RequestParam(required = false) String cursor,
-        @RequestParam(required = false, defaultValue = "latest") Sort sort,
+        @RequestParam(required = false, defaultValue = "created_at") Sort sort,
         @RequestParam(required = false, defaultValue = "DESC") OrderDirection order,
         @RequestParam(required = false, defaultValue = "10") @Min(1) @Max(100) int size
         ) {
