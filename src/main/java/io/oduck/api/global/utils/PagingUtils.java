@@ -10,7 +10,7 @@ public class PagingUtils {
         return PageRequest.of(0, size, direction.equals("desc") ? Direction.DESC : Direction.ASC, property);
     }
 
-    public static Pageable applyPageableForOffset(int page,String property, String direction, int size) {
-        return PageRequest.of(page, size, direction.equals("DESC") ? Direction.DESC : Direction.ASC, property);
+    public static Pageable applyPageableForOffset(int page, String property, String direction, int size) {
+        return PageRequest.of(page, size, direction.equals("desc") ? Direction.DESC : Direction.ASC, property);
     }
 }
