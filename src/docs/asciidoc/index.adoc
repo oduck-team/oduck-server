@@ -143,6 +143,51 @@ include::{snippets}/patchProfile/failureWhenSameNameAsBefore/http-response.adoc[
 .http-response
 include::{snippets}/patchProfile/failureWhenSameNameAsAlreadyExist/http-response.adoc[]
 
+=== GET api/v1/members/:name/bookmarks
+==== 성공시, cursor가 없을 경우
+.curl-request
+include::{snippets}/getBookmarks/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getBookmarks/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/getBookmarks/success/path-parameters.adoc[]
+
+.query-parameters
+include::{snippets}/getBookmarks/success/query-parameters.adoc[]
+
+.http-response
+include::{snippets}/getBookmarks/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getBookmarks/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getBookmarks/success/response-fields.adoc[]
+
+==== 성공시, cursor가 있을 경우
+.curl-request
+include::{snippets}/getBookmarks/successWithCursor/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getBookmarks/successWithCursor/http-request.adoc[]
+
+.request-param
+include::{snippets}/getBookmarks/successWithCursor/path-parameters.adoc[]
+
+.query-parameters
+include::{snippets}/getBookmarks/successWithCursor/query-parameters.adoc[]
+
+.http-response
+include::{snippets}/getBookmarks/successWithCursor/http-response.adoc[]
+
+.response-body
+include::{snippets}/getBookmarks/successWithCursor/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getBookmarks/successWithCursor/response-fields.adoc[]
+
 == animes
 === GET api/v1/animes/:id
 
