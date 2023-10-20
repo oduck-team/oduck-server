@@ -41,7 +41,7 @@ public class BookmarkServiceTest {
         void getBookmarksByMemberIdSuccess() {
             Long memberId = 1L;
             String cursor = null;
-            Sort sort = Sort.LATEST;
+            Sort sort = Sort.CREATED_AT;
             OrderDirection order = OrderDirection.ASC;
             int size = 10;
 

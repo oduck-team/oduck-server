@@ -514,7 +514,7 @@ public class MemberControllerTest {
             // given
             // 회원의 북마크 애니 목록 조회에 필요한 데이터
             int size = 2;
-            String sort = "latest";
+            String sort = "created_at";
             String order = "desc";
 
             // when
@@ -600,7 +600,7 @@ public class MemberControllerTest {
             // given
             // 회원의 북마크 애니 목록 조회에 필요한 데이터
             int size = 2;
-            String sort = "latest";
+            String sort = "created_at";
             String order = "desc";
             String cursor = "2";
 

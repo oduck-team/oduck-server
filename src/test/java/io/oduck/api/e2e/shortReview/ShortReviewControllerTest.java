@@ -117,9 +117,6 @@ public class ShortReviewControllerTest {
                         fieldWithPath("items[].member.thumbnail")
                             .type(JsonFieldType.STRING)
                             .description("회원 이미지 사진"),
-                        fieldWithPath("items[].id")
-                            .type(JsonFieldType.NUMBER)
-                            .description("애니 아이디"),
                         fieldWithPath("size")
                             .type(JsonFieldType.NUMBER)
                             .description("한 페이지에 보여줄 아이템의 개수"),
