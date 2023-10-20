@@ -40,7 +40,7 @@ public class AuthLocal extends BaseEntity {
     this.password = password;
   }
 
-  public void setMember(Member member) {
+  public void relateMember(Member member) {
     this.member = member;
   }
 }

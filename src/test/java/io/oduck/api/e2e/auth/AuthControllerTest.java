@@ -18,18 +18,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import io.oduck.api.domain.member.entity.LoginType;
 import io.oduck.api.domain.member.entity.Role;
-import io.oduck.api.global.initializer.TestDataInitializer;
-import io.oduck.api.global.MockMember.WithCustomMockMember;
-import io.oduck.api.global.security.auth.dto.AuthUser;
+import io.oduck.api.global.mockMember.WithCustomMockMember;
 import io.oduck.api.global.security.auth.dto.LocalAuthDto;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -67,7 +62,7 @@ public class AuthControllerTest {
         void postLogin() throws Exception {
             // given
             LocalAuthDto localAuthDto = LocalAuthDto.builder()
-                .email("bob@gmail.com")
+                .email("oduckdmin@gmail.com")
                 .password("Qwer!234")
                 .build();
 
@@ -114,7 +109,7 @@ public class AuthControllerTest {
 
         @DisplayName("인증된 회원일시 200 OK 및 회원 정보 반환")
         @Test
-        @WithCustomMockMember(id = 1L, email = "bob", password = "Qwer!234", role = Role.MEMBER)
+        @WithCustomMockMember(id = 1L, email = "admin", password = "Qwer!234", role = Role.MEMBER)
         void getAuthStatus() throws Exception {
             // given
 

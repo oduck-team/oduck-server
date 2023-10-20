@@ -62,7 +62,13 @@ public class MemberProfile extends BaseEntity {
     this.point = point;
   }
 
-  public void setMember(Member member) {
+  public void relateMember(Member member) {
     this.member = member;
+  }
+  public void updateName(String name) {
+    this.name = name;
+  }
+  public void updateInfo(String info) {
+    this.info = info;
   }
 }

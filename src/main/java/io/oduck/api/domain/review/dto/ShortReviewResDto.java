@@ -22,7 +22,7 @@ public class ShortReviewResDto {
         private MemberProfile member;
 
         @Override
-        public Long getId() {
+        public Long bringId() {
             return this.getReviewId();
         }
     }

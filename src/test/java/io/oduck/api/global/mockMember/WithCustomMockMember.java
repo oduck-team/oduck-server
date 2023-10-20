@@ -1,4 +1,4 @@
-package io.oduck.api.global.MockMember;
+package io.oduck.api.global.mockMember;
 
 import io.oduck.api.domain.member.entity.Role;
 import java.lang.annotation.Retention;
