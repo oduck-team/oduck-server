@@ -21,12 +21,13 @@ public class BookmarkResDto {
         private LocalDateTime createdAt;
 
         public static BookmarkRes of(BookmarkDsl bookmarkDsl) {
+            Integer myScore = bookmarkDsl.getMyScore();
 
             return BookmarkRes.builder()
                 .animeId(bookmarkDsl.getAnimeId())
                 .title(bookmarkDsl.getTitle())
                 .thumbnail(bookmarkDsl.getThumbnail())
-                .myScore(bookmarkDsl.getMyScore() == null ? -1 : bookmarkDsl.getMyScore())
+                .myScore(myScore == null ? -1 : myScore)
                 .createdAt(bookmarkDsl.getCreatedAt())
                 .build();
         }
