@@ -18,6 +18,7 @@ public interface AnimeService {
      * @return AnimeId
      */
     void save(PostReq req);
+
     /**
      * 애니 수정 로직
      * @param animeId
