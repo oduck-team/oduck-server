@@ -62,7 +62,7 @@ public class AnimeServiceImpl implements AnimeService{
     }
 
     @Override
-    public Long save(PostReq postReq) {
+    public void save(PostReq postReq) {
         // 원작 작가
         List<Long> originalAuthorIds = postReq.getOriginalAuthorIds();
         List<OriginalAuthor> originalAuthors = originalAuthorRepository.findAllById(originalAuthorIds);
@@ -114,7 +114,8 @@ public class AnimeServiceImpl implements AnimeService{
 
         Anime anime = Anime.createAnime(postReq.getTitle(), postReq.getSummary(), postReq.getBroadcastType(), postReq.getEpisodeCount(), postReq.getThumbnail(),
             postReq.getYear(), postReq.getQuarter(), postReq.getRating(), postReq.getStatus(), animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, series);
-        return animeRepository.save(anime).getId();
+
+        animeRepository.save(anime);
     }
 
 
