@@ -14,7 +14,7 @@ public class AnimeTestUtils {
         return new PostReq(
             getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(),
             getThumbnail(), getYear(), getQuarter(), getRating(), getStatus(),
-            getOriginalAuthorIds(), getStudioIds(), getVoiceActorIds(), getGenreIds(), getSeriesId());
+            getOriginalAuthorIds(), getStudioIds(), getVoiceActorReqs(), getGenreIds(), getSeriesId());
     }
 
     public static PatchAnimeReq createPatchAnimeRequest(){
@@ -71,11 +71,13 @@ public class AnimeTestUtils {
         return genreIds;
     }
 
-    public static List getVoiceActorIds() {
-        List voiceActorIds = getStudioIds();
-        voiceActorIds.add(2L);
-        voiceActorIds.add(4L);
-        return voiceActorIds;
+    public static List<VoiceActorReq> getVoiceActorReqs() {
+        List<VoiceActorReq> voiceActors = new ArrayList<>();
+        VoiceActorReq firstDto = new VoiceActorReq(5L, "카마도 탄지로");
+        VoiceActorReq secondDto = new VoiceActorReq(6L, "카마도 네즈코");
+        voiceActors.add(firstDto);
+        voiceActors.add(secondDto);
+        return voiceActors;
     }
 
     public static List getStudioIds() {
@@ -86,7 +88,7 @@ public class AnimeTestUtils {
 
     public static List getOriginalAuthorIds() {
         List originalAuthorIds = new ArrayList();
-        originalAuthorIds.add(5L);
+        originalAuthorIds.add(1L);
         return originalAuthorIds;
     }
 }
