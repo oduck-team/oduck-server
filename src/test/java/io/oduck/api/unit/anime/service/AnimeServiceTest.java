@@ -21,9 +21,8 @@ public class AnimeServiceTest {
     private AnimeServiceStub animeService;
 
     @Nested
-    @DisplayName("애니 조회")
-    class GetAnime{
-
+    @DisplayName("조회")
+    class findAnime{
         @Test
         @DisplayName("애니 상세 조회")
         void getAnimeById() {
@@ -40,8 +39,13 @@ public class AnimeServiceTest {
     }
 
     @Nested
-    @DisplayName("애니 등록")
-    class PostAnime{
+    @DisplayName("등록")
+    class SaveAnime{
+        Anime anime = createAnime();
+        List<OriginalAuthor> originalAuthors = getOriginalAuthors();
+        List<VoiceActor> voiceActors = getVoiceActors();
+        List<Studio> studios = getStudios();
+        List<Genre> genres = AnimeTestUtils.getGenres();
 
         @Test
         @DisplayName("애니 등록 성공")
