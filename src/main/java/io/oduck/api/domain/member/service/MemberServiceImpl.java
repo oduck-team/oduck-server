@@ -90,6 +90,7 @@ public class MemberServiceImpl implements MemberService{
 
         MemberProfileRes memberProfileRes = MemberProfileRes. builder()
             .isMine(memberProfile.getMemberId().equals(memberId))
+            .memberId(memberProfile.getMemberId())
             .name (memberProfile.getName())
             .description(memberProfile.getDescription())
             .thumbnail(memberProfile.getThumbnail())

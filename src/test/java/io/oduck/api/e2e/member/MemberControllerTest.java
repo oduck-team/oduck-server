@@ -130,8 +130,9 @@ public class MemberControllerTest {
             // 응답 결과 검증 후 문서화
             actions
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.name").exists())
                     .andExpect(jsonPath("$.isMine").value(true))
+                    .andExpect(jsonPath("$.memberId").exists())
+                    .andExpect(jsonPath("$.name").exists())
                     .andExpect(jsonPath("$.description").exists())
                     .andExpect(jsonPath("$.thumbnail").exists())
                     .andExpect(jsonPath("$.backgroundImage").value(equalTo(null)))
@@ -153,12 +154,15 @@ public class MemberControllerTest {
                                     .description("Header Cookie, 세션 쿠키")
                             ),
                             responseFields(
-                                fieldWithPath("name")
-                                    .type(JsonFieldType.STRING)
-                                    .description("회원 이름"),
                                 fieldWithPath("isMine")
                                     .type(JsonFieldType.BOOLEAN)
                                     .description("본인 여부(본인 프로필 조회시 true)"),
+                                fieldWithPath("memberId")
+                                    .type(JsonFieldType.NUMBER)
+                                    .description("회원 id"),
+                                fieldWithPath("name")
+                                    .type(JsonFieldType.STRING)
+                                    .description("회원 이름"),
                                 fieldWithPath("description")
                                     .type(JsonFieldType.STRING)
                                     .description("자기 소개"),
@@ -209,8 +213,9 @@ public class MemberControllerTest {
             // 응답 결과 검증 후 문서화
             actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.isMine").value(false))
+                .andExpect(jsonPath("$.memberId").exists())
+                .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.description").exists())
                 .andExpect(jsonPath("$.thumbnail").exists())
                 .andExpect(jsonPath("$.backgroundImage").value(equalTo(null)))
@@ -232,12 +237,15 @@ public class MemberControllerTest {
                             .description("Header Cookie, 세션 쿠키")
                     ),
                     responseFields(
-                        fieldWithPath("name")
-                            .type(JsonFieldType.STRING)
-                            .description("회원 이름"),
                         fieldWithPath("isMine")
                             .type(JsonFieldType.BOOLEAN)
                             .description("본인 여부(본인 프로필 조회시 true)"),
+                        fieldWithPath("memberId")
+                            .type(JsonFieldType.NUMBER)
+                            .description("회원 id"),
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .description("회원 이름"),
                         fieldWithPath("description")
                             .type(JsonFieldType.STRING)
                             .description("자기 소개"),

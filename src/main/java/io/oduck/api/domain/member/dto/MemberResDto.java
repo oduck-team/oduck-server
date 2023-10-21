@@ -9,6 +9,7 @@ public class MemberResDto {
     @NoArgsConstructor
     public static class MemberProfileRes {
         private boolean isMine;
+        private Long memberId;
         private String name;
         private String description;
         private String thumbnail;
@@ -16,9 +17,10 @@ public class MemberResDto {
         private Activity activity;
 
         @Builder
-        public MemberProfileRes(boolean isMine, String name, String description, String thumbnail,
+        public MemberProfileRes(boolean isMine, Long memberId, String name, String description, String thumbnail,
             String backgroundImage, Activity activity) {
             this.isMine = isMine;
+            this.memberId = memberId;
             this.name = name;
             this.description = description;
             this.thumbnail = thumbnail;
