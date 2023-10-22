@@ -11,27 +11,21 @@ import lombok.Getter;
 @Getter
 @Builder
 public class AnimeRes {
-    private Anime anime;
+    private Long id;
+    private String title;
+    private String thumbnail;
+    private BroadcastType broadcastType;
+    private int year;
+    private Quarter quarter;
+    private String summary;
+    private int episodeCount;
+    private Rating rating;
+    private Status status;
 
-    @Getter
-    @Builder
-    public static class Anime {
-        private Long id;
-        private String title;
-        private String thumbnail;
-        private BroadcastType broadcastType;
-        private int year;
-        private Quarter quarter;
-        private String summary;
-        private int episodeCount;
-        private Rating rating;
-        private Status status;
-
-        private List<String> genres;
-        private List<String> originalAuthors;
-        private List<String> voiceActors;
-        private List<String> studios;
-        private long reviewCount;
-        private long bookmarkCount;
-    }
+    private List<String> genres;
+    private List<String> originalAuthors;
+    private List<VoiceActorRes> voiceActors;
+    private List<String> studios;
+    private long reviewCount;
+    private long bookmarkCount;
 }

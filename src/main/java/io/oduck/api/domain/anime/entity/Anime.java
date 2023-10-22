@@ -2,6 +2,7 @@ package io.oduck.api.domain.anime.entity;
 
 import io.oduck.api.domain.series.entity.Series;
 import io.oduck.api.global.audit.BaseEntity;
+import io.oduck.api.global.exception.BadRequestException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -131,7 +132,7 @@ public class Anime extends BaseEntity {
   // 평가할 때 점수 합산(별점)
   public void increaseStarRatingScore(int score){
     if(score <= 0){
-      throw new IllegalArgumentException("음수는 올 수 없습니다.");
+      throw new BadRequestException("0 이하 올 수 없습니다.");
     }
     starRatingScoreTotal += score;
     increaseStarRatingCount();
@@ -140,7 +141,7 @@ public class Anime extends BaseEntity {
   // 평가를 지웠을 때 점수 합산(별점)
   public void decreaseStarRatingScore(int score){
     if(score <= 0){
-      throw new IllegalArgumentException("음수는 올 수 없습니다.");
+      throw new BadRequestException("0 이하 올 수 없습니다.");
     }
     starRatingScoreTotal -= score;
     decreaseStarRatingCount();

@@ -51,7 +51,7 @@ public class AnimeReq {
 
         private List<Long> studioIds;
 
-        private List<Long> voiceActorIds;
+        private List<VoiceActorReq> voiceActors;
 
         private List<Long> genreIds;
 
@@ -59,7 +59,7 @@ public class AnimeReq {
 
         public PostReq (String title, String summary, BroadcastType broadcastType,
             int episodeCount, String thumbnail, int year, Quarter quarter, Rating rating, Status status,
-            List<Long> originalAuthorIds, List<Long> studioIds, List<Long> voiceActorIds,
+            List<Long> originalAuthorIds, List<Long> studioIds, List<VoiceActorReq> voiceActors,
             List<Long> genreIds, Long seriesId) {
 
             this.title = title;
@@ -84,10 +84,10 @@ public class AnimeReq {
                 this.studioIds = studioIds;
             }
 
-            if(voiceActorIds == null) {
-                this.voiceActorIds = new ArrayList<>();
+            if(voiceActors == null) {
+                this.voiceActors = new ArrayList<>();
             }else {
-                this.voiceActorIds = voiceActorIds;
+                this.voiceActors = voiceActors;
             }
 
             if(genreIds == null) {
@@ -166,13 +166,13 @@ public class AnimeReq {
     @Getter
     @NoArgsConstructor
     public static class PatchVoiceActorIdsReq {
-        private List<Long> voiceActorIds;
+        private List<VoiceActorReq> voiceActors;
 
-        public PatchVoiceActorIdsReq(List<Long> voiceActorIds) {
-            if(voiceActorIds == null){
-                this.voiceActorIds = new ArrayList<>();
+        public PatchVoiceActorIdsReq(List<VoiceActorReq> voiceActors) {
+            if(voiceActors == null){
+                this.voiceActors = new ArrayList<>();
             }else{
-                this.voiceActorIds = voiceActorIds;
+                this.voiceActors = voiceActors;
             }
         }
     }

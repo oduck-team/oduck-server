@@ -2,10 +2,17 @@ package io.oduck.api.global.utils;
 
 import io.oduck.api.domain.anime.dto.AnimeReq.PatchAnimeReq;
 import io.oduck.api.domain.anime.dto.AnimeReq.PostReq;
+import io.oduck.api.domain.anime.dto.VoiceActorReq;
+import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.entity.BroadcastType;
 import io.oduck.api.domain.anime.entity.Quarter;
 import io.oduck.api.domain.anime.entity.Rating;
 import io.oduck.api.domain.anime.entity.Status;
+import io.oduck.api.domain.genre.entity.Genre;
+import io.oduck.api.domain.originalAuthor.entity.OriginalAuthor;
+import io.oduck.api.domain.series.entity.Series;
+import io.oduck.api.domain.studio.entity.Studio;
+import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +21,7 @@ public class AnimeTestUtils {
         return new PostReq(
             getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(),
             getThumbnail(), getYear(), getQuarter(), getRating(), getStatus(),
-            getOriginalAuthorIds(), getStudioIds(), getVoiceActorIds(), getGenreIds(), getSeriesId());
+            getOriginalAuthorIds(), getStudioIds(), getVoiceActorReqs(), getGenreIds(), getSeriesId());
     }
 
     public static PatchAnimeReq createPatchAnimeRequest(){
@@ -71,11 +78,13 @@ public class AnimeTestUtils {
         return genreIds;
     }
 
-    public static List getVoiceActorIds() {
-        List voiceActorIds = getStudioIds();
-        voiceActorIds.add(2L);
-        voiceActorIds.add(4L);
-        return voiceActorIds;
+    public static List<VoiceActorReq> getVoiceActorReqs() {
+        List<VoiceActorReq> voiceActors = new ArrayList<>();
+        VoiceActorReq firstDto = new VoiceActorReq(5L, "카마도 탄지로");
+        VoiceActorReq secondDto = new VoiceActorReq(6L, "카마도 네즈코");
+        voiceActors.add(firstDto);
+        voiceActors.add(secondDto);
+        return voiceActors;
     }
 
     public static List getStudioIds() {
@@ -86,7 +95,77 @@ public class AnimeTestUtils {
 
     public static List getOriginalAuthorIds() {
         List originalAuthorIds = new ArrayList();
-        originalAuthorIds.add(5L);
+        originalAuthorIds.add(1L);
         return originalAuthorIds;
+    }
+
+    public static Anime createAnime() {
+        Anime anime = Anime.createAnime(getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(),
+            getThumbnail(), getYear(), getQuarter(), getRating(), getStatus(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null);
+        return anime;
+    }
+
+    public static List<OriginalAuthor> getOriginalAuthors() {
+        List<OriginalAuthor> originalAuthors = new ArrayList<>();
+
+        for(int i = 0; i<2; i++){
+            OriginalAuthor originalAuthor = OriginalAuthor.builder()
+                .name("작가"+i)
+                .build();
+            originalAuthors.add(originalAuthor);
+        }
+        return originalAuthors;
+    }
+
+    public static List<VoiceActor> getVoiceActors() {
+        List<VoiceActor> voiceActors = new ArrayList<>();
+
+        VoiceActor firstVoiceActor = VoiceActor.builder()
+            .id(5L)
+            .name("성우A")
+            .build();
+        VoiceActor secondVoiceActor = VoiceActor.builder()
+            .id(6L)
+            .name("성우B")
+            .build();
+
+        voiceActors.add(firstVoiceActor);
+        voiceActors.add(firstVoiceActor);
+        return voiceActors;
+    }
+
+    public static List<Long> getVoiceActorIds() {
+        List<Long> voiceActorIds = new ArrayList<>();
+        voiceActorIds.add(5L);
+        voiceActorIds.add(6L);
+        return voiceActorIds;
+    }
+
+    public static List<Studio> getStudios() {
+        List<Studio> studios = new ArrayList<>();
+        Studio studio = Studio.builder()
+            .name("ufortable")
+            .build();
+
+        studios.add(studio);
+        return studios;
+    }
+
+    public static List<Genre> getGenres() {
+        List<Genre> genres = new ArrayList<>();
+
+        for(int i = 0; i < 2; i++){
+            Genre genre = Genre.builder()
+                .name("장르"+i)
+                .build();
+            genres.add(genre);
+        }
+        return genres;
+    }
+
+    public static Series getSeries() {
+        return Series.builder()
+            .title("귀멸의 칼날")
+            .build();
     }
 }

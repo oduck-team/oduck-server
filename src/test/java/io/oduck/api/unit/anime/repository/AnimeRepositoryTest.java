@@ -77,7 +77,7 @@ public class AnimeRepositoryTest {
     private SeriesRepository seriesRepository;
 
     @Nested
-    @DisplayName("애니 등록")
+    @DisplayName("등록")
     class PostAnime {
 
         @Test
@@ -232,7 +232,7 @@ public class AnimeRepositoryTest {
     }
 
     @Nested
-    @DisplayName("애니 수정")
+    @DisplayName("수정")
     class patchAnime {
 
         @Test
