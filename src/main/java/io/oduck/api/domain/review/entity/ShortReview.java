@@ -46,4 +46,27 @@ public class ShortReview extends BaseEntity {
 
   @OneToMany(mappedBy = "shortReview", cascade = CascadeType.PERSIST)
   private List<ShortReviewLike> shortReviewLikes;
+
+  @Builder
+  public ShortReview(Member member, Anime anime, String content, boolean hasSpoiler) {
+    this.member = member;
+    this.anime = anime;
+    this.content = content;
+    this.hasSpoiler = hasSpoiler;
+  }
+
+  public void relateMember(Member member){
+    this.member = member;
+  }
+  public void relateAnime(Anime anime){
+    this.anime = anime;
+  }
+
+  public void updateContent(String content){
+    this.content = content;
+
+  }
+  public void updateSpoiler(boolean hasSpoiler){
+    this.hasSpoiler = hasSpoiler;
+  }
 }
