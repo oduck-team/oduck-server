@@ -6,7 +6,7 @@ import io.oduck.api.global.common.OrderDirection;
 import io.oduck.api.global.common.SliceResponse;
 
 public interface BookmarkService {
-
+    boolean toggleBookmark(Long memberId, Long animeId);
     SliceResponse<BookmarkRes> getBookmarksByMemberId(Long memberId, String cursor, Sort sort, OrderDirection order, int size);
 
 }
