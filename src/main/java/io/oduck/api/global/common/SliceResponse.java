@@ -35,6 +35,10 @@ public class SliceResponse<T extends EntityBased> {
         }
     }
 
+    public static <T extends EntityBased> SliceResponse<T> of(Slice<T> slice) {
+        return new SliceResponse<>(slice, "id");
+    }
+
     public static <T extends EntityBased> SliceResponse<T> of(Slice<T> slice, String property) {
         return new SliceResponse<>(slice, property);
     }
