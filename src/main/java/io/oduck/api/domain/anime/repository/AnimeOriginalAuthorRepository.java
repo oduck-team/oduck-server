@@ -8,9 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 public interface AnimeOriginalAuthorRepository extends JpaRepository<AnimeOriginalAuthor, Long> {
 
-    @Query("select aoa from AnimeOriginalAuthor aoa "
-        + "join fetch aoa.anime "
-        + "join fetch aoa.originalAuthor "
+    @Query("select distinct aoa from AnimeOriginalAuthor aoa "
+        + "join fetch aoa.anime a "
+        + "join fetch aoa.originalAuthor o "
         + "where aoa.anime.id = :animeId")
-    List<AnimeOriginalAuthor> findAllByAnimeId(@Param("animeId") Long animeId);
+    List<AnimeOriginalAuthor> findAllFetchByAnimeId(@Param("animeId") Long animeId);
 }
