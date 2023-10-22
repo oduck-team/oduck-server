@@ -23,18 +23,22 @@ public class BookmarkResDto {
         public static BookmarkRes of(BookmarkDsl bookmarkDsl) {
             Integer myScore = bookmarkDsl.getMyScore();
 
-            return BookmarkRes.builder()
-                .animeId(bookmarkDsl.getAnimeId())
-                .title(bookmarkDsl.getTitle())
-                .thumbnail(bookmarkDsl.getThumbnail())
-                .myScore(myScore == null ? -1 : myScore)
-                .createdAt(bookmarkDsl.getCreatedAt())
-                .build();
+            return BookmarkRes.builder().animeId(bookmarkDsl.getAnimeId())
+                    .title(bookmarkDsl.getTitle()).thumbnail(bookmarkDsl.getThumbnail())
+                    .myScore(myScore == null ? -1 : myScore).createdAt(bookmarkDsl.getCreatedAt())
+                    .build();
         }
 
         @Override
-        public Long bringId() {
-            return this.animeId;
+        public String bringId(String property) {
+            switch (property) {
+                case "score":
+                    return this.myScore.toString() + ", " + this.createdAt.toString();
+                case "title":
+                    return this.title;
+                default:
+                    return this.createdAt.toString();
+            }
         }
     }
 }
