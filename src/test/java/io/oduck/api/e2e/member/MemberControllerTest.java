@@ -75,7 +75,7 @@ public class MemberControllerTest {
             // when
             // 요청 실행
             ResultActions actions = mockMvc.perform(
-                    post("/members")
+                    post(BASE_URL)
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
                             .content(content)
@@ -120,7 +120,7 @@ public class MemberControllerTest {
             // when
             // 요청 실행
             ResultActions actions = mockMvc.perform(
-                    get("/members" + "/{name}", name)
+                    get(BASE_URL + "/{name}", name)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -203,7 +203,7 @@ public class MemberControllerTest {
             // when
             // 요청 실행
             ResultActions actions = mockMvc.perform(
-                get("/members" + "/{name}", name)
+                get(BASE_URL + "/{name}", name)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -288,7 +288,7 @@ public class MemberControllerTest {
             // when
             // 요청 실행
             ResultActions actions = mockMvc.perform(
-                get("/members" + "/{name}", name)
+                get(BASE_URL + "/{name}", name)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -348,7 +348,7 @@ public class MemberControllerTest {
 
             // when
             ResultActions actions = mockMvc.perform(
-                    patch("/members")
+                    patch(BASE_URL)
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
                             .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -396,7 +396,7 @@ public class MemberControllerTest {
 
             // when
             ResultActions actions = mockMvc.perform(
-                patch("/members")
+                patch(BASE_URL)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -460,7 +460,7 @@ public class MemberControllerTest {
 
             // when
             ResultActions actions = mockMvc.perform(
-                patch("/members")
+                patch(BASE_URL)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -527,7 +527,7 @@ public class MemberControllerTest {
 
             // when
             ResultActions actions = mockMvc.perform(
-                get("/members/{memberId}/bookmarks", 1)
+                get( BASE_URL + "/{memberId}/bookmarks", 1)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .param("size", String.valueOf(size))
@@ -614,7 +614,7 @@ public class MemberControllerTest {
 
             // when
             ResultActions actions = mockMvc.perform(
-                get("/members/{memberId}/bookmarks", 1)
+                get(BASE_URL + "/{memberId}/bookmarks", 1)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .param("size", String.valueOf(size))

@@ -191,7 +191,5 @@ public class MemberServiceTest {
         }
     }
 
-    // TODO: 회원이 작성한 리뷰 목록
-
     // TODO: 회원 북마크 애니 목록
 }
