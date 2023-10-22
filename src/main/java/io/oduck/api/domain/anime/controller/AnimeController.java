@@ -24,10 +24,9 @@ public class AnimeController {
     @GetMapping("/{animeId}")
     public ResponseEntity<Object> getAnimeById(@PathVariable Long animeId){
         
-        // TODO: 애니 조회 로직 구현
         AnimeRes res = animeService.getAnimeById(animeId);
-        return ResponseEntity
-            .ok(res);
+
+        return ResponseEntity.ok(res);
     }
 
     // TODO: 애니 검색 결과 페이징
