@@ -4,6 +4,8 @@ import io.oduck.api.domain.review.dto.ShortReviewReqDto;
 import io.oduck.api.domain.review.dto.ShortReviewResDto;
 import io.oduck.api.domain.review.service.ShortReviewService;
 import io.oduck.api.global.common.SliceResponse;
+import io.oduck.api.global.security.auth.dto.LoginUser;
+import io.oduck.api.global.security.auth.entity.AuthLocal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +37,10 @@ public class ShortReviewController {
     }
     @PostMapping
     public ResponseEntity<?> postShortReview(
+        @LoginUser AuthLocal user,
         @RequestBody @Valid ShortReviewReqDto.PostShortReviewReq req)  {
         //TODO : 짧은 리뷰 작성
-        shortReviewService.save(req);
+        shortReviewService.save(user.getId(), req);
         return ResponseEntity.ok().build();
     }
 

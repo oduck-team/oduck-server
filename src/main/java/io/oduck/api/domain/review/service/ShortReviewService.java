@@ -10,7 +10,7 @@ public interface ShortReviewService {
     ShortReviewResDto getShortReviews(Long anime);
 
     //애니 리뷰 작성
-    void save(PostShortReviewReq shortReviewReq);
+    void save(Long memberId, PostShortReviewReq shortReviewReq);
 
     //애니 리뷰 수정
     void update(Long reviewId, PatchShortReviewReq req);
