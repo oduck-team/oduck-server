@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -17,6 +18,7 @@ import io.oduck.api.domain.anime.repository.AnimeRepository;
 import io.oduck.api.domain.bookmark.dto.BookmarkDslDto.BookmarkDsl;
 import io.oduck.api.domain.bookmark.dto.BookmarkReqDto.Sort;
 import io.oduck.api.domain.bookmark.dto.BookmarkResDto.BookmarkRes;
+import io.oduck.api.domain.bookmark.dto.BookmarkResDto.BookmarkedDateTimeRes;
 import io.oduck.api.domain.bookmark.entity.Bookmark;
 import io.oduck.api.domain.bookmark.repository.BookmarkRepository;
 import io.oduck.api.domain.bookmark.service.BookmarkServiceImpl;
@@ -25,6 +27,8 @@ import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.global.common.OrderDirection;
 import io.oduck.api.global.common.SliceResponse;
 import io.oduck.api.global.config.QueryDslConfig;
+import io.oduck.api.global.exception.NotFoundException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -124,6 +128,51 @@ public class BookmarkServiceTest {
             assertEquals(sampleSlice.getSize(), result.getItems().size());
             assertNotNull(result.getLastId());
             assertFalse(result.isHasNext());
+        }
+    }
+
+    @DisplayName("북마크 체크")
+    @Nested
+    class checkBookmarked {
+        @DisplayName("북마크 체크시 북마크가 존재할 경우")
+        @Test
+        void checkBookmarkedExist() {
+            // given
+            Long memberId = 1L;
+            Long animeId = 1L;
+
+            Bookmark bookmark = Bookmark.builder()
+                .member(Member.builder().id(memberId).build())
+                .anime(Anime.builder().id(animeId).build())
+                .createdAt(LocalDateTime.now())
+                .build();
+
+            given(bookmarkRepository.findByMemberIdAndAnimeId(memberId, animeId))
+                .willReturn(Optional.of(bookmark));
+
+            // when
+            BookmarkedDateTimeRes result = bookmarkService.checkBookmarked(memberId, animeId);
+
+            // then
+            assertNotNull(result);
+            assertNotNull(result.getCreatedAt());
+        }
+
+        @DisplayName("북마크 체크시 북마크가 존재하지 않을 경우")
+        @Test
+        void checkBookmarkedNotExist() {
+            // given
+            Long memberId = 1L;
+            Long animeId = 1L;
+
+            given(bookmarkRepository.findByMemberIdAndAnimeId(memberId, animeId))
+                .willReturn(Optional.empty());
+
+            // when
+            // then
+            assertThrows(NotFoundException.class,
+                () -> bookmarkService.checkBookmarked(memberId, animeId)
+            );
         }
     }
 }
