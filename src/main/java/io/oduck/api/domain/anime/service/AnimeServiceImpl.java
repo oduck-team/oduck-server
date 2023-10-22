@@ -9,17 +9,16 @@ import io.oduck.api.domain.anime.dto.AnimeReq.PatchVoiceActorIdsReq;
 import io.oduck.api.domain.anime.dto.AnimeReq.PostReq;
 import io.oduck.api.domain.anime.dto.AnimeRes;
 import io.oduck.api.domain.anime.dto.VoiceActorReq;
-import io.oduck.api.domain.anime.dto.VoiceActorRes;
 import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.entity.AnimeGenre;
 import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
 import io.oduck.api.domain.anime.entity.AnimeStudio;
 import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
-import io.oduck.api.domain.anime.entity.BroadcastType;
-import io.oduck.api.domain.anime.entity.Quarter;
-import io.oduck.api.domain.anime.entity.Rating;
-import io.oduck.api.domain.anime.entity.Status;
+import io.oduck.api.domain.anime.repository.AnimeGenreRepository;
+import io.oduck.api.domain.anime.repository.AnimeOriginalAuthorRepository;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
+import io.oduck.api.domain.anime.repository.AnimeStudioRepository;
+import io.oduck.api.domain.anime.repository.AnimeVoiceActorRepository;
 import io.oduck.api.domain.genre.entity.Genre;
 import io.oduck.api.domain.genre.repository.GenreRepository;
 import io.oduck.api.domain.originalAuthor.entity.OriginalAuthor;
@@ -31,7 +30,6 @@ import io.oduck.api.domain.studio.repository.StudioRepository;
 import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.domain.voiceActor.repository.VoiceActorRepository;
 import io.oduck.api.global.exception.NotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -47,18 +45,32 @@ import org.springframework.transaction.annotation.Transactional;
 public class AnimeServiceImpl implements AnimeService{
 
     private final AnimeRepository animeRepository;
+
     private final OriginalAuthorRepository originalAuthorRepository;
+    private final AnimeOriginalAuthorRepository animeOriginalAuthorRepository;
+
     private final VoiceActorRepository voiceActorRepository;
+    private final AnimeVoiceActorRepository animeVoiceActorRepository;
+
     private final StudioRepository studioRepository;
+    private final AnimeStudioRepository animeStudioRepository;
+
     private final GenreRepository genreRepository;
+    private final AnimeGenreRepository animeGenreRepository;
+
     private final SeriesRepository seriesRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public AnimeRes getAnimeById(Long animeId) {
-        //TODO: 애니 상세 조회 구현
-        AnimeRes anime = createAnimeDto(animeId);
 
-        return anime;
+        Anime anime = findAnime(animeId);
+        List<AnimeOriginalAuthor> animeOriginalAuthors = animeOriginalAuthorRepository.findAllFetchByAnimeId(animeId);
+        List<AnimeVoiceActor> animeVoiceActors = animeVoiceActorRepository.findAllFetchByAnimeId(animeId);
+        List<AnimeStudio> animeStudios = animeStudioRepository.findAllFetchByAnimeId(animeId);
+        List<AnimeGenre> animeGenres = animeGenreRepository.findAllFetchByAnimeId(animeId);
+
+        return new AnimeRes(anime, animeOriginalAuthors, animeVoiceActors, animeStudios, animeGenres);
     }
 
     @Override
@@ -219,57 +231,5 @@ public class AnimeServiceImpl implements AnimeService{
     @Transactional(readOnly = true)
     public Anime findAnime(Long animeId) {
         return animeRepository.findById(animeId).orElseThrow(() -> new NotFoundException("Anime"));
-    }
-
-    private AnimeRes createAnimeDto(Long animeId) {
-        return AnimeRes.builder()
-            .id(animeId)
-            .title("귀멸의 칼날: 도공 마을편")
-            .thumbnail("https://image파일경로/uuid.jpg")
-            .broadcastType(BroadcastType.TVA)
-            .year(2023)
-            .quarter(Quarter.Q2)
-            .summary(
-                "113년 만에 상현 혈귀가 죽자 분개한 무잔은 나머지 상현 혈귀들에게 또 다른 명령을 내린다! 한편, 규타로와의 전투 도중 검이 심하게 손상된 탄지로에게 하가네즈카는 대 격노하고 탄지로는 그 검을 만든 대장장이 하가네즈카 호타루에게 검이 어떻게 심하게 손상되었는지 설명하기 위해 도공 마을을 방문한다. 탄지로가 검이 수리되기를 기다리는 동안, 상현 혈귀 한텐구와 쿗코가 숨겨진 마을인 ‘도공 마을'을 습격한다. 공격할 때마다 분열해서 위력이 커지는 한텐구로 인해 탄지로와 겐야는 고전을 면치 못한다. 한편, 타인에 대한 관심이 희박한 하주 토키토 무이치로는 혈귀들에게 공격당하고 있는 코테츠를 목격하는데….")
-            .episodeCount(11)
-            .rating(Rating.ADULT)
-            .status(Status.FINISHED)
-            .genres(getGenres())
-            .originalAuthors(getOriginalAuthors())
-            .voiceActors(getVoiceActors())
-            .studios(getStudios())
-            .reviewCount(172)
-            .bookmarkCount(72)
-            .build();
-    }
-
-    private List<String> getStudios() {
-        List<String> studios = new ArrayList<>();
-        studios.add("ufotable");
-        return studios;
-    }
-
-    private List<VoiceActorRes> getVoiceActors() {
-        List<VoiceActorRes> voiceActors = new ArrayList<>();
-
-        for(int i = 0; i<5; i++){
-            VoiceActorRes voiceActor = new VoiceActorRes("성우"+i, "카마도 탄지로"+i);
-            voiceActors.add(voiceActor);
-        }
-
-        return voiceActors;
-    }
-
-    private List<String> getGenres(){
-        List<String> genres = new ArrayList<>();
-        genres.add("판타지");
-        genres.add("액션");
-        return genres;
-    }
-
-    private List<String> getOriginalAuthors() {
-        List<String> originalAuthors = new ArrayList<>();
-        originalAuthors.add("고토게 코요하루");
-        return originalAuthors;
     }
 }
