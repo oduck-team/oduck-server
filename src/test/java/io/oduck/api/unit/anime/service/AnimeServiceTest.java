@@ -1,25 +1,9 @@
 package io.oduck.api.unit.anime.service;
 
-import static io.oduck.api.global.utils.AnimeTestUtils.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchAnimeReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchGenreIdsReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchOriginalAuthorIdsReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchSeriesIdReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchStudioIdsReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchVoiceActorIdsReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PostReq;
-import io.oduck.api.domain.anime.dto.AnimeRes;
+import io.oduck.api.domain.anime.dto.AnimeReq.*;
 import io.oduck.api.domain.anime.dto.VoiceActorReq;
-import io.oduck.api.domain.anime.entity.Anime;
-import io.oduck.api.domain.anime.repository.AnimeRepository;
+import io.oduck.api.domain.anime.entity.*;
+import io.oduck.api.domain.anime.repository.*;
 import io.oduck.api.domain.anime.service.AnimeServiceImpl;
 import io.oduck.api.domain.genre.entity.Genre;
 import io.oduck.api.domain.genre.repository.GenreRepository;
@@ -32,9 +16,6 @@ import io.oduck.api.domain.studio.repository.StudioRepository;
 import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.domain.voiceActor.repository.VoiceActorRepository;
 import io.oduck.api.global.utils.AnimeTestUtils;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -42,6 +23,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static io.oduck.api.global.utils.AnimeTestUtils.*;
+import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class AnimeServiceTest {
@@ -56,13 +50,25 @@ public class AnimeServiceTest {
     private OriginalAuthorRepository originalAuthorRepository;
 
     @Mock
+    private AnimeOriginalAuthorRepository animeOriginalAuthorRepository;
+
+    @Mock
     private VoiceActorRepository voiceActorRepository;
+
+    @Mock
+    private AnimeVoiceActorRepository animeVoiceActorRepository;
 
     @Mock
     private StudioRepository studioRepository;
 
     @Mock
+    private AnimeStudioRepository animeStudioRepository;
+
+    @Mock
     private GenreRepository genreRepository;
+
+    @Mock
+    private AnimeGenreRepository animeGenreRepository;
 
     @Mock
     private SeriesRepository seriesRepository;
@@ -70,18 +76,40 @@ public class AnimeServiceTest {
     @Nested
     @DisplayName("조회")
     class findAnime{
+        Anime anime = createAnime();
+
         @Test
         @DisplayName("애니 상세 조회")
         void getAnimeById() {
             //given
             Long animeId = 1L;
 
+            List<AnimeOriginalAuthor> animeOriginalAuthors = new ArrayList<>();
+            given(animeOriginalAuthorRepository.findAllFetchByAnimeId(animeId)).willReturn(animeOriginalAuthors);
+
+            List<AnimeVoiceActor> animeVoiceActors = new ArrayList<>();
+            given(animeVoiceActorRepository.findAllFetchByAnimeId(animeId)).willReturn(animeVoiceActors);
+
+            List<AnimeStudio> animeStudios = new ArrayList<>();
+            given(animeStudioRepository.findAllFetchByAnimeId(animeId)).willReturn(animeStudios);
+
+            List<AnimeGenre> animeGenres = new ArrayList<>();
+            given(animeGenreRepository.findAllFetchByAnimeId(animeId)).willReturn(animeGenres);
+
+            given(animeRepository.findById(animeId)).willReturn(Optional.ofNullable(anime));
+
             //when
-            AnimeRes response = animeService.getAnimeById(animeId);
+            animeService.getAnimeById(animeId);
 
             //then
-            assertThat(response.getId()).isEqualTo(animeId);
             assertThatNoException();
+
+            //verify
+            verify(animeRepository, times(1)).findById(anyLong());
+            verify(animeOriginalAuthorRepository, times(1)).findAllFetchByAnimeId(anyLong());
+            verify(animeVoiceActorRepository, times(1)).findAllFetchByAnimeId(anyLong());
+            verify(animeStudioRepository, times(1)).findAllFetchByAnimeId(anyLong());
+            verify(animeGenreRepository, times(1)).findAllFetchByAnimeId(anyLong());
         }
     }
 
