@@ -16,8 +16,11 @@ import io.oduck.api.domain.bookmark.dto.BookmarkReqDto.CreateReq;
 import io.oduck.api.domain.member.entity.Role;
 import io.oduck.api.global.mockMember.WithCustomMockMember;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -46,9 +49,11 @@ public class BookmarkControllerTest {
 
     @DisplayName("북마크 토글")
     @Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class toggleBookmark {
         @DisplayName("북마크 토글 저장 성공")
         @Test
+        @Order(1)
         @WithCustomMockMember(id = 2L, email = "john", password = "Qwer!234", role = Role.MEMBER)
         void toggleBookmarkSaveSuccess() throws Exception {
             // given
@@ -79,8 +84,8 @@ public class BookmarkControllerTest {
                                 .value("Fields for bookmark creation")),
                             fieldWithPath("animeId")
                                 .attributes(key("constraints")
-                                    .value("애니메이션 ID, NotNull, Min(1)"))
-                                .description("애니메이션 ID")
+                                    .value("애니메 ID, NotNull, Min(1)"))
+                                .description("애니메 ID")
                         )
                     )
                 );
@@ -88,7 +93,8 @@ public class BookmarkControllerTest {
 
         @DisplayName("북마크 토글 삭제 성공")
         @Test
-        @WithCustomMockMember(id = 1L, email = "admin", password = "Qwer!234", role = Role.MEMBER)
+        @Order(2)
+        @WithCustomMockMember(id = 2L, email = "john", password = "Qwer!234", role = Role.MEMBER)
         void toggleBookmarkDeleteSuccess() throws Exception {
             // given
             Long animeId = 1L;
@@ -118,8 +124,8 @@ public class BookmarkControllerTest {
                                 .value("Fields for bookmark creation")),
                             fieldWithPath("animeId")
                                 .attributes(key("constraints")
-                                    .value("애니메이션 ID, NotNull, Min(1)"))
-                                .description("애니메이션 ID")
+                                    .value("애니메 ID, NotNull, Min(1)"))
+                                .description("애니메 ID")
                         )
                     )
                 );
