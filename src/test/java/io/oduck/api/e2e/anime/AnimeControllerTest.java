@@ -71,6 +71,8 @@ public class AnimeControllerTest {
                 .andExpect(jsonPath("$.genres").exists())
                 .andExpect(jsonPath("$.originalAuthors").exists())
                 .andExpect(jsonPath("$.voiceActors").exists())
+                .andExpect(jsonPath("$.voiceActors[0].name").exists())
+                .andExpect(jsonPath("$.voiceActors[0].part").exists())
                 .andExpect(jsonPath("$.studios").exists())
                 .andExpect(jsonPath("$.reviewCount").exists())
                 .andExpect(jsonPath("$.bookmarkCount").exists())
