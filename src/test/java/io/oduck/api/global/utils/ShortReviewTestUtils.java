@@ -7,7 +7,7 @@ public class ShortReviewTestUtils {
 
     public static PostShortReviewReq createPostShoreReviewReq(){
         return new PostShortReviewReq(
-            getMemberId(),getAnimeId(),
+            getAnimeId(),getName(),
             isHasSpoiler(),getContent()
         );
     }
@@ -18,9 +18,7 @@ public class ShortReviewTestUtils {
         );
     }
 
-    public static Long getMemberId(){
-        return 1L;
-    }
+    public static String getName(){return "회원이름";}
 
     public static Long getAnimeId(){
         return 1L;
