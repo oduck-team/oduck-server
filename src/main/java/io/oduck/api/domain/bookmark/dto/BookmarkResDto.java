@@ -3,6 +3,7 @@ package io.oduck.api.domain.bookmark.dto;
 import io.oduck.api.domain.bookmark.dto.BookmarkDslDto.BookmarkDsl;
 import io.oduck.api.global.common.EntityBased;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class BookmarkResDto {
     @Getter
     @Builder
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class BookmarkRes implements EntityBased {
         private Long animeId;
@@ -41,5 +42,13 @@ public class BookmarkResDto {
                     return this.createdAt.toString();
             }
         }
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BookmarkedDateTimeRes {
+        private String createdAt;
     }
 }
