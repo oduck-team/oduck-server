@@ -582,6 +582,9 @@ public class MemberControllerTest {
                             fieldWithPath("items[].thumbnail")
                                 .type(JsonFieldType.STRING)
                                 .description("애니 썸네일"),
+                            fieldWithPath("items[].avgScore")
+                                .type(JsonFieldType.NUMBER)
+                                .description("해당 애니메의 평균 별점"),
                             fieldWithPath("items[].myScore")
                                 .type(JsonFieldType.NUMBER)
                                 .description("해당 회원이 애니에 매긴 별점. 없을 경우 -1"),
@@ -670,6 +673,9 @@ public class MemberControllerTest {
                             fieldWithPath("items[].thumbnail")
                                 .type(JsonFieldType.STRING)
                                 .description("애니 썸네일"),
+                            fieldWithPath("items[].avgScore")
+                                .type(JsonFieldType.NUMBER)
+                                .description("해당 애니메의 평균 별점"),
                             fieldWithPath("items[].myScore")
                                 .type(JsonFieldType.NUMBER)
                                 .description("해당 회원이 애니에 매긴 별점. 없을 경우 -1"),
