@@ -2,10 +2,15 @@ package io.oduck.api.domain.bookmark.dto;
 
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class BookmarkReqDto {
     @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class CreateReq {
         @Positive
         private Long animeId;

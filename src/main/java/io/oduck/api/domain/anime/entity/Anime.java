@@ -16,13 +16,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Anime extends BaseEntity {
 
   @Id
@@ -79,15 +83,19 @@ public class Anime extends BaseEntity {
   private Series series;
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST, orphanRemoval = true)
+  @Builder.Default
   private List<AnimeOriginalAuthor> animeOriginalAuthors = new ArrayList<>();
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST, orphanRemoval = true)
+  @Builder.Default
   private List<AnimeStudio> animeStudios = new ArrayList<>();
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST, orphanRemoval = true)
+  @Builder.Default
   private List<AnimeVoiceActor> animeVoiceActors = new ArrayList<>();
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST, orphanRemoval = true)
+  @Builder.Default
   private List<AnimeGenre> animeGenres = new ArrayList<>();
 
   /**
