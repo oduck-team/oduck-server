@@ -516,7 +516,7 @@ public class MemberControllerTest {
     @DisplayName("회원의 북마크 애니 목록 조회")
     @Nested
     class GetBookmarks {
-        @DisplayName("회원의 북마크 애니 목록 조회 성공시 200 OK 응답")
+        @DisplayName("회원의 북마크 애니 목록 조회 성공시 200 OK 응답(cursor 없이 최초 요청)")
         @Test
         void getBookmarksSuccess() throws Exception {
             // given
@@ -595,14 +595,14 @@ public class MemberControllerTest {
                                 .type(JsonFieldType.BOOLEAN)
                                 .description("마지막 페이지 여부"),
                             fieldWithPath("lastId")
-                                .type(JsonFieldType.NUMBER)
-                                .description("마지막 아이템 id, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 -1")
+                                .type(JsonFieldType.STRING)
+                                .description("마지막 아이템 id, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 \"\"")
                         )
                     )
                 );
         }
 
-        @DisplayName("회원의 북마크 애니 목록 조회 성공시 200 OK 응답")
+        @DisplayName("회원의 북마크 애니 목록 조회 성공시 200 OK 응답(커서 요청)")
         @Test
         void getBookmarksSuccessWithCursor() throws Exception {
             // given
@@ -610,7 +610,7 @@ public class MemberControllerTest {
             int size = 2;
             String sort = "created_at";
             String order = "desc";
-            String cursor = "2";
+            String cursor = "2023-10-11T21:05:31.859";
 
             // when
             ResultActions actions = mockMvc.perform(
@@ -683,8 +683,8 @@ public class MemberControllerTest {
                                 .type(JsonFieldType.BOOLEAN)
                                 .description("마지막 페이지 여부"),
                             fieldWithPath("lastId")
-                                .type(JsonFieldType.NUMBER)
-                                .description("마지막 아이템 id, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 -1")
+                                .type(JsonFieldType.STRING)
+                                .description("마지막 아이템 id, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 \"\"")
                         )
                     )
                 );

@@ -52,7 +52,7 @@ public class BookmarkServiceTest {
             when(bookmarkRepository.selectBookmarks(
                 memberId,
                 cursor,
-                applyPageableForNonOffset(sort.getSort(), order.getOrder(), size)
+                applyPageableForNonOffset(size, sort.getSort(), order.getOrder())
             )).thenReturn(sampleSlice);
 
             SliceResponse<BookmarkRes> result = bookmarkService.getBookmarksByMemberId(memberId, cursor, sort, order, size);
