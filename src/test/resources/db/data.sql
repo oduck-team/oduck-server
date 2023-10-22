@@ -38,7 +38,7 @@ INSERT INTO anime_voice_actor(anime_id, voice_actor_id, part, created_at, update
 INSERT INTO anime_voice_actor(anime_id, voice_actor_id, part, created_at, updated_at) VALUES (1, 3, '하바시라 이노스케', '2023-10-12 21:05:31.859', '2023-10-12 21:05:31.859');
 INSERT INTO anime_voice_actor(anime_id, voice_actor_id, part, created_at, updated_at) VALUES (2, 1, '카마도 탄지로', '2023-10-12 21:05:31.859', '2023-10-12 21:05:31.859');
 INSERT INTO anime_voice_actor(anime_id, voice_actor_id, part, created_at, updated_at) VALUES (2, 2, '아가츠마 젠이츠', '2023-10-12 21:05:31.859', '2023-10-12 21:05:31.859');
-INSERT INTO anime_voice_actor(anime_id, voice_actor_id, part, created_at, updated_at) VALUES (1, 1, '카마도 탄지로', '2023-10-12 21:05:31.859', '2023-10-12 21:05:31.859');
+INSERT INTO anime_voice_actor(anime_id, voice_actor_id, part, created_at, updated_at) VALUES (3, 1, '카마도 탄지로', '2023-10-12 21:05:31.859', '2023-10-12 21:05:31.859');
 INSERT INTO anime_voice_actor(anime_id, voice_actor_id, part, created_at, updated_at) VALUES (3, 3, '하바시라 이노스케', '2023-10-12 21:05:31.859', '2023-10-12 21:05:31.859');
 
 INSERT INTO studio(name, created_at, updated_at) VALUES ('ufortable', '2023-10-12 21:05:31.859', '2023-10-12 21:05:31.859');
