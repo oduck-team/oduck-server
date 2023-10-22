@@ -1,26 +1,7 @@
 package io.oduck.api.unit.anime.repository;
 
-import static io.oduck.api.global.utils.AnimeTestUtils.getBroadcastType;
-import static io.oduck.api.global.utils.AnimeTestUtils.getEpisodeCount;
-import static io.oduck.api.global.utils.AnimeTestUtils.getQuarter;
-import static io.oduck.api.global.utils.AnimeTestUtils.getRating;
-import static io.oduck.api.global.utils.AnimeTestUtils.getStatus;
-import static io.oduck.api.global.utils.AnimeTestUtils.getSummary;
-import static io.oduck.api.global.utils.AnimeTestUtils.getThumbnail;
-import static io.oduck.api.global.utils.AnimeTestUtils.getTitle;
-import static io.oduck.api.global.utils.AnimeTestUtils.getYear;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import io.oduck.api.domain.anime.entity.Anime;
-import io.oduck.api.domain.anime.entity.AnimeGenre;
-import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
-import io.oduck.api.domain.anime.entity.AnimeStudio;
-import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
-import io.oduck.api.domain.anime.repository.AnimeGenreRepository;
-import io.oduck.api.domain.anime.repository.AnimeOriginalAuthorRepository;
-import io.oduck.api.domain.anime.repository.AnimeRepository;
-import io.oduck.api.domain.anime.repository.AnimeStudioRepository;
-import io.oduck.api.domain.anime.repository.AnimeVoiceActorRepository;
+import io.oduck.api.domain.anime.entity.*;
+import io.oduck.api.domain.anime.repository.*;
 import io.oduck.api.domain.genre.entity.Genre;
 import io.oduck.api.domain.genre.repository.GenreRepository;
 import io.oduck.api.domain.originalAuthor.entity.OriginalAuthor;
@@ -31,8 +12,6 @@ import io.oduck.api.domain.studio.entity.Studio;
 import io.oduck.api.domain.studio.repository.StudioRepository;
 import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.domain.voiceActor.repository.VoiceActorRepository;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -40,6 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static io.oduck.api.global.utils.AnimeTestUtils.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -294,8 +279,7 @@ public class AnimeRepositoryTest {
             findAnime.updateAnimeOriginalAuthors(updatingAnimeOriginalAuthors);
 
             Long findAnimeId = findAnime.getId();
-            List<AnimeOriginalAuthor> findAnimeOriginalAuthors = animeOriginalAuthorRepository
-                .findAllByAnimeId(findAnimeId);
+            List<AnimeOriginalAuthor> findAnimeOriginalAuthors = animeOriginalAuthorRepository.findAllFetchByAnimeId(findAnimeId);
 
             // then
             String findOriginalAuthorName = findAnime.getAnimeOriginalAuthors().get(0)
@@ -362,8 +346,7 @@ public class AnimeRepositoryTest {
             findAnime.updateAnimeStudios(updatingAnimeStudios);
 
             Long findAnimeId = findAnime.getId();
-            List<AnimeStudio> findAnimeOriginalAuthors = animeStudioRepository.findAllByAnimeId(
-                findAnimeId);
+            List<AnimeStudio> findAnimeOriginalAuthors = animeStudioRepository.findAllFetchByAnimeId(findAnimeId);
 
             // then
             String findStudioName = findAnime.getAnimeStudios().get(0).getStudio().getName();
@@ -431,8 +414,7 @@ public class AnimeRepositoryTest {
             findAnime.updateAnimeVoiceActors(updatingAnimeVoiceActors);
 
             Long findAnimeId = findAnime.getId();
-            List<AnimeVoiceActor> findAnimeVoiceActors = animeVoiceActorRepository.findAllByAnimeId(
-                findAnimeId);
+            List<AnimeVoiceActor> findAnimeVoiceActors = animeVoiceActorRepository.findAllFetchByAnimeId(findAnimeId);
 
             // then
             String firstVoiceActorName = findAnime.getAnimeVoiceActors().get(0).getVoiceActor()
@@ -499,7 +481,7 @@ public class AnimeRepositoryTest {
             findAnime.updateAnimeGenre(updatingAnimeGenres);
 
             Long findAnimeId = findAnime.getId();
-            List<AnimeGenre> findAnimeGenres = animeGenreRepository.findAllByAnimeId(findAnimeId);
+            List<AnimeGenre> findAnimeGenres = animeGenreRepository.findAllFetchByAnimeId(findAnimeId);
 
             // then
             String firstGenreName = findAnime.getAnimeGenres().get(0).getGenre().getName();
