@@ -146,6 +146,13 @@ public class AnimeServiceTest {
 
             // then
             assertThatNoException();
+
+            //verify
+            verify(originalAuthorRepository, times(1)).findAllById(anyList());
+            verify(voiceActorRepository, times(1)).findAllById(anyList());
+            verify(studioRepository, times(1)).findAllById(anyList());
+            verify(genreRepository, times(1)).findAllById(anyList());
+            verify(seriesRepository, times(1)).findById(anyLong());
         }
     }
 
