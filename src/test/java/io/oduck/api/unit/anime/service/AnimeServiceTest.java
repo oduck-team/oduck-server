@@ -75,7 +75,7 @@ public class AnimeServiceTest {
 
     @Nested
     @DisplayName("조회")
-    class findAnime{
+    class GetAnime{
         Anime anime = createAnime();
 
         @Test
