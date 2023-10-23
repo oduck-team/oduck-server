@@ -1,24 +1,10 @@
 package io.oduck.api.domain.anime.service;
 
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchAnimeReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchGenreIdsReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchOriginalAuthorIdsReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchSeriesIdReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchStudioIdsReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchVoiceActorIdsReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PostReq;
+import io.oduck.api.domain.anime.dto.AnimeReq.*;
 import io.oduck.api.domain.anime.dto.AnimeRes;
 import io.oduck.api.domain.anime.dto.VoiceActorReq;
-import io.oduck.api.domain.anime.entity.Anime;
-import io.oduck.api.domain.anime.entity.AnimeGenre;
-import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
-import io.oduck.api.domain.anime.entity.AnimeStudio;
-import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
-import io.oduck.api.domain.anime.repository.AnimeGenreRepository;
-import io.oduck.api.domain.anime.repository.AnimeOriginalAuthorRepository;
-import io.oduck.api.domain.anime.repository.AnimeRepository;
-import io.oduck.api.domain.anime.repository.AnimeStudioRepository;
-import io.oduck.api.domain.anime.repository.AnimeVoiceActorRepository;
+import io.oduck.api.domain.anime.entity.*;
+import io.oduck.api.domain.anime.repository.*;
 import io.oduck.api.domain.genre.entity.Genre;
 import io.oduck.api.domain.genre.repository.GenreRepository;
 import io.oduck.api.domain.originalAuthor.entity.OriginalAuthor;
@@ -30,13 +16,14 @@ import io.oduck.api.domain.studio.repository.StudioRepository;
 import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.domain.voiceActor.repository.VoiceActorRepository;
 import io.oduck.api.global.exception.NotFoundException;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -228,8 +215,7 @@ public class AnimeServiceImpl implements AnimeService{
         anime.update(series);
     }
 
-    @Transactional(readOnly = true)
-    public Anime findAnime(Long animeId) {
+    private Anime findAnime(Long animeId) {
         return animeRepository.findById(animeId).orElseThrow(() -> new NotFoundException("Anime"));
     }
 }
