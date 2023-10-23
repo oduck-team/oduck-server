@@ -15,6 +15,7 @@ import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.global.common.OrderDirection;
 import io.oduck.api.global.common.SliceResponse;
 import io.oduck.api.global.exception.NotFoundException;
+import jakarta.persistence.LockModeType;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -33,19 +36,22 @@ public class BookmarkServiceImpl implements BookmarkService {
     private final AnimeRepository animeRepository;
 
     @Override
+    @Transactional
+    @Lock(LockModeType.PESSIMISTIC_READ)
     public boolean toggleBookmark(Long memberId, Long animeId) {
-        Optional<Bookmark> optionalBookmark = getBookmark(memberId, animeId);
+        Optional<Bookmark> optionalBookmark = getBookmark(27L, animeId);
+
+        Anime anime = animeRepository.findByIdForUpdate(animeId)
+            .orElseThrow(() -> new NotFoundException("존재하지 않는 애니메이션입니다."));
 
         if (optionalBookmark.isPresent()) {
             bookmarkRepository.delete(optionalBookmark.get());
+            anime.decreaseBookmarkCount();
             return false;
         }
 
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다."));
-
-        Anime anime = animeRepository.findById(animeId)
-            .orElseThrow(() -> new NotFoundException("존재하지 않는 애니메이션입니다."));
 
         bookmarkRepository.save(
             Bookmark.builder()
@@ -53,6 +59,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                 .anime(anime)
                 .build()
         );
+        anime.increaseBookmarkCount();
         return true;
     }
 
