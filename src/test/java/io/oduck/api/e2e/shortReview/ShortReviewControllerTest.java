@@ -204,15 +204,44 @@ public class ShortReviewControllerTest {
 
             //then
             actions
-                .andExpect(status().isNoContent())
-                .andDo(document("patchShortReviewReq/success",
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.drawing").exists())
+                .andExpect(jsonPath("$.story").exists())
+                .andExpect(jsonPath("$.music").exists())
+                .andExpect(jsonPath("$.character").exists())
+                .andExpect(jsonPath("$.voiceActor").exists())
+                .andDo(document("PatchShortReviews/success",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     pathParameters(
                         parameterWithName("reviewId")
                             .description("리뷰 식별자")
                     ),
-                    requestFields(attributes(key("title").value("Fields for shortreview creation")),
+                    responseFields(
+                        fieldWithPath("drawing")
+                            .type(JsonFieldType.BOOLEAN)
+                            .description("그림 입덕포인트"),
+                        fieldWithPath("story")
+                            .type(JsonFieldType.BOOLEAN)
+                            .description("그림 입덕포인트"),
+                        fieldWithPath("music")
+                            .type(JsonFieldType.BOOLEAN)
+                            .description("음악 입덕포인트"),
+                        fieldWithPath("character")
+                            .type(JsonFieldType.BOOLEAN)
+                            .description("캐릭터 입덕포인트"),
+                        fieldWithPath("voiceActor")
+                            .type(JsonFieldType.BOOLEAN)
+                            .description("성우 입덕포인트")),
+                    requestFields(attributes(key("title").value("Fields for shortReview creation")),
+                        fieldWithPath("animeId")
+                            .type(JsonFieldType.NUMBER)
+                            .attributes(field("constraints", "숫자만 가능합니다."))
+                            .description("애니 식별자"),
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "회원의 이름입니다."))
+                            .description("회원의 이름"),
                         fieldWithPath("hasSpoiler")
                             .type(JsonFieldType.BOOLEAN)
                             .attributes(field("constraints", "true 또는 false."))
