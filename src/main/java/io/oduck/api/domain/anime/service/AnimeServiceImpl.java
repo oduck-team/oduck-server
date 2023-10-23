@@ -8,7 +8,7 @@ import io.oduck.api.domain.anime.dto.AnimeReq.PatchStudioIdsReq;
 import io.oduck.api.domain.anime.dto.AnimeReq.PatchVoiceActorIdsReq;
 import io.oduck.api.domain.anime.dto.AnimeReq.PostReq;
 import io.oduck.api.domain.anime.dto.AnimeRes;
-import io.oduck.api.domain.anime.dto.VoiceActorReq;
+import io.oduck.api.domain.anime.dto.AnimeVoiceActorReq;
 import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.entity.AnimeGenre;
 import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
@@ -84,18 +84,18 @@ public class AnimeServiceImpl implements AnimeService{
             .collect(Collectors.toList());
 
         // 애니에 참여한 성우 리스트
-        List<VoiceActorReq> voiceActorDtoList = postReq.getVoiceActors();
+        List<AnimeVoiceActorReq> voiceActorDtoList = postReq.getVoiceActors();
 
         // 성우의 아이디 리스트 구하기
         List<Long> voiceActorIds = voiceActorDtoList.stream()
-            .map(VoiceActorReq::getId)
+            .map(AnimeVoiceActorReq::getId)
             .collect(Collectors.toList());
 
         List<VoiceActor> voiceActors = voiceActorRepository.findAllById(voiceActorIds);
 
         // Id와 Part로 구성된 map 생성
         Map<Long, String> voiceActorDtoMap = voiceActorDtoList.stream()
-            .collect(Collectors.toMap(VoiceActorReq::getId, VoiceActorReq::getPart));
+            .collect(Collectors.toMap(AnimeVoiceActorReq::getId, AnimeVoiceActorReq::getPart));
 
         List<AnimeVoiceActor> animeVoiceActors = voiceActors.stream()
             .filter(voiceActor -> voiceActorDtoMap.containsKey(voiceActor.getId()))
@@ -182,18 +182,18 @@ public class AnimeServiceImpl implements AnimeService{
         Anime anime = findAnime(animeId);
 
         // 애니에 참여한 성우 리스트
-        List<VoiceActorReq> voiceActorDtoList = patchReq.getVoiceActors();
+        List<AnimeVoiceActorReq> voiceActorDtoList = patchReq.getVoiceActors();
 
         // 성우의 아이디 리스트 구하기
         List<Long> voiceActorIds = voiceActorDtoList.stream()
-            .map(VoiceActorReq::getId)
+            .map(AnimeVoiceActorReq::getId)
             .collect(Collectors.toList());
 
         List<VoiceActor> voiceActors = voiceActorRepository.findAllById(voiceActorIds);
 
         // Id와 Part로 구성된 map 생성
         Map<Long, String> voiceActorDtoMap = voiceActorDtoList.stream()
-            .collect(Collectors.toMap(VoiceActorReq::getId, VoiceActorReq::getPart));
+            .collect(Collectors.toMap(AnimeVoiceActorReq::getId, AnimeVoiceActorReq::getPart));
 
         List<AnimeVoiceActor> animeVoiceActors = voiceActors.stream()
             .filter(va -> voiceActorDtoMap.containsKey(va.getId()))
