@@ -51,7 +51,11 @@ public class AnimeServiceImpl implements AnimeService{
     @Transactional(readOnly = true)
     public AnimeRes getAnimeById(Long animeId) {
 
-        Anime anime = findAnime(animeId);
+        Anime anime = animeRepository.findReleasedAnimeById()
+                .orElseThrow(() -> new NotFoundException("Anime"));
+
+        anime.increaseViewCount();
+
         List<AnimeOriginalAuthor> animeOriginalAuthors = animeOriginalAuthorRepository.findAllFetchByAnimeId(animeId);
         List<AnimeVoiceActor> animeVoiceActors = animeVoiceActorRepository.findAllFetchByAnimeId(animeId);
         List<AnimeStudio> animeStudios = animeStudioRepository.findAllFetchByAnimeId(animeId);
