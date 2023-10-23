@@ -1,7 +1,7 @@
 package io.oduck.api.unit.anime.service;
 
 import io.oduck.api.domain.anime.dto.AnimeReq.*;
-import io.oduck.api.domain.anime.dto.VoiceActorReq;
+import io.oduck.api.domain.anime.dto.AnimeVoiceActorReq;
 import io.oduck.api.domain.anime.entity.*;
 import io.oduck.api.domain.anime.repository.*;
 import io.oduck.api.domain.anime.service.AnimeServiceImpl;
@@ -230,8 +230,8 @@ public class AnimeServiceTest {
             //given
             Long animeId = 1L;
 
-            List<VoiceActorReq> patchReqs = getVoiceActorReqs();
-            List<Long> voiceActorIds = patchReqs.stream().map(VoiceActorReq::getId)
+            List<AnimeVoiceActorReq> patchReqs = getVoiceActorReqs();
+            List<Long> voiceActorIds = patchReqs.stream().map(AnimeVoiceActorReq::getId)
                 .collect(Collectors.toList());
 
             PatchVoiceActorIdsReq patchReq = new PatchVoiceActorIdsReq(patchReqs);
