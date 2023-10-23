@@ -27,7 +27,7 @@ public class AnimeRes {
     private Status status;
 
     private List<String> originalAuthors;
-    private List<VoiceActorRes> voiceActors;
+    private List<AnimeVoiceActorRes> voiceActors;
     private List<String> genres;
     private List<String> studios;
     private long reviewCount;
@@ -50,7 +50,7 @@ public class AnimeRes {
             .map(aoa -> aoa.getOriginalAuthor().getName())
             .collect(Collectors.toList());
         voiceActors = animeVoiceActors.stream()
-            .map(ava -> new VoiceActorRes(ava.getVoiceActor().getName(), ava.getPart()))
+            .map(ava -> new AnimeVoiceActorRes(ava.getVoiceActor().getName(), ava.getPart()))
             .collect(Collectors.toList());
         genres = animeGenres.stream()
             .map(ag -> ag.getGenre().getName())

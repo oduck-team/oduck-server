@@ -6,12 +6,13 @@ import io.oduck.api.domain.anime.entity.Rating;
 import io.oduck.api.domain.anime.entity.Status;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AnimeReq {
 
@@ -51,7 +52,7 @@ public class AnimeReq {
 
         private List<Long> studioIds;
 
-        private List<VoiceActorReq> voiceActors;
+        private List<AnimeVoiceActorReq> voiceActors;
 
         private List<Long> genreIds;
 
@@ -59,7 +60,7 @@ public class AnimeReq {
 
         public PostReq (String title, String summary, BroadcastType broadcastType,
             int episodeCount, String thumbnail, int year, Quarter quarter, Rating rating, Status status,
-            List<Long> originalAuthorIds, List<Long> studioIds, List<VoiceActorReq> voiceActors,
+            List<Long> originalAuthorIds, List<Long> studioIds, List<AnimeVoiceActorReq> voiceActors,
             List<Long> genreIds, Long seriesId) {
 
             this.title = title;
@@ -166,9 +167,9 @@ public class AnimeReq {
     @Getter
     @NoArgsConstructor
     public static class PatchVoiceActorIdsReq {
-        private List<VoiceActorReq> voiceActors;
+        private List<AnimeVoiceActorReq> voiceActors;
 
-        public PatchVoiceActorIdsReq(List<VoiceActorReq> voiceActors) {
+        public PatchVoiceActorIdsReq(List<AnimeVoiceActorReq> voiceActors) {
             if(voiceActors == null){
                 this.voiceActors = new ArrayList<>();
             }else{
