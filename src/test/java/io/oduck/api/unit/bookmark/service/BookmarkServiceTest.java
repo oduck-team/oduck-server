@@ -126,7 +126,7 @@ public class BookmarkServiceTest {
             SliceResponse<BookmarkRes> result = bookmarkService.getBookmarksByMemberId(memberId, cursor, sort, order, size);
 
             assertEquals(sampleSlice.getSize(), result.getItems().size());
-            assertNotNull(result.getLastId());
+            assertNotNull(result.getCursor());
             assertFalse(result.isHasNext());
         }
     }

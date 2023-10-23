@@ -120,7 +120,7 @@ public class ShortReviewControllerTest {
                         fieldWithPath("size")
                             .type(JsonFieldType.NUMBER)
                             .description("한 페이지에 보여줄 아이템의 개수"),
-                        fieldWithPath("lastId")
+                        fieldWithPath("cursor")
                             .type(JsonFieldType.STRING)
                             .description("마지막 아이템 id, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 \"\""),
                         fieldWithPath("hasNext")

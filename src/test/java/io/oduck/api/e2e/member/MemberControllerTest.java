@@ -543,7 +543,7 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.items[0].title").exists())
                 .andExpect(jsonPath("$.items[0].thumbnail").exists())
                 .andExpect(jsonPath("$.size").exists())
-                .andExpect(jsonPath("$.lastId").exists())
+                .andExpect(jsonPath("$.cursor").exists())
                 .andExpect(jsonPath("$.hasNext").exists())
                 .andDo(
                     document("getBookmarks/success",
@@ -597,7 +597,7 @@ public class MemberControllerTest {
                             fieldWithPath("hasNext")
                                 .type(JsonFieldType.BOOLEAN)
                                 .description("마지막 페이지 여부"),
-                            fieldWithPath("lastId")
+                            fieldWithPath("cursor")
                                 .type(JsonFieldType.STRING)
                                 .description("마지막 아이템 id, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 \"\"")
                         )
@@ -634,7 +634,7 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.items[0].title").exists())
                 .andExpect(jsonPath("$.items[0].thumbnail").exists())
                 .andExpect(jsonPath("$.size").exists())
-                .andExpect(jsonPath("$.lastId").exists())
+                .andExpect(jsonPath("$.cursor").exists())
                 .andExpect(jsonPath("$.hasNext").exists())
                 .andDo(
                     document("getBookmarks/successWithCursor",
@@ -688,7 +688,7 @@ public class MemberControllerTest {
                             fieldWithPath("hasNext")
                                 .type(JsonFieldType.BOOLEAN)
                                 .description("마지막 페이지 여부"),
-                            fieldWithPath("lastId")
+                            fieldWithPath("cursor")
                                 .type(JsonFieldType.STRING)
                                 .description("마지막 아이템 id, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 \"\"")
                         )
