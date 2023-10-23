@@ -18,6 +18,7 @@ public class BookmarkResDto {
         private Long animeId;
         private String title;
         private String thumbnail;
+        @Builder.Default
         private double avgScore = 0.0;
         private Integer myScore;
         private LocalDateTime createdAt;
@@ -32,7 +33,7 @@ public class BookmarkResDto {
         }
 
         @Override
-        public String bringId(String property) {
+        public String bringCursor(String property) {
             switch (property) {
                 case "score":
                     return this.myScore.toString() + ", " + this.createdAt.toString();

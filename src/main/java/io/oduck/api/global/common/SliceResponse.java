@@ -9,7 +9,7 @@ public class SliceResponse<T extends EntityBased> {
     private final List<T> items;
     private final int size;          // 한 페이지에 보여줄 아이템의 개수
     private final boolean hasNext;   // 마지막 페이지일 경우, true 반환.
-    private String lastId;           // 마지막 아이템의 id
+    private String cursor;           // 마지막 아이템의 id
 
     public SliceResponse(Slice<T> sliceContent, String property) {
         this.items = sliceContent.getContent();
@@ -18,7 +18,7 @@ public class SliceResponse<T extends EntityBased> {
 
         if (!items.isEmpty() && !hasNext) {
             T lastItem = items.get(items.size() - 1);
-            lastId = lastItem.bringId(property);
+            cursor = lastItem.bringCursor(property);
         }
     }
 
@@ -29,9 +29,9 @@ public class SliceResponse<T extends EntityBased> {
 
         if (!items.isEmpty() && hasNext) {
             T lastItem = items.get(items.size() - 1);
-            this.lastId = lastItem.bringId(property);
+            this.cursor = lastItem.bringCursor(property);
         } else {
-            this.lastId = "";
+            this.cursor = "";
         }
     }
 

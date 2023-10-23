@@ -22,7 +22,7 @@ public class ShortReviewResDto {
         private MemberProfile member;
 
         @Override
-        public String bringId(String property) {
+        public String bringCursor(String property) {
             return this.reviewId.toString();
         }
     }
