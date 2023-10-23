@@ -442,3 +442,198 @@ include::{snippets}/patchAnimeSeries/success/request-fields.adoc[]
 include::{snippets}/patchAnimeSeries/success/http-response.adoc[]
 
 ==== 실패시
+
+=== GET api/v1/oduckdmin/original-authors
+
+.curl-request
+include::{snippets}/getOriginalAuthors/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getOriginalAuthors/success/http-request.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/getOriginalAuthors/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getOriginalAuthors/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getOriginalAuthors/success/response-fields.adoc[]
+
+==== 실패 시
+
+=== POST api/v1/oduckdmin/original-authors
+.curl-request
+include::{snippets}/postOriginalAuthor/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/postOriginalAuthor/success/http-request.adoc[]
+
+.request-body
+include::{snippets}/postOriginalAuthor/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/postOriginalAuthor/success/request-fields.adoc[]
+
+==== 성공 시
+.http-response
+include::{snippets}/postOriginalAuthor/success/http-response.adoc[]
+
+==== 실패 시
+
+=== GET api/v1/oduckdmin/voice-actors
+
+.curl-request
+include::{snippets}/getVoiceActors/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getVoiceActors/success/http-request.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/getVoiceActors/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getVoiceActors/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getVoiceActors/success/response-fields.adoc[]
+
+==== 실패 시
+
+=== POST api/v1/oduckdmin/voice-actors
+.curl-request
+include::{snippets}/postVoiceActor/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/postVoiceActor/success/http-request.adoc[]
+
+.request-body
+include::{snippets}/postVoiceActor/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/postVoiceActor/success/request-fields.adoc[]
+
+==== 성공 시
+.http-response
+include::{snippets}/postVoiceActor/success/http-response.adoc[]
+
+==== 실패 시
+
+=== GET api/v1/oduckdmin/studios
+
+.curl-request
+include::{snippets}/getStudios/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getStudios/success/http-request.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/getStudios/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getStudios/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getStudios/success/response-fields.adoc[]
+
+==== 실패 시
+
+=== POST api/v1/oduckdmin/studios
+.curl-request
+include::{snippets}/postStudio/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/postStudio/success/http-request.adoc[]
+
+.request-body
+include::{snippets}/postStudio/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/postStudio/success/request-fields.adoc[]
+
+==== 성공 시
+.http-response
+include::{snippets}/postStudio/success/http-response.adoc[]
+
+==== 실패 시
+
+=== GET api/v1/oduckdmin/genres
+
+.curl-request
+include::{snippets}/getGenres//success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getGenres/success/http-request.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/getGenres/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getGenres/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getGenres/success/response-fields.adoc[]
+
+==== 실패 시
+
+=== POST api/v1/oduckdmin/genres
+.curl-request
+include::{snippets}/postGenre/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/postGenre/success/http-request.adoc[]
+
+.request-body
+include::{snippets}/postGenre/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/postGenre/success/request-fields.adoc[]
+
+==== 성공 시
+.http-response
+include::{snippets}/postGenre/success/http-response.adoc[]
+
+==== 실패 시
+
+=== GET api/v1/oduckdmin/series
+
+.curl-request
+include::{snippets}/getSeries//success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getSeries/success/http-request.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/getSeries/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getSeries/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getSeries/success/response-fields.adoc[]
+
+==== 실패 시
+
+=== POST api/v1/oduckdmin/genres
+.curl-request
+include::{snippets}/postSeries/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/postSeries/success/http-request.adoc[]
+
+.request-body
+include::{snippets}/postSeries/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/postSeries/success/request-fields.adoc[]
+
+==== 성공 시
+.http-response
+include::{snippets}/postSeries/success/http-response.adoc[]
+
+==== 실패 시
