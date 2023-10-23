@@ -51,7 +51,7 @@ public class AnimeServiceImpl implements AnimeService{
     @Transactional(readOnly = true)
     public AnimeRes getAnimeById(Long animeId) {
 
-        Anime anime = animeRepository.findReleasedAnimeById()
+        Anime anime = animeRepository.findReleasedAnimeById(animeId)
                 .orElseThrow(() -> new NotFoundException("Anime"));
 
         anime.increaseViewCount();
