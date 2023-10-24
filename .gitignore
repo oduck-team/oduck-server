@@ -10,7 +10,10 @@ build/
 *.gz
 *.tmp
 src/main/resources/static/docs/index.html
-application-*.yml
+application-prod.yml
+application-dev.yml
+application-local.yml
+application-test.yml
 
 ### STS ###
 .apt_generated
