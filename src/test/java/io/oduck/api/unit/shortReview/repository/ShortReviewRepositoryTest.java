@@ -21,7 +21,6 @@ import io.oduck.api.domain.anime.entity.AnimeStudio;
 import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
 import io.oduck.api.domain.member.entity.Member;
-import io.oduck.api.domain.member.entity.MemberProfile;
 import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.review.repository.ShortReviewRepository;
