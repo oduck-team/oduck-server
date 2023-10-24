@@ -14,7 +14,7 @@ public class ShortReviewTestUtils {
 
     public static PatchShortReviewReq createPatchShortReview(){
         return new PatchShortReviewReq(
-            isHasSpoiler(),getContent()
+            getAnimeId(), getName(), isHasSpoiler(),getContent()
         );
     }
 

@@ -28,6 +28,8 @@ public class ShortReviewReqDto {
     @AllArgsConstructor
     @Builder
     public static class PatchShortReviewReq{
+        private Long animeId;
+        private String name;
         private boolean hasSpoiler;
         @NotBlank
         @Length(min = 10, max = 100,
