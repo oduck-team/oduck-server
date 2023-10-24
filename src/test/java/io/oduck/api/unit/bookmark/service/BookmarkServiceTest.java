@@ -76,7 +76,8 @@ public class BookmarkServiceTest {
         @Test
         void toggleBookmarkSaveSuccess() {
             given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
-            given(animeRepository.findById(anyLong())).willReturn(Optional.of(anime));
+            given(animeRepository.findByIdForUpdate(anyLong()))
+                .willReturn(Optional.of(anime));
             given(bookmarkRepository.findByMemberIdAndAnimeId(anyLong(), anyLong()))
                 .willReturn(Optional.empty());
             given(bookmarkRepository.save(any(Bookmark.class))).willReturn(bookmark);
@@ -92,6 +93,8 @@ public class BookmarkServiceTest {
         void toggleBookmarkDeleteSuccess() {
             given(bookmarkRepository.findByMemberIdAndAnimeId(anyLong(), anyLong()))
                 .willReturn(Optional.of(bookmark));
+            given(animeRepository.findByIdForUpdate(anyLong()))
+                .willReturn(Optional.of(anime));
             doNothing().when(bookmarkRepository).delete(any(Bookmark.class));
 
             boolean result = bookmarkService.toggleBookmark(member.getId(), anime.getId());

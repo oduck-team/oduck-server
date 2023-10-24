@@ -37,9 +37,8 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     @Override
     @Transactional
-    @Lock(LockModeType.PESSIMISTIC_READ)
     public boolean toggleBookmark(Long memberId, Long animeId) {
-        Optional<Bookmark> optionalBookmark = getBookmark(27L, animeId);
+        Optional<Bookmark> optionalBookmark = getBookmark(memberId, animeId);
 
         Anime anime = animeRepository.findByIdForUpdate(animeId)
             .orElseThrow(() -> new NotFoundException("존재하지 않는 애니메이션입니다."));
