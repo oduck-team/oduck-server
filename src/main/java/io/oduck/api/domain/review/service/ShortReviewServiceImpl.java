@@ -39,12 +39,25 @@ public class ShortReviewServiceImpl implements ShortReviewService{
                                       .build();
 
         //애니 입력
-        shortReview.relateAnime(getAnime(shortReviewReq.getAnimeId()));
+        Anime anime = getAnime(shortReviewReq.getAnimeId());
+        shortReview.relateAnime(anime);
 
         //회원 입력
         shortReview.relateMember(getMember(memberId));
 
         ShortReview saveShortReview = shortReviewRepository.save(shortReview);
+
+        Optional
+            .ofNullable(saveShortReview.getContent())
+            .ifPresent(
+                content ->{
+                    if(saveShortReview.getContent().equals(shortReview.getContent())){
+                        throw new BadRequestException("Failed to saveFail.");
+                    }
+                    //리뷰 작성 성공시 애니 리뷰카운트 증가
+                    anime.increaseReviewCount();
+                }
+            );
         log.info("ShortReview Crated! {}", saveShortReview.getId());
     }
 
