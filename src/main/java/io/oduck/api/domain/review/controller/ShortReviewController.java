@@ -1,5 +1,7 @@
 package io.oduck.api.domain.review.controller;
 
+import io.oduck.api.domain.attractionPoint.dto.AttractionPointResDto.IsAttractionPoint;
+import io.oduck.api.domain.attractionPoint.service.AttractionPointService;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto;
 import io.oduck.api.domain.review.dto.ShortReviewResDto;
 import io.oduck.api.domain.review.service.ShortReviewService;
@@ -22,10 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/short-reviews")
 @RestController
 @RequiredArgsConstructor
-
 public class ShortReviewController {
 
     private final ShortReviewService shortReviewService;
+    private final AttractionPointService attractionPointService;
 
     //애니의 짧은 리뷰 조회
     @GetMapping("/{animeId}")
@@ -46,9 +48,13 @@ public class ShortReviewController {
 
     @PatchMapping("/{reviewId}")
     public ResponseEntity<?> patchShortReview(
-        @PathVariable Long reviewId, @RequestBody @Valid ShortReviewReqDto.PatchShortReviewReq req)  {
+        @LoginUser AuthLocal user,
+        @PathVariable Long reviewId,
+        @RequestBody @Valid ShortReviewReqDto.PatchShortReviewReq req)  {
         //TODO : 짧은 리뷰 수정
         shortReviewService.update(reviewId, req);
-        return ResponseEntity.noContent().build();
+        //입덕포인트 반환
+        IsAttractionPoint attractionPointRes = attractionPointService.isAttractionPoint(user.getId(), req.getAnimeId());
+        return ResponseEntity.ok(attractionPointRes);
     }
 }
