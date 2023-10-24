@@ -5,6 +5,8 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -15,13 +17,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class QueryDslUtils {
     // JPAQuery를 이용하여 Slice를 생성하여 반환.
-    public static <T> Slice<T> fetchSliceByCursor(Path path, JPAQuery<T> query, Pageable pageable) {
-        Sort.Order order = pageable.getSort().iterator().next();
+    public static <T> Slice<T> fetchSliceByCursor(List<Path> paths, JPAQuery<T> query, Pageable pageable) {
+        Sort sort = pageable.getSort();
 
         int pageSize = pageable.getPageSize();
 
         List<T> content = query
-            .orderBy(getOrderSpecifier(order, path))
+            .orderBy(getAllOrderSpecifiers(sort, paths))
             .limit(pageSize + 1)
             .fetch();
 
@@ -29,10 +31,25 @@ public class QueryDslUtils {
     }
 
     // sort.order 객체로 OrderSpecifier를 생성하여 반환.
-    public static OrderSpecifier<?> getOrderSpecifier(Sort.Order order, Path path) {
+    public static OrderSpecifier[] getAllOrderSpecifiers(Sort sort, List<Path> paths) {
+        List<OrderSpecifier> orders = convertToDslOrder(sort, paths);
+        return orders.toArray(OrderSpecifier[]::new);
+    }
 
-        Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
-        return createOrderSpecifier(direction, path, order.getProperty());
+    private static List<OrderSpecifier> convertToDslOrder(Sort sort, List<Path> paths) {
+        List<OrderSpecifier> orders = new ArrayList<>();
+        Iterator<Path> iterator = paths.iterator();
+        if (!sort.isEmpty()) {
+            for (Sort.Order order : sort) {
+                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
+
+                Path<?> path = iterator.next();
+
+                OrderSpecifier<?> orderBy = createOrderSpecifier(direction, path, order.getProperty());
+                orders.add(orderBy);
+            }
+        }
+        return orders;
     }
 
     private static OrderSpecifier<?> createOrderSpecifier(Order order, Path<?> parent, String fieldName) {
