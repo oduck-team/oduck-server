@@ -134,7 +134,6 @@ public class MemberServiceTest {
 
             given(memberProfileRepository.findByMemberId(anyLong())).willReturn(Optional.ofNullable(memberProfile));
             given(memberProfileRepository.existsByName(anyString())).willReturn(false);
-            given(memberProfileRepository.save(any(MemberProfile.class))).willReturn(updatedMemberProfile);
 
             // when
             // then
