@@ -1,13 +1,8 @@
 package io.oduck.api.domain.anime.service;
 
-import io.oduck.api.domain.anime.dto.AnimeReq.*;
+import static io.oduck.api.domain.anime.dto.AnimeReq.*;
+
 import io.oduck.api.domain.anime.dto.AnimeRes;
-import io.oduck.api.domain.anime.entity.AnimeGenre;
-import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
-import io.oduck.api.domain.anime.entity.AnimeStudio;
-import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
-import io.oduck.api.domain.series.entity.Series;
-import java.util.List;
 
 public interface AnimeService {
 
@@ -20,10 +15,9 @@ public interface AnimeService {
 
     /**
      * 애니 저장 로직
-     * @param req
      * @return AnimeId
      */
-    Long save(PostReq req);
+    void save(PostReq req);
 
     /**
      * 애니 수정 로직
@@ -37,33 +31,33 @@ public interface AnimeService {
      * @param animeId
      * @param originalAuthors
      */
-    void updateAnimeOriginalAuthors(Long animeId, List<AnimeOriginalAuthor> originalAuthors);
+    void updateAnimeOriginalAuthors(Long animeId, PatchOriginalAuthorIdsReq originalAuthors);
 
     /**
      * 애니 스튜디오 수정 로직
      * @param animeId
-     * @param animeStudios
+     * @param patchReq
      */
-    void updateAnimeStudios(Long animeId, List<AnimeStudio> animeStudios);
+    void updateAnimeStudios(Long animeId, PatchStudioIdsReq patchReq);
 
     /**
      * 애니 성우 수정 로직
      * @param animeId
-     * @param animeVoiceActors
+     * @param patchReq
      */
-    void updateAnimeVoiceActors(Long animeId, List<AnimeVoiceActor> animeVoiceActors);
+    void updateAnimeVoiceActors(Long animeId, PatchVoiceActorIdsReq patchReq);
 
     /**
      * 애니 장르 수정 로직
      * @param animeId
-     * @param animeGenres
+     * @param patchReq
      */
-    void updateAnimeGenres(Long animeId, List<AnimeGenre> animeGenres);
+    void updateAnimeGenres(Long animeId, PatchGenreIdsReq patchReq);
 
     /**
      * 애니 시리즈 수정 로직
      * @param animeId
-     * @param series
+     * @param patchReq
      */
-    void update(Long animeId, Series series);
+    void updateSeries(Long animeId, PatchSeriesIdReq patchReq);
 }

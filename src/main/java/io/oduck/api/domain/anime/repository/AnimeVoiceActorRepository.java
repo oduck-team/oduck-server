@@ -8,9 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 public interface AnimeVoiceActorRepository extends JpaRepository<AnimeVoiceActor, Long> {
 
-    @Query("select ava from AnimeVoiceActor ava "
-        + "join ava.anime "
-        + "join ava.voiceActor "
+    @Query("select distinct ava from AnimeVoiceActor ava "
+        + "join fetch ava.anime a "
+        + "join fetch ava.voiceActor va "
         + "where ava.anime.id = :animeId")
-    List<AnimeVoiceActor> findAllByAnimeId(@Param("animeId") Long animeId);
+    List<AnimeVoiceActor> findAllFetchByAnimeId(@Param("animeId") Long animeId);
 }

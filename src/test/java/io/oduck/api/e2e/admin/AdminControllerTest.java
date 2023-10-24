@@ -24,6 +24,7 @@ import io.oduck.api.domain.anime.dto.AnimeReq.PatchSeriesIdReq;
 import io.oduck.api.domain.anime.dto.AnimeReq.PatchStudioIdsReq;
 import io.oduck.api.domain.anime.dto.AnimeReq.PatchVoiceActorIdsReq;
 import io.oduck.api.domain.anime.dto.AnimeReq.PostReq;
+import io.oduck.api.domain.anime.dto.VoiceActorReq;
 import io.oduck.api.global.utils.AnimeTestUtils;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -57,11 +58,11 @@ public class AdminControllerTest {
     private final static String ADMIN_URL = "/oduckdmin";
 
     @Nested
-    @DisplayName("애니 등록")
+    @DisplayName("등록")
     class PostAnime{
 
         @Test
-        @DisplayName("등록 성공 시 Http Status 200 반환")
+        @DisplayName("성공 시 Http Status 200 반환")
         void postAnime() throws Exception {
             //given
             PostReq request = AnimeTestUtils.createPostAnimeRequest();
@@ -128,11 +129,19 @@ public class AdminControllerTest {
                             .description("애니 스튜디오 아이디 리스트")
                             .attributes(field("constraints", "List만 허용합니다."))
                             .optional(),
-                        fieldWithPath("voiceActorIds")
+                        fieldWithPath("voiceActors")
                             .type(JsonFieldType.ARRAY)
-                            .description("애니 성우 아이디 리스트")
+                            .description("애니 성우 리스트")
                             .attributes(field("constraints", "List만 허용합니다."))
                             .optional(),
+                        fieldWithPath("voiceActors[].id")
+                            .type(JsonFieldType.NUMBER)
+                            .description("성우의 아이디")
+                            .attributes(field("constraints", "숫자만 허용합니다.")),
+                        fieldWithPath("voiceActors[].part")
+                            .type(JsonFieldType.STRING)
+                            .description("성우의 역할")
+                            .attributes(field("constraints", "100자 이하만 허용합니다.")),
                         fieldWithPath("genreIds")
                             .type(JsonFieldType.ARRAY)
                             .description("애니 장르 아이디 리스트")
@@ -150,7 +159,7 @@ public class AdminControllerTest {
     }
 
     @Nested
-    @DisplayName("애니 수정")
+    @DisplayName("수정")
     class PatchAnime{
 
         @Test
@@ -302,9 +311,9 @@ public class AdminControllerTest {
         void patchAnimeVoiceActors() throws Exception {
             //given
             Long animeId = 1L;
-            List<Long> voiceActorIds = AnimeTestUtils.getVoiceActorIds();
+            List<VoiceActorReq> voiceActors = AnimeTestUtils.getVoiceActorReqs();
 
-            PatchVoiceActorIdsReq req = new PatchVoiceActorIdsReq(voiceActorIds);
+            PatchVoiceActorIdsReq req = new PatchVoiceActorIdsReq(voiceActors);
             String content = gson.toJson(req);
 
             //when
@@ -324,11 +333,19 @@ public class AdminControllerTest {
                         parameterWithName("animeId").description("애니의 식별자")
                     ),
                     requestFields(attributes(key("title").value("Fields for anime creation")),
-                        fieldWithPath("voiceActorIds")
+                        fieldWithPath("voiceActors")
                             .type(JsonFieldType.ARRAY)
-                            .description("애니 성우 아이디 리스트")
+                            .description("애니 성우 리스트")
                             .attributes(field("constraints", "List만 허용합니다."))
-                            .optional()
+                            .optional(),
+                        fieldWithPath("voiceActors[].id")
+                            .type(JsonFieldType.NUMBER)
+                            .description("성우의 아이디")
+                            .attributes(field("constraints", "숫자만 허용합니다.")),
+                        fieldWithPath("voiceActors[].part")
+                            .type(JsonFieldType.STRING)
+                            .description("성우의 역할")
+                            .attributes(field("constraints", "100자 이하만 허용합니다."))
                     )
                 ));
         }

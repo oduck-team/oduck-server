@@ -8,15 +8,8 @@ import io.oduck.api.domain.anime.dto.AnimeReq.PatchOriginalAuthorIdsReq;
 import io.oduck.api.domain.anime.dto.AnimeReq.PatchSeriesIdReq;
 import io.oduck.api.domain.anime.dto.AnimeReq.PatchStudioIdsReq;
 import io.oduck.api.domain.anime.dto.AnimeReq.PatchVoiceActorIdsReq;
-import io.oduck.api.domain.anime.entity.AnimeGenre;
-import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
-import io.oduck.api.domain.anime.entity.AnimeStudio;
-import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
 import io.oduck.api.domain.anime.service.AnimeService;
-import io.oduck.api.domain.series.entity.Series;
 import jakarta.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +33,7 @@ public class AdminController {
     //애니 등록
     @PostMapping("/animes")
     public ResponseEntity<Object> postAnime(@RequestBody @Valid PostReq req){
-        // TODO: 애니 추가 로직 구현
+
         animeService.save(req);
 
         return ResponseEntity.ok().build();
@@ -51,7 +44,7 @@ public class AdminController {
     public ResponseEntity<Object> patchAnime(
         @PathVariable Long animeId, @RequestBody @Valid PatchAnimeReq req
     ){
-        //TODO: 애니 수정 로직 구현
+
         animeService.update(animeId, req);
 
         return ResponseEntity.noContent().build();
@@ -62,12 +55,7 @@ public class AdminController {
     public ResponseEntity<Object> patchAnimeOriginalAuthors(
         @PathVariable Long animeId, @RequestBody PatchOriginalAuthorIdsReq req
     ){
-        List<Long> originalAuthorIds = req.getOriginalAuthorIds();
-        //TODO: 컨트롤러에서 애니 아이디와 원작 작가 아이디로 AnimeOriginalAuthor들을 찾아야 함.
-        List<AnimeOriginalAuthor> animeOriginalAuthors = new ArrayList<>();
-
-        //TODO: 애니 수정 로직 구현
-        animeService.updateAnimeOriginalAuthors(animeId, animeOriginalAuthors);
+        animeService.updateAnimeOriginalAuthors(animeId, req);
 
         return ResponseEntity.noContent().build();
     }
@@ -77,12 +65,8 @@ public class AdminController {
     public ResponseEntity<Object> patchAnimeStudios(
         @PathVariable Long animeId, @RequestBody PatchStudioIdsReq req
     ){
-        List<Long> originalAuthorIds = req.getStudioIds();
-        //TODO: 컨트롤러에서 애니 아이디와 원작 작가 아이디로 AnimeOriginalAuthor들을 찾아야 함.
-        List<AnimeStudio> animeStudios = new ArrayList<>();
 
-        //TODO: 애니 수정 로직 구현
-        animeService.updateAnimeStudios(animeId, animeStudios);
+        animeService.updateAnimeStudios(animeId, req);
 
         return ResponseEntity.noContent().build();
     }
@@ -91,12 +75,7 @@ public class AdminController {
     public ResponseEntity<Object> patchAnimeVoiceActors(
         @PathVariable Long animeId, @RequestBody PatchVoiceActorIdsReq req
     ){
-        List<Long> voiceActorIds = req.getVoiceActorIds();
-        //TODO: 컨트롤러에서 애니 아이디와 성우 아이디로 AnimeOriginalAuthor들을 찾아야 함.
-        List<AnimeVoiceActor> animeVoiceActors = new ArrayList<>();
-
-        //TODO: 애니 수정 로직 구현
-        animeService.updateAnimeVoiceActors(animeId, animeVoiceActors);
+        animeService.updateAnimeVoiceActors(animeId, req);
 
         return ResponseEntity.noContent().build();
     }
@@ -106,12 +85,8 @@ public class AdminController {
     public ResponseEntity<Object> patchAnimeGenres(
         @PathVariable Long animeId, @RequestBody PatchGenreIdsReq req
     ){
-        List<Long> genreIds = req.getGenreIds();
-        //TODO: 컨트롤러에서 애니 아이디와 장르 아이디로 AnimeGenre들을 찾아야 함.
-        List<AnimeGenre> animeGenres = new ArrayList<>();
 
-        //TODO: 애니 수정 로직 구현
-        animeService.updateAnimeGenres(animeId, animeGenres);
+        animeService.updateAnimeGenres(animeId, req);
 
         return ResponseEntity.noContent().build();
     }
@@ -121,12 +96,8 @@ public class AdminController {
     public ResponseEntity<Object> patchAnimeSeries(
         @PathVariable Long animeId, @RequestBody PatchSeriesIdReq req
     ){
-        Long seriesId = req.getSeriesId();
-        //TODO: 컨트롤러에서 시리즈 아이디로 시리즈를 찾아야 함.
-        Series series = null;
 
-        //TODO: 애니 수정 로직 구현
-        animeService.update(animeId, series);
+        animeService.updateSeries(animeId, req);
 
         return ResponseEntity.noContent().build();
     }
