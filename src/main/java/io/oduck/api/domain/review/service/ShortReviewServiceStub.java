@@ -1,5 +1,8 @@
 //package io.oduck.api.domain.review.service;
 //
+//import io.oduck.api.domain.attractionPoint.dto.AttractionPointResDto.AttractionPointRes;
+//import io.oduck.api.domain.attractionPoint.entity.AttractionPoint;
+//import io.oduck.api.domain.attractionPoint.repository.AttractionPointRepository;
 //import io.oduck.api.domain.review.dto.ShortReviewReqDto.PatchShortReviewReq;
 //import io.oduck.api.domain.review.dto.ShortReviewReqDto.PostShortReviewReq;
 //import io.oduck.api.domain.review.dto.ShortReviewResDto;
@@ -14,6 +17,8 @@
 //
 //@Service
 //public class ShortReviewServiceStub implements ShortReviewService{
+//
+//
 //
 //    @Override
 //    public ShortReviewResDto getShortReviews(Long animeId) {
@@ -34,13 +39,21 @@
 //    }
 //
 //    @Override
-//    public void save(PostShortReviewReq shortReviewReq) {
+//    public void save(Long memberId, PostShortReviewReq shortReviewReq) {
 //
 //    }
+//
 //
 //    @Override
 //    public void update(Long reviewId, PatchShortReviewReq req) {
 //
+//
+//
+//    }
+//
+//    @Override
+//    public ShortReviewResDto isAttractionPoint(Long memberId, Long animeId) {
+//        return null;
 //    }
 //
 //    private ShortReview createReview(Long animeId){

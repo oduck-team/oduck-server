@@ -1,7 +1,7 @@
 package io.oduck.api.unit.shortReview.service;
 
 import io.oduck.api.domain.review.dto.ShortReviewResDto;
-import io.oduck.api.domain.review.service.ShortReviewServiceStub;
+import io.oduck.api.domain.review.service.ShortReviewServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ShortReviewServiceTest {
 
     @InjectMocks
-    private ShortReviewServiceStub shortReviewService;
+    private ShortReviewServiceImpl shortReviewService;
 
     @Nested
     @DisplayName("짧은 리뷰 조회")
