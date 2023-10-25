@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class VoiceActorReq {
-    private Long id;
+public class AnimeVoiceActorRes {
+    private String name;
     private String part;
 }

@@ -1,7 +1,7 @@
 package io.oduck.api.unit.anime.service;
 
 import io.oduck.api.domain.anime.dto.AnimeReq.*;
-import io.oduck.api.domain.anime.dto.VoiceActorReq;
+import io.oduck.api.domain.anime.dto.AnimeVoiceActorReq;
 import io.oduck.api.domain.anime.entity.*;
 import io.oduck.api.domain.anime.repository.*;
 import io.oduck.api.domain.anime.service.AnimeServiceImpl;
@@ -75,7 +75,7 @@ public class AnimeServiceTest {
 
     @Nested
     @DisplayName("조회")
-    class findAnime{
+    class GetAnime{
         Anime anime = createAnime();
 
         @Test
@@ -146,6 +146,13 @@ public class AnimeServiceTest {
 
             // then
             assertThatNoException();
+
+            //verify
+            verify(originalAuthorRepository, times(1)).findAllById(anyList());
+            verify(voiceActorRepository, times(1)).findAllById(anyList());
+            verify(studioRepository, times(1)).findAllById(anyList());
+            verify(genreRepository, times(1)).findAllById(anyList());
+            verify(seriesRepository, times(1)).findById(anyLong());
         }
     }
 
@@ -230,8 +237,8 @@ public class AnimeServiceTest {
             //given
             Long animeId = 1L;
 
-            List<VoiceActorReq> patchReqs = getVoiceActorReqs();
-            List<Long> voiceActorIds = patchReqs.stream().map(VoiceActorReq::getId)
+            List<AnimeVoiceActorReq> patchReqs = getVoiceActorReqs();
+            List<Long> voiceActorIds = patchReqs.stream().map(AnimeVoiceActorReq::getId)
                 .collect(Collectors.toList());
 
             PatchVoiceActorIdsReq patchReq = new PatchVoiceActorIdsReq(patchReqs);
