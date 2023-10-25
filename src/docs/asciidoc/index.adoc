@@ -189,23 +189,29 @@ include::{snippets}/postShortReview/success/http-response.adoc[]
 === PATCH api/v1/short-reviews/1
 
 .curl-request
-include::{snippets}/patchShortReviewReq/success/curl-request.adoc[]
+include::{snippets}/patchShortReview/success/curl-request.adoc[]
 
 .http-request
-include::{snippets}/patchShortReviewReq/success/http-request.adoc[]
+include::{snippets}/patchShortReview/success/http-request.adoc[]
 
 .request-param
-include::{snippets}/patchShortReviewReq/success/path-parameters.adoc[]
+include::{snippets}/patchShortReview/success/path-parameters.adoc[]
 
 .request-body
-include::{snippets}/patchShortReviewReq/success/request-body.adoc[]
+include::{snippets}/patchShortReview/success/request-body.adoc[]
 
 .request-fields
-include::{snippets}/patchShortReviewReq/success/request-fields.adoc[]
+include::{snippets}/patchShortReview/success/request-fields.adoc[]
 
 ==== 성공시
 .http-response
-include::{snippets}/patchShortReviewReq/success/http-response.adoc[]
+include::{snippets}/patchShortReview/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/patchShortReview/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/patchShortReview/success/response-fields.adoc[]
 
 
 ==== 실패시
