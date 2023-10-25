@@ -160,14 +160,15 @@ public class ShortReviewControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(attributes(key("title").value("Fields for shortReview creation")),
-                            fieldWithPath("memberId")
-                                .type(JsonFieldType.NUMBER)
-                                .attributes(field("constraints", "숫자만 가능합니다."))
-                                .description("리뷰를 등록할 회원의 고유 식별 번호"),
+
                             fieldWithPath("animeId")
                                 .type(JsonFieldType.NUMBER)
                                 .attributes(field("constraints", "숫자만 가능합니다."))
                                 .description("리뷰를 등록할 애니 고유 식별 번호"),
+                            fieldWithPath("name")
+                                .type(JsonFieldType.STRING)
+                                .attributes(field("constraints", "String만 가능합니다"))
+                                .description("리뷰를 등록할 회원의 이름"),
                             fieldWithPath("hasSpoiler")
                                 .type(JsonFieldType.BOOLEAN)
                                 .attributes(field("constraints", "true 또는 false."))
@@ -186,7 +187,7 @@ public class ShortReviewControllerTest {
     @DisplayName("짧은 리뷰 수정")
     class PatchShortReview{
 
-        @DisplayName("짧은 리뷰 수정 성공시 Http Status 204 반환")
+        @DisplayName("짧은 리뷰 수정 성공시 Http Status 200 반환")
         @Test
         void patchShortReview() throws Exception{
             //given
@@ -210,13 +211,12 @@ public class ShortReviewControllerTest {
                 .andExpect(jsonPath("$.music").exists())
                 .andExpect(jsonPath("$.character").exists())
                 .andExpect(jsonPath("$.voiceActor").exists())
-                .andDo(document("PatchShortReviews/success",
+                .andDo(document("patchShortReview/success",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     pathParameters(
                         parameterWithName("reviewId")
-                            .description("리뷰 식별자")
-                    ),
+                            .description("리뷰 식별자")),
                     responseFields(
                         fieldWithPath("drawing")
                             .type(JsonFieldType.BOOLEAN)
