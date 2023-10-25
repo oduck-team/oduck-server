@@ -134,7 +134,6 @@ public class MemberServiceTest {
 
             given(memberProfileRepository.findByMemberId(anyLong())).willReturn(Optional.ofNullable(memberProfile));
             given(memberProfileRepository.existsByName(anyString())).willReturn(false);
-            given(memberProfileRepository.save(any(MemberProfile.class))).willReturn(updatedMemberProfile);
 
             // when
             // then
@@ -190,8 +189,6 @@ public class MemberServiceTest {
             );
         }
     }
-
-    // TODO: 회원이 작성한 리뷰 목록
 
     // TODO: 회원 북마크 애니 목록
 }

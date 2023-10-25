@@ -81,6 +81,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.PUT, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
                     .requestMatchers(HttpMethod.PATCH, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
                     .requestMatchers(HttpMethod.DELETE, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                    .requestMatchers( "/bookmarks/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
 //                    .requestMatchers("/oduckdmin/**").hasAuthority(Role.ADMIN.name())
                     .anyRequest().permitAll()
             );
