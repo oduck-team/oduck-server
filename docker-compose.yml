@@ -1,14 +1,16 @@
+version: '3.8'
+
 services:
   redis:
     image: redis:latest
     command: redis-server
-    container_name: oDuckio-redis
+    container_name: redis
     ports:
       - '6379:6379'
 
   spring:
     image: fabeejoo/oduckio-spring
-    container_name: oDuckio-spring
+    container_name: spring
     depends_on:
       - redis
     ports:
@@ -18,3 +20,35 @@ services:
       # 로컬 /logs랑 안 섞이게 /data/logs로 연결
       # 컨테이너상 서버 실행 경로 var/app/
       - ./data/logs:/logs
+
+  proxy:
+    container_name: proxy
+    image: nginx:latest
+    ports:
+      - '80:80' # common web
+      # - '443:443' # https
+    # restart: unless-stopped
+    volumes:
+      - ./proxy/nginx.conf:/etc/nginx/nginx.conf
+      # - ./proxy/web.conf:/etc/nginx/web.conf
+      # - ./proxy/server-https-common.conf:/etc/nginx/server-https-common.conf:ro
+      # - /etc/letsencrypt/live/사이트이름:/etc/ssl:ro
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - '9090:9090'
+    restart: always
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - '3000:3000'
+    restart: always
+    volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasources.yml

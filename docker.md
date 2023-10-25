@@ -37,4 +37,25 @@
 > # docker push {dockerHubName}/{imageName}:{tag}
 >
 > docker push fabeejoo/oduckio-spring
+>
+> # 다양한 아키텍처로 빌드
+> # docker buildx build --platform {platform} -f {path} -t {tag} .
+>
+> docker buildx build --platform linux/amd64 -f ./dockerfile-dev -t fabeejoo/oduckio-spring .
+> ```
+
+# Promethues
+
+> ```bash
+> # prometheus 실행
+> docker run \
+> ```
+
+    -d \
+    -p 9090:9090 \
+    -v ./prometheus.yml:/etc/prometheus/prometheus.yml \
+    prom/prometheus
+
+> ```
+>
 > ```
