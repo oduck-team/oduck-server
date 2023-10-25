@@ -36,6 +36,7 @@ ext {
 dependencies {
 	// 서버 상태 체크
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 
 	// security & oauth2
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
