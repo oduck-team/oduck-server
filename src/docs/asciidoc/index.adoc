@@ -189,6 +189,29 @@ include::{snippets}/getBookmarks/successWithCursor/response-body.adoc[]
 include::{snippets}/getBookmarks/successWithCursor/response-fields.adoc[]
 
 == animes
+=== GET api/v1/animes
+.curl-request
+include::{snippets}/getAnimes/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getAnimes/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/getAnimes/success/path-parameters.adoc[]
+
+.query-parameters
+include::{snippets}/getAnimes/success/query-parameters.adoc[]
+
+.http-response
+include::{snippets}/getAnimes/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getAnimes/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getAnimes/success/response-fields.adoc[]
+
+
 === GET api/v1/animes/:id
 
 .curl-request
