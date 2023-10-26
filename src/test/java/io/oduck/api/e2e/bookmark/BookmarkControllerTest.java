@@ -1,5 +1,8 @@
 package io.oduck.api.e2e.bookmark;
 
+import static io.oduck.api.global.config.RestDocsConfig.field;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -30,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
@@ -73,6 +77,7 @@ public class BookmarkControllerTest {
                 post(BASE_URL)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
                     .content(content)
             );
 
@@ -83,6 +88,11 @@ public class BookmarkControllerTest {
                     document("bookmark/toggleBookmark/save/success",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                            headerWithName(HttpHeaders.COOKIE)
+                                .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                .description("Header Cookie, 세션 쿠키")
+                        ),
                         requestFields(
                             attributes(key("title")
                                 .value("Fields for bookmark creation")),
@@ -113,6 +123,7 @@ public class BookmarkControllerTest {
                 post(BASE_URL)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
                     .content(content)
             );
 
@@ -123,6 +134,11 @@ public class BookmarkControllerTest {
                     document("bookmark/toggleBookmark/delete/success",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                            headerWithName(HttpHeaders.COOKIE)
+                                .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                .description("Header Cookie, 세션 쿠키")
+                        ),
                         requestFields(
                             attributes(key("title")
                                 .value("Fields for bookmark creation")),
@@ -151,6 +167,7 @@ public class BookmarkControllerTest {
                 get(BASE_URL + "/{animeId}", animeId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
             );
 
             // then
@@ -163,6 +180,11 @@ public class BookmarkControllerTest {
                         pathParameters(
                             parameterWithName("animeId")
                                 .description("애니메 id")
+                        ),
+                        requestHeaders(
+                            headerWithName(HttpHeaders.COOKIE)
+                                .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                .description("Header Cookie, 세션 쿠키")
                         ),
                         responseFields(
                             attributes(key("title")
@@ -186,6 +208,7 @@ public class BookmarkControllerTest {
                 get(BASE_URL + "/{animeId}", animeId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
             );
 
             // then
@@ -198,6 +221,12 @@ public class BookmarkControllerTest {
                         pathParameters(
                             parameterWithName("animeId")
                                 .description("애니메 id")
+                        ),
+                        requestHeaders(
+                            headerWithName(HttpHeaders.COOKIE)
+                                .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                .optional()
+                                .description("Header Cookie, 세션 쿠키")
                         ),
                         responseFields(
                             attributes(key("title")

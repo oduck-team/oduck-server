@@ -2,7 +2,7 @@ package io.oduck.api.global.utils;
 
 import io.oduck.api.domain.anime.dto.AnimeReq.PatchAnimeReq;
 import io.oduck.api.domain.anime.dto.AnimeReq.PostReq;
-import io.oduck.api.domain.anime.dto.VoiceActorReq;
+import io.oduck.api.domain.anime.dto.AnimeVoiceActorReq;
 import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.entity.BroadcastType;
 import io.oduck.api.domain.anime.entity.Quarter;
@@ -78,10 +78,10 @@ public class AnimeTestUtils {
         return genreIds;
     }
 
-    public static List<VoiceActorReq> getVoiceActorReqs() {
-        List<VoiceActorReq> voiceActors = new ArrayList<>();
-        VoiceActorReq firstDto = new VoiceActorReq(5L, "카마도 탄지로");
-        VoiceActorReq secondDto = new VoiceActorReq(6L, "카마도 네즈코");
+    public static List<AnimeVoiceActorReq> getVoiceActorReqs() {
+        List<AnimeVoiceActorReq> voiceActors = new ArrayList<>();
+        AnimeVoiceActorReq firstDto = new AnimeVoiceActorReq(5L, "카마도 탄지로");
+        AnimeVoiceActorReq secondDto = new AnimeVoiceActorReq(6L, "카마도 네즈코");
         voiceActors.add(firstDto);
         voiceActors.add(secondDto);
         return voiceActors;
