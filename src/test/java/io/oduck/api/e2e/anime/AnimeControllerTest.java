@@ -58,22 +58,24 @@ public class AnimeControllerTest {
             //then
             actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.anime.id").exists())
-                .andExpect(jsonPath("$.anime.title").exists())
-                .andExpect(jsonPath("$.anime.thumbnail").exists())
-                .andExpect(jsonPath("$.anime.broadcastType").exists())
-                .andExpect(jsonPath("$.anime.year").exists())
-                .andExpect(jsonPath("$.anime.quarter").exists())
-                .andExpect(jsonPath("$.anime.summary").exists())
-                .andExpect(jsonPath("$.anime.episodeCount").exists())
-                .andExpect(jsonPath("$.anime.rating").exists())
-                .andExpect(jsonPath("$.anime.status").exists())
-                .andExpect(jsonPath("$.anime.genres").exists())
-                .andExpect(jsonPath("$.anime.originalAuthors").exists())
-                .andExpect(jsonPath("$.anime.voiceActors").exists())
-                .andExpect(jsonPath("$.anime.studios").exists())
-                .andExpect(jsonPath("$.anime.reviewCount").exists())
-                .andExpect(jsonPath("$.anime.bookmarkCount").exists())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.title").exists())
+                .andExpect(jsonPath("$.thumbnail").exists())
+                .andExpect(jsonPath("$.broadcastType").exists())
+                .andExpect(jsonPath("$.year").exists())
+                .andExpect(jsonPath("$.quarter").exists())
+                .andExpect(jsonPath("$.summary").exists())
+                .andExpect(jsonPath("$.episodeCount").exists())
+                .andExpect(jsonPath("$.rating").exists())
+                .andExpect(jsonPath("$.status").exists())
+                .andExpect(jsonPath("$.genres").exists())
+                .andExpect(jsonPath("$.originalAuthors").exists())
+                .andExpect(jsonPath("$.voiceActors").exists())
+                .andExpect(jsonPath("$.voiceActors[0].name").exists())
+                .andExpect(jsonPath("$.voiceActors[0].part").exists())
+                .andExpect(jsonPath("$.studios").exists())
+                .andExpect(jsonPath("$.reviewCount").exists())
+                .andExpect(jsonPath("$.bookmarkCount").exists())
                 .andDo(document("getAnimeById/success",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
@@ -82,55 +84,58 @@ public class AnimeControllerTest {
                             .description("애니의 고유 식별자")
                     ),
                     responseFields(
-                        fieldWithPath("anime")
-                            .type(JsonFieldType.OBJECT)
-                            .description("애니 정보"),
-                        fieldWithPath("anime.id")
+                        fieldWithPath("id")
                             .type(JsonFieldType.NUMBER)
                             .description("애니의 고유 식별자"),
-                        fieldWithPath("anime.title")
+                        fieldWithPath("title")
                             .type(JsonFieldType.STRING)
                             .description("애니 제목"),
-                        fieldWithPath("anime.thumbnail")
+                        fieldWithPath("thumbnail")
                             .type(JsonFieldType.STRING)
                             .description("애니 이미지, 경로로 저장됨"),
-                        fieldWithPath("anime.broadcastType")
+                        fieldWithPath("broadcastType")
                             .type(JsonFieldType.STRING)
                             .description("작품의 출시 방식. TVA, OVA, ONA, MOV가 있음"),
-                        fieldWithPath("anime.year")
+                        fieldWithPath("year")
                             .type(JsonFieldType.NUMBER)
                             .description("작품의 출시 년도"),
-                        fieldWithPath("anime.quarter")
+                        fieldWithPath("quarter")
                             .type(JsonFieldType.STRING)
                             .description("작품의 출시 분기"),
-                        fieldWithPath("anime.summary")
+                        fieldWithPath("summary")
                             .type(JsonFieldType.STRING)
                             .description("애니를 소개할 때 줄거리"),
-                        fieldWithPath("anime.episodeCount")
+                        fieldWithPath("episodeCount")
                             .type(JsonFieldType.NUMBER)
                             .description("에피소드의 숫자. 16화까지 나왔으면 16으로 표기됨."),
-                        fieldWithPath("anime.rating")
+                        fieldWithPath("rating")
                             .type(JsonFieldType.STRING)
                             .description("작품의 심의 등급. ADULT, FIFTEEN, TWELVE, ALL가 있다."),
-                        fieldWithPath("anime.status")
+                        fieldWithPath("status")
                             .type(JsonFieldType.STRING)
                             .description("방영 상태. FINISHED, ONGOING, UPCOMING, UNKNOWN이 있다."),
-                        fieldWithPath("anime.genres")
+                        fieldWithPath("genres")
                             .type(JsonFieldType.ARRAY)
                             .description("애니의 장르."),
-                        fieldWithPath("anime.originalAuthors")
+                        fieldWithPath("originalAuthors")
                             .type(JsonFieldType.ARRAY)
                             .description("애니의 원작 작가."),
-                        fieldWithPath("anime.voiceActors")
+                        fieldWithPath("voiceActors")
                             .type(JsonFieldType.ARRAY)
-                            .description("애니의 출연 성우."),
-                        fieldWithPath("anime.studios")
+                            .description("애니 성우 리스트"),
+                        fieldWithPath("voiceActors[].name")
+                            .type(JsonFieldType.STRING)
+                            .description("성우의 이름"),
+                        fieldWithPath("voiceActors[].part")
+                            .type(JsonFieldType.STRING)
+                            .description("성우의 역할"),
+                        fieldWithPath("studios")
                             .type(JsonFieldType.ARRAY)
                             .description("애니의 제작사."),
-                        fieldWithPath("anime.reviewCount")
+                        fieldWithPath("reviewCount")
                             .type(JsonFieldType.NUMBER)
                             .description("애니의 리뷰 개수."),
-                        fieldWithPath("anime.bookmarkCount")
+                        fieldWithPath("bookmarkCount")
                             .type(JsonFieldType.NUMBER)
                             .description("애니의 덕후 수.")
                     )

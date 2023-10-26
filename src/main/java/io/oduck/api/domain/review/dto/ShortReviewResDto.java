@@ -22,8 +22,8 @@ public class ShortReviewResDto {
         private MemberProfile member;
 
         @Override
-        public Long getId() {
-            return this.getReviewId();
+        public String bringCursor(String property) {
+            return this.reviewId.toString();
         }
     }
 

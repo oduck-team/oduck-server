@@ -2,6 +2,7 @@ package io.oduck.api.domain.anime.entity;
 
 import io.oduck.api.domain.series.entity.Series;
 import io.oduck.api.global.audit.BaseEntity;
+import io.oduck.api.global.exception.BadRequestException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,13 +17,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Anime extends BaseEntity {
 
   @Id
@@ -79,15 +84,19 @@ public class Anime extends BaseEntity {
   private Series series;
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST, orphanRemoval = true)
+  @Builder.Default
   private List<AnimeOriginalAuthor> animeOriginalAuthors = new ArrayList<>();
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST, orphanRemoval = true)
+  @Builder.Default
   private List<AnimeStudio> animeStudios = new ArrayList<>();
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST, orphanRemoval = true)
+  @Builder.Default
   private List<AnimeVoiceActor> animeVoiceActors = new ArrayList<>();
 
   @OneToMany(mappedBy = "anime", cascade = CascadeType.PERSIST, orphanRemoval = true)
+  @Builder.Default
   private List<AnimeGenre> animeGenres = new ArrayList<>();
 
   /**
@@ -131,7 +140,7 @@ public class Anime extends BaseEntity {
   // 평가할 때 점수 합산(별점)
   public void increaseStarRatingScore(int score){
     if(score <= 0){
-      throw new IllegalArgumentException("음수는 올 수 없습니다.");
+      throw new BadRequestException("0 이하 올 수 없습니다.");
     }
     starRatingScoreTotal += score;
     increaseStarRatingCount();
@@ -140,7 +149,7 @@ public class Anime extends BaseEntity {
   // 평가를 지웠을 때 점수 합산(별점)
   public void decreaseStarRatingScore(int score){
     if(score <= 0){
-      throw new IllegalArgumentException("음수는 올 수 없습니다.");
+      throw new BadRequestException("0 이하 올 수 없습니다.");
     }
     starRatingScoreTotal -= score;
     decreaseStarRatingCount();

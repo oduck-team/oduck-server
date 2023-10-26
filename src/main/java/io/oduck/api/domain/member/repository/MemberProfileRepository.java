@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface MemberProfileRepository extends JpaRepository<MemberProfile,Long> {
 
     Optional<MemberProfile> findByMemberId(Long memberId);
-    boolean existsByMemberId(Long memberId);
+    boolean existsByName(String name);
 }

@@ -8,9 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 public interface AnimeGenreRepository extends JpaRepository<AnimeGenre, Long> {
 
-    @Query("select ag from AnimeGenre ag "
-        + "join ag.anime "
-        + "join ag.genre "
+    @Query("select distinct ag from AnimeGenre ag "
+        + "join fetch ag.anime a "
+        + "join fetch ag.genre g "
         + "where ag.anime.id = :animeId")
-    List<AnimeGenre> findAllByAnimeId(@Param("animeId") Long animeId);
+    List<AnimeGenre> findAllFetchByAnimeId(@Param("animeId") Long animeId);
 }

@@ -76,24 +76,24 @@ public class Member extends BaseEntity {
   }
 
   // TODO: set 말고 다른 이름으로 변경하기
-  public void setAuthSocial(AuthSocial authSocial) {
+  public void relateAuthSocial(AuthSocial authSocial) {
     this.authSocial = authSocial;
     if(authSocial != null) {
-      authSocial.setMember(this);
+      authSocial.relateMember(this);
     }
   }
 
-  public void setAuthLocal(AuthLocal authLocal) {
+  public void relateAuthLocal(AuthLocal authLocal) {
     this.authLocal = authLocal;
     if(authLocal != null) {
-      authLocal.setMember(this);
+      authLocal.relateMember(this);
     }
   }
 
-  public void setMemberProfile(MemberProfile memberProfile) {
+  public void relateMemberProfile(MemberProfile memberProfile) {
     this.memberProfile = memberProfile;
     if(memberProfile != null) {
-      memberProfile.setMember(this);
+      memberProfile.relateMember(this);
     }
   }
 }

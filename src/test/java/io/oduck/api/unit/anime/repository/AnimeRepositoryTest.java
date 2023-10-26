@@ -1,26 +1,7 @@
 package io.oduck.api.unit.anime.repository;
 
-import static io.oduck.api.global.utils.AnimeTestUtils.getBroadcastType;
-import static io.oduck.api.global.utils.AnimeTestUtils.getEpisodeCount;
-import static io.oduck.api.global.utils.AnimeTestUtils.getQuarter;
-import static io.oduck.api.global.utils.AnimeTestUtils.getRating;
-import static io.oduck.api.global.utils.AnimeTestUtils.getStatus;
-import static io.oduck.api.global.utils.AnimeTestUtils.getSummary;
-import static io.oduck.api.global.utils.AnimeTestUtils.getThumbnail;
-import static io.oduck.api.global.utils.AnimeTestUtils.getTitle;
-import static io.oduck.api.global.utils.AnimeTestUtils.getYear;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import io.oduck.api.domain.anime.entity.Anime;
-import io.oduck.api.domain.anime.entity.AnimeGenre;
-import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
-import io.oduck.api.domain.anime.entity.AnimeStudio;
-import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
-import io.oduck.api.domain.anime.repository.AnimeGenreRepository;
-import io.oduck.api.domain.anime.repository.AnimeOriginalAuthorRepository;
-import io.oduck.api.domain.anime.repository.AnimeRepository;
-import io.oduck.api.domain.anime.repository.AnimeStudioRepository;
-import io.oduck.api.domain.anime.repository.AnimeVoiceActorRepository;
+import io.oduck.api.domain.anime.entity.*;
+import io.oduck.api.domain.anime.repository.*;
 import io.oduck.api.domain.genre.entity.Genre;
 import io.oduck.api.domain.genre.repository.GenreRepository;
 import io.oduck.api.domain.originalAuthor.entity.OriginalAuthor;
@@ -31,8 +12,6 @@ import io.oduck.api.domain.studio.entity.Studio;
 import io.oduck.api.domain.studio.repository.StudioRepository;
 import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.domain.voiceActor.repository.VoiceActorRepository;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -41,10 +20,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static io.oduck.api.global.utils.AnimeTestUtils.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
 public class AnimeRepositoryTest {
+
     @Autowired
     private AnimeRepository animeRepository;
 
@@ -76,12 +62,12 @@ public class AnimeRepositoryTest {
     private SeriesRepository seriesRepository;
 
     @Nested
-    @DisplayName("애니 등록")
-    class PostAnime{
+    @DisplayName("등록")
+    class PostAnime {
 
         @Test
         @DisplayName("연관 관계 설정 성공")
-        void saveAnime(){
+        void saveAnime() {
             /**
              * 원작 작가 연관 관계 설정
              */
@@ -93,7 +79,8 @@ public class AnimeRepositoryTest {
             originalAuthorRepository.save(originalAuthor);
 
             // 2. AnimeOriginalAuthor 생성
-            AnimeOriginalAuthor animeOriginalAuthor = AnimeOriginalAuthor.createAnimeOriginalAuthor(originalAuthor);
+            AnimeOriginalAuthor animeOriginalAuthor = AnimeOriginalAuthor.createAnimeOriginalAuthor(
+                originalAuthor);
 
             List<AnimeOriginalAuthor> animeOriginalAuthors = new ArrayList<>();
             animeOriginalAuthors.add(animeOriginalAuthor);
@@ -123,9 +110,9 @@ public class AnimeRepositoryTest {
             int voiceActorSize = 5;
 
             List<VoiceActor> voiceActors = new ArrayList<>();
-            for(int i = 0; i < voiceActorSize; i++){
+            for (int i = 0; i < voiceActorSize; i++) {
                 VoiceActor voiceActor = VoiceActor.builder()
-                    .name("성우"+i)
+                    .name("성우" + i)
                     .build();
                 voiceActors.add(voiceActor);
             }
@@ -135,7 +122,8 @@ public class AnimeRepositoryTest {
             // 2. AnimeVoiceActor 생성
             List<AnimeVoiceActor> animeVoiceActors = new ArrayList<>();
             for (VoiceActor voiceActor : voiceActors) {
-                AnimeVoiceActor animeVoiceActor = AnimeVoiceActor.createAnimeVoiceActor("파트", voiceActor);
+                AnimeVoiceActor animeVoiceActor = AnimeVoiceActor.createAnimeVoiceActor("파트",
+                    voiceActor);
                 animeVoiceActors.add(animeVoiceActor);
             }
 
@@ -146,9 +134,9 @@ public class AnimeRepositoryTest {
             int genreSize = 2;
 
             List<Genre> genres = new ArrayList<>();
-            for(int i = 0; i < genreSize; i++){
+            for (int i = 0; i < genreSize; i++) {
                 Genre genre = Genre.builder()
-                    .name("장르"+i)
+                    .name("장르" + i)
                     .build();
                 genres.add(genre);
             }
@@ -207,7 +195,7 @@ public class AnimeRepositoryTest {
 
         @Test
         @DisplayName("연관 관계 설정 시 연결 테이블의 값이 없을 때")
-        void saveAnimeNoAnimeOriginalAuthor(){
+        void saveAnimeNoAnimeOriginalAuthor() {
             List<AnimeOriginalAuthor> animeOriginalAuthors = new ArrayList<>();
             List<AnimeStudio> animeStudios = new ArrayList<>();
             List<AnimeVoiceActor> animeVoiceActors = new ArrayList<>();
@@ -229,18 +217,19 @@ public class AnimeRepositoryTest {
     }
 
     @Nested
-    @DisplayName("애니 수정")
-    class patchAnime{
+    @DisplayName("수정")
+    class patchAnime {
+
         @Test
         @DisplayName("애니 원작 작가 수정 성공")
-        void changeAnimeOriginalAuthors(){
+        void changeAnimeOriginalAuthors() {
             // given
             // 초기 원작 작가 설정
             String originalAuthorName = "작가";
             int firstInsertSize = 2;
 
             List<OriginalAuthor> originalAuthors = new ArrayList<>();
-            for(int i = 0; i < firstInsertSize; i++){
+            for (int i = 0; i < firstInsertSize; i++) {
                 OriginalAuthor originalAuthor = OriginalAuthor.builder()
                     .name(originalAuthorName)
                     .build();
@@ -252,7 +241,8 @@ public class AnimeRepositoryTest {
             // 원작 작가와 애니 연관 관계 테이블 연관 관계 맺기
             List<AnimeOriginalAuthor> animeOriginalAuthors = new ArrayList<>();
             for (OriginalAuthor originalAuthor : originalAuthors) {
-                AnimeOriginalAuthor animeOriginalAuthor = AnimeOriginalAuthor.createAnimeOriginalAuthor(originalAuthor);
+                AnimeOriginalAuthor animeOriginalAuthor = AnimeOriginalAuthor.createAnimeOriginalAuthor(
+                    originalAuthor);
                 animeOriginalAuthors.add(animeOriginalAuthor);
             }
 
@@ -278,21 +268,22 @@ public class AnimeRepositoryTest {
             originalAuthorRepository.save(updatingOriginalAuthor);
 
             List<AnimeOriginalAuthor> updatingAnimeOriginalAuthors = new ArrayList<>();
-            AnimeOriginalAuthor updatingAnimeOriginalAuthor = AnimeOriginalAuthor.createAnimeOriginalAuthor(updatingOriginalAuthor);
+            AnimeOriginalAuthor updatingAnimeOriginalAuthor = AnimeOriginalAuthor.createAnimeOriginalAuthor(
+                updatingOriginalAuthor);
             updatingAnimeOriginalAuthors.add(updatingAnimeOriginalAuthor);
 
             // 애니 찾기
             Anime findAnime = animeRepository.findById(savedAnimeId).get();
 
             // 애니 수정
-            findAnime.assignAnimeOriginalAuthors(updatingAnimeOriginalAuthors);
+            findAnime.updateAnimeOriginalAuthors(updatingAnimeOriginalAuthors);
 
             Long findAnimeId = findAnime.getId();
-            List<AnimeOriginalAuthor> findAnimeOriginalAuthors = animeOriginalAuthorRepository
-                .findAllByAnimeId(findAnimeId);
+            List<AnimeOriginalAuthor> findAnimeOriginalAuthors = animeOriginalAuthorRepository.findAllFetchByAnimeId(findAnimeId);
 
             // then
-            String findOriginalAuthorName = findAnime.getAnimeOriginalAuthors().get(0).getOriginalAuthor().getName();
+            String findOriginalAuthorName = findAnime.getAnimeOriginalAuthors().get(0)
+                .getOriginalAuthor().getName();
             assertThat(findOriginalAuthorName).isEqualTo(updatingOriginalAuthorName);
             assertThat(findAnimeOriginalAuthors.size()).isNotEqualTo(firstInsertSize);
             assertThat(findAnimeOriginalAuthors.size()).isEqualTo(1);
@@ -300,14 +291,14 @@ public class AnimeRepositoryTest {
 
         @Test
         @DisplayName("애니 스튜디오 수정 성공")
-        void changeAnimeStudios(){
+        void changeAnimeStudios() {
             // given
             // 초기 스튜디오 설정
             String studioName = "스튜디오";
             int firstInsertSize = 2;
 
             List<Studio> studios = new ArrayList<>();
-            for(int i = 0; i<firstInsertSize; i++){
+            for (int i = 0; i < firstInsertSize; i++) {
                 Studio studio = Studio.builder()
                     .name(studioName)
                     .build();
@@ -352,10 +343,10 @@ public class AnimeRepositoryTest {
             Anime findAnime = animeRepository.findById(savedAnimeId).get();
 
             // 애니 수정
-            findAnime.assignAnimeStudios(updatingAnimeStudios);
+            findAnime.updateAnimeStudios(updatingAnimeStudios);
 
             Long findAnimeId = findAnime.getId();
-            List<AnimeStudio> findAnimeOriginalAuthors = animeStudioRepository.findAllByAnimeId(findAnimeId);
+            List<AnimeStudio> findAnimeOriginalAuthors = animeStudioRepository.findAllFetchByAnimeId(findAnimeId);
 
             // then
             String findStudioName = findAnime.getAnimeStudios().get(0).getStudio().getName();
@@ -366,14 +357,14 @@ public class AnimeRepositoryTest {
 
         @Test
         @DisplayName("애니 성우 수정 성공")
-        void changeAnimeVoiceActors(){
+        void changeAnimeVoiceActors() {
             // given
             // 초기 성우 설정
             String voiceActorName = "성우";
             int firstInsertSize = 2;
 
             List<VoiceActor> voiceActors = new ArrayList<>();
-            for(int i = 0; i < firstInsertSize; i++){
+            for (int i = 0; i < firstInsertSize; i++) {
                 VoiceActor voiceActor = VoiceActor.builder()
                     .name(voiceActorName)
                     .build();
@@ -385,7 +376,8 @@ public class AnimeRepositoryTest {
             // 성우와 애니 연관 관계 테이블 연관 관계 맺기
             List<AnimeVoiceActor> animeVoiceActors = new ArrayList<>();
             for (VoiceActor voiceActor : voiceActors) {
-                AnimeVoiceActor animeVoiceActor = AnimeVoiceActor.createAnimeVoiceActor("part", voiceActor);
+                AnimeVoiceActor animeVoiceActor = AnimeVoiceActor.createAnimeVoiceActor("part",
+                    voiceActor);
                 animeVoiceActors.add(animeVoiceActor);
             }
 
@@ -411,20 +403,22 @@ public class AnimeRepositoryTest {
             voiceActorRepository.save(updatingVoiceActor);
 
             List<AnimeVoiceActor> updatingAnimeVoiceActors = new ArrayList<>();
-            AnimeVoiceActor animeVoiceActor = AnimeVoiceActor.createAnimeVoiceActor("part", updatingVoiceActor);
+            AnimeVoiceActor animeVoiceActor = AnimeVoiceActor.createAnimeVoiceActor("part",
+                updatingVoiceActor);
             updatingAnimeVoiceActors.add(animeVoiceActor);
 
             // 애니 찾기
             Anime findAnime = animeRepository.findById(savedAnimeId).get();
 
             // 애니 수정
-            findAnime.assignAnimeVoiceActors(updatingAnimeVoiceActors);
+            findAnime.updateAnimeVoiceActors(updatingAnimeVoiceActors);
 
             Long findAnimeId = findAnime.getId();
-            List<AnimeVoiceActor> findAnimeVoiceActors = animeVoiceActorRepository.findAllByAnimeId(findAnimeId);
+            List<AnimeVoiceActor> findAnimeVoiceActors = animeVoiceActorRepository.findAllFetchByAnimeId(findAnimeId);
 
             // then
-            String firstVoiceActorName = findAnime.getAnimeVoiceActors().get(0).getVoiceActor().getName();
+            String firstVoiceActorName = findAnime.getAnimeVoiceActors().get(0).getVoiceActor()
+                .getName();
             assertThat(firstVoiceActorName).isEqualTo(updatingVoiceActorName);
             assertThat(findAnimeVoiceActors.size()).isNotEqualTo(firstInsertSize);
             assertThat(findAnimeVoiceActors.size()).isEqualTo(1);
@@ -432,14 +426,14 @@ public class AnimeRepositoryTest {
 
         @Test
         @DisplayName("애니 장르 수정 성공")
-        void changeAnimeGenres(){
+        void changeAnimeGenres() {
             // given
             // 초기 장르 설정
             String genreName = "장르";
             int firstInsertSize = 2;
 
             List<Genre> genres = new ArrayList<>();
-            for(int i = 0; i < firstInsertSize; i++){
+            for (int i = 0; i < firstInsertSize; i++) {
                 Genre genre = Genre.builder()
                     .name(genreName)
                     .build();
@@ -484,10 +478,10 @@ public class AnimeRepositoryTest {
             Anime findAnime = animeRepository.findById(savedAnimeId).get();
 
             // 애니 수정
-            findAnime.assignAnimeGenre(updatingAnimeGenres);
+            findAnime.updateAnimeGenre(updatingAnimeGenres);
 
             Long findAnimeId = findAnime.getId();
-            List<AnimeGenre> findAnimeGenres = animeGenreRepository.findAllByAnimeId(findAnimeId);
+            List<AnimeGenre> findAnimeGenres = animeGenreRepository.findAllFetchByAnimeId(findAnimeId);
 
             // then
             String firstGenreName = findAnime.getAnimeGenres().get(0).getGenre().getName();

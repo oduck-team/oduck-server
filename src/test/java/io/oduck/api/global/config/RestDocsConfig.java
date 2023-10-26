@@ -8,6 +8,6 @@ public class RestDocsConfig {
     public static final Attribute field(
         final String key,
         final String value){
-        return new Attribute(key,value);
+        return new Attribute(key, value);
     }
 }

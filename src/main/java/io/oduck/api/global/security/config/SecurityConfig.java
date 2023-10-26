@@ -14,6 +14,7 @@ import io.oduck.api.global.security.handler.UnauthorizedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -75,9 +76,13 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests((authorizeRequests) ->
                 authorizeRequests
-                    .requestMatchers("/auth/status").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
                     // .requestMatchers("docs/index.html").hasAuthority(Role.ADMIN.name())
-                    .requestMatchers("oduckdmin/*").hasAuthority(Role.ADMIN.name())
+                    .requestMatchers("/auth/status").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                    .requestMatchers(HttpMethod.PUT, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                    .requestMatchers(HttpMethod.PATCH, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                    .requestMatchers(HttpMethod.DELETE, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                    .requestMatchers( "/bookmarks/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+//                    .requestMatchers("/oduckdmin/**").hasAuthority(Role.ADMIN.name())
                     .anyRequest().permitAll()
             );
 
