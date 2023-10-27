@@ -10,6 +10,7 @@ import static io.oduck.api.global.utils.AnimeTestUtils.getSummary;
 import static io.oduck.api.global.utils.AnimeTestUtils.getThumbnail;
 import static io.oduck.api.global.utils.AnimeTestUtils.getTitle;
 import static io.oduck.api.global.utils.AnimeTestUtils.getYear;
+import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -22,6 +23,7 @@ import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
+import io.oduck.api.domain.review.dto.ShortReviewDslDto.ShortReviewDsl;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.review.repository.ShortReviewRepository;
 
@@ -32,6 +34,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +51,31 @@ public class ShortReviewRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+
+    @Nested
+    @DisplayName("리뷰 조회")
+    class GetShortReviews{
+
+        @Test
+        @DisplayName("리뷰 조회 성공")
+        void getShortReviews(){
+            //given
+            Long animeId = 1L;
+            Pageable pageable = applyPageableForNonOffset(10, "createdAt", "desc");
+
+            Slice<ShortReviewDsl> shortReviewDsl = shortReviewRepository.selectShortReviews(animeId, null, pageable);
+
+            assertNotNull(shortReviewDsl);
+            assertNotNull(shortReviewDsl.getContent().get(0).getAnimeId());
+            assertNotNull(shortReviewDsl.getContent().get(0).getName());
+            assertNotNull(shortReviewDsl.getContent().get(0).getThumbnail());
+            assertNotNull(shortReviewDsl.getContent().get(0).getScore());
+            assertNotNull(shortReviewDsl.getContent().get(0).getContent());
+            assertNotNull(shortReviewDsl.getContent().get(0).getLikeCount());
+            assertNotNull(shortReviewDsl.getContent().get(0).getCreatedAt());
+        }
+    }
 
     @Nested
     @DisplayName("리뷰 등록")
@@ -140,7 +169,7 @@ public class ShortReviewRepositoryTest {
             );
 
             Anime anime = animeRepository.saveAndFlush(createAnime);
-            Long animeId = anime.getId();
+
 
             shortReview.relateMember(member);
             shortReview.relateAnime(anime);
@@ -149,6 +178,7 @@ public class ShortReviewRepositoryTest {
 
             //when
             ShortReview findShortReview = shortReviewRepository.findById(reviewId).get();
+            Long animeId = findShortReview.getAnime().getId();
 
             //리뷰 수정
             findShortReview.updateContent(content);
