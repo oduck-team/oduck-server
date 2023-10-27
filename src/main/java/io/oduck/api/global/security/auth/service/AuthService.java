@@ -29,11 +29,13 @@ public class AuthService {
     private final MemberProfileRepository memberProfileRepository;
     private final HttpSession httpSession;
 
-    public Status getStatus(Long memberId) {
-        MemberProfile memberProfile = memberProfileRepository.findByMemberId(memberId)
+    public Status getStatus(AuthUser user) {
+        MemberProfile memberProfile = memberProfileRepository.findByMemberId(user.getId())
             .orElseThrow(() -> new UnauthorizedException("UnAuthorized"));
 
         return Status.builder()
+            .memberId(user.getId())
+            .role(user.getRole())
             .name(memberProfile.getName())
             .description(memberProfile.getInfo())
             .thumbnail(memberProfile.getThumbnail())
