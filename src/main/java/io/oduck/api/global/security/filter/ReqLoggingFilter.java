@@ -1,5 +1,7 @@
 package io.oduck.api.global.security.filter;
 
+import static io.oduck.api.global.utils.HttpHeaderUtils.getClientIP;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -7,12 +9,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
-@RequiredArgsConstructor
 @Slf4j
 @Component
 public class ReqLoggingFilter extends OncePerRequestFilter {
@@ -21,20 +23,14 @@ public class ReqLoggingFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
 
-        String method = request.getMethod();
-        String requestURI = request.getRequestURI();
-        String clientIP = request.getHeader("X-Forwarded-For");
-
-        if (clientIP == null || clientIP.isEmpty() || "unknown".equalsIgnoreCase(clientIP)) {
-            clientIP = request.getHeader("X-Real-IP");
+        if (!request.getRequestURI().startsWith("/api/v1/actuator/prometheus")) {
+            log.info("Request: {} {} {} {}",
+                request.getMethod(),
+                request.getRequestURI(),
+                getClientIP(request),
+                request.getHeader("User-Agent")
+            );
         }
-        if (clientIP == null || clientIP.isEmpty() || "unknown".equalsIgnoreCase(clientIP)) {
-            clientIP = request.getRemoteAddr();
-        }
-
-        String userAgent = request.getHeader("User-Agent");
-
-        log.info("Request: {} {} {} {}", method, requestURI, clientIP, userAgent);
 
         filterChain.doFilter(request, response);
     }
