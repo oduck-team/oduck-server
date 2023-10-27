@@ -228,8 +228,6 @@ public class AnimeServiceImpl implements AnimeService{
         Slice<SearchResult> slice = animeRepository.findAnimesByCondition(
                 query,
                 cursor,
-                sort,
-                order,
                 PagingUtils.applyPageableForNonOffset(
                         sort.getSort(),
                         order.getOrder(),

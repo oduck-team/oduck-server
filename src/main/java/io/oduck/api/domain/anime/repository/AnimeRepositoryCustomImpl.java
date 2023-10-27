@@ -6,11 +6,9 @@ import com.querydsl.core.types.dsl.BooleanTemplate;
 import com.querydsl.core.util.StringUtils;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import io.oduck.api.domain.anime.dto.AnimeReq;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.domain.anime.entity.BroadcastType;
 import io.oduck.api.domain.anime.entity.Quarter;
-import io.oduck.api.global.common.OrderDirection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +35,7 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<SearchResult> findAnimesByCondition(String query, String cursor, AnimeReq.Sort sort, OrderDirection order, Pageable pageable, SearchFilterDsl searchFilterDsl) {
+    public Slice<SearchResult> findAnimesByCondition(String query, String cursor, Pageable pageable, SearchFilterDsl searchFilterDsl) {
         JPAQuery<SearchResult> jpaQuery = queryFactory
                 .select(
                         Projections.constructor(
