@@ -124,6 +124,8 @@ public class AuthControllerTest {
             // then
             actions
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.memberId").exists())
+                .andExpect(jsonPath("$.role").exists())
                 .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.description").exists())
                 .andExpect(jsonPath("$.thumbnail").exists())
@@ -138,6 +140,12 @@ public class AuthControllerTest {
                                 .description("Header Cookie, 세션 쿠키")
                         ),
                         responseFields(
+                            fieldWithPath("memberId")
+                                .type(JsonFieldType.NUMBER)
+                                .description("회원 식별자"),
+                            fieldWithPath("role")
+                                .type(JsonFieldType.STRING)
+                                .description("회원 권한"),
                             fieldWithPath("name")
                                 .type(JsonFieldType.STRING)
                                 .description("회원 이름"),
