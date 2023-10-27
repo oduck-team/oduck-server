@@ -20,7 +20,6 @@ import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
 import io.oduck.api.domain.attractionPoint.entity.AttractionElement;
 import io.oduck.api.domain.attractionPoint.entity.AttractionPoint;
-import io.oduck.api.domain.attractionPoint.repository.AttractionElementRepository;
 import io.oduck.api.domain.attractionPoint.repository.AttractionPointRepository;
 import io.oduck.api.domain.member.entity.Member;
 import java.util.ArrayList;
@@ -37,9 +36,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @ActiveProfiles("test")
 public class AttractionPointRepositoryTest {
-
-    @Autowired
-    private AttractionElementRepository elementRepository;
 
     @Autowired
     private AttractionPointRepository attractionPointRepository;
@@ -100,7 +96,7 @@ public class AttractionPointRepositoryTest {
 
             //when
             //입덕포인트 조회
-            List<AttractionPoint> res = elementRepository.findAllByAnimeId_memberId(memberId, animeId);
+            List<AttractionPoint> res = attractionPointRepository.findAllByAnimeId_memberId(memberId, animeId);
             AttractionElement findDrawing = res.get(0).getAttractionElement();
             AttractionElement findStory = res.get(1).getAttractionElement();
 
