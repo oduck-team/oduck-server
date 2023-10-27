@@ -36,4 +36,15 @@ public class ShortReviewReqDto {
             message = "최소 10에서 100자 까지 입력 가능합니다.")
         private String content;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public enum Sort{
+        //좋아요순(기본), 최신순, 평점 높은순, 평점 낮은순으로 조회 가능
+        CREATED_AT("createdAt"),
+        LIKE("likeCount"),
+        SCORE("score");
+
+        private final String sort;
+    }
 }
