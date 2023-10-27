@@ -61,8 +61,9 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
                         cursorCondition(cursor, pageable),
                         notDeleted()
                 )
-                .limit(pageable.getPageSize())
-                .distinct();
+                .groupBy(anime.id)
+                .orderBy(anime.createdAt.desc())
+                .limit(pageable.getPageSize());
 
         return fetchSliceByCursor(anime, jpaQuery, pageable);
     }
