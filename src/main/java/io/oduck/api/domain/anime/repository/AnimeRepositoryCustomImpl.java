@@ -1,5 +1,12 @@
 package io.oduck.api.domain.anime.repository;
 
+import static io.oduck.api.domain.anime.dto.AnimeReq.EpisodeCountEnum;
+import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
+import static io.oduck.api.domain.anime.entity.QAnime.anime;
+import static io.oduck.api.domain.anime.entity.QAnimeGenre.animeGenre;
+import static io.oduck.api.global.utils.QueryDslUtils.fetchSliceByCursor;
+import static org.springframework.data.domain.Sort.Direction;
+
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.BooleanTemplate;
@@ -9,23 +16,15 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.domain.anime.entity.BroadcastType;
 import io.oduck.api.domain.anime.entity.Quarter;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static io.oduck.api.domain.anime.dto.AnimeReq.EpisodeCountEnum;
-import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
-import static io.oduck.api.domain.anime.entity.QAnime.anime;
-import static io.oduck.api.domain.anime.entity.QAnimeGenre.animeGenre;
-import static io.oduck.api.global.utils.QueryDslUtils.fetchSliceByCursor;
-import static org.springframework.data.domain.Sort.Direction;
 
 @Slf4j
 @Repository
@@ -60,7 +59,6 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
                         notDeleted()
                 )
                 .groupBy(anime.id)
-                .orderBy(anime.createdAt.desc())
                 .limit(pageable.getPageSize());
 
         return fetchSliceByCursor(anime, jpaQuery, pageable);
