@@ -14,11 +14,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Getter
@@ -47,6 +49,7 @@ public class ShortReview extends BaseEntity {
   @OneToMany(mappedBy = "shortReview", cascade = CascadeType.PERSIST)
   private List<ShortReviewLike> shortReviewLikes;
 
+
   @Builder
   public ShortReview(Member member, Anime anime, String content, boolean hasSpoiler) {
     this.member = member;
@@ -63,10 +66,13 @@ public class ShortReview extends BaseEntity {
   }
 
   public void updateContent(String content){
-    this.content = content;
-
+    if(!this.content.equals(content)){
+      this.content = content;
+    }
   }
   public void updateSpoiler(boolean hasSpoiler){
+    if(this.isHasSpoiler() != hasSpoiler){
     this.hasSpoiler = hasSpoiler;
+    }
   }
 }
