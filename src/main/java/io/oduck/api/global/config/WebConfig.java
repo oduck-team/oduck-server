@@ -2,6 +2,7 @@ package io.oduck.api.global.config;
 
 import io.oduck.api.global.converter.StringToBookmarkSortConverter;
 import io.oduck.api.global.converter.StringToOrderDirectionConverter;
+import io.oduck.api.global.converter.StringToShortReviewConverter;
 import io.oduck.api.global.security.resolver.LoginUserArgumentResolver;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
         // config에 converter 등록
         registry.addConverter(new StringToOrderDirectionConverter());
         registry.addConverter(new StringToBookmarkSortConverter());
+        registry.addConverter(new StringToShortReviewConverter());
     }
 
     @Override
