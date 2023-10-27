@@ -13,6 +13,8 @@ public class AuthResDto {
     @AllArgsConstructor
     @Getter
     public static class Status {
+        private Long memberId;
+        private String role;
         private String name;
         private String description;
         private String thumbnail;
