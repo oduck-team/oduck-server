@@ -3,12 +3,16 @@ package io.oduck.api.domain.review.controller;
 import io.oduck.api.domain.attractionPoint.dto.AttractionPointResDto.IsAttractionPoint;
 import io.oduck.api.domain.attractionPoint.service.AttractionPointService;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto;
-import io.oduck.api.domain.review.dto.ShortReviewResDto;
+import io.oduck.api.domain.review.dto.ShortReviewReqDto.Sort;
+import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewRes;
 import io.oduck.api.domain.review.service.ShortReviewService;
+import io.oduck.api.global.common.OrderDirection;
 import io.oduck.api.global.common.SliceResponse;
 import io.oduck.api.global.security.auth.dto.LoginUser;
 import io.oduck.api.global.security.auth.entity.AuthLocal;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
@@ -32,17 +37,22 @@ public class ShortReviewController {
     //애니의 짧은 리뷰 조회
     @GetMapping("/{animeId}")
     public ResponseEntity<?> getShortReviews(
-        @PathVariable Long animeId)  {
+        @PathVariable Long animeId,
+        @RequestParam(required = false) String cursor,
+        @RequestParam(required = false, defaultValue = "created_at") Sort sort,
+        @RequestParam(required = false, defaultValue = "DESC") OrderDirection order,
+        @RequestParam(required = false, defaultValue = "10") @Min(1) @Max(100) int size
+    )  {
         //TODO: 애니에 따른 짧은 리뷰 조회
-        ShortReviewResDto reviewResDto = shortReviewService.getShortReviews(animeId);
-        return ResponseEntity.ok(SliceResponse.of(reviewResDto.getShortReviews()));
+        SliceResponse<ShortReviewRes> reviewRes = shortReviewService.getShortReviews(animeId, cursor, sort, order, size);
+        return ResponseEntity.ok(reviewRes);
     }
     @PostMapping
     public ResponseEntity<?> postShortReview(
         @LoginUser AuthLocal user,
         @RequestBody @Valid ShortReviewReqDto.PostShortReviewReq req)  {
         //TODO : 짧은 리뷰 작성
-        shortReviewService.save(user.getId(), req);
+        shortReviewService.save(user.getId() == null? 1L: user.getId(), req);
         return ResponseEntity.ok().build();
     }
 
