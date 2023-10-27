@@ -107,7 +107,7 @@ public class AnimeServiceTest {
 
             SearchFilterDsl searchFilter = new SearchFilterDsl(null, null, null, null, null);
 
-            given(animeRepository.findAnimesByCondition(query, cursor, sort, order, pageable, searchFilter)).willReturn(slice);
+            given(animeRepository.findAnimesByCondition(query, cursor, pageable, searchFilter)).willReturn(slice);
 
             //when
             animeService.getAnimesByCondition(query, cursor, sort, order, size, searchFilter);
@@ -116,7 +116,7 @@ public class AnimeServiceTest {
             assertThatNoException();
 
             //verify
-            verify(animeRepository, times(1)).findAnimesByCondition(query, cursor, sort, order, pageable, searchFilter);
+            verify(animeRepository, times(1)).findAnimesByCondition(query, cursor, pageable, searchFilter);
         }
 
         @Test

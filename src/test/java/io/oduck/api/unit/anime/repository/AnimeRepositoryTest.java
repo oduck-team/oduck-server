@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -513,10 +512,6 @@ public class AnimeRepositoryTest {
             int size = 10;
             String cursor = null;
 
-            List<SearchResult> searchResults = new ArrayList<>();
-
-            Slice<SearchResult> slice = new SliceImpl<>(searchResults);
-
             Pageable pageable = applyPageableForNonOffset(
                     sort.getSort(),
                     order.getOrder(),
@@ -525,10 +520,9 @@ public class AnimeRepositoryTest {
 
             SearchFilterDsl searchFilter = new SearchFilterDsl(null, null, null, null, null);
 
-
             //when
             Slice<SearchResult> animes = animeRepository.findAnimesByCondition(
-                    query, cursor, sort, order, pageable, searchFilter
+                    query, cursor, pageable, searchFilter
             );
 
             //then
