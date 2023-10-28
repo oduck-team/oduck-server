@@ -173,8 +173,8 @@ public class AnimeRepositoryTest {
             // 애니 생성
             Anime anime = Anime.createAnime(
                 getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), animeOriginalAuthors,
-                animeStudios, animeVoiceActors, animeGenres, series
+                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, series
             );
 
             Anime savedAnime = animeRepository.save(anime);
@@ -188,7 +188,7 @@ public class AnimeRepositoryTest {
             assertThat(savedAnime.getQuarter()).isEqualTo(getQuarter());
             assertThat(savedAnime.getRating()).isEqualTo(getRating());
             assertThat(savedAnime.getStatus()).isEqualTo(getStatus());
-            assertThat(savedAnime.isReleased()).isFalse();
+            assertThat(savedAnime.isReleased()).isSameAs(isReleased());
             assertThat(savedAnime.getViewCount()).isEqualTo(0);
             assertThat(savedAnime.getReviewCount()).isEqualTo(0);
             assertThat(savedAnime.getBookmarkCount()).isEqualTo(0);
@@ -211,8 +211,8 @@ public class AnimeRepositoryTest {
 
             Anime anime = Anime.createAnime(
                 getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), animeOriginalAuthors,
-                animeStudios, animeVoiceActors, animeGenres, null
+                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
             );
 
             Anime savedAnime = animeRepository.save(anime);
@@ -261,8 +261,8 @@ public class AnimeRepositoryTest {
             // 애니 생성
             Anime anime = Anime.createAnime(
                 getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), animeOriginalAuthors,
-                animeStudios, animeVoiceActors, animeGenres, null
+                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
             );
 
             Long savedAnimeId = animeRepository.saveAndFlush(anime).getId();
@@ -329,8 +329,8 @@ public class AnimeRepositoryTest {
             // 애니 생성
             Anime anime = Anime.createAnime(
                 getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), animeOriginalAuthors,
-                animeStudios, animeVoiceActors, animeGenres, null
+                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
             );
 
             Long savedAnimeId = animeRepository.saveAndFlush(anime).getId();
@@ -396,8 +396,8 @@ public class AnimeRepositoryTest {
             // 애니 생성
             Anime anime = Anime.createAnime(
                 getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), animeOriginalAuthors,
-                animeStudios, animeVoiceActors, animeGenres, null
+                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
             );
 
             Long savedAnimeId = animeRepository.saveAndFlush(anime).getId();
@@ -464,8 +464,8 @@ public class AnimeRepositoryTest {
             // 애니 생성
             Anime anime = Anime.createAnime(
                 getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), animeOriginalAuthors,
-                animeStudios, animeVoiceActors, animeGenres, null
+                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
             );
 
             Long savedAnimeId = animeRepository.saveAndFlush(anime).getId();
