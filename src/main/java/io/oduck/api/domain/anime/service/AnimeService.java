@@ -1,8 +1,12 @@
 package io.oduck.api.domain.anime.service;
 
-import static io.oduck.api.domain.anime.dto.AnimeReq.*;
+import io.oduck.api.domain.anime.dto.SearchFilterDsl;
+import io.oduck.api.global.common.OrderDirection;
+import io.oduck.api.global.common.SliceResponse;
 
-import io.oduck.api.domain.anime.dto.AnimeRes;
+import static io.oduck.api.domain.anime.dto.AnimeReq.*;
+import static io.oduck.api.domain.anime.dto.AnimeRes.DetailResult;
+import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
 
 public interface AnimeService {
 
@@ -11,7 +15,7 @@ public interface AnimeService {
      * @param animeId
      * @return AnimeRes
      */
-    AnimeRes getAnimeById(Long animeId);
+    DetailResult getAnimeById(Long animeId);
 
     /**
      * 애니 저장 로직
@@ -60,4 +64,16 @@ public interface AnimeService {
      * @param patchReq
      */
     void updateSeries(Long animeId, PatchSeriesIdReq patchReq);
+
+    /**
+     * 애니 검색 결과 조회
+     * @param query
+     * @param cursor
+     * @param sort
+     * @param order
+     * @param size
+     * @param searchFilterDsl
+     * @return SliceResponse<SearchResult>
+     */
+    SliceResponse<SearchResult> getAnimesByCondition(String query, String cursor, Sort sort, OrderDirection order, int size, SearchFilterDsl searchFilterDsl);
 }

@@ -1,18 +1,9 @@
 package io.oduck.api.domain.anime.service;
 
-import io.oduck.api.domain.anime.dto.AnimeReq.*;
-import io.oduck.api.domain.anime.dto.AnimeRes;
 import io.oduck.api.domain.anime.dto.AnimeVoiceActorReq;
-import io.oduck.api.domain.anime.entity.Anime;
-import io.oduck.api.domain.anime.entity.AnimeGenre;
-import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
-import io.oduck.api.domain.anime.entity.AnimeStudio;
-import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
-import io.oduck.api.domain.anime.repository.AnimeGenreRepository;
-import io.oduck.api.domain.anime.repository.AnimeOriginalAuthorRepository;
-import io.oduck.api.domain.anime.repository.AnimeRepository;
-import io.oduck.api.domain.anime.repository.AnimeStudioRepository;
-import io.oduck.api.domain.anime.repository.AnimeVoiceActorRepository;
+import io.oduck.api.domain.anime.dto.SearchFilterDsl;
+import io.oduck.api.domain.anime.entity.*;
+import io.oduck.api.domain.anime.repository.*;
 import io.oduck.api.domain.genre.entity.Genre;
 import io.oduck.api.domain.genre.repository.GenreRepository;
 import io.oduck.api.domain.originalAuthor.entity.OriginalAuthor;
@@ -23,15 +14,23 @@ import io.oduck.api.domain.studio.entity.Studio;
 import io.oduck.api.domain.studio.repository.StudioRepository;
 import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.domain.voiceActor.repository.VoiceActorRepository;
+import io.oduck.api.global.common.OrderDirection;
+import io.oduck.api.global.common.SliceResponse;
 import io.oduck.api.global.exception.NotFoundException;
+import io.oduck.api.global.utils.PagingUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static io.oduck.api.domain.anime.dto.AnimeReq.*;
+import static io.oduck.api.domain.anime.dto.AnimeRes.DetailResult;
+import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +56,7 @@ public class AnimeServiceImpl implements AnimeService{
 
     @Override
     @Transactional(readOnly = true)
-    public AnimeRes getAnimeById(Long animeId) {
+    public DetailResult getAnimeById(Long animeId) {
 
         Anime anime = animeRepository.findReleasedAnimeById(animeId)
                 .orElseThrow(() -> new NotFoundException("Anime"));
@@ -69,7 +68,7 @@ public class AnimeServiceImpl implements AnimeService{
         List<AnimeStudio> animeStudios = animeStudioRepository.findAllFetchByAnimeId(animeId);
         List<AnimeGenre> animeGenres = animeGenreRepository.findAllFetchByAnimeId(animeId);
 
-        return new AnimeRes(anime, animeOriginalAuthors, animeVoiceActors, animeStudios, animeGenres);
+        return new DetailResult(anime, animeOriginalAuthors, animeVoiceActors, animeStudios, animeGenres);
     }
 
     @Override
@@ -227,7 +226,27 @@ public class AnimeServiceImpl implements AnimeService{
         anime.update(series);
     }
 
-    private Anime findAnime(Long animeId) {
+    @Override
+    @Transactional(readOnly = true)
+    public SliceResponse<SearchResult> getAnimesByCondition(String query, String cursor, Sort sort, OrderDirection order, int size, SearchFilterDsl searchFilterDsl) {
+        Slice<SearchResult> slice = animeRepository.findAnimesByCondition(
+                query,
+                cursor,
+                PagingUtils.applyPageableForNonOffset(
+                        sort.getSort(),
+                        order.getOrder(),
+                        size
+                ),
+                searchFilterDsl
+        );
+
+        List<SearchResult> searchResults = slice.getContent();
+
+        return SliceResponse.of(slice, searchResults);
+    }
+
+    @Transactional(readOnly = true)
+    public Anime findAnime(Long animeId) {
         return animeRepository.findById(animeId).orElseThrow(() -> new NotFoundException("Anime"));
     }
 }
