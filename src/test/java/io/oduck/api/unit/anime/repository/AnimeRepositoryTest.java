@@ -513,9 +513,9 @@ public class AnimeRepositoryTest {
             String cursor = null;
 
             Pageable pageable = applyPageableForNonOffset(
+                    size,
                     sort.getSort(),
-                    order.getOrder(),
-                    size
+                    order.getOrder()
             );
 
             SearchFilterDsl searchFilter = new SearchFilterDsl(null, null, null, null, null);

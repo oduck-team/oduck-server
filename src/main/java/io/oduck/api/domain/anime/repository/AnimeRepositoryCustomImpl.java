@@ -7,6 +7,7 @@ import static io.oduck.api.domain.anime.entity.QAnimeGenre.animeGenre;
 import static io.oduck.api.global.utils.QueryDslUtils.fetchSliceByCursor;
 import static org.springframework.data.domain.Sort.Direction;
 
+import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.BooleanTemplate;
@@ -15,8 +16,10 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.domain.anime.entity.BroadcastType;
+import io.oduck.api.domain.anime.entity.QAnime;
 import io.oduck.api.domain.anime.entity.Quarter;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +64,13 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
                 .groupBy(anime.id)
                 .limit(pageable.getPageSize());
 
-        return fetchSliceByCursor(anime, jpaQuery, pageable);
+        return fetchSliceByCursor(sortPath(anime), jpaQuery, pageable);
+    }
+
+    private List<Path> sortPath(QAnime anime) {
+        List<Path> path = new ArrayList<>();
+        path.add(anime);
+        return path;
     }
 
     private BooleanExpression genreIdsIn(List<Long> genreIds) {
@@ -74,19 +83,13 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
             return null;
         }
 
-        boolean isNumeric = cursor.chars().allMatch(Character::isDigit);
-
-        if(!isNumeric){
-            return null;
-        }
-
         List<Sort.Order> orders = pageable.getSort().get().collect(Collectors.toList());
         Direction direction = orders.get(0).getDirection();
 
-        if(direction == Direction.ASC){
-            return anime.id.gt(Long.parseLong(cursor));
+        if (direction == Direction.ASC) {
+            return anime.title.gt(cursor);
         }else{
-            return anime.id.lt(Long.parseLong(cursor));
+            return anime.title.lt(cursor);
         }
     }
 

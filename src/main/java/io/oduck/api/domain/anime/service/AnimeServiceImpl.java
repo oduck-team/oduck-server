@@ -233,16 +233,16 @@ public class AnimeServiceImpl implements AnimeService{
                 query,
                 cursor,
                 PagingUtils.applyPageableForNonOffset(
+                        size,
                         sort.getSort(),
-                        order.getOrder(),
-                        size
+                        order.getOrder()
                 ),
                 searchFilterDsl
         );
 
-        List<SearchResult> searchResults = slice.getContent();
+        List<SearchResult> items = slice.getContent();
 
-        return SliceResponse.of(slice, searchResults);
+        return SliceResponse.of(slice, items, sort.getSort());
     }
 
     @Transactional(readOnly = true)
