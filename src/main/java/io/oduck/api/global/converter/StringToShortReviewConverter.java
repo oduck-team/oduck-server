@@ -1,6 +1,7 @@
 package io.oduck.api.global.converter;
 
-import io.oduck.api.domain.bookmark.dto.BookmarkReqDto.Sort;
+
+import io.oduck.api.domain.review.dto.ShortReviewReqDto.Sort;
 import org.springframework.core.convert.converter.Converter;
 
 public class StringToShortReviewConverter implements Converter<String, Sort> {
