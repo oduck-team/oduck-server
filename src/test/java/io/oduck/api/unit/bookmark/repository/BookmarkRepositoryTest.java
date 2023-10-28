@@ -33,7 +33,7 @@ public class BookmarkRepositoryTest {
         void selectBookmarksSuccess() {
             // given
             Long memberId = 1L;
-            Pageable pageable = applyPageableForNonOffset("createdAt", "desc", 10);
+            Pageable pageable = applyPageableForNonOffset(10, "createdAt", "desc");
 
             // when
             Slice<BookmarkDsl> bookmarks = memberRepository.selectBookmarks(memberId, null, pageable);

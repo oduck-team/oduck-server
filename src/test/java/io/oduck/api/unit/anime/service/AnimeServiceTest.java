@@ -137,7 +137,7 @@ public class AnimeServiceTest {
             List<AnimeGenre> animeGenres = new ArrayList<>();
             given(animeGenreRepository.findAllFetchByAnimeId(animeId)).willReturn(animeGenres);
 
-            given(animeRepository.findById(animeId)).willReturn(Optional.ofNullable(anime));
+            given(animeRepository.findReleasedAnimeById(animeId)).willReturn(Optional.ofNullable(anime));
 
             //when
             animeService.getAnimeById(animeId);
@@ -146,7 +146,7 @@ public class AnimeServiceTest {
             assertThatNoException();
 
             //verify
-            verify(animeRepository, times(1)).findById(anyLong());
+            verify(animeRepository, times(1)).findReleasedAnimeById(anyLong());
             verify(animeOriginalAuthorRepository, times(1)).findAllFetchByAnimeId(anyLong());
             verify(animeVoiceActorRepository, times(1)).findAllFetchByAnimeId(anyLong());
             verify(animeStudioRepository, times(1)).findAllFetchByAnimeId(anyLong());

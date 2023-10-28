@@ -75,7 +75,7 @@ public class MemberControllerTest {
             // when
             // 요청 실행
             ResultActions actions = mockMvc.perform(
-                    post("/members")
+                    post(BASE_URL)
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
                             .content(content)
@@ -120,7 +120,7 @@ public class MemberControllerTest {
             // when
             // 요청 실행
             ResultActions actions = mockMvc.perform(
-                    get("/members" + "/{name}", name)
+                    get(BASE_URL + "/{name}", name)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -130,8 +130,9 @@ public class MemberControllerTest {
             // 응답 결과 검증 후 문서화
             actions
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.name").exists())
                     .andExpect(jsonPath("$.isMine").value(true))
+                    .andExpect(jsonPath("$.memberId").exists())
+                    .andExpect(jsonPath("$.name").exists())
                     .andExpect(jsonPath("$.description").exists())
                     .andExpect(jsonPath("$.thumbnail").exists())
                     .andExpect(jsonPath("$.backgroundImage").value(equalTo(null)))
@@ -153,12 +154,15 @@ public class MemberControllerTest {
                                     .description("Header Cookie, 세션 쿠키")
                             ),
                             responseFields(
-                                fieldWithPath("name")
-                                    .type(JsonFieldType.STRING)
-                                    .description("회원 이름"),
                                 fieldWithPath("isMine")
                                     .type(JsonFieldType.BOOLEAN)
                                     .description("본인 여부(본인 프로필 조회시 true)"),
+                                fieldWithPath("memberId")
+                                    .type(JsonFieldType.NUMBER)
+                                    .description("회원 id"),
+                                fieldWithPath("name")
+                                    .type(JsonFieldType.STRING)
+                                    .description("회원 이름"),
                                 fieldWithPath("description")
                                     .type(JsonFieldType.STRING)
                                     .description("자기 소개"),
@@ -199,7 +203,7 @@ public class MemberControllerTest {
             // when
             // 요청 실행
             ResultActions actions = mockMvc.perform(
-                get("/members" + "/{name}", name)
+                get(BASE_URL + "/{name}", name)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -209,8 +213,9 @@ public class MemberControllerTest {
             // 응답 결과 검증 후 문서화
             actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.isMine").value(false))
+                .andExpect(jsonPath("$.memberId").exists())
+                .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.description").exists())
                 .andExpect(jsonPath("$.thumbnail").exists())
                 .andExpect(jsonPath("$.backgroundImage").value(equalTo(null)))
@@ -232,12 +237,15 @@ public class MemberControllerTest {
                             .description("Header Cookie, 세션 쿠키")
                     ),
                     responseFields(
-                        fieldWithPath("name")
-                            .type(JsonFieldType.STRING)
-                            .description("회원 이름"),
                         fieldWithPath("isMine")
                             .type(JsonFieldType.BOOLEAN)
                             .description("본인 여부(본인 프로필 조회시 true)"),
+                        fieldWithPath("memberId")
+                            .type(JsonFieldType.NUMBER)
+                            .description("회원 id"),
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .description("회원 이름"),
                         fieldWithPath("description")
                             .type(JsonFieldType.STRING)
                             .description("자기 소개"),
@@ -280,7 +288,7 @@ public class MemberControllerTest {
             // when
             // 요청 실행
             ResultActions actions = mockMvc.perform(
-                get("/members" + "/{name}", name)
+                get(BASE_URL + "/{name}", name)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -340,7 +348,7 @@ public class MemberControllerTest {
 
             // when
             ResultActions actions = mockMvc.perform(
-                    patch("/members")
+                    patch(BASE_URL)
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
                             .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -388,7 +396,7 @@ public class MemberControllerTest {
 
             // when
             ResultActions actions = mockMvc.perform(
-                patch("/members")
+                patch(BASE_URL)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -452,7 +460,7 @@ public class MemberControllerTest {
 
             // when
             ResultActions actions = mockMvc.perform(
-                patch("/members")
+                patch(BASE_URL)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -508,7 +516,7 @@ public class MemberControllerTest {
     @DisplayName("회원의 북마크 애니 목록 조회")
     @Nested
     class GetBookmarks {
-        @DisplayName("회원의 북마크 애니 목록 조회 성공시 200 OK 응답")
+        @DisplayName("회원의 북마크 애니 목록 조회 성공시 200 OK 응답(cursor 없이 최초 요청)")
         @Test
         void getBookmarksSuccess() throws Exception {
             // given
@@ -519,7 +527,7 @@ public class MemberControllerTest {
 
             // when
             ResultActions actions = mockMvc.perform(
-                get("/members/{memberId}/bookmarks", 1)
+                get( BASE_URL + "/{memberId}/bookmarks", 1)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .param("size", String.valueOf(size))
@@ -535,7 +543,7 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.items[0].title").exists())
                 .andExpect(jsonPath("$.items[0].thumbnail").exists())
                 .andExpect(jsonPath("$.size").exists())
-                .andExpect(jsonPath("$.lastId").exists())
+                .andExpect(jsonPath("$.cursor").exists())
                 .andExpect(jsonPath("$.hasNext").exists())
                 .andDo(
                     document("getBookmarks/success",
@@ -574,6 +582,9 @@ public class MemberControllerTest {
                             fieldWithPath("items[].thumbnail")
                                 .type(JsonFieldType.STRING)
                                 .description("애니 썸네일"),
+                            fieldWithPath("items[].avgScore")
+                                .type(JsonFieldType.NUMBER)
+                                .description("해당 애니메의 평균 별점"),
                             fieldWithPath("items[].myScore")
                                 .type(JsonFieldType.NUMBER)
                                 .description("해당 회원이 애니에 매긴 별점. 없을 경우 -1"),
@@ -586,15 +597,15 @@ public class MemberControllerTest {
                             fieldWithPath("hasNext")
                                 .type(JsonFieldType.BOOLEAN)
                                 .description("마지막 페이지 여부"),
-                            fieldWithPath("lastId")
-                                .type(JsonFieldType.NUMBER)
-                                .description("마지막 아이템 id, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 -1")
+                            fieldWithPath("cursor")
+                                .type(JsonFieldType.STRING)
+                                .description("마지막 아이템 id, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 \"\"")
                         )
                     )
                 );
         }
 
-        @DisplayName("회원의 북마크 애니 목록 조회 성공시 200 OK 응답")
+        @DisplayName("회원의 북마크 애니 목록 조회 성공시 200 OK 응답(커서 요청)")
         @Test
         void getBookmarksSuccessWithCursor() throws Exception {
             // given
@@ -602,11 +613,11 @@ public class MemberControllerTest {
             int size = 2;
             String sort = "created_at";
             String order = "desc";
-            String cursor = "2";
+            String cursor = "2023-10-11T21:05:31.859";
 
             // when
             ResultActions actions = mockMvc.perform(
-                get("/members/{memberId}/bookmarks", 1)
+                get(BASE_URL + "/{memberId}/bookmarks", 1)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .param("size", String.valueOf(size))
@@ -623,7 +634,7 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.items[0].title").exists())
                 .andExpect(jsonPath("$.items[0].thumbnail").exists())
                 .andExpect(jsonPath("$.size").exists())
-                .andExpect(jsonPath("$.lastId").exists())
+                .andExpect(jsonPath("$.cursor").exists())
                 .andExpect(jsonPath("$.hasNext").exists())
                 .andDo(
                     document("getBookmarks/successWithCursor",
@@ -662,6 +673,9 @@ public class MemberControllerTest {
                             fieldWithPath("items[].thumbnail")
                                 .type(JsonFieldType.STRING)
                                 .description("애니 썸네일"),
+                            fieldWithPath("items[].avgScore")
+                                .type(JsonFieldType.NUMBER)
+                                .description("해당 애니메의 평균 별점"),
                             fieldWithPath("items[].myScore")
                                 .type(JsonFieldType.NUMBER)
                                 .description("해당 회원이 애니에 매긴 별점. 없을 경우 -1"),
@@ -674,9 +688,9 @@ public class MemberControllerTest {
                             fieldWithPath("hasNext")
                                 .type(JsonFieldType.BOOLEAN)
                                 .description("마지막 페이지 여부"),
-                            fieldWithPath("lastId")
-                                .type(JsonFieldType.NUMBER)
-                                .description("마지막 아이템 id, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 -1")
+                            fieldWithPath("cursor")
+                                .type(JsonFieldType.STRING)
+                                .description("마지막 아이템 id, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 \"\"")
                         )
                     )
                 );
