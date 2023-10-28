@@ -62,7 +62,7 @@ public class AnimeControllerTest {
                     .andExpect(jsonPath("$.items[0].starScoreAvg").exists())
                     .andExpect(jsonPath("$.size").exists())
                     .andExpect(jsonPath("$.hasNext").exists())
-                    .andExpect(jsonPath("$.lastId").exists())
+                    .andExpect(jsonPath("$.cursor").exists())
                     .andDo(document("getAnimes/success",
                             preprocessRequest(prettyPrint()),
                             preprocessResponse(prettyPrint()),
@@ -85,7 +85,7 @@ public class AnimeControllerTest {
                                             .description("정렬 방향"),
                                     parameterWithName("cursor")
                                             .optional()
-                                            .description("마지막 아이템 id")
+                                            .description("마지막 아이템 제목")
                             ),
                             responseFields(
                                     fieldWithPath("items")
@@ -109,9 +109,9 @@ public class AnimeControllerTest {
                                     fieldWithPath("hasNext")
                                             .type(JsonFieldType.BOOLEAN)
                                             .description("마지막 페이지 여부"),
-                                    fieldWithPath("lastId")
-                                            .type(JsonFieldType.NUMBER)
-                                            .description("마지막 아이템 id, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 -1")
+                                    fieldWithPath("cursor")
+                                            .type(JsonFieldType.STRING)
+                                            .description("마지막 아이템의 제목, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 \"\"")
                             )
                     ));
 
