@@ -118,6 +118,10 @@ public class AdminControllerTest {
                             .type(JsonFieldType.STRING)
                             .attributes(field("constraints", "ONGOING,FINISHED,UPCOMING,UNKNOWN만 허용합니다."))
                             .description("애니 상태"),
+                        fieldWithPath("isReleased")
+                            .type(JsonFieldType.BOOLEAN)
+                            .attributes(field("constraints", "true, false만 허용합니다. null일 시 false로 초기화합니다."))
+                            .description("클라이언트가 애니를 열람할 수 있는지 여부"),
                         fieldWithPath("originalAuthorIds")
                             .type(JsonFieldType.ARRAY)
                             .description("원작 작가들 아이디 리스트")
@@ -217,7 +221,11 @@ public class AdminControllerTest {
                                     fieldWithPath("status")
                                             .type(JsonFieldType.STRING)
                                             .attributes(field("constraints", "ONGOING,FINISHED,UPCOMING,UNKNOWN만 허용합니다."))
-                                            .description("애니 상태")
+                                            .description("애니 상태"),
+                                    fieldWithPath("isReleased")
+                                        .type(JsonFieldType.BOOLEAN)
+                                        .attributes(field("constraints", "true, false만 허용합니다. null일 시 false로 초기화합니다."))
+                                        .description("클라이언트가 애니를 열람할 수 있는지 여부")
                             )
                     ));
 
