@@ -22,7 +22,7 @@ public class AttractionPointServiceImpl implements AttractionPointService {
         boolean character = false;
         boolean voiceActor = false;
 
-        List<AttractionPoint> points = attractionPointRepository.findAllByAnimeId_memberId(memberId, animeId);
+        List<AttractionPoint> points = attractionPointRepository.findAllByAnimeIdAndMemberId(memberId, animeId);
         for (AttractionPoint point : points) {
             switch (point.getAttractionElement()) {
                 case DRAWING -> drawing = true;

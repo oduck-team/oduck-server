@@ -12,6 +12,6 @@ public interface AttractionPointRepository extends JpaRepository<AttractionPoint
     @Query("select ap from AttractionPoint ap "
                + "where ap.anime.id = :animeId "
                + "and ap.member.id = :memberId")
-    List<AttractionPoint> findAllByAnimeId_memberId(@Param("memberId") Long memberId, @Param("animeId") Long animeId);
+    List<AttractionPoint> findAllByAnimeIdAndMemberId(@Param("memberId") Long memberId, @Param("animeId") Long animeId);
 
 }

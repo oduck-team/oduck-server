@@ -96,7 +96,7 @@ public class AttractionPointRepositoryTest {
 
             //when
             //입덕포인트 조회
-            List<AttractionPoint> res = attractionPointRepository.findAllByAnimeId_memberId(memberId, animeId);
+            List<AttractionPoint> res = attractionPointRepository.findAllByAnimeIdAndMemberId(memberId, animeId);
             AttractionElement findDrawing = res.get(0).getAttractionElement();
             AttractionElement findStory = res.get(1).getAttractionElement();
 
