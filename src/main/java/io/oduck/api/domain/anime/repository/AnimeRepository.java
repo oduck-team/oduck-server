@@ -11,8 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 public interface AnimeRepository extends JpaRepository<Anime,Long>, AnimeRepositoryCustom {
 
@@ -21,7 +19,7 @@ public interface AnimeRepository extends JpaRepository<Anime,Long>, AnimeReposit
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="3000")})
     Optional<Anime> findByIdForUpdate(@Param("id")Long id);
   
-    @Query("select a from Anime a where a.id = :id and a.deletedAt = null and a.isReleased = true")
-    Optional<Anime> findReleasedAnimeById(@Param("id") Long id);
+    @Query("select a from Anime a where a.id = :id and a.deletedAt = null and a.isReleased = :isReleased")
+    Optional<Anime> findAnimeByConditions(@Param("id") Long id, @Param("isReleased") boolean isReleased);
   
 }
