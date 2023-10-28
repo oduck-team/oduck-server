@@ -82,8 +82,8 @@ public class AnimeRes {
         }
 
         @Override
-        public Long bringId() {
-            return this.id;
+        public String bringCursor(String property) {
+            return title;
         }
     }
 
