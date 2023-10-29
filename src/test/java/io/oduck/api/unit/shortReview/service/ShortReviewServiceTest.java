@@ -2,6 +2,7 @@ package io.oduck.api.unit.shortReview.service;
 
 import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
+import io.oduck.api.domain.attractionPoint.dto.AttractionPointResDto;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.domain.review.dto.ShortReviewDslDto.ShortReviewDsl;
@@ -38,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -106,16 +108,16 @@ public class ShortReviewServiceTest {
             ShortReview shortReview = createShortReview();
 
             Anime anime = createAnime();
-            given(animeRepository.findById(animeId)).willReturn(Optional.ofNullable(anime));
+            given(animeRepository.findByIdForUpdate(animeId)).willReturn(Optional.of(anime));
 
             Member member = new MemberStub().getMember();
-            given(memberRepository.findById(memberId)).willReturn(Optional.ofNullable(member));
+            given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
 
             //when
             shortReviewService.save(memberId,shortReviewReq);
 
             //then
-            verify(animeRepository,times(1)).findById(any());
+            verify(animeRepository,times(1)).findByIdForUpdate(any());
             verify(memberRepository,times(1)).findById(any());
         }
     }
@@ -131,13 +133,16 @@ public class ShortReviewServiceTest {
         void patchShortReview(){
             //given
             Long reviewId = 1L;
+            Long memberId = 1L;
             PatchShortReviewReq patchShortReviewReq = createPatchShortReview();
 
             given(shortReviewRepository.findById(reviewId)).willReturn(Optional.ofNullable(shortReview));
 
             //when
+            shortReviewService.update(memberId, reviewId, patchShortReviewReq);
+
             //then
-            assertDoesNotThrow(() ->shortReviewService.update(reviewId, patchShortReviewReq));
+            verify(shortReviewRepository, times(1)).findById(anyLong());
         }
     }
 }
