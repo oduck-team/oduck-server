@@ -68,8 +68,8 @@ public class ShortReviewControllerTest {
             //given
             Long animeId = 1L;
             int size = 2;
-            String sort = "CREATED_AT";
-            String order = "DESC";
+            String sort = "created_at";
+            String order = "desc";
 
             //when
             ResultActions actions = mockMvc.perform(
@@ -173,8 +173,8 @@ public class ShortReviewControllerTest {
             //given
             Long animeId = 1L;
             int size = 1;
-            String sort = "CREATED_AT";
-            String order = "DESC";
+            String sort = "created_at";
+            String order = "desc";
             String cursor = "2023-10-11T21:05:31.859";
 
             //when
@@ -282,7 +282,7 @@ public class ShortReviewControllerTest {
 
         @DisplayName("리뷰 작성 성공시 Http Status 200 ok 반환")
         @Test
-        @WithCustomMockMember(id = 1L, email = "john", password = "Qwer!234", role = Role.MEMBER)
+        @WithCustomMockMember(id = 2L, email = "john", password = "Qwer!234", role = Role.MEMBER)
         void postShortReview() throws Exception{
             //given
             PostShortReviewReq req = ShortReviewTestUtils.createPostShoreReviewReq();
@@ -336,6 +336,7 @@ public class ShortReviewControllerTest {
 
         @DisplayName("짧은 리뷰 수정 성공시 Http Status 200 반환")
         @Test
+        @WithCustomMockMember(id = 1L, email = "john", password = "Qwer!234", role = Role.MEMBER)
         void patchShortReview() throws Exception{
             //given
             Long reviewId = 1L;
@@ -347,6 +348,7 @@ public class ShortReviewControllerTest {
                 patch(BASE_URL +"/{reviewId}", reviewId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
                     .content(content)
             );
 
@@ -361,6 +363,11 @@ public class ShortReviewControllerTest {
                 .andDo(document("patchShortReview/success",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.COOKIE)
+                            .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                            .description("Header Cookie, 세션 쿠키")
+                    ),
                     pathParameters(
                         parameterWithName("reviewId")
                             .description("리뷰 식별자")),
@@ -379,24 +386,7 @@ public class ShortReviewControllerTest {
                             .description("캐릭터 입덕포인트"),
                         fieldWithPath("voiceActor")
                             .type(JsonFieldType.BOOLEAN)
-                            .description("성우 입덕포인트")),
-                    requestFields(attributes(key("title").value("Fields for shortReview creation")),
-                        fieldWithPath("animeId")
-                            .type(JsonFieldType.NUMBER)
-                            .attributes(field("constraints", "숫자만 가능합니다."))
-                            .description("애니 식별자"),
-                        fieldWithPath("name")
-                            .type(JsonFieldType.STRING)
-                            .attributes(field("constraints", "회원의 이름입니다."))
-                            .description("회원의 이름"),
-                        fieldWithPath("hasSpoiler")
-                            .type(JsonFieldType.BOOLEAN)
-                            .attributes(field("constraints", "true 또는 false."))
-                            .description("스포일러 유무"),
-                        fieldWithPath("content")
-                            .type(JsonFieldType.STRING)
-                            .attributes(field("constraints", "최소 10에서 100자 까지 입력 가능합니다."))
-                            .description("짧은 리뷰 내용"))
+                            .description("성우 입덕포인트"))
                 ));
         }
 //        @DisplayName("짧은 리뷰 수정 기존 내용과 동일할 시 400 BadRequest 응답")
