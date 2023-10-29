@@ -75,7 +75,7 @@ public class AnimeReq {
             this.rating = rating;
             this.status = status;
 
-            if(isReleased == null) {
+            if(isReleased != null) {
                 this.isReleased = isReleased;
             }
 
