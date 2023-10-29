@@ -52,7 +52,7 @@ public class ShortReviewController {
         @LoginUser AuthLocal user,
         @RequestBody @Valid ShortReviewReqDto.PostShortReviewReq req)  {
         //TODO : 짧은 리뷰 작성
-        shortReviewService.save(user.getId() == null? 1L: user.getId(), req);
+        shortReviewService.save(user.getId() == null? 0L: user.getId(), req);
         return ResponseEntity.ok().build();
     }
 
@@ -62,7 +62,7 @@ public class ShortReviewController {
         @PathVariable Long reviewId,
         @RequestBody @Valid ShortReviewReqDto.PatchShortReviewReq req)  {
         //TODO : 짧은 리뷰 수정
-        shortReviewService.update(reviewId, req);
+        shortReviewService.update(user.getId(), reviewId, req);
         //입덕포인트 반환
         IsAttractionPoint attractionPointRes = attractionPointService.isAttractionPoint(user.getId(), req.getAnimeId());
         return ResponseEntity.ok(attractionPointRes);
