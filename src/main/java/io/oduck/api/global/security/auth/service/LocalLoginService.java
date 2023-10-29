@@ -21,7 +21,7 @@ public class LocalLoginService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<AuthLocal> optionalAuthLocal = authLocalRepository.findByEmail(email);
 
-        if (!optionalAuthLocal.isPresent()) {
+        if (optionalAuthLocal.isEmpty()) {
             throw new UnauthorizedException("Unauthorized");
         }
 
