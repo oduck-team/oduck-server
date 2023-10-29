@@ -7,9 +7,7 @@ import io.oduck.api.domain.anime.entity.Status;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.ArrayList;
@@ -200,5 +198,47 @@ public class AnimeReq {
     @NoArgsConstructor
     public static class PatchSeriesIdReq{
         private Long seriesId;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum Sort {
+        LATEST("createdAt"),
+        REVIEW_COUNT("reviewCount"),
+        SCORE("score");
+
+        private final String sort;
+    }
+
+    @Getter
+    @ToString
+    public static class SearchFilter {
+        List<Long> genreIds;
+        List<BroadcastType> broadcastTypes;
+        List<Status> statuses;
+        List<EpisodeCountEnum> episodeCounts;
+        List<Integer> years;
+        List<Quarter> quarters;
+
+        public SearchFilter(List<Long> genreIds, List<BroadcastType> broadcastTypes, List<Status> statuses, List<EpisodeCountEnum> episodeCounts, List<Integer> years, List<Quarter> quarters) {
+            this.genreIds = genreIds;
+            this.broadcastTypes = broadcastTypes;
+            this.statuses = statuses;
+            this.episodeCounts = episodeCounts;
+            this.years = years;
+            this.quarters = quarters;
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum EpisodeCountEnum {
+        UNDER_TWELVE(12),
+        UNDER_TWENTY_FOUR(24),
+        UNDER_FORTY_EIGHT(48),
+        UNDER_HUNDRED(100),
+        OVER_HUNDRED(100);
+
+        private final int count;
     }
 }

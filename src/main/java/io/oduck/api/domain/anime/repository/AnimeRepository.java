@@ -14,7 +14,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface AnimeRepository extends JpaRepository<Anime,Long> {
+public interface AnimeRepository extends JpaRepository<Anime,Long>, AnimeRepositoryCustom {
+
     @Query("select a from Anime a where a.id = :id")
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="3000")})
@@ -22,4 +23,5 @@ public interface AnimeRepository extends JpaRepository<Anime,Long> {
   
     @Query("select a from Anime a where a.id = :id and a.deletedAt = null and a.isReleased = true")
     Optional<Anime> findReleasedAnimeById(@Param("id") Long id);
+  
 }

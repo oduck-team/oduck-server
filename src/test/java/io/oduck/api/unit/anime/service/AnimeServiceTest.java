@@ -2,6 +2,7 @@ package io.oduck.api.unit.anime.service;
 
 import io.oduck.api.domain.anime.dto.AnimeReq.*;
 import io.oduck.api.domain.anime.dto.AnimeVoiceActorReq;
+import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.domain.anime.entity.*;
 import io.oduck.api.domain.anime.repository.*;
 import io.oduck.api.domain.anime.service.AnimeServiceImpl;
@@ -15,6 +16,8 @@ import io.oduck.api.domain.studio.entity.Studio;
 import io.oduck.api.domain.studio.repository.StudioRepository;
 import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.domain.voiceActor.repository.VoiceActorRepository;
+import io.oduck.api.global.common.OrderDirection;
+import io.oduck.api.global.common.SliceResponse;
 import io.oduck.api.global.utils.AnimeTestUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,17 +25,26 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
 import static io.oduck.api.global.utils.AnimeTestUtils.*;
+import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
 import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyIterable;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -77,6 +89,45 @@ public class AnimeServiceTest {
     @DisplayName("조회")
     class GetAnime{
         Anime anime = createAnime();
+
+        @Test
+        @DisplayName("애니 제목 검색")
+        void getAnimes() {
+            //given
+            String query = null;
+            String cursor = null;
+            int size = 10;
+            Sort sort = Sort.LATEST;
+            OrderDirection order = OrderDirection.DESC;
+            SearchFilterDsl searchFilter = new SearchFilterDsl(null, null, null, null, null);
+
+            List<SearchResult> content = new ArrayList<>();
+            Slice<SearchResult> searchResults = new SliceImpl<>(content);
+
+            Pageable pageable = applyPageableForNonOffset(
+                size,
+                sort.getSort(),
+                order.getOrder()
+            );
+
+            given(
+                animeRepository.findAnimesByCondition(
+                    query,
+                    cursor,
+                    pageable,
+                    searchFilter
+                )
+            ).willReturn(searchResults);
+
+            //when
+            animeService.getAnimesByCondition(query, cursor, sort, order, size, searchFilter);
+
+            //then
+            assertThatNoException();
+
+            //verify
+            verify(animeRepository, times(1)).findAnimesByCondition(query, cursor, pageable, searchFilter);
+        }
 
         @Test
         @DisplayName("애니 상세 조회")
