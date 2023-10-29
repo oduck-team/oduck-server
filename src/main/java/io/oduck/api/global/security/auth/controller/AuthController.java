@@ -39,7 +39,7 @@ public class AuthController {
         @LoginUser AuthUser user
     ) {
 
-        Status res = authService.getStatus(user.getId());
+        Status res = authService.getStatus(user);
 
         return ResponseEntity.ok(res);
     }
