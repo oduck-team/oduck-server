@@ -16,14 +16,17 @@ import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.review.repository.ShortReviewRepository;
 import io.oduck.api.global.common.OrderDirection;
 import io.oduck.api.global.common.SliceResponse;
+import io.oduck.api.global.exception.BadRequestException;
 import io.oduck.api.global.exception.NotFoundException;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -67,6 +70,7 @@ public class ShortReviewServiceImpl implements ShortReviewService{
     }
 
     @Override
+    @Transactional
     public void save(Long memberId, PostShortReviewReq shortReviewReq) {
         ShortReview shortReview = ShortReview
                                       .builder()
@@ -75,11 +79,18 @@ public class ShortReviewServiceImpl implements ShortReviewService{
                                       .build();
 
         //애니 입력
-        Anime anime = getAnime(shortReviewReq.getAnimeId());
+        Anime anime = animeRepository.findByIdForUpdate(shortReviewReq.getAnimeId())
+                             .orElseThrow(
+                                 () -> new NotFoundException("Anime")
+                             );
         shortReview.relateAnime(anime);
 
         //회원 입력
-        shortReview.relateMember(getMember(memberId));
+        Member member = memberRepository.findById(memberId)
+                            .orElseThrow(
+                                () -> new NotFoundException("Memebr")
+                            );
+        shortReview.relateMember(member);
 
         ShortReview saveShortReview = shortReviewRepository.save(shortReview);
         anime.increaseReviewCount();
@@ -88,26 +99,23 @@ public class ShortReviewServiceImpl implements ShortReviewService{
     }
 
     @Override
-    public void update(Long reviewId, PatchShortReviewReq req) {
+    public void update(Long memberId, Long reviewId, PatchShortReviewReq req) {
         ShortReview findShortReview = getShortReview(reviewId);
-        findShortReview.updateContent(req.getContent());
-        findShortReview.updateSpoiler(req.isHasSpoiler());
-        shortReviewRepository.save(findShortReview);
+        Long findMemberId = findShortReview.getMember().getId();
+        //리뷰 작성자 인지 확인
+        Optional
+            .ofNullable(findMemberId)
+            .ifPresent(
+                id -> {
+                    if(!findMemberId.equals(memberId)) {
+                        throw new BadRequestException("Not the author of the review.");
+                    }
+                    findShortReview.updateContent(req.getContent());
+                    findShortReview.updateSpoiler(req.isHasSpoiler());
+                }
+            );
     }
 
-    private Member getMember(Long memberId){
-        return memberRepository.findById(memberId)
-                  .orElseThrow(
-                      () -> new NotFoundException("Member")
-                  );
-    }
-
-    private Anime getAnime(Long animeId){
-        return animeRepository.findById(animeId)
-                   .orElseThrow(
-                       () -> new NotFoundException("Anime")
-                   );
-    }
 
     private ShortReview getShortReview(Long reviewId){
         return shortReviewRepository.findById(reviewId)

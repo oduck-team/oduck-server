@@ -16,7 +16,7 @@ public interface ShortReviewService {
     void save(Long memberId, PostShortReviewReq shortReviewReq);
 
     //애니 리뷰 수정
-    void update(Long reviewId, PatchShortReviewReq req);
+    void update(Long memberId, Long reviewId, PatchShortReviewReq req);
 
     //애니 리뷰 삭제
 
