@@ -250,6 +250,13 @@ public class AnimeServiceImpl implements AnimeService{
         return SliceResponse.of(slice, items, sort.getSort());
     }
 
+    @Override
+    public void delete(Long animeId) {
+        Anime anime = findAnime(animeId);
+
+        anime.delete();
+    }
+
     @Transactional(readOnly = true)
     public Anime findAnime(Long animeId) {
         return animeRepository.findById(animeId).orElseThrow(() -> new NotFoundException("Anime"));

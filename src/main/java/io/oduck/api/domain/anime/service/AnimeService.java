@@ -76,4 +76,10 @@ public interface AnimeService {
      * @return SliceResponse<SearchResult>
      */
     SliceResponse<SearchResult> getAnimesByCondition(String query, String cursor, Sort sort, OrderDirection order, int size, SearchFilterDsl searchFilterDsl);
+
+    /**
+     * 애니 삭제 로직
+     * @param animeId
+     */
+    void delete(Long animeId);
 }
