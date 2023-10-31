@@ -134,6 +134,7 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
+    // 원작 작가 추가
     @PostMapping("/original-authors")
     public ResponseEntity<Object> postOriginalAuthor(@RequestBody @Valid OriginalAuthorReq.PostReq req) {
 
@@ -142,6 +143,7 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
+    // 원작 작가 조회
     @GetMapping("/original-authors")
     public ResponseEntity<Object> getOriginalAuthors(){
 
@@ -150,6 +152,7 @@ public class AdminController {
         return ResponseEntity.ok(originalAuthors);
     }
 
+    // 성우 추가
     @PostMapping("/voice-actors")
     public ResponseEntity<Object> postVoiceActor(@RequestBody @Valid VoiceActorReq.PostReq req) {
 
@@ -158,6 +161,7 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
+    // 성우 조회
     @GetMapping("/voice-actors")
     public ResponseEntity<Object> getVoiceActors() {
 
@@ -166,6 +170,7 @@ public class AdminController {
         return ResponseEntity.ok(voiceActors);
     }
 
+    // 스튜디오 추가
     @PostMapping("/studios")
     public ResponseEntity<Object> postStudio(@RequestBody @Valid StudioReq.PostReq req) {
 
@@ -174,6 +179,7 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
+    // 스튜디오 조회
     @GetMapping("/studios")
     public ResponseEntity<Object> getStudios() {
 
@@ -182,6 +188,7 @@ public class AdminController {
         return ResponseEntity.ok(studios);
     }
 
+    // 장르 추가
     @PostMapping("/genres")
     public ResponseEntity<Object> postGenre(@RequestBody @Valid GenreReq.PostReq req) {
 
@@ -190,6 +197,7 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
+    // 장르 조회
     @GetMapping("/genres")
     public ResponseEntity<Object> getGenres(){
 
@@ -198,6 +206,7 @@ public class AdminController {
         return ResponseEntity.ok(genres);
     }
 
+    // 시리즈 추가
     @PostMapping("/series")
     public ResponseEntity<Object> postSeries(@RequestBody @Valid SeriesReq.PostReq req) {
 
@@ -206,6 +215,7 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
+    // 시리즈 조회
     @GetMapping("/series")
     public ResponseEntity<Object> getSeries() {
 
