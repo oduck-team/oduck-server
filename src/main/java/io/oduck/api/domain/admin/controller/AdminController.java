@@ -49,6 +49,18 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
+    // 관리자 애니 조회 (isReleased = false도 조회)
+//    @GetMapping("/animes")
+//    public ResponseEntity<Object> getAnimes(
+//        Pageable pageable, String query, SearchCondition condition
+//    ){
+//
+//        //TODO: 애니 조회 로직 구현.
+//        Page<GetAnime> res = adminAnimeService.getAnimes(pageable, query, condition);
+//        return ResponseEntity
+//            .ok(PageResponse.of(null));
+//    }
+
     //애니 관련 수정
     @PatchMapping("/animes/{animeId}")
     public ResponseEntity<Object> patchAnime(
@@ -56,6 +68,16 @@ public class AdminController {
     ){
 
         animeService.update(animeId, req);
+
+        return ResponseEntity.noContent().build();
+    }
+
+
+    // 애니 삭제
+    @DeleteMapping("/animes/{animeId}")
+    public ResponseEntity<Object> deleteAnime(@PathVariable Long animeId) {
+
+        animeService.delete(animeId);
 
         return ResponseEntity.noContent().build();
     }
@@ -112,26 +134,13 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
-    // 애니 삭제
-    @DeleteMapping("/animes/{animeId}")
-    public ResponseEntity<Object> deleteAnime(@PathVariable Long animeId) {
+    @PostMapping("/original-authors")
+    public ResponseEntity<Object> postOriginalAuthor(@RequestBody @Valid OriginalAuthorReq.PostReq req) {
 
-        animeService.delete(animeId);
+        originalAuthorService.save(req);
 
         return ResponseEntity.noContent().build();
     }
-
-    // 관리자 애니 조회 (isReleased = false도 조회)
-//    @GetMapping("/animes")
-//    public ResponseEntity<Object> getAnimes(
-//        Pageable pageable, String query, SearchCondition condition
-//    ){
-//
-//        //TODO: 애니 조회 로직 구현.
-//        Page<GetAnime> res = adminAnimeService.getAnimes(pageable, query, condition);
-//        return ResponseEntity
-//            .ok(PageResponse.of(null));
-//    }
 
     @GetMapping("/original-authors")
     public ResponseEntity<Object> getOriginalAuthors(){
@@ -141,10 +150,10 @@ public class AdminController {
         return ResponseEntity.ok(originalAuthors);
     }
 
-    @PostMapping("/original-authors")
-    public ResponseEntity<Object> postOriginalAuthor(@RequestBody @Valid OriginalAuthorReq.PostReq req) {
+    @PostMapping("/voice-actors")
+    public ResponseEntity<Object> postVoiceActor(@RequestBody @Valid VoiceActorReq.PostReq req) {
 
-        originalAuthorService.save(req);
+        voiceActorService.save(req);
 
         return ResponseEntity.noContent().build();
     }
@@ -157,10 +166,10 @@ public class AdminController {
         return ResponseEntity.ok(voiceActors);
     }
 
-    @PostMapping("/voice-actors")
-    public ResponseEntity<Object> postVoiceActor(@RequestBody @Valid VoiceActorReq.PostReq req) {
+    @PostMapping("/studios")
+    public ResponseEntity<Object> postStudio(@RequestBody @Valid StudioReq.PostReq req) {
 
-        voiceActorService.save(req);
+        studioService.save(req);
 
         return ResponseEntity.noContent().build();
     }
@@ -173,10 +182,10 @@ public class AdminController {
         return ResponseEntity.ok(studios);
     }
 
-    @PostMapping("/studios")
-    public ResponseEntity<Object> postStudio(@RequestBody @Valid StudioReq.PostReq req) {
+    @PostMapping("/genres")
+    public ResponseEntity<Object> postGenre(@RequestBody @Valid GenreReq.PostReq req) {
 
-        studioService.save(req);
+        genreService.save(req);
 
         return ResponseEntity.noContent().build();
     }
@@ -189,10 +198,10 @@ public class AdminController {
         return ResponseEntity.ok(genres);
     }
 
-    @PostMapping("/genres")
-    public ResponseEntity<Object> postGenre(@RequestBody @Valid GenreReq.PostReq req) {
+    @PostMapping("/series")
+    public ResponseEntity<Object> postSeries(@RequestBody @Valid SeriesReq.PostReq req) {
 
-        genreService.save(req);
+        seriesService.save(req);
 
         return ResponseEntity.noContent().build();
     }
@@ -203,13 +212,5 @@ public class AdminController {
         List<SeriesRes> seriesList = seriesService.getSeries();
 
         return ResponseEntity.ok(seriesList);
-    }
-
-    @PostMapping("/series")
-    public ResponseEntity<Object> postSeries(@RequestBody @Valid SeriesReq.PostReq req) {
-
-        seriesService.save(req);
-
-        return ResponseEntity.noContent().build();
     }
 }
