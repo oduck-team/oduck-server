@@ -113,15 +113,15 @@ public class AdminController {
     }
 
     // 애니 삭제
-//    @DeleteMapping("/animes/{animeId}")
-//    public ResponseEntity<Object> deleteAnime(@PathVariable Long animeId){
-//
-//        //TODO: 애니 삭제 로직 구현. (애니를 실제로 삭제하지 않음)
-//        animeService.delete(animeId);
-//        return ResponseEntity.noContent().build();
-//    }
+    @DeleteMapping("/animes/{animeId}")
+    public ResponseEntity<Object> deleteAnime(@PathVariable Long animeId) {
 
-//     관리자 애니 조회 (isReleased = false도 조회)
+        animeService.delete(animeId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    // 관리자 애니 조회 (isReleased = false도 조회)
 //    @GetMapping("/animes")
 //    public ResponseEntity<Object> getAnimes(
 //        Pageable pageable, String query, SearchCondition condition
