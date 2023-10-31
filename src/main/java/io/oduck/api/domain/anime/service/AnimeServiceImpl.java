@@ -55,23 +55,6 @@ public class AnimeServiceImpl implements AnimeService{
     private final SeriesRepository seriesRepository;
 
     @Override
-    @Transactional(readOnly = true)
-    public DetailResult getAnimeById(Long animeId) {
-
-        Anime anime = animeRepository.findAnimeByConditions(animeId, true)
-                .orElseThrow(() -> new NotFoundException("Anime"));
-
-        anime.increaseViewCount();
-
-        List<AnimeOriginalAuthor> animeOriginalAuthors = animeOriginalAuthorRepository.findAllFetchByAnimeId(animeId);
-        List<AnimeVoiceActor> animeVoiceActors = animeVoiceActorRepository.findAllFetchByAnimeId(animeId);
-        List<AnimeStudio> animeStudios = animeStudioRepository.findAllFetchByAnimeId(animeId);
-        List<AnimeGenre> animeGenres = animeGenreRepository.findAllFetchByAnimeId(animeId);
-
-        return new DetailResult(anime, animeOriginalAuthors, animeVoiceActors, animeStudios, animeGenres);
-    }
-
-    @Override
     public void save(PostReq postReq) {
         // 원작 작가
         List<Long> originalAuthorIds = postReq.getOriginalAuthorIds();
@@ -121,7 +104,6 @@ public class AnimeServiceImpl implements AnimeService{
         Long seriesId = postReq.getSeriesId();
         Series series = createSeries(seriesId);
 
-
         Anime anime = Anime.createAnime(
             postReq.getTitle(), postReq.getSummary(), postReq.getBroadcastType(), postReq.getEpisodeCount(),
             postReq.getThumbnail(), postReq.getYear(), postReq.getQuarter(), postReq.getRating(), postReq.getStatus(),
@@ -131,6 +113,41 @@ public class AnimeServiceImpl implements AnimeService{
         animeRepository.save(anime);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public DetailResult getAnimeById(Long animeId) {
+
+        Anime anime = animeRepository.findAnimeByConditions(animeId, true)
+                .orElseThrow(() -> new NotFoundException("Anime"));
+
+        anime.increaseViewCount();
+
+        List<AnimeOriginalAuthor> animeOriginalAuthors = animeOriginalAuthorRepository.findAllFetchByAnimeId(animeId);
+        List<AnimeVoiceActor> animeVoiceActors = animeVoiceActorRepository.findAllFetchByAnimeId(animeId);
+        List<AnimeStudio> animeStudios = animeStudioRepository.findAllFetchByAnimeId(animeId);
+        List<AnimeGenre> animeGenres = animeGenreRepository.findAllFetchByAnimeId(animeId);
+
+        return new DetailResult(anime, animeOriginalAuthors, animeVoiceActors, animeStudios, animeGenres);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public SliceResponse<SearchResult> getAnimesByCondition(String query, String cursor, Sort sort, OrderDirection order, int size, SearchFilterDsl searchFilterDsl) {
+        Slice<SearchResult> slice = animeRepository.findAnimesByCondition(
+            query,
+            cursor,
+            PagingUtils.applyPageableForNonOffset(
+                size,
+                sort.getSort(),
+                order.getOrder()
+            ),
+            searchFilterDsl
+        );
+
+        List<SearchResult> items = slice.getContent();
+
+        return SliceResponse.of(slice, items, sort.getSort());
+    }
 
     private Series createSeries(Long seriesId) {
         if(seriesId == null){
@@ -229,25 +246,6 @@ public class AnimeServiceImpl implements AnimeService{
             .orElseThrow(() -> new NotFoundException("Series"));
 
         anime.update(series);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public SliceResponse<SearchResult> getAnimesByCondition(String query, String cursor, Sort sort, OrderDirection order, int size, SearchFilterDsl searchFilterDsl) {
-        Slice<SearchResult> slice = animeRepository.findAnimesByCondition(
-                query,
-                cursor,
-                PagingUtils.applyPageableForNonOffset(
-                        size,
-                        sort.getSort(),
-                        order.getOrder()
-                ),
-                searchFilterDsl
-        );
-
-        List<SearchResult> items = slice.getContent();
-
-        return SliceResponse.of(slice, items, sort.getSort());
     }
 
     @Override
