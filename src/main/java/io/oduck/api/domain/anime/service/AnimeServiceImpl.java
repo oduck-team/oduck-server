@@ -102,7 +102,8 @@ public class AnimeServiceImpl implements AnimeService{
 
         // 시리즈
         Long seriesId = postReq.getSeriesId();
-        Series series = createSeries(seriesId);
+        boolean isSeriesIdNull = isIdNull(seriesId);
+        Series series = findSeriesWhenIdNotNull(seriesId, isSeriesIdNull);
 
         Anime anime = Anime.createAnime(
             postReq.getTitle(), postReq.getSummary(), postReq.getBroadcastType(), postReq.getEpisodeCount(),
@@ -149,13 +150,17 @@ public class AnimeServiceImpl implements AnimeService{
         return SliceResponse.of(slice, items, sort.getSort());
     }
 
-    private Series createSeries(Long seriesId) {
-        if(seriesId == null){
+    private Series findSeriesWhenIdNotNull(Long seriesId, boolean isSeriesIdNull) {
+        if(isSeriesIdNull == true){
             return null;
-        }else{
-            return seriesRepository.findById(seriesId)
-                .orElseThrow(() -> new NotFoundException("Series"));
         }
+
+        return seriesRepository.findById(seriesId)
+            .orElseThrow(() -> new NotFoundException("Series"));
+    }
+
+    private boolean isIdNull(Long id) {
+        return id == null;
     }
 
     @Override
