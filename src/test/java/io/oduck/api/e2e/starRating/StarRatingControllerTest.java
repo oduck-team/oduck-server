@@ -19,7 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.google.gson.Gson;
 import io.oduck.api.domain.member.entity.Role;
 import io.oduck.api.domain.starRating.dto.StarRatingReqDto.CreateReq;
-import io.oduck.api.domain.starRating.entity.StarRating;
 import io.oduck.api.global.mockMember.WithCustomMockMember;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -132,7 +131,7 @@ public class StarRatingControllerTest {
             // then
             actions
                 .andExpect(status().isConflict())
-                .andDo(document("starRating/createScore/faile",
+                .andDo(document("starRating/createScore/failure",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
