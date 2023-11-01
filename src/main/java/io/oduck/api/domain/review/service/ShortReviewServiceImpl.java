@@ -39,35 +39,6 @@ public class ShortReviewServiceImpl implements ShortReviewService{
 
     private final AnimeRepository animeRepository;
 
-    @Override
-    public SliceResponse<ShortReviewRes> getShortReviews(Long animeId, String cursor,ShortReviewReqDto.Sort sort, OrderDirection order, int size) {
-        Sort sortList = Sort.by(
-            Direction.fromString(order.getOrder()),
-            sort.getSort()
-        );
-
-        if(sort == ShortReviewReqDto.Sort.LIKE){
-            sortList = sortList.and(Sort.by(Direction.DESC, "createdAt"));
-        }else if(sort == ShortReviewReqDto.Sort.SCORE){
-            sortList = sortList.and(Sort.by(Direction.DESC, "createdAt"));
-        }
-
-        Slice<ShortReviewDsl> shortReviews = shortReviewRepository.selectShortReviews(
-            animeId,
-            cursor,
-            applyPageableForNonOffset(
-                size,
-                sortList
-            )
-        );
-
-        List<ShortReviewRes> res = shortReviews.getContent()
-                                       .stream()
-                                       .map(ShortReviewRes::of)
-                                       .toList();
-
-        return SliceResponse.of(shortReviews, res, sort.getSort());
-    }
 
     @Override
     @Transactional
@@ -96,6 +67,36 @@ public class ShortReviewServiceImpl implements ShortReviewService{
         anime.increaseReviewCount();
 
         //log.info("ShortReview Crated! {}", saveShortReview.getId());
+    }
+
+    @Override
+    public SliceResponse<ShortReviewRes> getShortReviews(Long animeId, String cursor,ShortReviewReqDto.Sort sort, OrderDirection order, int size) {
+        Sort sortList = Sort.by(
+            Direction.fromString(order.getOrder()),
+            sort.getSort()
+        );
+
+        if(sort == ShortReviewReqDto.Sort.LIKE){
+            sortList = sortList.and(Sort.by(Direction.DESC, "createdAt"));
+        }else if(sort == ShortReviewReqDto.Sort.SCORE){
+            sortList = sortList.and(Sort.by(Direction.DESC, "createdAt"));
+        }
+
+        Slice<ShortReviewDsl> shortReviews = shortReviewRepository.selectShortReviews(
+            animeId,
+            cursor,
+            applyPageableForNonOffset(
+                size,
+                sortList
+            )
+        );
+
+        List<ShortReviewRes> res = shortReviews.getContent()
+                                       .stream()
+                                       .map(ShortReviewRes::of)
+                                       .toList();
+
+        return SliceResponse.of(shortReviews, res, sort.getSort());
     }
 
     @Override
