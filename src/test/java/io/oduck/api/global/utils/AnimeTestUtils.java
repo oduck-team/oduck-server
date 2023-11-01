@@ -20,14 +20,14 @@ public class AnimeTestUtils {
     public static PostReq createPostAnimeRequest(){
         return new PostReq(
             getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(),
-            getThumbnail(), getYear(), getQuarter(), getRating(), getStatus(),
+            getThumbnail(), getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
             getOriginalAuthorIds(), getStudioIds(), getVoiceActorReqs(), getGenreIds(), getSeriesId());
     }
 
     public static PatchAnimeReq createPatchAnimeRequest(){
         return new PatchAnimeReq(
             getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(),
-            getThumbnail(), getYear(), getQuarter(), getRating(), getStatus());
+            getThumbnail(), getYear(), getQuarter(), getRating(), getStatus(), isReleased());
     }
 
     public static long getSeriesId() {
@@ -36,6 +36,10 @@ public class AnimeTestUtils {
 
     public static Status getStatus() {
         return Status.FINISHED;
+    }
+
+    public static boolean isReleased() {
+        return true;
     }
 
     public static Rating getRating() {
@@ -101,7 +105,7 @@ public class AnimeTestUtils {
 
     public static Anime createAnime() {
         Anime anime = Anime.createAnime(getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(),
-            getThumbnail(), getYear(), getQuarter(), getRating(), getStatus(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null);
+            getThumbnail(), getYear(), getQuarter(), getRating(), getStatus(), isReleased(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null);
         return anime;
     }
 

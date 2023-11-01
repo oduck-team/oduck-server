@@ -196,9 +196,6 @@ include::{snippets}/getAnimes/success/curl-request.adoc[]
 .http-request
 include::{snippets}/getAnimes/success/http-request.adoc[]
 
-.request-param
-include::{snippets}/getAnimes/success/path-parameters.adoc[]
-
 .query-parameters
 include::{snippets}/getAnimes/success/query-parameters.adoc[]
 

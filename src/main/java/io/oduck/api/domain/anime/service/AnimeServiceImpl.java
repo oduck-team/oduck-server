@@ -58,7 +58,7 @@ public class AnimeServiceImpl implements AnimeService{
     @Transactional(readOnly = true)
     public DetailResult getAnimeById(Long animeId) {
 
-        Anime anime = animeRepository.findReleasedAnimeById(animeId)
+        Anime anime = animeRepository.findAnimeByConditions(animeId, true)
                 .orElseThrow(() -> new NotFoundException("Anime"));
 
         anime.increaseViewCount();
@@ -122,8 +122,11 @@ public class AnimeServiceImpl implements AnimeService{
         Series series = createSeries(seriesId);
 
 
-        Anime anime = Anime.createAnime(postReq.getTitle(), postReq.getSummary(), postReq.getBroadcastType(), postReq.getEpisodeCount(), postReq.getThumbnail(),
-            postReq.getYear(), postReq.getQuarter(), postReq.getRating(), postReq.getStatus(), animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, series);
+        Anime anime = Anime.createAnime(
+            postReq.getTitle(), postReq.getSummary(), postReq.getBroadcastType(), postReq.getEpisodeCount(),
+            postReq.getThumbnail(), postReq.getYear(), postReq.getQuarter(), postReq.getRating(), postReq.getStatus(),
+            postReq.isReleased(), animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, series
+        );
 
         animeRepository.save(anime);
     }
@@ -142,8 +145,10 @@ public class AnimeServiceImpl implements AnimeService{
     public void update(Long animeId, PatchAnimeReq req) {
         Anime anime = findAnime(animeId);
 
-        anime.update(req.getTitle(), req.getSummary(), req.getBroadcastType(), req.getEpisodeCount(), req.getThumbnail(), req.getYear(),
-            req.getQuarter(), req.getRating(), req.getStatus());
+        anime.update(
+            req.getTitle(), req.getSummary(), req.getBroadcastType(), req.getEpisodeCount(), req.getThumbnail(), req.getYear(),
+            req.getQuarter(), req.getRating(), req.getStatus(), req.isReleased()
+        );
     }
 
     @Override
