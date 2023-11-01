@@ -42,6 +42,8 @@
 > # docker buildx build --platform {platform} -f {path} -t {tag} .
 >
 > docker buildx build --platform linux/amd64 -f ./dockerfile-dev -t fabeejoo/oduckio-spring .
+>
+> docker buildx build --platform linux/amd64 -f ./dockerfile-prod -t fabeejoo/oduckio-spring:x.x.x .
 > ```
 
 # Promethues
