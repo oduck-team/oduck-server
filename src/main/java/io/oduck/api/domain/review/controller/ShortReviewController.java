@@ -8,8 +8,8 @@ import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewRes;
 import io.oduck.api.domain.review.service.ShortReviewService;
 import io.oduck.api.global.common.OrderDirection;
 import io.oduck.api.global.common.SliceResponse;
+import io.oduck.api.global.security.auth.dto.AuthUser;
 import io.oduck.api.global.security.auth.dto.LoginUser;
-import io.oduck.api.global.security.auth.entity.AuthLocal;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -34,7 +34,15 @@ public class ShortReviewController {
     private final ShortReviewService shortReviewService;
     private final AttractionPointService attractionPointService;
 
-    //애니의 짧은 리뷰 조회
+    @PostMapping
+    public ResponseEntity<?> postShortReview(
+        @LoginUser AuthUser user,
+        @RequestBody @Valid ShortReviewReqDto.PostShortReviewReq req)  {
+        //TODO : 짧은 리뷰 작성
+        shortReviewService.save(user.getId() == null? 0L: user.getId(), req);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/{animeId}")
     public ResponseEntity<?> getShortReviews(
         @PathVariable Long animeId,
@@ -47,18 +55,9 @@ public class ShortReviewController {
         SliceResponse<ShortReviewRes> reviewRes = shortReviewService.getShortReviews(animeId, cursor, sort, order, size);
         return ResponseEntity.ok(reviewRes);
     }
-    @PostMapping
-    public ResponseEntity<?> postShortReview(
-        @LoginUser AuthLocal user,
-        @RequestBody @Valid ShortReviewReqDto.PostShortReviewReq req)  {
-        //TODO : 짧은 리뷰 작성
-        shortReviewService.save(user.getId() == null? 0L: user.getId(), req);
-        return ResponseEntity.ok().build();
-    }
-
     @PatchMapping("/{reviewId}")
     public ResponseEntity<?> patchShortReview(
-        @LoginUser AuthLocal user,
+        @LoginUser AuthUser user,
         @PathVariable Long reviewId,
         @RequestBody @Valid ShortReviewReqDto.PatchShortReviewReq req)  {
         //TODO : 짧은 리뷰 수정
