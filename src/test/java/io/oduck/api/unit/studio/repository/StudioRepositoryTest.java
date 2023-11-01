@@ -30,7 +30,7 @@ public class StudioRepositoryTest {
         void saveStudio() {
             //given
             Studio studio = Studio.builder()
-                    .name("ufortable")
+                    .name("스튜디오A")
                     .build();
 
             Studio savedStudio = studioRepository.save(studio);
