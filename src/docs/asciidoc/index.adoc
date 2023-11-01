@@ -189,6 +189,26 @@ include::{snippets}/getBookmarks/successWithCursor/response-body.adoc[]
 include::{snippets}/getBookmarks/successWithCursor/response-fields.adoc[]
 
 == animes
+=== GET api/v1/animes
+.curl-request
+include::{snippets}/getAnimes/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getAnimes/success/http-request.adoc[]
+
+.query-parameters
+include::{snippets}/getAnimes/success/query-parameters.adoc[]
+
+.http-response
+include::{snippets}/getAnimes/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getAnimes/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getAnimes/success/response-fields.adoc[]
+
+
 === GET api/v1/animes/:id
 
 .curl-request
@@ -210,6 +230,57 @@ include::{snippets}/getAnimeById/success/response-body.adoc[]
 include::{snippets}/getAnimeById/success/response-fields.adoc[]
 ==== 실패 시
 
+== bookmark
+=== POST api/v1/bookmarks
+.curl-request
+include::{snippets}/bookmark/toggleBookmark/save/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/bookmark/toggleBookmark/save/success/http-request.adoc[]
+
+.request-header
+include::{snippets}/bookmark/toggleBookmark/save/success/request-headers.adoc[]
+
+.request-body
+include::{snippets}/bookmark/toggleBookmark/save/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/bookmark/toggleBookmark/save/success/request-fields.adoc[]
+
+==== 저장 성공시
+.http-response
+include::{snippets}/bookmark/toggleBookmark/save/success/http-response.adoc[]
+
+==== 삭제 성공시
+.http-response
+include::{snippets}/bookmark/toggleBookmark/delete/success/http-response.adoc[]
+
+=== GET api/v1/bookmarks/:animeId
+.curl-request
+include::{snippets}/bookmark/checkBookmarked/exist/curl-request.adoc[]
+
+.http-request
+include::{snippets}/bookmark/checkBookmarked/exist/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/bookmark/checkBookmarked/exist/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/bookmark/checkBookmarked/exist/request-headers.adoc[]
+
+==== 북마크가 존재할 경우
+.http-response
+include::{snippets}/bookmark/checkBookmarked/exist/http-response.adoc[]
+
+.response-body
+include::{snippets}/bookmark/checkBookmarked/exist/response-body.adoc[]
+
+.response-fields
+include::{snippets}/bookmark/checkBookmarked/exist/response-fields.adoc[]
+
+==== 북마크가 존재하지 않을 경우
+.http-response
+include::{snippets}/bookmark/checkBookmarked/notExist/http-response.adoc[]
 
 == shortReview
 

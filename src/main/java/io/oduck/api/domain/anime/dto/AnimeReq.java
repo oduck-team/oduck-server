@@ -7,9 +7,7 @@ import io.oduck.api.domain.anime.entity.Status;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.ArrayList;
@@ -50,6 +48,8 @@ public class AnimeReq {
         @NotNull(message = "방영 상태를 입력하세요.")
         private Status status;
 
+        private boolean isReleased = false;
+
         private List<Long> originalAuthorIds;
 
         private List<Long> studioIds;
@@ -61,7 +61,7 @@ public class AnimeReq {
         private Long seriesId;
 
         public PostReq (String title, String summary, BroadcastType broadcastType,
-            int episodeCount, String thumbnail, int year, Quarter quarter, Rating rating, Status status,
+            int episodeCount, String thumbnail, int year, Quarter quarter, Rating rating, Status status, Boolean isReleased,
             List<Long> originalAuthorIds, List<Long> studioIds, List<AnimeVoiceActorReq> voiceActors,
             List<Long> genreIds, Long seriesId) {
 
@@ -74,6 +74,10 @@ public class AnimeReq {
             this.quarter = quarter;
             this.rating = rating;
             this.status = status;
+
+            if(isReleased != null) {
+                this.isReleased = isReleased;
+            }
 
             if(originalAuthorIds == null){
                 this.originalAuthorIds = new ArrayList<>();
@@ -104,7 +108,6 @@ public class AnimeReq {
     }
 
     @Getter
-    @AllArgsConstructor
     public static class PatchAnimeReq{
         @NotBlank
         @Length(min = 1, max = 50, message = "글자 수는 0~50을 허용합니다.")
@@ -136,6 +139,25 @@ public class AnimeReq {
 
         @NotNull(message = "방영 상태를 입력하세요.")
         private Status status;
+
+        private boolean isReleased = false;
+
+        public PatchAnimeReq(String title, String summary, BroadcastType broadcastType,
+            int episodeCount, String thumbnail, int year, Quarter quarter, Rating rating, Status status,
+            Boolean isReleased) {
+            this.title = title;
+            this.summary = summary;
+            this.broadcastType = broadcastType;
+            this.episodeCount = episodeCount;
+            this.thumbnail = thumbnail;
+            this.year = year;
+            this.quarter = quarter;
+            this.rating = rating;
+            this.status = status;
+            if(isReleased != null){
+                this.isReleased = isReleased;
+            }
+        }
     }
 
     @Getter
@@ -200,5 +222,47 @@ public class AnimeReq {
     @NoArgsConstructor
     public static class PatchSeriesIdReq{
         private Long seriesId;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum Sort {
+        LATEST("createdAt"),
+        REVIEW_COUNT("reviewCount"),
+        SCORE("score");
+
+        private final String sort;
+    }
+
+    @Getter
+    @ToString
+    public static class SearchFilter {
+        List<Long> genreIds;
+        List<BroadcastType> broadcastTypes;
+        List<Status> statuses;
+        List<EpisodeCountEnum> episodeCounts;
+        List<Integer> years;
+        List<Quarter> quarters;
+
+        public SearchFilter(List<Long> genreIds, List<BroadcastType> broadcastTypes, List<Status> statuses, List<EpisodeCountEnum> episodeCounts, List<Integer> years, List<Quarter> quarters) {
+            this.genreIds = genreIds;
+            this.broadcastTypes = broadcastTypes;
+            this.statuses = statuses;
+            this.episodeCounts = episodeCounts;
+            this.years = years;
+            this.quarters = quarters;
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum EpisodeCountEnum {
+        UNDER_TWELVE(12),
+        UNDER_TWENTY_FOUR(24),
+        UNDER_FORTY_EIGHT(48),
+        UNDER_HUNDRED(100),
+        OVER_HUNDRED(100);
+
+        private final int count;
     }
 }

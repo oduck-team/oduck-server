@@ -58,6 +58,8 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
             .id(
                 ((CustomOAuth2User)principal).getId()
             )
+            .role(
+                ((CustomOAuth2User)principal).getAuthorities().stream().findFirst().get().getAuthority().toUpperCase())
             .loginType(
                 ((CustomOAuth2User)principal).getLoginType()
             )
@@ -68,6 +70,9 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         return AuthUser.builder()
             .id(
                 ((CustomUserDetails)principal).getId()
+            )
+            .role(
+                ((CustomUserDetails)principal).getAuthorities().stream().findFirst().get().getAuthority().toUpperCase()
             )
             .loginType(
                 ((CustomUserDetails)principal).getLoginType()

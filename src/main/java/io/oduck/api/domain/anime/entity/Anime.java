@@ -247,7 +247,7 @@ public class Anime extends BaseEntity {
   }
 
   public void update(String title, String summary, BroadcastType broadcastType, int episodeCount,
-      String thumbnail, int year, Quarter quarter, Rating rating, Status status){
+      String thumbnail, int year, Quarter quarter, Rating rating, Status status, boolean isReleased){
     this.title = title;
     this.summary = summary;
     this.broadcastType = broadcastType;
@@ -257,6 +257,7 @@ public class Anime extends BaseEntity {
     this.quarter = quarter;
     this.rating = rating;
     this.status = status;
+    this.isReleased = isReleased;
   }
 
   public void update(Series series){
@@ -264,7 +265,7 @@ public class Anime extends BaseEntity {
   }
 
   public static Anime createAnime(String title, String summary, BroadcastType broadcastType, int episodeCount,
-      String thumbnail, int year, Quarter quarter, Rating rating, Status status,
+      String thumbnail, int year, Quarter quarter, Rating rating, Status status, boolean isReleased,
       List<AnimeOriginalAuthor> animeOriginalAuthors, List<AnimeStudio> animeStudios, List<AnimeVoiceActor> animeVoiceActors, List<AnimeGenre> animeGenres, Series series) {
     Anime anime = new Anime();
     // dto의 값으로 anime 초기화
@@ -277,13 +278,13 @@ public class Anime extends BaseEntity {
     anime.quarter = quarter;
     anime.rating = rating;
     anime.status = status;
-    anime.isReleased = false;
+    anime.isReleased = isReleased;
     anime.viewCount = 0;
     anime.reviewCount = 0;
     anime.bookmarkCount = 0;
     anime.starRatingScoreTotal = 0;
     anime.starRatingCount = 0;
-    
+
     // 연결 엔티티 설정
     anime.updateAnimeOriginalAuthors(animeOriginalAuthors);
     anime.updateAnimeStudios(animeStudios);

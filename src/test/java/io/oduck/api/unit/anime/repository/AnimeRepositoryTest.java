@@ -1,5 +1,7 @@
 package io.oduck.api.unit.anime.repository;
 
+import io.oduck.api.domain.anime.dto.AnimeReq;
+import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.domain.anime.entity.*;
 import io.oduck.api.domain.anime.repository.*;
 import io.oduck.api.domain.genre.entity.Genre;
@@ -12,18 +14,24 @@ import io.oduck.api.domain.studio.entity.Studio;
 import io.oduck.api.domain.studio.repository.StudioRepository;
 import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.domain.voiceActor.repository.VoiceActorRepository;
+import io.oduck.api.global.common.OrderDirection;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
 import static io.oduck.api.global.utils.AnimeTestUtils.*;
+import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -165,8 +173,8 @@ public class AnimeRepositoryTest {
             // 애니 생성
             Anime anime = Anime.createAnime(
                 getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), animeOriginalAuthors,
-                animeStudios, animeVoiceActors, animeGenres, series
+                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, series
             );
 
             Anime savedAnime = animeRepository.save(anime);
@@ -180,7 +188,7 @@ public class AnimeRepositoryTest {
             assertThat(savedAnime.getQuarter()).isEqualTo(getQuarter());
             assertThat(savedAnime.getRating()).isEqualTo(getRating());
             assertThat(savedAnime.getStatus()).isEqualTo(getStatus());
-            assertThat(savedAnime.isReleased()).isFalse();
+            assertThat(savedAnime.isReleased()).isSameAs(isReleased());
             assertThat(savedAnime.getViewCount()).isEqualTo(0);
             assertThat(savedAnime.getReviewCount()).isEqualTo(0);
             assertThat(savedAnime.getBookmarkCount()).isEqualTo(0);
@@ -203,8 +211,8 @@ public class AnimeRepositoryTest {
 
             Anime anime = Anime.createAnime(
                 getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), animeOriginalAuthors,
-                animeStudios, animeVoiceActors, animeGenres, null
+                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
             );
 
             Anime savedAnime = animeRepository.save(anime);
@@ -218,7 +226,7 @@ public class AnimeRepositoryTest {
 
     @Nested
     @DisplayName("수정")
-    class patchAnime {
+    class PatchAnime {
 
         @Test
         @DisplayName("애니 원작 작가 수정 성공")
@@ -253,8 +261,8 @@ public class AnimeRepositoryTest {
             // 애니 생성
             Anime anime = Anime.createAnime(
                 getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), animeOriginalAuthors,
-                animeStudios, animeVoiceActors, animeGenres, null
+                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
             );
 
             Long savedAnimeId = animeRepository.saveAndFlush(anime).getId();
@@ -321,8 +329,8 @@ public class AnimeRepositoryTest {
             // 애니 생성
             Anime anime = Anime.createAnime(
                 getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), animeOriginalAuthors,
-                animeStudios, animeVoiceActors, animeGenres, null
+                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
             );
 
             Long savedAnimeId = animeRepository.saveAndFlush(anime).getId();
@@ -388,8 +396,8 @@ public class AnimeRepositoryTest {
             // 애니 생성
             Anime anime = Anime.createAnime(
                 getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), animeOriginalAuthors,
-                animeStudios, animeVoiceActors, animeGenres, null
+                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
             );
 
             Long savedAnimeId = animeRepository.saveAndFlush(anime).getId();
@@ -456,8 +464,8 @@ public class AnimeRepositoryTest {
             // 애니 생성
             Anime anime = Anime.createAnime(
                 getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), animeOriginalAuthors,
-                animeStudios, animeVoiceActors, animeGenres, null
+                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
             );
 
             Long savedAnimeId = animeRepository.saveAndFlush(anime).getId();
@@ -488,6 +496,54 @@ public class AnimeRepositoryTest {
             assertThat(firstGenreName).isEqualTo(updatingGenreName);
             assertThat(findAnimeGenres.size()).isNotEqualTo(firstInsertSize);
             assertThat(findAnimeGenres.size()).isEqualTo(1);
+        }
+    }
+
+    @Nested
+    @DisplayName("조회")
+    class GetAnime{
+        @Test
+        @DisplayName("애니 조회 성공")
+        void getAnimes() {
+            //given
+            String query = null;
+            AnimeReq.Sort sort = AnimeReq.Sort.LATEST;
+            OrderDirection order = OrderDirection.DESC;
+            int size = 10;
+            String cursor = null;
+
+            Pageable pageable = applyPageableForNonOffset(
+                    size,
+                    sort.getSort(),
+                    order.getOrder()
+            );
+
+            SearchFilterDsl searchFilter = new SearchFilterDsl(null, null, null, null, null);
+
+            //when
+            Slice<SearchResult> animes = animeRepository.findAnimesByCondition(
+                    query, cursor, pageable, searchFilter
+            );
+
+            //then
+            assertThat(animes).isNotNull();
+            assertThat(animes.getContent().get(0).getId()).isNotNull();
+            assertThat(animes.getContent().get(0).getStarScoreAvg()).isNotNull();
+            assertThat(animes.getContent().get(0).getThumbnail()).isNotNull();
+            assertThat(animes.getContent().get(0).getStarScoreAvg()).isNotNull();
+        }
+
+        @Test
+        @DisplayName("애니 상세 조회 성공")
+        void getAnimeById(){
+            //given
+            Long animeId = 1L;
+
+            //when
+            Optional<Anime> optionalAnime = animeRepository.findById(animeId);
+
+            //then
+            assertThat(optionalAnime.isPresent()).isTrue();
         }
     }
 }

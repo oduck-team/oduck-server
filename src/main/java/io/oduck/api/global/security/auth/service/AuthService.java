@@ -5,6 +5,7 @@ import io.oduck.api.domain.member.entity.MemberProfile;
 import io.oduck.api.domain.member.entity.Role;
 import io.oduck.api.domain.member.repository.MemberProfileRepository;
 import io.oduck.api.global.exception.UnauthorizedException;
+import io.oduck.api.global.security.auth.dto.AuthResDto.AdminStatus;
 import io.oduck.api.global.security.auth.dto.AuthResDto.Status;
 import io.oduck.api.global.security.auth.dto.AuthUser;
 import io.oduck.api.global.security.auth.dto.LocalAuthDto;
@@ -29,16 +30,26 @@ public class AuthService {
     private final MemberProfileRepository memberProfileRepository;
     private final HttpSession httpSession;
 
-    public Status getStatus(Long memberId) {
-        MemberProfile memberProfile = memberProfileRepository.findByMemberId(memberId)
+    public Status getStatus(AuthUser user) {
+        MemberProfile memberProfile = memberProfileRepository.findByMemberId(user.getId())
             .orElseThrow(() -> new UnauthorizedException("UnAuthorized"));
 
-        return Status.builder()
+        Status status = Status.builder()
+            .memberId(user.getId())
             .name(memberProfile.getName())
             .description(memberProfile.getInfo())
             .thumbnail(memberProfile.getThumbnail())
             .point(memberProfile.getPoint())
             .build();
+
+        if (user.getRole().equals("ADMIN")) {
+            status = AdminStatus.builder()
+                .status(status)
+                .role(user.getRole())
+                .build();
+        }
+
+        return status;
     }
 
     public AuthLocal getAuthLocal(String email) {
