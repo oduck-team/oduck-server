@@ -9,6 +9,7 @@ import static io.oduck.api.global.utils.AnimeTestUtils.getSummary;
 import static io.oduck.api.global.utils.AnimeTestUtils.getThumbnail;
 import static io.oduck.api.global.utils.AnimeTestUtils.getTitle;
 import static io.oduck.api.global.utils.AnimeTestUtils.getYear;
+import static io.oduck.api.global.utils.AnimeTestUtils.isReleased;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -68,8 +69,8 @@ public class AttractionPointRepositoryTest {
 
             Anime createAnime = Anime.createAnime(
                 getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), animeOriginalAuthors,
-                animeStudios, animeVoiceActors, animeGenres, null
+                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
             );
 
             Anime anime = animeRepository.saveAndFlush(createAnime);
