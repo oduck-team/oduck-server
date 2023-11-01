@@ -59,6 +59,60 @@ public class ShortReviewControllerTest {
     private final String BASE_URL = "/short-reviews";
 
     @Nested
+    @DisplayName("짧은 리뷰 작성")
+    class PostShortReviews{
+
+        @DisplayName("리뷰 작성 성공시 Http Status 200 ok 반환")
+        @Test
+        @WithCustomMockMember(id = 2L, email = "john", password = "Qwer!234", role = Role.MEMBER)
+        void postShortReview() throws Exception{
+            //given
+            PostShortReviewReq req = ShortReviewTestUtils.createPostShoreReviewReq();
+            String content = gson.toJson(req);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                post(BASE_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+                    .content(content));
+
+            //then
+            actions
+                .andExpect(status().isOk())
+                .andDo(document("postShortReview/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.COOKIE)
+                            .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                            .description("Header Cookie, 세션 쿠키")
+                    ),
+                        requestFields(attributes(key("title").value("Fields for shortReview creation")),
+                        fieldWithPath("animeId")
+                            .type(JsonFieldType.NUMBER)
+                            .attributes(field("constraints","애니메 ID, NotNull, Min(1)"))
+                            .description("리뷰를 등록할 애니 고유 식별 번호"),
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "String만 가능합니다"))
+                            .description("리뷰를 등록할 회원의 이름"),
+                        fieldWithPath("hasSpoiler")
+                            .type(JsonFieldType.BOOLEAN)
+                            .attributes(field("constraints", "true 또는 false."))
+                            .description("스포일러 유무"),
+                        fieldWithPath("content")
+                        .type(JsonFieldType.STRING)
+                        .attributes(field("constraints", "최소 10에서 100자 까지 입력 가능합니다."))
+                        .description("짧은 리뷰 내용"))
+                    )
+                );
+        }
+        //TODO: 리뷰 작성 실패 시
+    }
+
+    @Nested
     @DisplayName("짧은 리뷰 조회")
     class GetShortReviews{
 
@@ -276,59 +330,6 @@ public class ShortReviewControllerTest {
 
     }
 
-    @Nested
-    @DisplayName("짧은 리뷰 작성")
-    class PostShortReviews{
-
-        @DisplayName("리뷰 작성 성공시 Http Status 200 ok 반환")
-        @Test
-        @WithCustomMockMember(id = 2L, email = "john", password = "Qwer!234", role = Role.MEMBER)
-        void postShortReview() throws Exception{
-            //given
-            PostShortReviewReq req = ShortReviewTestUtils.createPostShoreReviewReq();
-            String content = gson.toJson(req);
-
-            //when
-            ResultActions actions = mockMvc.perform(
-                post(BASE_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
-                    .content(content));
-
-            //then
-            actions
-                .andExpect(status().isOk())
-                .andDo(document("postShortReview/success",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                        headerWithName(HttpHeaders.COOKIE)
-                            .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
-                            .description("Header Cookie, 세션 쿠키")
-                    ),
-                        requestFields(attributes(key("title").value("Fields for shortReview creation")),
-                        fieldWithPath("animeId")
-                            .type(JsonFieldType.NUMBER)
-                            .attributes(field("constraints","애니메 ID, NotNull, Min(1)"))
-                            .description("리뷰를 등록할 애니 고유 식별 번호"),
-                        fieldWithPath("name")
-                            .type(JsonFieldType.STRING)
-                            .attributes(field("constraints", "String만 가능합니다"))
-                            .description("리뷰를 등록할 회원의 이름"),
-                        fieldWithPath("hasSpoiler")
-                            .type(JsonFieldType.BOOLEAN)
-                            .attributes(field("constraints", "true 또는 false."))
-                            .description("스포일러 유무"),
-                        fieldWithPath("content")
-                        .type(JsonFieldType.STRING)
-                        .attributes(field("constraints", "최소 10에서 100자 까지 입력 가능합니다."))
-                        .description("짧은 리뷰 내용"))
-                    )
-                );
-        }
-        //TODO: 리뷰 작성 실패 시
-    }
 
     @Nested
     @DisplayName("짧은 리뷰 수정")

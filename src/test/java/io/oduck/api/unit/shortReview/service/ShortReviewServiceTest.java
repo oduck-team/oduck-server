@@ -61,6 +61,34 @@ public class ShortReviewServiceTest {
     private MemberRepository memberRepository;
 
     @Nested
+    @DisplayName("짧은 리뷰 작성")
+    class PostShortReview{
+
+        @Test
+        @DisplayName("짧은 리뷰 작성 성공")
+        void postShortReview(){
+            //given
+            Long animeId = 1L;
+            Long memberId = 1L;
+            PostShortReviewReq shortReviewReq = createPostShoreReviewReq();
+            ShortReview shortReview = createShortReview();
+
+            Anime anime = createAnime();
+            given(animeRepository.findByIdForUpdate(animeId)).willReturn(Optional.of(anime));
+
+            Member member = new MemberStub().getMember();
+            given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
+
+            //when
+            shortReviewService.save(memberId,shortReviewReq);
+
+            //then
+            verify(animeRepository,times(1)).findByIdForUpdate(any());
+            verify(memberRepository,times(1)).findById(any());
+        }
+    }
+
+    @Nested
     @DisplayName("짧은 리뷰 조회")
     class GetShortReviews{
 
@@ -91,34 +119,6 @@ public class ShortReviewServiceTest {
             assertEquals(sampleSlice.getSize(), result.getItems().size());
             assertNotNull(result.getCursor());
             assertFalse(result.isHasNext());
-        }
-    }
-
-    @Nested
-    @DisplayName("짧은 리뷰 작성")
-    class PostShortReview{
-
-        @Test
-        @DisplayName("짧은 리뷰 작성 성공")
-        void postShortReview(){
-            //given
-            Long animeId = 1L;
-            Long memberId = 1L;
-            PostShortReviewReq shortReviewReq = createPostShoreReviewReq();
-            ShortReview shortReview = createShortReview();
-
-            Anime anime = createAnime();
-            given(animeRepository.findByIdForUpdate(animeId)).willReturn(Optional.of(anime));
-
-            Member member = new MemberStub().getMember();
-            given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
-
-            //when
-            shortReviewService.save(memberId,shortReviewReq);
-
-            //then
-            verify(animeRepository,times(1)).findByIdForUpdate(any());
-            verify(memberRepository,times(1)).findById(any());
         }
     }
 

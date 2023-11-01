@@ -54,30 +54,6 @@ public class ShortReviewRepositoryTest {
 
 
     @Nested
-    @DisplayName("리뷰 조회")
-    class GetShortReviews{
-
-        @Test
-        @DisplayName("리뷰 조회 성공")
-        void getShortReviews(){
-            //given
-            Long animeId = 1L;
-            Pageable pageable = applyPageableForNonOffset(10, "createdAt", "desc");
-
-            Slice<ShortReviewDsl> shortReviewDsl = shortReviewRepository.selectShortReviews(animeId, null, pageable);
-
-            assertNotNull(shortReviewDsl);
-            assertNotNull(shortReviewDsl.getContent().get(0).getAnimeId());
-            assertNotNull(shortReviewDsl.getContent().get(0).getName());
-            assertNotNull(shortReviewDsl.getContent().get(0).getThumbnail());
-            assertNotNull(shortReviewDsl.getContent().get(0).getScore());
-            assertNotNull(shortReviewDsl.getContent().get(0).getContent());
-            assertNotNull(shortReviewDsl.getContent().get(0).getLikeCount());
-            assertNotNull(shortReviewDsl.getContent().get(0).getCreatedAt());
-        }
-    }
-
-    @Nested
     @DisplayName("리뷰 등록")
     class PostShortReview{
 
@@ -127,6 +103,30 @@ public class ShortReviewRepositoryTest {
             assertThat(saveShortReview.isHasSpoiler()).isEqualTo(shortReview.isHasSpoiler());
         }
     }
+    @Nested
+    @DisplayName("리뷰 조회")
+    class GetShortReviews{
+
+        @Test
+        @DisplayName("리뷰 조회 성공")
+        void getShortReviews(){
+            //given
+            Long animeId = 1L;
+            Pageable pageable = applyPageableForNonOffset(10, "createdAt", "desc");
+
+            Slice<ShortReviewDsl> shortReviewDsl = shortReviewRepository.selectShortReviews(animeId, null, pageable);
+
+            assertNotNull(shortReviewDsl);
+            assertNotNull(shortReviewDsl.getContent().get(0).getAnimeId());
+            assertNotNull(shortReviewDsl.getContent().get(0).getName());
+            assertNotNull(shortReviewDsl.getContent().get(0).getThumbnail());
+            assertNotNull(shortReviewDsl.getContent().get(0).getScore());
+            assertNotNull(shortReviewDsl.getContent().get(0).getContent());
+            assertNotNull(shortReviewDsl.getContent().get(0).getLikeCount());
+            assertNotNull(shortReviewDsl.getContent().get(0).getCreatedAt());
+        }
+    }
+
 
     @Nested
     @DisplayName("리뷰 수정")
