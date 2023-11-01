@@ -17,7 +17,6 @@ services:
       - '8000:8000'
     env_file:
       - .env.spring
-
     volumes:
       # 로컬 logs < - > 컨테이너 logs 연결
       # 로컬 /logs랑 안 섞이게 /data/logs로 연결
