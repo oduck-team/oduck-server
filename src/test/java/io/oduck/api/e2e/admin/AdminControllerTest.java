@@ -461,7 +461,7 @@ public class AdminControllerTest {
         @Test
         @DisplayName("등록 성공 시 Http Status 204 반환")
         void postOriginalAuthor() throws Exception {
-            String name = "고토게 코요하루";
+            String name = "원작작가A";
             OriginalAuthorReq.PostReq postReq = new OriginalAuthorReq.PostReq(name);
             String content = gson.toJson(postReq);
 
@@ -484,6 +484,37 @@ public class AdminControllerTest {
                                             .description("원작 작가의 이름")
                             )
                     ));
+        }
+
+        @Test
+        @DisplayName("등록 실패 - 중복된 이름 : Http Status 409 반환")
+        void whenDuplicatedNameThenThrowException() throws Exception {
+            //given
+            String name = "고토게 코요하루";
+            OriginalAuthorReq.PostReq postReq = new OriginalAuthorReq.PostReq(name);
+            String content = gson.toJson(postReq);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                post(ADMIN_URL + "/original-authors")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(content)
+            );
+
+            //then
+            actions
+                .andExpect(status().isConflict())
+                .andDo(document("postOriginalAuthor/fail",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestFields(attributes(key("title").value("Fields for original author creation")),
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "공백을 허용하지 않습니다. 1~50자를 허용합니다."))
+                            .description("원작 작가의 이름")
+                    )
+                ));
         }
     }
 
@@ -536,13 +567,44 @@ public class AdminControllerTest {
                     .andDo(document("postVoiceActor/success",
                             preprocessRequest(prettyPrint()),
                             preprocessResponse(prettyPrint()),
-                            requestFields(attributes(key("title").value("Fields for original author creation")),
+                            requestFields(attributes(key("title").value("Fields for voice actor creation")),
                                     fieldWithPath("name")
                                             .type(JsonFieldType.STRING)
                                             .attributes(field("constraints", "공백을 허용하지 않습니다. 1~50자를 허용합니다."))
                                             .description("성우의 이름")
                             )
                     ));
+        }
+
+        @Test
+        @DisplayName("등록 실패 - 중복된 이름 : Http Status 409 반환")
+        void whenDuplicatedNameThenThrowException() throws Exception {
+            //given
+            String name = "하나에 나츠키";
+            VoiceActorReq.PostReq postReq = new VoiceActorReq.PostReq(name);
+            String content = gson.toJson(postReq);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                post(ADMIN_URL + "/voice-actors")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(content)
+            );
+
+            //then
+            actions
+                .andExpect(status().isConflict())
+                .andDo(document("postVoiceActor/fail",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestFields(attributes(key("title").value("Fields for original author creation")),
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "공백을 허용하지 않습니다. 1~50자를 허용합니다."))
+                            .description("성우의 이름")
+                    )
+                ));
         }
     }
 
@@ -578,8 +640,8 @@ public class AdminControllerTest {
 
         @Test
         @DisplayName("등록 성공 시 Http Status 204 반환")
-        void postVoiceActor() throws Exception {
-            String name = "ufortable";
+        void postStudio() throws Exception {
+            String name = "스튜디오A";
             StudioReq.PostReq postReq = new StudioReq.PostReq(name);
             String content = gson.toJson(postReq);
 
@@ -602,6 +664,37 @@ public class AdminControllerTest {
                                             .description("스튜디오의 이름")
                             )
                     ));
+        }
+
+        @Test
+        @DisplayName("등록 실패 - 중복된 이름 : Http Status 409 반환")
+        void whenDuplicatedNameThenThrowException() throws Exception {
+            //given
+            String name = "ufortable";
+            StudioReq.PostReq postReq = new StudioReq.PostReq(name);
+            String content = gson.toJson(postReq);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                post(ADMIN_URL + "/studios")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(content)
+            );
+
+            //then
+            actions
+                .andExpect(status().isConflict())
+                .andDo(document("postStudio/fail",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestFields(attributes(key("title").value("Fields for studio creation")),
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "공백을 허용하지 않습니다. 1~50자를 허용합니다."))
+                            .description("스튜디오의 이름")
+                    )
+                ));
         }
     }
 
@@ -639,7 +732,7 @@ public class AdminControllerTest {
         @Test
         @DisplayName("등록 성공 시 Http Status 204 반환")
         void postVoiceActor() throws Exception {
-            String name = "판타지";
+            String name = "이세계";
             GenreReq.PostReq postReq = new GenreReq.PostReq(name);
             String content = gson.toJson(postReq);
 
@@ -662,6 +755,37 @@ public class AdminControllerTest {
                                             .description("장르의 이름")
                             )
                     ));
+        }
+
+        @Test
+        @DisplayName("등록 실패 - 중복된 이름 : Http Status 409 반환")
+        void whenDuplicatedNameThenThrowException() throws Exception {
+            //given
+            String name = "판타지";
+            GenreReq.PostReq postReq = new GenreReq.PostReq(name);
+            String content = gson.toJson(postReq);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                post(ADMIN_URL + "/genres")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(content)
+            );
+
+            //then
+            actions
+                .andExpect(status().isConflict())
+                .andDo(document("postGenre/fail",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestFields(attributes(key("title").value("Fields for genre creation")),
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "공백을 허용하지 않습니다. 1~15자를 허용합니다."))
+                            .description("장르의 이름")
+                    )
+                ));
         }
     }
 
@@ -699,7 +823,7 @@ public class AdminControllerTest {
         @Test
         @DisplayName("등록 성공 시 Http Status 204 반환")
         void postSeries() throws Exception {
-            String title = "귀멸의 칼날";
+            String title = "스파이 패밀리";
             SeriesReq.PostReq postReq = new SeriesReq.PostReq(title);
             String content = gson.toJson(postReq);
 
@@ -722,6 +846,37 @@ public class AdminControllerTest {
                                             .description("시리즈의 제목")
                             )
                     ));
+        }
+
+        @Test
+        @DisplayName("등록 실패 - 중복된 이름 : Http Status 409 반환")
+        void whenDuplicatedNameThenThrowException() throws Exception {
+            //given
+            String name = "원피스";
+            SeriesReq.PostReq postReq = new SeriesReq.PostReq(name);
+            String content = gson.toJson(postReq);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                post(ADMIN_URL + "/series")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(content)
+            );
+
+            //then
+            actions
+                .andExpect(status().isConflict())
+                .andDo(document("postSeries/fail",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestFields(attributes(key("title").value("Fields for series creation")),
+                        fieldWithPath("title")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "공백을 허용하지 않습니다. 1~50자를 허용합니다."))
+                            .description("시리즈의 제목")
+                    )
+                ));
         }
     }
 
