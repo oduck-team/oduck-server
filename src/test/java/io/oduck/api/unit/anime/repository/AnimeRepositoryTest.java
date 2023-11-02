@@ -15,12 +15,15 @@ import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.oduck.api.domain.anime.dto.AnimeReq;
+import io.oduck.api.domain.anime.dto.AnimeReq.EpisodeCountEnum;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.entity.AnimeGenre;
 import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
 import io.oduck.api.domain.anime.entity.AnimeStudio;
 import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
+import io.oduck.api.domain.anime.entity.BroadcastType;
+import io.oduck.api.domain.anime.entity.Quarter;
 import io.oduck.api.domain.anime.repository.AnimeGenreRepository;
 import io.oduck.api.domain.anime.repository.AnimeOriginalAuthorRepository;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
@@ -518,6 +521,11 @@ public class AnimeRepositoryTest {
     @Nested
     @DisplayName("조회")
     class GetAnime{
+        List<Long> genreIds = new ArrayList<>();
+        List<BroadcastType> broadcastTypes = new ArrayList<>();
+        List<EpisodeCountEnum> episodeCountEnums = new ArrayList<>();
+        List<Integer> years = new ArrayList<>();
+        List<Quarter> quarters = new ArrayList<>();
         @Test
         @DisplayName("애니 조회 성공")
         void getAnimes() {
@@ -534,7 +542,7 @@ public class AnimeRepositoryTest {
                     order.getOrder()
             );
 
-            SearchFilterDsl searchFilter = new SearchFilterDsl(null, null, null, null, null);
+            SearchFilterDsl searchFilter = new SearchFilterDsl(genreIds, broadcastTypes, episodeCountEnums, years, quarters);
 
             //when
             Slice<SearchResult> animes = animeRepository.findAnimesByCondition(
