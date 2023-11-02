@@ -258,7 +258,7 @@ public class ShortReviewControllerTest {
                 .andExpect(jsonPath("$.size").exists())
                 .andExpect(jsonPath("$.cursor").exists())
                 .andExpect(jsonPath("$.hasNext").exists())
-                .andDo(document("getShortReviews/success",
+                .andDo(document("getShortReviews/withCursor/success",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     pathParameters(
