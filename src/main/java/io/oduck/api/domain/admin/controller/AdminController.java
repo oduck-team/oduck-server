@@ -49,6 +49,18 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
+    // 관리자 애니 조회 (isReleased = false도 조회)
+//    @GetMapping("/animes")
+//    public ResponseEntity<Object> getAnimes(
+//        Pageable pageable, String query, SearchCondition condition
+//    ){
+//
+//        //TODO: 애니 조회 로직 구현.
+//        Page<GetAnime> res = adminAnimeService.getAnimes(pageable, query, condition);
+//        return ResponseEntity
+//            .ok(PageResponse.of(null));
+//    }
+
     //애니 관련 수정
     @PatchMapping("/animes/{animeId}")
     public ResponseEntity<Object> patchAnime(
@@ -56,6 +68,16 @@ public class AdminController {
     ){
 
         animeService.update(animeId, req);
+
+        return ResponseEntity.noContent().build();
+    }
+
+
+    // 애니 삭제
+    @DeleteMapping("/animes/{animeId}")
+    public ResponseEntity<Object> deleteAnime(@PathVariable Long animeId) {
+
+        animeService.delete(animeId);
 
         return ResponseEntity.noContent().build();
     }
@@ -112,35 +134,7 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
-    // 애니 삭제
-//    @DeleteMapping("/animes/{animeId}")
-//    public ResponseEntity<Object> deleteAnime(@PathVariable Long animeId){
-//
-//        //TODO: 애니 삭제 로직 구현. (애니를 실제로 삭제하지 않음)
-//        animeService.delete(animeId);
-//        return ResponseEntity.noContent().build();
-//    }
-
-//     관리자 애니 조회 (isReleased = false도 조회)
-//    @GetMapping("/animes")
-//    public ResponseEntity<Object> getAnimes(
-//        Pageable pageable, String query, SearchCondition condition
-//    ){
-//
-//        //TODO: 애니 조회 로직 구현.
-//        Page<GetAnime> res = adminAnimeService.getAnimes(pageable, query, condition);
-//        return ResponseEntity
-//            .ok(PageResponse.of(null));
-//    }
-
-    @GetMapping("/original-authors")
-    public ResponseEntity<Object> getOriginalAuthors(){
-
-        List<OriginalAuthorRes> originalAuthors = originalAuthorService.getOriginalAuthors();
-
-        return ResponseEntity.ok(originalAuthors);
-    }
-
+    // 원작 작가 추가
     @PostMapping("/original-authors")
     public ResponseEntity<Object> postOriginalAuthor(@RequestBody @Valid OriginalAuthorReq.PostReq req) {
 
@@ -149,14 +143,16 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/voice-actors")
-    public ResponseEntity<Object> getVoiceActors() {
+    // 원작 작가 조회
+    @GetMapping("/original-authors")
+    public ResponseEntity<Object> getOriginalAuthors(){
 
-        List<VoiceActorRes> voiceActors = voiceActorService.getVoiceActors();
+        List<OriginalAuthorRes> originalAuthors = originalAuthorService.getOriginalAuthors();
 
-        return ResponseEntity.ok(voiceActors);
+        return ResponseEntity.ok(originalAuthors);
     }
 
+    // 성우 추가
     @PostMapping("/voice-actors")
     public ResponseEntity<Object> postVoiceActor(@RequestBody @Valid VoiceActorReq.PostReq req) {
 
@@ -165,14 +161,16 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/studios")
-    public ResponseEntity<Object> getStudios() {
+    // 성우 조회
+    @GetMapping("/voice-actors")
+    public ResponseEntity<Object> getVoiceActors() {
 
-        List<StudioRes> studios = studioService.getStudios();
+        List<VoiceActorRes> voiceActors = voiceActorService.getVoiceActors();
 
-        return ResponseEntity.ok(studios);
+        return ResponseEntity.ok(voiceActors);
     }
 
+    // 스튜디오 추가
     @PostMapping("/studios")
     public ResponseEntity<Object> postStudio(@RequestBody @Valid StudioReq.PostReq req) {
 
@@ -181,14 +179,16 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/genres")
-    public ResponseEntity<Object> getGenres(){
+    // 스튜디오 조회
+    @GetMapping("/studios")
+    public ResponseEntity<Object> getStudios() {
 
-        List<GenreRes> genres = genreService.getGenres();
+        List<StudioRes> studios = studioService.getStudios();
 
-        return ResponseEntity.ok(genres);
+        return ResponseEntity.ok(studios);
     }
 
+    // 장르 추가
     @PostMapping("/genres")
     public ResponseEntity<Object> postGenre(@RequestBody @Valid GenreReq.PostReq req) {
 
@@ -197,19 +197,30 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/series")
-    public ResponseEntity<Object> getSeries() {
+    // 장르 조회
+    @GetMapping("/genres")
+    public ResponseEntity<Object> getGenres(){
 
-        List<SeriesRes> seriesList = seriesService.getSeries();
+        List<GenreRes> genres = genreService.getGenres();
 
-        return ResponseEntity.ok(seriesList);
+        return ResponseEntity.ok(genres);
     }
 
+    // 시리즈 추가
     @PostMapping("/series")
     public ResponseEntity<Object> postSeries(@RequestBody @Valid SeriesReq.PostReq req) {
 
         seriesService.save(req);
 
         return ResponseEntity.noContent().build();
+    }
+
+    // 시리즈 조회
+    @GetMapping("/series")
+    public ResponseEntity<Object> getSeries() {
+
+        List<SeriesRes> seriesList = seriesService.getSeries();
+
+        return ResponseEntity.ok(seriesList);
     }
 }

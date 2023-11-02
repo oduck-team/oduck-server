@@ -426,6 +426,30 @@ public class AdminControllerTest {
         }
         //TODO: 수정 실패 시
 
+        @Test
+        @DisplayName("애니 삭제 성공 시 Http Status 204 반환")
+        void deleteAnime() throws Exception {
+            //given
+            Long animeId = 1L;
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                delete(ADMIN_URL+"/animes/{animeId}", animeId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+
+            //then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(document("deleteAnime/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("animeId").description("애니의 식별자")
+                    )
+                ));
+        }
     }
 
     @Nested
