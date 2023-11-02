@@ -1,12 +1,10 @@
 package io.oduck.api.global.security.auth.controller;
 
-import io.oduck.api.global.common.SingleResponse;
 import io.oduck.api.global.security.auth.dto.AuthResDto.Status;
 import io.oduck.api.global.security.auth.dto.LocalAuthDto;
 import io.oduck.api.global.security.auth.dto.AuthUser;
 import io.oduck.api.global.security.auth.dto.LoginUser;
 import io.oduck.api.global.security.auth.service.AuthService;
-import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +27,6 @@ public class AuthController {
     public ResponseEntity<?> login(
         @RequestBody LocalAuthDto localAuthDto
     ) {
-
         authService.login(localAuthDto);
         return ResponseEntity.created(null).build();
     }
@@ -38,9 +35,7 @@ public class AuthController {
     public ResponseEntity<Status> status(
         @LoginUser AuthUser user
     ) {
-
         Status res = authService.getStatus(user);
-
         return ResponseEntity.ok(res);
     }
 }
