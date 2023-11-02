@@ -11,6 +11,12 @@ import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
 public interface AnimeService {
 
     /**
+     * 애니 저장 로직
+     * @return AnimeId
+     */
+    void save(PostReq req);
+
+    /**
      * 애니 상세 조회 로직
      * @param animeId
      * @return AnimeRes
@@ -18,10 +24,16 @@ public interface AnimeService {
     DetailResult getAnimeById(Long animeId);
 
     /**
-     * 애니 저장 로직
-     * @return AnimeId
+     * 애니 검색 결과 조회
+     * @param query
+     * @param cursor
+     * @param sort
+     * @param order
+     * @param size
+     * @param searchFilterDsl
+     * @return SliceResponse<SearchResult>
      */
-    void save(PostReq req);
+    SliceResponse<SearchResult> getAnimesByCondition(String query, String cursor, Sort sort, OrderDirection order, int size, SearchFilterDsl searchFilterDsl);
 
     /**
      * 애니 수정 로직
@@ -66,14 +78,8 @@ public interface AnimeService {
     void updateSeries(Long animeId, PatchSeriesIdReq patchReq);
 
     /**
-     * 애니 검색 결과 조회
-     * @param query
-     * @param cursor
-     * @param sort
-     * @param order
-     * @param size
-     * @param searchFilterDsl
-     * @return SliceResponse<SearchResult>
+     * 애니 삭제 로직
+     * @param animeId
      */
-    SliceResponse<SearchResult> getAnimesByCondition(String query, String cursor, Sort sort, OrderDirection order, int size, SearchFilterDsl searchFilterDsl);
+    void delete(Long animeId);
 }

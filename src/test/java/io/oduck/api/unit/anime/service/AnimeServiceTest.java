@@ -352,4 +352,26 @@ public class AnimeServiceTest {
             verify(seriesRepository, times(1)).findById(anyLong());
         }
     }
+
+    @Nested
+    @DisplayName("삭제")
+    class DeleteAnime{
+        @Test
+        @DisplayName("애니 삭제 성공")
+        void deleteAnime() {
+            //given
+            Long animeId = 1L;
+            Anime anime = createAnime();
+            given(animeRepository.findById(anyLong())).willReturn(Optional.ofNullable(anime));
+
+            //when
+            animeService.delete(animeId);
+
+            //then
+            assertThatNoException();
+
+            //verify
+            verify(animeRepository, times(1)).findById(anyLong());
+        }
+    }
 }

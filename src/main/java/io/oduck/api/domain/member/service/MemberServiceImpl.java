@@ -128,6 +128,8 @@ public class MemberServiceImpl implements MemberService{
             .ifPresent(
                 memberProfile::updateInfo
             );
+        
+        memberProfileRepository.save(memberProfile);
     }
 
     private MemberProfile getProfileByMemberId(Long memberId) {
