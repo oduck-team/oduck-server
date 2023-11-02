@@ -356,7 +356,55 @@ include::{snippets}/patchShortReviewReq/success/http-response.adoc[]
 
 ==== 실패시
 
-==== 실패시
+== shortReviewLike
+=== POST api/v1/likes
+.curl-request
+include::{snippets}/likes/shortReview/save/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/likes/shortReview/save/success/http-request.adoc[]
+
+.request-header
+include::{snippets}/likes/shortReview/save/success/request-headers.adoc[]
+
+.request-body
+include::{snippets}/likes/shortReview/save/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/likes/shortReview/save/success/request-fields.adoc[]
+
+==== 저장 성공시
+.http-response
+include::{snippets}/likes/shortReview/save/success/http-response.adoc[]
+
+==== 삭제 성공시
+.http-response
+include::{snippets}/likes/shortReview/delete/success/http-response.adoc[]
+
+== 짧은 리뷰 좋아요 존재 여부
+=== GET api/v1/likes/:shortReviewId
+.curl-request
+include::{snippets}/likes/shortReview/checkLike/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/likes/shortReview/checkLike/success/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/likes/shortReview/checkLike/success/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/likes/shortReview/checkLike/success/request-headers.adoc[]
+
+=== 짧은 리뷰 좋아요 존재 여부
+.http-response
+include::{snippets}/likes/shortReview/checkLike/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/likes/shortReview/checkLike/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/likes/shortReview/checkLike/success/response-fields.adoc[]
+
 
 == admin
 
@@ -711,3 +759,5 @@ include::{snippets}/postSeries/success/request-fields.adoc[]
 include::{snippets}/postSeries/success/http-response.adoc[]
 
 ==== 실패 시
+
+====
