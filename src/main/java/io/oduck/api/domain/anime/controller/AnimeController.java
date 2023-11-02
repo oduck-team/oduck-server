@@ -40,7 +40,7 @@ public class AnimeController {
             @RequestParam(required = false) String query,
             @RequestParam(required = false) String cursor,
             @RequestParam(required = false, defaultValue = "latest") Sort sort,
-            @RequestParam(required = false, defaultValue = "DESC") OrderDirection order,
+            @RequestParam(required = false, defaultValue = "DESC") OrderDirection direction,
             @RequestParam(required = false, defaultValue = "10") @Min(1) @Max(100) int size,
             @ModelAttribute SearchFilter searchFilter
     ){
@@ -59,7 +59,8 @@ public class AnimeController {
 
         SearchFilterDsl searchFilterDsl = new SearchFilterDsl(genreIds, broadcastTypes, episodeCountEnums, years, quarters);
 
-        SliceResponse<AnimeRes.SearchResult> res = animeService.getAnimesByCondition(query, cursor,  sort, order, size, searchFilterDsl);
+        SliceResponse<AnimeRes.SearchResult> res = animeService.getAnimesByCondition(query, cursor,  sort,
+            direction, size, searchFilterDsl);
         return ResponseEntity.ok(res);
     }
 

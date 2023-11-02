@@ -70,10 +70,10 @@ public interface AnimeService {
      * @param query
      * @param cursor
      * @param sort
-     * @param order
+     * @param direction
      * @param size
      * @param searchFilterDsl
      * @return SliceResponse<SearchResult>
      */
-    SliceResponse<SearchResult> getAnimesByCondition(String query, String cursor, Sort sort, OrderDirection order, int size, SearchFilterDsl searchFilterDsl);
+    SliceResponse<SearchResult> getAnimesByCondition(String query, String cursor, Sort sort, OrderDirection direction, int size, SearchFilterDsl searchFilterDsl);
 }
