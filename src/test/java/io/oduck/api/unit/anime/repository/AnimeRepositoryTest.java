@@ -178,7 +178,7 @@ public class AnimeRepositoryTest {
              * 시리즈 생성
              */
             // 1. Series
-            String seriesTitle = "귀멸의 칼날";
+            String seriesTitle = "시리즈A";
             Series series = Series.builder()
                 .title(seriesTitle)
                 .build();
