@@ -11,6 +11,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -21,6 +22,7 @@ public class StarRatingServiceImpl implements StarRatingService {
     private final StarRatingRepository starRatingRepository;
 
     @Override
+    @Transactional
     public boolean createScore(Long memberId, Long animeId, int score) {
         Optional<StarRating> foundStarRating = starRatingRepository.findByMemberIdAndAnimeId(memberId, animeId);
         if (foundStarRating.isPresent()) {
@@ -32,6 +34,8 @@ public class StarRatingServiceImpl implements StarRatingService {
 
         Anime anime = animeRepository.findById(animeId)
             .orElseThrow(() -> new NotFoundException("Anime"));
+
+        anime.increaseStarRatingScore(score);
 
         StarRating starRating = StarRating.builder()
             .member(member)
