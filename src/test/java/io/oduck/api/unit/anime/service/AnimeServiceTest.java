@@ -17,7 +17,6 @@ import io.oduck.api.domain.studio.repository.StudioRepository;
 import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.domain.voiceActor.repository.VoiceActorRepository;
 import io.oduck.api.global.common.OrderDirection;
-import io.oduck.api.global.common.SliceResponse;
 import io.oduck.api.global.utils.AnimeTestUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -25,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -41,7 +39,7 @@ import static io.oduck.api.global.utils.AnimeTestUtils.*;
 import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyIterable;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.isNull;
@@ -147,7 +145,7 @@ public class AnimeServiceTest {
             List<AnimeGenre> animeGenres = new ArrayList<>();
             given(animeGenreRepository.findAllFetchByAnimeId(animeId)).willReturn(animeGenres);
 
-            given(animeRepository.findReleasedAnimeById(animeId)).willReturn(Optional.ofNullable(anime));
+            given(animeRepository.findAnimeByConditions(animeId, true)).willReturn(Optional.ofNullable(anime));
 
             //when
             animeService.getAnimeById(animeId);
@@ -156,7 +154,7 @@ public class AnimeServiceTest {
             assertThatNoException();
 
             //verify
-            verify(animeRepository, times(1)).findReleasedAnimeById(anyLong());
+            verify(animeRepository, times(1)).findAnimeByConditions(anyLong(), anyBoolean());
             verify(animeOriginalAuthorRepository, times(1)).findAllFetchByAnimeId(anyLong());
             verify(animeVoiceActorRepository, times(1)).findAllFetchByAnimeId(anyLong());
             verify(animeStudioRepository, times(1)).findAllFetchByAnimeId(anyLong());
@@ -352,6 +350,28 @@ public class AnimeServiceTest {
             //verify
             verify(animeRepository, times(1)).findById(anyLong());
             verify(seriesRepository, times(1)).findById(anyLong());
+        }
+    }
+
+    @Nested
+    @DisplayName("삭제")
+    class DeleteAnime{
+        @Test
+        @DisplayName("애니 삭제 성공")
+        void deleteAnime() {
+            //given
+            Long animeId = 1L;
+            Anime anime = createAnime();
+            given(animeRepository.findById(anyLong())).willReturn(Optional.ofNullable(anime));
+
+            //when
+            animeService.delete(animeId);
+
+            //then
+            assertThatNoException();
+
+            //verify
+            verify(animeRepository, times(1)).findById(anyLong());
         }
     }
 }

@@ -55,23 +55,6 @@ public class AnimeServiceImpl implements AnimeService{
     private final SeriesRepository seriesRepository;
 
     @Override
-    @Transactional(readOnly = true)
-    public DetailResult getAnimeById(Long animeId) {
-
-        Anime anime = animeRepository.findReleasedAnimeById(animeId)
-                .orElseThrow(() -> new NotFoundException("Anime"));
-
-        anime.increaseViewCount();
-
-        List<AnimeOriginalAuthor> animeOriginalAuthors = animeOriginalAuthorRepository.findAllFetchByAnimeId(animeId);
-        List<AnimeVoiceActor> animeVoiceActors = animeVoiceActorRepository.findAllFetchByAnimeId(animeId);
-        List<AnimeStudio> animeStudios = animeStudioRepository.findAllFetchByAnimeId(animeId);
-        List<AnimeGenre> animeGenres = animeGenreRepository.findAllFetchByAnimeId(animeId);
-
-        return new DetailResult(anime, animeOriginalAuthors, animeVoiceActors, animeStudios, animeGenres);
-    }
-
-    @Override
     public void save(PostReq postReq) {
         // 원작 작가
         List<Long> originalAuthorIds = postReq.getOriginalAuthorIds();
@@ -119,31 +102,75 @@ public class AnimeServiceImpl implements AnimeService{
 
         // 시리즈
         Long seriesId = postReq.getSeriesId();
-        Series series = createSeries(seriesId);
+        boolean isSeriesIdNull = isIdNull(seriesId);
+        Series series = findSeriesWhenIdNotNull(seriesId, isSeriesIdNull);
 
-
-        Anime anime = Anime.createAnime(postReq.getTitle(), postReq.getSummary(), postReq.getBroadcastType(), postReq.getEpisodeCount(), postReq.getThumbnail(),
-            postReq.getYear(), postReq.getQuarter(), postReq.getRating(), postReq.getStatus(), animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, series);
+        Anime anime = Anime.createAnime(
+            postReq.getTitle(), postReq.getSummary(), postReq.getBroadcastType(), postReq.getEpisodeCount(),
+            postReq.getThumbnail(), postReq.getYear(), postReq.getQuarter(), postReq.getRating(), postReq.getStatus(),
+            postReq.isReleased(), animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, series
+        );
 
         animeRepository.save(anime);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public DetailResult getAnimeById(Long animeId) {
 
-    private Series createSeries(Long seriesId) {
-        if(seriesId == null){
+        Anime anime = animeRepository.findAnimeByConditions(animeId, true)
+                .orElseThrow(() -> new NotFoundException("Anime"));
+
+        anime.increaseViewCount();
+
+        List<AnimeOriginalAuthor> animeOriginalAuthors = animeOriginalAuthorRepository.findAllFetchByAnimeId(animeId);
+        List<AnimeVoiceActor> animeVoiceActors = animeVoiceActorRepository.findAllFetchByAnimeId(animeId);
+        List<AnimeStudio> animeStudios = animeStudioRepository.findAllFetchByAnimeId(animeId);
+        List<AnimeGenre> animeGenres = animeGenreRepository.findAllFetchByAnimeId(animeId);
+
+        return new DetailResult(anime, animeOriginalAuthors, animeVoiceActors, animeStudios, animeGenres);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public SliceResponse<SearchResult> getAnimesByCondition(String query, String cursor, Sort sort, OrderDirection order, int size, SearchFilterDsl searchFilterDsl) {
+        Slice<SearchResult> slice = animeRepository.findAnimesByCondition(
+            query,
+            cursor,
+            PagingUtils.applyPageableForNonOffset(
+                size,
+                sort.getSort(),
+                order.getOrder()
+            ),
+            searchFilterDsl
+        );
+
+        List<SearchResult> items = slice.getContent();
+
+        return SliceResponse.of(slice, items, sort.getSort());
+    }
+
+    private Series findSeriesWhenIdNotNull(Long seriesId, boolean isSeriesIdNull) {
+        if(isSeriesIdNull == true){
             return null;
-        }else{
-            return seriesRepository.findById(seriesId)
-                .orElseThrow(() -> new NotFoundException("Series"));
         }
+
+        return seriesRepository.findById(seriesId)
+            .orElseThrow(() -> new NotFoundException("Series"));
+    }
+
+    private boolean isIdNull(Long id) {
+        return id == null;
     }
 
     @Override
     public void update(Long animeId, PatchAnimeReq req) {
         Anime anime = findAnime(animeId);
 
-        anime.update(req.getTitle(), req.getSummary(), req.getBroadcastType(), req.getEpisodeCount(), req.getThumbnail(), req.getYear(),
-            req.getQuarter(), req.getRating(), req.getStatus());
+        anime.update(
+            req.getTitle(), req.getSummary(), req.getBroadcastType(), req.getEpisodeCount(), req.getThumbnail(), req.getYear(),
+            req.getQuarter(), req.getRating(), req.getStatus(), req.isReleased()
+        );
     }
 
     @Override
@@ -227,22 +254,10 @@ public class AnimeServiceImpl implements AnimeService{
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public SliceResponse<SearchResult> getAnimesByCondition(String query, String cursor, Sort sort, OrderDirection order, int size, SearchFilterDsl searchFilterDsl) {
-        Slice<SearchResult> slice = animeRepository.findAnimesByCondition(
-                query,
-                cursor,
-                PagingUtils.applyPageableForNonOffset(
-                        size,
-                        sort.getSort(),
-                        order.getOrder()
-                ),
-                searchFilterDsl
-        );
+    public void delete(Long animeId) {
+        Anime anime = findAnime(animeId);
 
-        List<SearchResult> items = slice.getContent();
-
-        return SliceResponse.of(slice, items, sort.getSort());
+        anime.delete();
     }
 
     @Transactional(readOnly = true)

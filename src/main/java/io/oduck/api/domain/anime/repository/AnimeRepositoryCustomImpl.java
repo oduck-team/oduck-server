@@ -59,12 +59,17 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
                         yearsIn(searchFilterDsl.getYears()),
                         currentYearsAndQuarters(searchFilterDsl.getQuarters()),
                         cursorCondition(cursor, pageable),
+                        isReleased(true),
                         notDeleted()
                 )
                 .groupBy(anime.id)
                 .limit(pageable.getPageSize());
 
         return fetchSliceByCursor(sortPath(anime), jpaQuery, pageable);
+    }
+
+    private BooleanExpression isReleased(boolean isReleased) {
+        return anime.isReleased.eq(isReleased);
     }
 
     private List<Path> sortPath(QAnime anime) {

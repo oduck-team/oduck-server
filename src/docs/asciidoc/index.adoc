@@ -196,9 +196,6 @@ include::{snippets}/getAnimes/success/curl-request.adoc[]
 .http-request
 include::{snippets}/getAnimes/success/http-request.adoc[]
 
-.request-param
-include::{snippets}/getAnimes/success/path-parameters.adoc[]
-
 .query-parameters
 include::{snippets}/getAnimes/success/query-parameters.adoc[]
 
@@ -399,6 +396,26 @@ include::{snippets}/patchAnime/success/request-fields.adoc[]
 
 .http-response
 include::{snippets}/patchAnime/success/http-response.adoc[]
+
+==== 실패시
+
+=== DELETE api/v1/oduckdmin/animes/:id
+.curl-request
+include::{snippets}/deleteAnime/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/deleteAnime/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/deleteAnime/success/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/deleteAnime/success/request-fields.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/deleteAnime/success/http-response.adoc[]
 
 ==== 실패시
 

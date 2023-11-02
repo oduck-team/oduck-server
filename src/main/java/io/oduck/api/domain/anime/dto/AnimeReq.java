@@ -48,6 +48,8 @@ public class AnimeReq {
         @NotNull(message = "방영 상태를 입력하세요.")
         private Status status;
 
+        private boolean isReleased = false;
+
         private List<Long> originalAuthorIds;
 
         private List<Long> studioIds;
@@ -59,7 +61,7 @@ public class AnimeReq {
         private Long seriesId;
 
         public PostReq (String title, String summary, BroadcastType broadcastType,
-            int episodeCount, String thumbnail, int year, Quarter quarter, Rating rating, Status status,
+            int episodeCount, String thumbnail, int year, Quarter quarter, Rating rating, Status status, Boolean isReleased,
             List<Long> originalAuthorIds, List<Long> studioIds, List<AnimeVoiceActorReq> voiceActors,
             List<Long> genreIds, Long seriesId) {
 
@@ -72,6 +74,10 @@ public class AnimeReq {
             this.quarter = quarter;
             this.rating = rating;
             this.status = status;
+
+            if(isReleased != null) {
+                this.isReleased = isReleased;
+            }
 
             if(originalAuthorIds == null){
                 this.originalAuthorIds = new ArrayList<>();
@@ -102,7 +108,6 @@ public class AnimeReq {
     }
 
     @Getter
-    @AllArgsConstructor
     public static class PatchAnimeReq{
         @NotBlank
         @Length(min = 1, max = 50, message = "글자 수는 0~50을 허용합니다.")
@@ -134,6 +139,25 @@ public class AnimeReq {
 
         @NotNull(message = "방영 상태를 입력하세요.")
         private Status status;
+
+        private boolean isReleased = false;
+
+        public PatchAnimeReq(String title, String summary, BroadcastType broadcastType,
+            int episodeCount, String thumbnail, int year, Quarter quarter, Rating rating, Status status,
+            Boolean isReleased) {
+            this.title = title;
+            this.summary = summary;
+            this.broadcastType = broadcastType;
+            this.episodeCount = episodeCount;
+            this.thumbnail = thumbnail;
+            this.year = year;
+            this.quarter = quarter;
+            this.rating = rating;
+            this.status = status;
+            if(isReleased != null){
+                this.isReleased = isReleased;
+            }
+        }
     }
 
     @Getter
