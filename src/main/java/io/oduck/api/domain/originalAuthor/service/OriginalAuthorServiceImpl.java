@@ -1,17 +1,17 @@
 package io.oduck.api.domain.originalAuthor.service;
 
+import static io.oduck.api.domain.originalAuthor.dto.OriginalAuthorReq.PostReq;
+
 import io.oduck.api.domain.originalAuthor.dto.OriginalAuthorRes;
 import io.oduck.api.domain.originalAuthor.entity.OriginalAuthor;
 import io.oduck.api.domain.originalAuthor.repository.OriginalAuthorRepository;
+import io.oduck.api.global.exception.ConflictException;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static io.oduck.api.domain.originalAuthor.dto.OriginalAuthorReq.PostReq;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +23,13 @@ public class OriginalAuthorServiceImpl implements OriginalAuthorService{
 
     @Override
     public void save(PostReq req) {
+        String name = req.getName();
+
+        boolean isExistsName = originalAuthorRepository.existsByName(name);
+
+        if(isExistsName == true){
+            throw new ConflictException("Original Author name");
+        }
 
         OriginalAuthor originalAuthor = OriginalAuthor.builder()
                 .name(req.getName())

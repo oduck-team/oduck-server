@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OriginalAuthorRepository extends JpaRepository<OriginalAuthor, Long> {
 
+  boolean existsByName(String name);
 }

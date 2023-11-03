@@ -616,7 +616,9 @@ include::{snippets}/postOriginalAuthor/success/request-fields.adoc[]
 .http-response
 include::{snippets}/postOriginalAuthor/success/http-response.adoc[]
 
-==== 실패 시
+==== 실패 시(이름 중복)
+.http-response
+include::{snippets}/postOriginalAuthor/fail/http-response.adoc[]
 
 === GET api/v1/oduckdmin/voice-actors
 
@@ -636,7 +638,7 @@ include::{snippets}/getVoiceActors/success/response-body.adoc[]
 .response-fields
 include::{snippets}/getVoiceActors/success/response-fields.adoc[]
 
-==== 실패 시
+==== 실패 시(이름 중복)
 
 === POST api/v1/oduckdmin/voice-actors
 .curl-request
@@ -655,7 +657,9 @@ include::{snippets}/postVoiceActor/success/request-fields.adoc[]
 .http-response
 include::{snippets}/postVoiceActor/success/http-response.adoc[]
 
-==== 실패 시
+==== 실패 시(이름 중복)
+.http-response
+include::{snippets}/postVoiceActor/fail/http-response.adoc[]
 
 === GET api/v1/oduckdmin/studios
 
@@ -694,7 +698,9 @@ include::{snippets}/postStudio/success/request-fields.adoc[]
 .http-response
 include::{snippets}/postStudio/success/http-response.adoc[]
 
-==== 실패 시
+==== 실패 시 (이름 중복)
+.http-response
+include::{snippets}/postStudio/fail/http-response.adoc[]
 
 === GET api/v1/oduckdmin/genres
 
@@ -733,12 +739,14 @@ include::{snippets}/postGenre/success/request-fields.adoc[]
 .http-response
 include::{snippets}/postGenre/success/http-response.adoc[]
 
-==== 실패 시
+==== 실패 시 (이름 중복)
+.http-response
+include::{snippets}/postGenre/fail/http-response.adoc[]
 
 === GET api/v1/oduckdmin/series
 
 .curl-request
-include::{snippets}/getSeries//success/curl-request.adoc[]
+include::{snippets}/getSeries/success/curl-request.adoc[]
 
 .http-request
 include::{snippets}/getSeries/success/http-request.adoc[]
@@ -755,7 +763,7 @@ include::{snippets}/getSeries/success/response-fields.adoc[]
 
 ==== 실패 시
 
-=== POST api/v1/oduckdmin/genres
+=== POST api/v1/oduckdmin/series
 .curl-request
 include::{snippets}/postSeries/success/curl-request.adoc[]
 
@@ -772,8 +780,10 @@ include::{snippets}/postSeries/success/request-fields.adoc[]
 .http-response
 include::{snippets}/postSeries/success/http-response.adoc[]
 
+==== 실패 시 (이름 중복)
+.http-response
+include::{snippets}/postSeries/fail/http-response.adoc[]
 ==== 실패 시
-
 
 == starRating
 === POST api/v1/ratings/:animeId

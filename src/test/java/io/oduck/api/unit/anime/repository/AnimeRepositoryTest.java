@@ -1,9 +1,31 @@
 package io.oduck.api.unit.anime.repository;
 
+import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
+import static io.oduck.api.global.utils.AnimeTestUtils.getBroadcastType;
+import static io.oduck.api.global.utils.AnimeTestUtils.getEpisodeCount;
+import static io.oduck.api.global.utils.AnimeTestUtils.getQuarter;
+import static io.oduck.api.global.utils.AnimeTestUtils.getRating;
+import static io.oduck.api.global.utils.AnimeTestUtils.getStatus;
+import static io.oduck.api.global.utils.AnimeTestUtils.getSummary;
+import static io.oduck.api.global.utils.AnimeTestUtils.getThumbnail;
+import static io.oduck.api.global.utils.AnimeTestUtils.getTitle;
+import static io.oduck.api.global.utils.AnimeTestUtils.getYear;
+import static io.oduck.api.global.utils.AnimeTestUtils.isReleased;
+import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.oduck.api.domain.anime.dto.AnimeReq;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
-import io.oduck.api.domain.anime.entity.*;
-import io.oduck.api.domain.anime.repository.*;
+import io.oduck.api.domain.anime.entity.Anime;
+import io.oduck.api.domain.anime.entity.AnimeGenre;
+import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
+import io.oduck.api.domain.anime.entity.AnimeStudio;
+import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
+import io.oduck.api.domain.anime.repository.AnimeGenreRepository;
+import io.oduck.api.domain.anime.repository.AnimeOriginalAuthorRepository;
+import io.oduck.api.domain.anime.repository.AnimeRepository;
+import io.oduck.api.domain.anime.repository.AnimeStudioRepository;
+import io.oduck.api.domain.anime.repository.AnimeVoiceActorRepository;
 import io.oduck.api.domain.genre.entity.Genre;
 import io.oduck.api.domain.genre.repository.GenreRepository;
 import io.oduck.api.domain.originalAuthor.entity.OriginalAuthor;
@@ -15,6 +37,9 @@ import io.oduck.api.domain.studio.repository.StudioRepository;
 import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.domain.voiceActor.repository.VoiceActorRepository;
 import io.oduck.api.global.common.OrderDirection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,15 +49,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
-import static io.oduck.api.global.utils.AnimeTestUtils.*;
-import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -80,7 +96,7 @@ public class AnimeRepositoryTest {
              * 원작 작가 연관 관계 설정
              */
             // 1. OriginalAuthor 생성 size=1
-            String originalAuthorName = "엔도 타츠야";
+            String originalAuthorName = "원작작가";
             OriginalAuthor originalAuthor = OriginalAuthor.builder()
                 .name(originalAuthorName)
                 .build();
@@ -97,7 +113,7 @@ public class AnimeRepositoryTest {
              * 스튜디오 생성
              */
             // 1. Studio 생성 size=1
-            String studioName = "ufortable";
+            String studioName = "스튜디오A";
             Studio studio = Studio.builder()
                 .name(studioName)
                 .build();
@@ -162,7 +178,7 @@ public class AnimeRepositoryTest {
              * 시리즈 생성
              */
             // 1. Series
-            String seriesTitle = "귀멸의 칼날";
+            String seriesTitle = "시리즈A";
             Series series = Series.builder()
                 .title(seriesTitle)
                 .build();
@@ -239,7 +255,7 @@ public class AnimeRepositoryTest {
             List<OriginalAuthor> originalAuthors = new ArrayList<>();
             for (int i = 0; i < firstInsertSize; i++) {
                 OriginalAuthor originalAuthor = OriginalAuthor.builder()
-                    .name(originalAuthorName)
+                    .name(originalAuthorName+i)
                     .build();
                 originalAuthors.add(originalAuthor);
             }
@@ -308,7 +324,7 @@ public class AnimeRepositoryTest {
             List<Studio> studios = new ArrayList<>();
             for (int i = 0; i < firstInsertSize; i++) {
                 Studio studio = Studio.builder()
-                    .name(studioName)
+                    .name(studioName+i)
                     .build();
                 studios.add(studio);
             }
@@ -374,7 +390,7 @@ public class AnimeRepositoryTest {
             List<VoiceActor> voiceActors = new ArrayList<>();
             for (int i = 0; i < firstInsertSize; i++) {
                 VoiceActor voiceActor = VoiceActor.builder()
-                    .name(voiceActorName)
+                    .name(voiceActorName+i)
                     .build();
                 voiceActors.add(voiceActor);
             }
@@ -443,7 +459,7 @@ public class AnimeRepositoryTest {
             List<Genre> genres = new ArrayList<>();
             for (int i = 0; i < firstInsertSize; i++) {
                 Genre genre = Genre.builder()
-                    .name(genreName)
+                    .name(genreName+i)
                     .build();
                 genres.add(genre);
             }
@@ -472,7 +488,7 @@ public class AnimeRepositoryTest {
 
             //when
             //업데이트할 장르 생성
-            String updatingGenreName = "판타지";
+            String updatingGenreName = "이세계";
             Genre updatingGenre = Genre.builder()
                 .name(updatingGenreName)
                 .build();

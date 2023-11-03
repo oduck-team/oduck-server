@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VoiceActorRepository extends JpaRepository<VoiceActor, Long> {
 
+  boolean existsByName(String name);
 }

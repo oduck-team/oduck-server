@@ -1,17 +1,17 @@
 package io.oduck.api.domain.genre.service;
 
+import static io.oduck.api.domain.genre.dto.GenreReq.PostReq;
+
 import io.oduck.api.domain.genre.dto.GenreRes;
 import io.oduck.api.domain.genre.entity.Genre;
 import io.oduck.api.domain.genre.repository.GenreRepository;
+import io.oduck.api.global.exception.ConflictException;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static io.oduck.api.domain.genre.dto.GenreReq.PostReq;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +23,14 @@ public class GenreServiceImpl implements GenreService{
 
     @Override
     public void save(PostReq req) {
+        String name = req.getName();
+
+        boolean isExistsName = genreRepository.existsByName(name);
+
+        if(isExistsName == true){
+            throw new ConflictException("Genre name is ");
+        }
+
         Genre genre = Genre.builder()
                 .name(req.getName())
                 .build();
