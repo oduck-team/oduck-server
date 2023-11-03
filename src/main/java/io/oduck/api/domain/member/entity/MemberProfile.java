@@ -34,7 +34,7 @@ public class MemberProfile extends BaseEntity {
   @Column(nullable = false, length = 15, unique = true)
   private String name;
 
-  @Column(nullable = false, length = 50)
+  @Column(nullable = false, length = 100)
   @Builder.Default
   private String info = "";
 
