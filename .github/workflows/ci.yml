@@ -22,22 +22,20 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
-      with:
-        arguments: build
-      env:
-        aws.access.key: ${{ secrets.aws_access_key }}
-        aws.secret.key: ${{ secrets.aws.secret_key }}
-        aws.region: ${{ secrets.aws_region }}
-        
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+        with:
+          arguments: build
+        env:
+          aws_access_key: ${{ secrets.aws_access_key }}
+          aws_secret_key: ${{ secrets.aws_secret_key }}
+          aws_region: ${{ secrets.aws_region }}
