@@ -37,7 +37,7 @@ jobs:
       with:
         arguments: build
       env:
-        aws.access.key: ${{ secrets.aws.access.key }}
-        aws.secret.key: ${{ secrets.aws.secret.key }}
-        aws.region: ${{ secrets.aws.region }}
+        aws.access.key: ${{ secrets.aws_access_key }}
+        aws.secret.key: ${{ secrets.aws.secret_key }}
+        aws.region: ${{ secrets.aws_region }}
         
