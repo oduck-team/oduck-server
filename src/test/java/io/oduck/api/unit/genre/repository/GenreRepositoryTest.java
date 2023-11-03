@@ -50,7 +50,7 @@ public class GenreRepositoryTest {
         void findGenre() {
             //given
             Genre genre = Genre.builder()
-                    .name("판타지")
+                    .name("이세계")
                     .build();
 
             Genre savedGenre = genreRepository.save(genre);

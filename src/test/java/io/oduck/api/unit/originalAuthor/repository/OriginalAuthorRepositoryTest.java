@@ -30,7 +30,7 @@ public class OriginalAuthorRepositoryTest {
         void SaveOriginalAuthor() {
             //given
             OriginalAuthor originalAuthor = OriginalAuthor.builder()
-                    .name("엔도 타츠야")
+                    .name("원작작가A")
                     .build();
 
             //when
