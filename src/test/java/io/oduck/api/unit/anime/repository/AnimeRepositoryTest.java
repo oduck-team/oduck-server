@@ -570,4 +570,22 @@ public class AnimeRepositoryTest {
             assertThat(optionalAnime.isPresent()).isTrue();
         }
     }
+
+    @Nested
+    @DisplayName("삭제")
+    class DeleteAnime {
+        @Test
+        @DisplayName("애니 삭제 성공")
+        void deleteAnime() {
+            //given
+            Anime anime = createAnime();
+            Anime savedAnime = animeRepository.save(anime);
+
+            //when
+            savedAnime.delete();
+
+            //then
+            assertThat(savedAnime.getDeletedAt()).isNotNull();
+        }
+    }
 }
