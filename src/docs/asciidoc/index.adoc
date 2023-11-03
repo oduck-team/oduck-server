@@ -777,4 +777,31 @@ include::{snippets}/postSeries/success/http-response.adoc[]
 
 ==== 실패 시
 
-====
+
+== starRating
+=== POST api/v1/ratings
+.curl-request
+include::{snippets}/starRating/createScore/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/starRating/createScore/success/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/starRating/createScore/success/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/starRating/createScore/success/request-headers.adoc[]
+
+.request-body
+include::{snippets}/starRating/createScore/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/starRating/createScore/success/request-fields.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/starRating/createScore/success/http-response.adoc[]
+
+==== 실패시
+.http-response
+include::{snippets}/starRating/createScore/failure/http-response.adoc[]
