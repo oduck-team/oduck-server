@@ -457,9 +457,6 @@ include::{snippets}/deleteAnime/success/http-request.adoc[]
 .request-param
 include::{snippets}/deleteAnime/success/path-parameters.adoc[]
 
-.request-fields
-include::{snippets}/deleteAnime/success/request-fields.adoc[]
-
 ==== 성공시
 
 .http-response
@@ -779,7 +776,7 @@ include::{snippets}/postSeries/success/http-response.adoc[]
 
 
 == starRating
-=== POST api/v1/ratings
+=== POST api/v1/ratings/:animeId
 .curl-request
 include::{snippets}/starRating/createScore/success/curl-request.adoc[]
 
@@ -805,3 +802,36 @@ include::{snippets}/starRating/createScore/success/http-response.adoc[]
 ==== 실패시
 .http-response
 include::{snippets}/starRating/createScore/failure/http-response.adoc[]
+
+=== GET api/v1/ratings/:animeId
+.curl-request
+include::{snippets}/starRating/checkRated/exist/curl-request.adoc[]
+
+.http-request
+include::{snippets}/starRating/checkRated/exist/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/starRating/checkRated/exist/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/starRating/checkRated/exist/request-headers.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/starRating/checkRated/exist/http-response.adoc[]
+
+.response-body
+include::{snippets}/starRating/checkRated/exist/response-body.adoc[]
+
+.response-fields
+include::{snippets}/starRating/checkRated/exist/response-fields.adoc[]
+
+==== 실패시
+.http-response
+include::{snippets}/starRating/checkRated/notExist/http-response.adoc[]
+
+.response-body
+include::{snippets}/starRating/checkRated/notExist/response-body.adoc[]
+
+.response-fields
+include::{snippets}/starRating/checkRated/notExist/response-fields.adoc[]
