@@ -24,6 +24,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -36,6 +42,6 @@ jobs:
         with:
           arguments: build
         env:
-          aws_access_key: ${{ secrets.aws_access_key }}
-          aws_secret_key: ${{ secrets.aws_secret_key }}
-          aws_region: ${{ secrets.aws_region }}
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          aws_region: ${{ secrets.AWs_REGION }}
