@@ -7,6 +7,7 @@ import io.oduck.api.global.exception.CustomException;
 import io.oduck.api.global.exception.ForbiddenException;
 import io.oduck.api.global.exception.NotFoundException;
 import io.oduck.api.global.exception.UnauthorizedException;
+import io.oduck.api.global.webHook.WebHookService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @Slf4j
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
+  private final WebHookService webHookService;
 
   // 요청 바디 필드 유효성 검증 예외 처리
   @ExceptionHandler
@@ -114,7 +116,8 @@ public class ExceptionHandlerAdvice {
   @ExceptionHandler
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ErrorResponse handleException(HttpServletRequest req, Exception e) {
-    log.error("# handle Exception", e);
+    webHookService.sendMsg(e, req);
+    log.error("# Uncaught exceptions, which can be fatal to the server", e);
     return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
