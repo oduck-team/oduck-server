@@ -1,34 +1,10 @@
 package io.oduck.api.unit.anime.repository;
 
-import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
-import static io.oduck.api.global.utils.AnimeTestUtils.getBroadcastType;
-import static io.oduck.api.global.utils.AnimeTestUtils.getEpisodeCount;
-import static io.oduck.api.global.utils.AnimeTestUtils.getQuarter;
-import static io.oduck.api.global.utils.AnimeTestUtils.getRating;
-import static io.oduck.api.global.utils.AnimeTestUtils.getStatus;
-import static io.oduck.api.global.utils.AnimeTestUtils.getSummary;
-import static io.oduck.api.global.utils.AnimeTestUtils.getThumbnail;
-import static io.oduck.api.global.utils.AnimeTestUtils.getTitle;
-import static io.oduck.api.global.utils.AnimeTestUtils.getYear;
-import static io.oduck.api.global.utils.AnimeTestUtils.isReleased;
-import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import io.oduck.api.domain.anime.dto.AnimeReq;
 import io.oduck.api.domain.anime.dto.AnimeReq.EpisodeCountEnum;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
-import io.oduck.api.domain.anime.entity.Anime;
-import io.oduck.api.domain.anime.entity.AnimeGenre;
-import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
-import io.oduck.api.domain.anime.entity.AnimeStudio;
-import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
-import io.oduck.api.domain.anime.entity.BroadcastType;
-import io.oduck.api.domain.anime.entity.Quarter;
-import io.oduck.api.domain.anime.repository.AnimeGenreRepository;
-import io.oduck.api.domain.anime.repository.AnimeOriginalAuthorRepository;
-import io.oduck.api.domain.anime.repository.AnimeRepository;
-import io.oduck.api.domain.anime.repository.AnimeStudioRepository;
-import io.oduck.api.domain.anime.repository.AnimeVoiceActorRepository;
+import io.oduck.api.domain.anime.entity.*;
+import io.oduck.api.domain.anime.repository.*;
 import io.oduck.api.domain.genre.entity.Genre;
 import io.oduck.api.domain.genre.repository.GenreRepository;
 import io.oduck.api.domain.originalAuthor.entity.OriginalAuthor;
@@ -40,9 +16,6 @@ import io.oduck.api.domain.studio.repository.StudioRepository;
 import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.domain.voiceActor.repository.VoiceActorRepository;
 import io.oduck.api.global.common.OrderDirection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -52,6 +25,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
+import static io.oduck.api.global.utils.AnimeTestUtils.*;
+import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
