@@ -1,6 +1,7 @@
 package io.oduck.api.unit.anime.repository;
 
 import io.oduck.api.domain.anime.dto.AnimeReq;
+import io.oduck.api.domain.anime.dto.AnimeReq.EpisodeCountEnum;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.domain.anime.entity.*;
 import io.oduck.api.domain.anime.repository.*;
@@ -502,6 +503,11 @@ public class AnimeRepositoryTest {
     @Nested
     @DisplayName("조회")
     class GetAnime{
+        List<Long> genreIds = new ArrayList<>();
+        List<BroadcastType> broadcastTypes = new ArrayList<>();
+        List<EpisodeCountEnum> episodeCountEnums = new ArrayList<>();
+        List<Integer> years = new ArrayList<>();
+        List<Quarter> quarters = new ArrayList<>();
         @Test
         @DisplayName("애니 조회 성공")
         void getAnimes() {
@@ -518,7 +524,7 @@ public class AnimeRepositoryTest {
                     order.getOrder()
             );
 
-            SearchFilterDsl searchFilter = new SearchFilterDsl(null, null, null, null, null);
+            SearchFilterDsl searchFilter = new SearchFilterDsl(genreIds, broadcastTypes, episodeCountEnums, years, quarters);
 
             //when
             Slice<SearchResult> animes = animeRepository.findAnimesByCondition(

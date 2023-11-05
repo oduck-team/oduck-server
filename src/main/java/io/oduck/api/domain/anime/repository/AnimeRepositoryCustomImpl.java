@@ -10,7 +10,6 @@ import static org.springframework.data.domain.Sort.Direction;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.BooleanTemplate;
 import com.querydsl.core.util.StringUtils;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -56,8 +55,7 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
                         genreIdsIn(searchFilterDsl.getGenreIds()),
                         broadcastTypesIn(searchFilterDsl.getBroadcastTypes()),
                         compareEpisodeCount(searchFilterDsl.getEpisodeCountEnums()),
-                        yearsIn(searchFilterDsl.getYears()),
-                        currentYearsAndQuarters(searchFilterDsl.getQuarters()),
+                        yearFilters(searchFilterDsl.getQuarters(), searchFilterDsl.getYears()),
                         cursorCondition(cursor, pageable),
                         isReleased(true),
                         notDeleted()
@@ -66,6 +64,25 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
                 .limit(pageable.getPageSize());
 
         return fetchSliceByCursor(sortPath(anime), jpaQuery, pageable);
+    }
+
+    private BooleanExpression yearFilters(List<Quarter> quarters, List<Integer> years) {
+        BooleanExpression firstExpression = currentYearsAndQuarters(quarters);
+        BooleanExpression secondExpression  = yearsIn(years);
+
+        if (firstExpression == null && secondExpression == null) {
+            return null;
+        }
+
+        if (firstExpression == null) {
+            return secondExpression;
+        }
+
+        if (secondExpression == null) {
+            return firstExpression;
+        }
+
+        return firstExpression.or(secondExpression);
     }
 
     private BooleanExpression isReleased(boolean isReleased) {
@@ -111,11 +128,11 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
 
         BooleanExpression expression = null;
         for (Quarter quarter : quarters) {
-            BooleanExpression and = anime.year.eq(currentYear).and(anime.quarter.eq(quarter));
+            BooleanExpression or = anime.year.eq(currentYear).and(anime.quarter.eq(quarter));
             if(expression == null){
-                expression = and;
+                expression = or;
             }else{
-                expression.and(and);
+                expression = expression.or(or);
             }
         }
 
@@ -146,14 +163,14 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
                 .orElse(null);
 
         // BooleanExpression 조건 설정
-        BooleanTemplate loeTemplate = (BooleanTemplate) anime.episodeCount.loe(maxCount);
-        BooleanTemplate goeTemplate = (overHundredCount != null) ? (BooleanTemplate) anime.episodeCount.goe(overHundredCount) : null;
+        BooleanExpression loeExpression = anime.episodeCount.loe(maxCount);
+        BooleanExpression goeExpression = (overHundredCount != null) ? anime.episodeCount.goe(overHundredCount) : null;
 
         // loe와 goe 조건을 조합하여 반환
-        if (goeTemplate != null) {
-            return loeTemplate.and(goeTemplate);
+        if (goeExpression != null) {
+            return loeExpression.or(goeExpression);
         } else {
-            return loeTemplate;
+            return loeExpression;
         }
     }
 

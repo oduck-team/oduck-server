@@ -186,7 +186,49 @@ include::{snippets}/getBookmarks/successWithCursor/http-response.adoc[]
 include::{snippets}/getBookmarks/successWithCursor/response-body.adoc[]
 
 .response-fields
-include::{snippets}/getBookmarks/successWithCursor/response-fields.adoc[]
+include::{snippets}/getBookmarks/successWithCursor/response-fields.adoc[]==== 성공시, cursor가 없을 경우
+.curl-request
+include::{snippets}/getBookmarks/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getBookmarks/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/getBookmarks/success/path-parameters.adoc[]
+
+.query-parameters
+include::{snippets}/getBookmarks/success/query-parameters.adoc[]
+
+.http-response
+include::{snippets}/getBookmarks/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getBookmarks/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getBookmarks/success/response-fields.adoc[]
+
+==== 성공시, cursor가 있을 경우
+.curl-request
+include::{snippets}/getBookmarks/successWithCursor/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getBookmarks/successWithCursor/http-request.adoc[]
+
+.request-param
+include::{snippets}/getBookmarks/successWithCursor/path-parameters.adoc[]
+
+.query-parameters
+include::{snippets}/getBookmarks/successWithCursor/query-parameters.adoc[]
+
+.http-response
+include::{snippets}/getBookmarks/successWithCursor/http-response.adoc[]
+
+.response-body
+include::{snippets}/getBookmarks/successWithCursor/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getBookmarks/successWithCursor/response-fields.adoc[]sho
 
 == animes
 === GET api/v1/animes
@@ -285,17 +327,19 @@ include::{snippets}/bookmark/checkBookmarked/notExist/http-response.adoc[]
 == shortReview
 
 === GET api/v1/short-reviews/animeId/1
-
+==== 성공시, cursor가 없을 경우
 .curl-request
 include::{snippets}/getShortReviews/success/curl-request.adoc[]
 
 .http-request
 include::{snippets}/getShortReviews/success/http-request.adoc[]
 
-.path-parameters
+.request-param
 include::{snippets}/getShortReviews/success/path-parameters.adoc[]
 
-==== 성공시
+.query-parameters
+include::{snippets}/getShortReviews/success/query-parameters.adoc[]
+
 .http-response
 include::{snippets}/getShortReviews/success/http-response.adoc[]
 
@@ -305,8 +349,27 @@ include::{snippets}/getShortReviews/success/response-body.adoc[]
 .response-fields
 include::{snippets}/getShortReviews/success/response-fields.adoc[]
 
+==== 성공시, cursor가 있을 경우
+.curl-request
+include::{snippets}/getShortReviews/withCursor/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getShortReviews/withCursor/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/getShortReviews/withCursor/success/path-parameters.adoc[]
+
+.query-parameters
+include::{snippets}/getShortReviews/withCursor/success/query-parameters.adoc[]
+
 .http-response
-include::{snippets}/getShortReviews/success/http-response.adoc[]
+include::{snippets}/getShortReviews/withCursor/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getShortReviews/withCursor/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getShortReviews/withCursor/success/response-fields.adoc[]
 ==== 실패시
 
 === POST api/v1/short-reviews/1
@@ -332,23 +395,29 @@ include::{snippets}/postShortReview/success/http-response.adoc[]
 === PATCH api/v1/short-reviews/1
 
 .curl-request
-include::{snippets}/patchShortReviewReq/success/curl-request.adoc[]
+include::{snippets}/patchShortReview/success/curl-request.adoc[]
 
 .http-request
-include::{snippets}/patchShortReviewReq/success/http-request.adoc[]
+include::{snippets}/patchShortReview/success/http-request.adoc[]
 
 .request-param
-include::{snippets}/patchShortReviewReq/success/path-parameters.adoc[]
+include::{snippets}/patchShortReview/success/path-parameters.adoc[]
 
 .request-body
-include::{snippets}/patchShortReviewReq/success/request-body.adoc[]
+include::{snippets}/patchShortReview/success/request-body.adoc[]
 
 .request-fields
-include::{snippets}/patchShortReviewReq/success/request-fields.adoc[]
+include::{snippets}/patchShortReview/success/request-fields.adoc[]
 
 ==== 성공시
 .http-response
-include::{snippets}/patchShortReviewReq/success/http-response.adoc[]
+include::{snippets}/patchShortReview/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/patchShortReview/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/patchShortReview/success/response-fields.adoc[]
 
 
 ==== 실패시
