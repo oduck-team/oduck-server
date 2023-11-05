@@ -59,7 +59,7 @@ public class VoiceActorServiceTest {
             assertThatNoException();
 
             //verify
-            verify(voiceActorRepository, times(1)).findAll();
+            verify(voiceActorRepository, times(1)).findAllByDeletedAtIsNull();
         }
     }
 }
