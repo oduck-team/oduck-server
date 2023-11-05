@@ -59,7 +59,8 @@ public class AnimeController {
 
         SearchFilterDsl searchFilterDsl = new SearchFilterDsl(genreIds, broadcastTypes, episodeCountEnums, years, quarters);
 
-        SliceResponse<AnimeRes.SearchResult> res = animeService.getAnimesByCondition(query, cursor,  sort, order, size, searchFilterDsl);
+        SliceResponse<AnimeRes.SearchResult> res = animeService.getAnimesByCondition(query, cursor,  sort,
+            order, size, searchFilterDsl);
         return ResponseEntity.ok(res);
     }
 
@@ -80,15 +81,12 @@ public class AnimeController {
         }
     }
 
-    private void extractCurrentYearsNotInCurrentYear(List<Integer> years) {
-        if (years == null) {
-            years = null;
-        }else{
-            int currentYear = LocalDate.now().getYear();
-            years = years.stream()
-                    .filter(year -> year != currentYear)
-                    .collect(Collectors.toList());
-        }
+    private List<Integer> extractCurrentYearsNotInCurrentYear(List<Integer> years) {
+        int currentYear = LocalDate.now().getYear();
+
+        return years.stream()
+                .filter(year -> year != currentYear)
+                .collect(Collectors.toList());
     }
 
     private void validateDuplicateQuarters(List<Quarter> quarters) {

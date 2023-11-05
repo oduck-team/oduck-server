@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,4 +34,23 @@ public class AttractionPoint extends BaseEntity {
 
   @Enumerated(EnumType.STRING)
   private AttractionElement attractionElement;
+
+  @Builder
+  public AttractionPoint(Long id, Member member, Anime anime, AttractionElement attractionElement) {
+    this.id = id;
+    this.member = member;
+    this.anime = anime;
+    this.attractionElement = attractionElement;
+  }
+
+  public void relateMember(Member member){
+    this.member = member;
+  }
+  public void relateAnime(Anime anime){
+    this.anime = anime;
+  }
+
+  public void updateElement(AttractionElement attractionElement){
+    this.attractionElement = attractionElement;
+  }
 }

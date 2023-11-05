@@ -14,9 +14,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class LogoutHandler implements LogoutSuccessHandler {
 
-    @Value("${config.base.url}")
-    private String BASE_URL;
-
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
