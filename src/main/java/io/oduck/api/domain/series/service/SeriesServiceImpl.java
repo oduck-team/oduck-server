@@ -5,7 +5,9 @@ import static io.oduck.api.domain.series.dto.SeriesReq.PostReq;
 import io.oduck.api.domain.series.dto.SeriesRes;
 import io.oduck.api.domain.series.entity.Series;
 import io.oduck.api.domain.series.repository.SeriesRepository;
+import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.global.exception.ConflictException;
+import io.oduck.api.global.exception.NotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +42,27 @@ public class SeriesServiceImpl implements SeriesService{
     @Override
     @Transactional(readOnly = true)
     public List<SeriesRes> getSeries() {
-        return seriesRepository.findAll().stream()
+        return seriesRepository.findAllByDeletedAtIsNull().stream()
                 .map(s -> new SeriesRes(s.getId(), s.getTitle()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void update(Long seriesId, String title) {
+        Series series = findById(seriesId);
+
+        series.update(title);
+    }
+
+    @Override
+    public void delete(Long seriesId) {
+        Series series = findById(seriesId);
+
+        series.delete();
+    }
+
+    private Series findById(Long seriesId) {
+        return seriesRepository.findByIdAndDeletedAtIsNull(seriesId)
+            .orElseThrow(() -> new NotFoundException("series"));
     }
 }

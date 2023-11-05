@@ -12,4 +12,7 @@ public interface VoiceActorService {
 
     List<VoiceActorRes> getVoiceActors();
 
+    void update(Long voiceActorId, String name);
+
+    void delete(Long voiceActorId);
 }
