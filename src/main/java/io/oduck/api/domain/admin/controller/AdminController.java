@@ -152,6 +152,28 @@ public class AdminController {
         return ResponseEntity.ok(originalAuthors);
     }
 
+    // 원작 작가 수정
+    @PatchMapping("/original-authors/{originalAuthorId}")
+    public ResponseEntity<Object> patchOriginalAuthor(
+        @PathVariable Long originalAuthorId, @RequestBody @Valid OriginalAuthorReq.PatchReq req
+    ){
+
+        originalAuthorService.update(originalAuthorId, req.getName());
+
+        return ResponseEntity.noContent().build();
+    }
+
+    // 원작 작가 삭제
+    @DeleteMapping("/original-authors/{originalAuthorId}")
+    public ResponseEntity<Object> deleteOriginalAuthor(
+        @PathVariable Long originalAuthorId
+    ){
+
+        originalAuthorService.delete(originalAuthorId);
+
+        return ResponseEntity.noContent().build();
+    }
+
     // 성우 추가
     @PostMapping("/voice-actors")
     public ResponseEntity<Object> postVoiceActor(@RequestBody @Valid VoiceActorReq.PostReq req) {
@@ -168,6 +190,28 @@ public class AdminController {
         List<VoiceActorRes> voiceActors = voiceActorService.getVoiceActors();
 
         return ResponseEntity.ok(voiceActors);
+    }
+
+    // 성우 수정
+    @PatchMapping("/voice-actors/{voiceActorId}")
+    public ResponseEntity<Object> patchVoiceActor(
+        @PathVariable Long voiceActorId, @RequestBody @Valid VoiceActorReq.PatchReq req
+    ){
+
+        voiceActorService.update(voiceActorId, req.getName());
+
+        return ResponseEntity.noContent().build();
+    }
+
+    // 성우 삭제
+    @DeleteMapping("/voice-actors/{voiceActorId}")
+    public ResponseEntity<Object> deleteVoiceActor(
+        @PathVariable Long voiceActorId
+    ){
+
+        voiceActorService.delete(voiceActorId);
+
+        return ResponseEntity.noContent().build();
     }
 
     // 스튜디오 추가
@@ -188,6 +232,28 @@ public class AdminController {
         return ResponseEntity.ok(studios);
     }
 
+    // 스튜디오 수정
+    @PatchMapping("/studios/{studioId}")
+    public ResponseEntity<Object> patchStudio(
+        @PathVariable Long studioId, @RequestBody @Valid StudioReq.PatchReq req
+    ){
+
+        studioService.update(studioId, req.getName());
+
+        return ResponseEntity.noContent().build();
+    }
+
+    // 스튜디오 삭제
+    @DeleteMapping("/studios/{studioId}")
+    public ResponseEntity<Object> deleteStudio(
+        @PathVariable Long studioId
+    ){
+
+        studioService.delete(studioId);
+
+        return ResponseEntity.noContent().build();
+    }
+
     // 장르 추가
     @PostMapping("/genres")
     public ResponseEntity<Object> postGenre(@RequestBody @Valid GenreReq.PostReq req) {
@@ -206,6 +272,28 @@ public class AdminController {
         return ResponseEntity.ok(genres);
     }
 
+    // 장르 수정
+    @PatchMapping("/genres/{genreId}")
+    public ResponseEntity<Object> patchGenre(
+        @PathVariable Long genreId, @RequestBody @Valid GenreReq.PatchReq req
+    ){
+
+        genreService.update(genreId, req.getName());
+
+        return ResponseEntity.noContent().build();
+    }
+
+    // 장르 삭제
+    @DeleteMapping("/genres/{genreId}")
+    public ResponseEntity<Object> deleteGenre(
+        @PathVariable Long genreId
+    ){
+
+        genreService.delete(genreId);
+
+        return ResponseEntity.noContent().build();
+    }
+
     // 시리즈 추가
     @PostMapping("/series")
     public ResponseEntity<Object> postSeries(@RequestBody @Valid SeriesReq.PostReq req) {
@@ -222,5 +310,27 @@ public class AdminController {
         List<SeriesRes> seriesList = seriesService.getSeries();
 
         return ResponseEntity.ok(seriesList);
+    }
+
+    // 시리즈 수정
+    @PatchMapping("/series/{seriesId}")
+    public ResponseEntity<Object> patchSeries(
+        @PathVariable Long seriesId, @RequestBody @Valid SeriesReq.PatchReq req
+    ){
+
+        seriesService.update(seriesId, req.getTitle());
+
+        return ResponseEntity.noContent().build();
+    }
+
+    // 시리즈 삭제
+    @DeleteMapping("/series/{seriesId}")
+    public ResponseEntity<Object> deleteSeries(
+        @PathVariable Long seriesId
+    ){
+
+        seriesService.delete(seriesId);
+
+        return ResponseEntity.noContent().build();
     }
 }
