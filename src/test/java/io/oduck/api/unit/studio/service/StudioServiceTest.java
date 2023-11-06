@@ -58,7 +58,7 @@ public class StudioServiceTest {
             assertThatNoException();
 
             //verify
-            verify(studioRepository, times(1)).findAll();
+            verify(studioRepository, times(1)).findAllByDeletedAtIsNull();
         }
     }
 }

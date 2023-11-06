@@ -688,6 +688,43 @@ include::{snippets}/postOriginalAuthor/success/http-response.adoc[]
 .http-response
 include::{snippets}/postOriginalAuthor/fail/http-response.adoc[]
 
+=== PATCH api/v1/oduckdmin/original-authors/:id
+.curl-request
+include::{snippets}/patchOriginalAuthor/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchOriginalAuthor/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/patchOriginalAuthor/success/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/patchOriginalAuthor/success/request-fields.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/patchOriginalAuthor/success/http-response.adoc[]
+
+==== 실패시
+
+=== DELETE api/v1/oduckdmin/original-authors/:id
+.curl-request
+include::{snippets}/deleteOriginalAuthor/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/deleteOriginalAuthor/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/deleteOriginalAuthor/success/path-parameters.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/deleteOriginalAuthor/success/http-response.adoc[]
+
+==== 실패시
+
 === GET api/v1/oduckdmin/voice-actors
 
 .curl-request
@@ -728,6 +765,43 @@ include::{snippets}/postVoiceActor/success/http-response.adoc[]
 ==== 실패 시(이름 중복)
 .http-response
 include::{snippets}/postVoiceActor/fail/http-response.adoc[]
+
+=== PATCH api/v1/oduckdmin/voice-actors/:id
+.curl-request
+include::{snippets}/patchVoiceActor/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchVoiceActor/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/patchVoiceActor/success/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/patchVoiceActor/success/request-fields.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/patchVoiceActor/success/http-response.adoc[]
+
+==== 실패시
+
+=== DELETE api/v1/oduckdmin/voice-actors/:id
+.curl-request
+include::{snippets}/deleteVoiceActor/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/deleteVoiceActor/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/deleteVoiceActor/success/path-parameters.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/deleteVoiceActor/success/http-response.adoc[]
+
+==== 실패시
 
 === GET api/v1/oduckdmin/studios
 
@@ -770,6 +844,43 @@ include::{snippets}/postStudio/success/http-response.adoc[]
 .http-response
 include::{snippets}/postStudio/fail/http-response.adoc[]
 
+=== PATCH api/v1/oduckdmin/studios/:id
+.curl-request
+include::{snippets}/patchStudio/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchStudio/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/patchStudio/success/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/patchStudio/success/request-fields.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/patchStudio/success/http-response.adoc[]
+
+==== 실패시
+
+=== DELETE api/v1/oduckdmin/studios/:id
+.curl-request
+include::{snippets}/deleteStudio/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/deleteStudio/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/deleteStudio/success/path-parameters.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/deleteStudio/success/http-response.adoc[]
+
+==== 실패시
+
 === GET api/v1/oduckdmin/genres
 
 .curl-request
@@ -810,6 +921,43 @@ include::{snippets}/postGenre/success/http-response.adoc[]
 ==== 실패 시 (이름 중복)
 .http-response
 include::{snippets}/postGenre/fail/http-response.adoc[]
+
+=== PATCH api/v1/oduckdmin/genres/:id
+.curl-request
+include::{snippets}/patchGenre/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchGenre/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/patchGenre/success/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/patchGenre/success/request-fields.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/patchGenre/success/http-response.adoc[]
+
+==== 실패시
+
+=== DELETE api/v1/oduckdmin/genres/:id
+.curl-request
+include::{snippets}/deleteGenre/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/deleteGenre/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/deleteGenre/success/path-parameters.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/deleteGenre/success/http-response.adoc[]
+
+==== 실패시
 
 === GET api/v1/oduckdmin/series
 
@@ -852,6 +1000,43 @@ include::{snippets}/postSeries/success/http-response.adoc[]
 .http-response
 include::{snippets}/postSeries/fail/http-response.adoc[]
 ==== 실패 시
+
+=== PATCH api/v1/oduckdmin/series/:id
+.curl-request
+include::{snippets}/patchSeries/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchSeries/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/patchSeries/success/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/patchSeries/success/request-fields.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/patchSeries/success/http-response.adoc[]
+
+==== 실패시
+
+=== DELETE api/v1/oduckdmin/series/:id
+.curl-request
+include::{snippets}/deleteSeries/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/deleteSeries/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/deleteSeries/success/path-parameters.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/deleteSeries/success/http-response.adoc[]
+
+==== 실패시
 
 == starRating
 === POST api/v1/ratings

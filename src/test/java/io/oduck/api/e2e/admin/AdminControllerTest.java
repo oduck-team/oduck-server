@@ -5,6 +5,7 @@ import io.oduck.api.domain.anime.dto.AnimeReq.*;
 import io.oduck.api.domain.anime.dto.AnimeVoiceActorReq;
 import io.oduck.api.domain.genre.dto.GenreReq;
 import io.oduck.api.domain.originalAuthor.dto.OriginalAuthorReq;
+import io.oduck.api.domain.originalAuthor.dto.OriginalAuthorReq.PatchReq;
 import io.oduck.api.domain.series.dto.SeriesReq;
 import io.oduck.api.domain.studio.dto.StudioReq;
 import io.oduck.api.domain.voiceActor.dto.VoiceActorReq;
@@ -540,6 +541,65 @@ public class AdminControllerTest {
                     )
                 ));
         }
+
+        @Test
+        @DisplayName("수정 성공 시 Http Status 204 반환")
+        void patchOriginalAuthor() throws Exception {
+            //given
+            Long originalAuthorId = 1L;
+            OriginalAuthorReq.PatchReq req = new PatchReq("원작 작가 수정");
+            String content = gson.toJson(req);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                patch(ADMIN_URL+"/original-authors/{originalAuthorId}", originalAuthorId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(content)
+            );
+
+            //then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(document("patchOriginalAuthor/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("originalAuthorId").description("원작 작가의 식별자")
+                    ),
+                    requestFields(attributes(key("title").value("Fields for original author creation")),
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "공백을 허용하지 않습니다. 1~50자를 허용합니다."))
+                            .description("원작 작가의 이름")
+                    )
+                ));
+        }
+
+        @Test
+        @DisplayName("삭제 성공 시 Http Status 204 반환")
+        void deleteOriginalAuthor() throws Exception {
+            //given
+            Long originalAuthorId = 1L;
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                delete(ADMIN_URL+"/original-authors/{originalAuthorId}", originalAuthorId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+
+            //then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(document("deleteOriginalAuthor/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("originalAuthorId").description("원작 작가의 식별자")
+                    )
+                ));
+        }
     }
 
     @Nested
@@ -627,6 +687,65 @@ public class AdminControllerTest {
                             .type(JsonFieldType.STRING)
                             .attributes(field("constraints", "공백을 허용하지 않습니다. 1~50자를 허용합니다."))
                             .description("성우의 이름")
+                    )
+                ));
+        }
+
+        @Test
+        @DisplayName("수정 성공 시 Http Status 204 반환")
+        void patchVoiceActor() throws Exception {
+            //given
+            Long voiceActorId = 1L;
+            VoiceActorReq.PatchReq req = new VoiceActorReq.PatchReq("성우 수정");
+            String content = gson.toJson(req);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                patch(ADMIN_URL+"/voice-actors/{voiceActorId}", voiceActorId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(content)
+            );
+
+            //then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(document("patchVoiceActor/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("voiceActorId").description("성우의 식별자")
+                    ),
+                    requestFields(attributes(key("title").value("Fields for voice actor creation")),
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "공백을 허용하지 않습니다. 1~50자를 허용합니다."))
+                            .description("성우의 이름")
+                    )
+                ));
+        }
+
+        @Test
+        @DisplayName("삭제 성공 시 Http Status 204 반환")
+        void deleteVoiceActor() throws Exception {
+            //given
+            Long voiceActorId = 1L;
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                delete(ADMIN_URL+"/voice-actors/{voiceActorId}", voiceActorId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+
+            //then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(document("deleteVoiceActor/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("voiceActorId").description("성우의 식별자")
                     )
                 ));
         }
@@ -720,6 +839,65 @@ public class AdminControllerTest {
                     )
                 ));
         }
+
+        @Test
+        @DisplayName("수정 성공 시 Http Status 204 반환")
+        void patchStudio() throws Exception {
+            //given
+            Long studioId = 1L;
+            StudioReq.PatchReq req = new StudioReq.PatchReq("스튜디오 수정");
+            String content = gson.toJson(req);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                patch(ADMIN_URL+"/studios/{studioId}", studioId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(content)
+            );
+
+            //then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(document("patchStudio/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("studioId").description("스튜디오의 식별자")
+                    ),
+                    requestFields(attributes(key("title").value("Fields for studio creation")),
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "공백을 허용하지 않습니다. 1~50자를 허용합니다."))
+                            .description("스튜디오의 이름")
+                    )
+                ));
+        }
+
+        @Test
+        @DisplayName("삭제 성공 시 Http Status 204 반환")
+        void deleteStudio() throws Exception {
+            //given
+            Long studioId = 1L;
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                delete(ADMIN_URL+"/studios/{studioId}", studioId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+
+            //then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(document("deleteStudio/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("studioId").description("스튜디오의 식별자")
+                    )
+                ));
+        }
     }
 
 
@@ -755,7 +933,7 @@ public class AdminControllerTest {
 
         @Test
         @DisplayName("등록 성공 시 Http Status 204 반환")
-        void postVoiceActor() throws Exception {
+        void postGenre() throws Exception {
             String name = "이세계";
             GenreReq.PostReq postReq = new GenreReq.PostReq(name);
             String content = gson.toJson(postReq);
@@ -808,6 +986,65 @@ public class AdminControllerTest {
                             .type(JsonFieldType.STRING)
                             .attributes(field("constraints", "공백을 허용하지 않습니다. 1~15자를 허용합니다."))
                             .description("장르의 이름")
+                    )
+                ));
+        }
+
+        @Test
+        @DisplayName("수정 성공 시 Http Status 204 반환")
+        void patchGenre() throws Exception {
+            //given
+            Long genreId = 1L;
+            GenreReq.PatchReq req = new GenreReq.PatchReq("장르 수정");
+            String content = gson.toJson(req);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                patch(ADMIN_URL+"/genres/{genreId}", genreId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(content)
+            );
+
+            //then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(document("patchGenre/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("genreId").description("장르의 식별자")
+                    ),
+                    requestFields(attributes(key("title").value("Fields for studio creation")),
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "공백을 허용하지 않습니다. 1~15자를 허용합니다."))
+                            .description("장르의 이름")
+                    )
+                ));
+        }
+
+        @Test
+        @DisplayName("삭제 성공 시 Http Status 204 반환")
+        void deleteGenre() throws Exception {
+            //given
+            Long genreId = 1L;
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                delete(ADMIN_URL+"/genres/{genreId}", genreId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+
+            //then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(document("deleteGenre/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("genreId").description("장르의 식별자")
                     )
                 ));
         }
@@ -899,6 +1136,65 @@ public class AdminControllerTest {
                             .type(JsonFieldType.STRING)
                             .attributes(field("constraints", "공백을 허용하지 않습니다. 1~50자를 허용합니다."))
                             .description("시리즈의 제목")
+                    )
+                ));
+        }
+
+        @Test
+        @DisplayName("수정 성공 시 Http Status 204 반환")
+        void patchSeries() throws Exception {
+            //given
+            Long seriesId = 1L;
+            SeriesReq.PatchReq req = new SeriesReq.PatchReq("시리즈 수정");
+            String content = gson.toJson(req);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                patch(ADMIN_URL+"/series/{seriesId}", seriesId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(content)
+            );
+
+            //then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(document("patchSeries/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("seriesId").description("시리즈의 식별자")
+                    ),
+                    requestFields(attributes(key("title").value("Fields for studio creation")),
+                        fieldWithPath("title")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "공백을 허용하지 않습니다. 1~50자를 허용합니다."))
+                            .description("시리즈의 이름")
+                    )
+                ));
+        }
+
+        @Test
+        @DisplayName("삭제 성공 시 Http Status 204 반환")
+        void deleteSeries() throws Exception {
+            //given
+            Long seriesId = 1L;
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                delete(ADMIN_URL+"/series/{seriesId}", seriesId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+
+            //then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(document("deleteSeries/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("seriesId").description("시리즈의 식별자")
                     )
                 ));
         }

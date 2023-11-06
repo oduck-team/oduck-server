@@ -5,7 +5,9 @@ import static io.oduck.api.domain.originalAuthor.dto.OriginalAuthorReq.PostReq;
 import io.oduck.api.domain.originalAuthor.dto.OriginalAuthorRes;
 import io.oduck.api.domain.originalAuthor.entity.OriginalAuthor;
 import io.oduck.api.domain.originalAuthor.repository.OriginalAuthorRepository;
+import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.global.exception.ConflictException;
+import io.oduck.api.global.exception.NotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +43,27 @@ public class OriginalAuthorServiceImpl implements OriginalAuthorService{
     @Transactional(readOnly = true)
     public List<OriginalAuthorRes> getOriginalAuthors() {
 
-        return originalAuthorRepository.findAll().stream()
+        return originalAuthorRepository.findAllByDeletedAtIsNull().stream()
                 .map(oa -> new OriginalAuthorRes(oa.getId(), oa.getName()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void update(Long originalAuthorId, String name) {
+        OriginalAuthor originalAuthor = findById(originalAuthorId);
+
+        originalAuthor.update(name);
+    }
+
+    @Override
+    public void delete(Long originalAuthorId) {
+        OriginalAuthor originalAuthor = findById(originalAuthorId);
+
+        originalAuthor.delete();
+    }
+
+    private OriginalAuthor findById(Long originalAuthorId) {
+        return originalAuthorRepository.findByIdAndDeletedAtIsNull(originalAuthorId)
+            .orElseThrow(() -> new NotFoundException("originalAuthor"));
     }
 }

@@ -13,8 +13,18 @@ public class GenreReq {
     @NoArgsConstructor
     public static class PostReq {
         @NotBlank
-        @Length(min = 1, max = 50,
-                message = "글자 수는 0~50을 허용합니다.")
+        @Length(min = 1, max = 15,
+                message = "글자 수는 1~15을 허용합니다.")
+        private String name;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PatchReq {
+        @NotBlank
+        @Length(min = 1, max = 15,
+            message = "글자 수는 1~15을 허용합니다.")
         private String name;
     }
 }

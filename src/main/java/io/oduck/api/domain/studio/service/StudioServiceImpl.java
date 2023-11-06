@@ -5,6 +5,7 @@ import io.oduck.api.domain.studio.dto.StudioRes;
 import io.oduck.api.domain.studio.entity.Studio;
 import io.oduck.api.domain.studio.repository.StudioRepository;
 import io.oduck.api.global.exception.ConflictException;
+import io.oduck.api.global.exception.NotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -39,8 +40,27 @@ public class StudioServiceImpl implements StudioService{
     @Override
     @Transactional(readOnly = true)
     public List<StudioRes> getStudios() {
-        return studioRepository.findAll().stream()
+        return studioRepository.findAllByDeletedAtIsNull().stream()
                 .map(st -> new StudioRes(st.getId(), st.getName()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void update(Long studioId, String name) {
+        Studio studio = findById(studioId);
+
+        studio.update(name);
+    }
+
+    @Override
+    public void delete(Long studioId) {
+        Studio studio = findById(studioId);
+
+        studio.delete();
+    }
+
+    private Studio findById(Long studioId) {
+        return studioRepository.findByIdAndDeletedAtIsNull(studioId)
+            .orElseThrow(() -> new NotFoundException("studio"));
     }
 }
