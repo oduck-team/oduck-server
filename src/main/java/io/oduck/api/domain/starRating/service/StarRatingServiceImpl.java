@@ -49,7 +49,7 @@ public class StarRatingServiceImpl implements StarRatingService {
     }
 
     @Override
-    public RatedDateTimeRes chekRated(Long memberId, Long animeId) {
+    public RatedDateTimeRes checkRated(Long memberId, Long animeId) {
         StarRating foundStarRating = findByMemberIdAndAnimeId(memberId, animeId)
             .orElseThrow(() -> new NotFoundException("StarRating"));
 

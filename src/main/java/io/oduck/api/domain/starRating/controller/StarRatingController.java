@@ -39,6 +39,6 @@ public class StarRatingController {
         @PathVariable("animeId") @Positive Long animeId,
         @LoginUser AuthUser user
     ) {
-        return ResponseEntity.ok(starRatingService.chekRated(user.getId(), animeId));
+        return ResponseEntity.ok(starRatingService.checkRated(user.getId(), animeId));
     }
 }
