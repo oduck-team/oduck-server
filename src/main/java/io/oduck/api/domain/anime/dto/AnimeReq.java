@@ -228,9 +228,9 @@ public class AnimeReq {
     @Getter
     @AllArgsConstructor
     public enum Sort {
-        LATEST("createdAt"),
+        LATEST("title"),
         REVIEW_COUNT("reviewCount"),
-        SCORE("score");
+        SCORE("starRatingScoreTotal");
 
         private final String sort;
     }
