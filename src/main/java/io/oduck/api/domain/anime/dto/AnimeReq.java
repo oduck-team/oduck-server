@@ -7,11 +7,12 @@ import io.oduck.api.domain.anime.entity.Status;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
-import org.hibernate.validator.constraints.Length;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 public class AnimeReq {
 
@@ -235,7 +236,6 @@ public class AnimeReq {
     }
 
     @Getter
-    @ToString
     public static class SearchFilter {
         List<Long> genreIds;
         List<BroadcastType> broadcastTypes;
@@ -244,12 +244,20 @@ public class AnimeReq {
         List<Integer> years;
         List<Quarter> quarters;
 
-        public SearchFilter(List<Long> genreIds, List<BroadcastType> broadcastTypes, List<Status> statuses, List<EpisodeCountEnum> episodeCounts, List<Integer> years, List<Quarter> quarters) {
+        public SearchFilter(List<Long> genreIds, List<BroadcastType> broadcastTypes,
+            List<Status> statuses, List<EpisodeCountEnum> episodeCounts, List<Integer> years,
+            List<Quarter> quarters) {
             this.genreIds = genreIds;
             this.broadcastTypes = broadcastTypes;
             this.statuses = statuses;
             this.episodeCounts = episodeCounts;
-            this.years = years;
+
+            if(years == null){
+                this.years = new ArrayList<>();
+            }else{
+                this.years = years;
+            }
+
             this.quarters = quarters;
         }
     }

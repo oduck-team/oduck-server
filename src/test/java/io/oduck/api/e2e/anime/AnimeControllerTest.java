@@ -1,5 +1,18 @@
 package io.oduck.api.e2e.anime;
 
+import static io.oduck.api.global.config.RestDocsConfig.field;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,15 +29,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-
-import static io.oduck.api.global.config.RestDocsConfig.field;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
@@ -83,6 +87,30 @@ public class AnimeControllerTest {
                                             .attributes(field("constraints", "ASC, DESC"))
                                             .optional()
                                             .description("정렬 방향"),
+                                    parameterWithName("genreIds")
+                                            .attributes(field("constraints", "장르 아이디 리스트"))
+                                            .optional()
+                                            .description("장르 아이디 리스트"),
+                                    parameterWithName("broadcastTypes")
+                                            .attributes(field("constraints", "BroadcastType의 리스트"))
+                                            .optional()
+                                            .description("BroadcastType의 리스트 TVA, ONA, OVA, MOV"),
+                                    parameterWithName("statuses")
+                                            .attributes(field("constraints", "Status의 리스트 ONGOING, FINISHED, UPCOMING, UNKNOWN"))
+                                            .optional()
+                                            .description("Status의 리스트 ONGOING, FINISHED, UPCOMING, UNKNOWN"),
+                                    parameterWithName("episodeCounts")
+                                            .attributes(field("constraints", "EpisodeCountEnum의 리스트. UNDER_TWELVE, UNDER_TWENTY_FOUR, UNDER_FORTY_EIGHT, UNDER_HUNDRED, OVER_HUNDRED를 허용"))
+                                            .optional()
+                                            .description("EpisodeCountEnum의 리스트. UNDER_TWELVE, UNDER_TWENTY_FOUR, UNDER_FORTY_EIGHT, UNDER_HUNDRED, OVER_HUNDRED를 허용"),
+                                    parameterWithName("years")
+                                            .attributes(field("constraints", "년도의 리스트. 현재 년도는 내부 로직으로 걸러집니다."))
+                                            .optional()
+                                            .description("년도 리스트"),
+                                    parameterWithName("quarters")
+                                            .attributes(field("constraints", "Quarter의 리스트. Quarters가 null이거나 empty하지 않으면 자동으로 <최신 년도+분기>로 예상하고 로직을 수행합니다. 예를 들어 2023년에 클라이언트가 Q1으로 요청하면, 서버에 Q1만 보내도 자동으로 2023년은 내부 로직으로 계산합니다."))
+                                            .optional()
+                                            .description("Quarter의 리스트. Quarters가 null이거나 empty하지 않으면 자동으로 <최신 년도+분기>로 예상하고 로직을 수행합니다. 예를 들어 2023년에 클라이언트가 Q1으로 요청하면, 서버에 Q1만 보내도 자동으로 2023년은 내부 로직으로 계산합니다."),
                                     parameterWithName("cursor")
                                             .optional()
                                             .description("마지막 아이템 제목")

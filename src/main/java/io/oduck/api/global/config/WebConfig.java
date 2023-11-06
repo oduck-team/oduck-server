@@ -20,6 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
         // config에 converter 등록
         registry.addConverter(new StringToOrderDirectionConverter());
         registry.addConverter(new StringToBookmarkSortConverter());
+        registry.addConverter(new StringToShortReviewConverter());
         registry.addConverter(new StringToAnimeSortConverter());
     }
 
