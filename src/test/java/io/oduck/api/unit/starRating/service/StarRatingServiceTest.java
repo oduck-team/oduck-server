@@ -128,10 +128,10 @@ public class StarRatingServiceTest {
             StarRating foundStarRating = starRatingRepository.findByMemberIdAndAnimeId(memberId, animeId)
                 .orElseThrow(() -> new RuntimeException("StarRating"));
 
-            RatedDateTimeRes createdAtScore = starRatingService.chekRated(memberId, animeId);
+            RatedDateTimeRes createdAtScore = starRatingService.checkRated(memberId, animeId);
 
             // then
-            assertDoesNotThrow(() -> starRatingService.chekRated(memberId, animeId));
+            assertDoesNotThrow(() -> starRatingService.checkRated(memberId, animeId));
             assertNotNull(createdAtScore);
         }
 
@@ -144,7 +144,7 @@ public class StarRatingServiceTest {
 
             // when
             // then
-            assertThrows(NotFoundException.class, () -> starRatingService.chekRated(memberId, animeId));
+            assertThrows(NotFoundException.class, () -> starRatingService.checkRated(memberId, animeId));
         }
     }
 }
