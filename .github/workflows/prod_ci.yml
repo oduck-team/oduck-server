@@ -45,7 +45,7 @@ jobs:
           aws_region: ${{ secrets.AWs_REGION }}
 
       - name: docker image build
-        run: docker buildx build --platform linux/amd64 -f ./dockerfile-prod -t ${{ secrets.DOCKERHUB_USERNAME }}/oduckio-spring:${{ secrets.PROD_VERSION }} .
+        run: docker build -f dockerfile-dev -t ${{ secrets.DOCKERHUB_USERNAME }}/oduckio-spring:${{ secrets.PROD_VERSION }} .
 
       - name: docker login
         uses: docker/login-action@v2
