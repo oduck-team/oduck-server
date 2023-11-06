@@ -139,30 +139,6 @@ public class MemberServiceTest {
             // then
             assertDoesNotThrow(() -> memberService.updateProfile(patchReq, 1L));
         }
-        @DisplayName("회원 프로필 수정시 실패. 이전 이름과 동일한 이름일때")
-        @Test
-        void updateProfileFailureWhenSameNameAsBefore() {
-            // given
-            Member member = new MemberStub().getMember();
-            MemberProfile memberProfile = member.getMemberProfile();
-            PatchReq patchReq = PatchReq.builder()
-                .name(memberProfile.getName())
-                .description("newDescription")
-                .build();
-            MemberProfile updatedMemberProfile = MemberProfile.builder()
-                .member(member)
-                .name(patchReq.getName())
-                .info(patchReq.getDescription())
-                .build();
-
-            given(memberProfileRepository.findByMemberId(anyLong())).willReturn(Optional.ofNullable(memberProfile));
-
-            // when
-            // then
-            assertThrows(BadRequestException.class,
-                () -> memberService.updateProfile(patchReq, 1L)
-            );
-        }
         @DisplayName("회원 프로필 수정시 실패. 중복 이름 존재시")
         @Test
         void updateProfileFailureWhenSameNameAsAlreadyExist() {

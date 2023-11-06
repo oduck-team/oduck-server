@@ -106,21 +106,14 @@ public class MemberServiceImpl implements MemberService{
         MemberProfile memberProfile = getProfileByMemberId(memberId);
 
         // Null 체크
-        Optional
-            .ofNullable(body.getName())
-            .ifPresent(
-                name -> {
-                    // 이전 이름과 같은지 체크
-                    if (memberProfile.getName().equals(name)) {
-                        throw new BadRequestException("Same name as before.");
-                    }
+        String name = body.getName();
 
-                    // 이름 중복 체크
-                    checkDuplicatedName(name);
+        if (!memberProfile.getName().equals(name)) {
+            // 이름 중복 체크
+            checkDuplicatedName(name);
 
-                    memberProfile.updateName(name);
-                }
-            );
+            memberProfile.updateName(name);
+        }
 
         // Null 체크
         Optional

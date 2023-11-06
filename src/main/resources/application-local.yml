@@ -52,11 +52,9 @@ spring:
     redis:
       host: localhost
       port: ${.redis.port}
-      session:
-        store-type: redis
+      repositories:
+        enabled: false
   security:
-    basic:
-      enabled: false
     oauth2:
       client:
         registration:

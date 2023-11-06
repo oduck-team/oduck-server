@@ -135,10 +135,6 @@ include::{snippets}/patchProfile/success/request-fields.adoc[]
 .http-response
 include::{snippets}/patchProfile/success/http-response.adoc[]
 
-==== 실패시(기존 이름과 같을 경우)
-.http-response
-include::{snippets}/patchProfile/failureWhenSameNameAsBefore/http-response.adoc[]
-
 ==== 실패시(이름 중복시)
 .http-response
 include::{snippets}/patchProfile/failureWhenSameNameAsAlreadyExist/http-response.adoc[]
