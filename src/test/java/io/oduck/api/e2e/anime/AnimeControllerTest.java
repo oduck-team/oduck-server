@@ -82,11 +82,11 @@ public class AnimeControllerTest {
                                     parameterWithName("sort")
                                             .attributes(field("constraints", "LATEST, REVIEW_COUNT, SCORE"))
                                             .optional()
-                                            .description("정렬 기준"),
+                                            .description("정렬 기준이다. LATEST, REVIEW_COUNT, SCORE만 허용한다."),
                                     parameterWithName("direction")
                                             .attributes(field("constraints", "ASC, DESC"))
                                             .optional()
-                                            .description("정렬 방향"),
+                                            .description("정렬 방향이다. ASC, DESC만 허용한다."),
                                     parameterWithName("genreIds")
                                             .attributes(field("constraints", "장르 아이디 리스트"))
                                             .optional()
@@ -98,7 +98,7 @@ public class AnimeControllerTest {
                                     parameterWithName("statuses")
                                             .attributes(field("constraints", "Status의 리스트 ONGOING, FINISHED, UPCOMING, UNKNOWN"))
                                             .optional()
-                                            .description("Status의 리스트 ONGOING, FINISHED, UPCOMING, UNKNOWN"),
+                                            .description("status의 리스트. ONGOING, FINISHED, UPCOMING, UNKNOWN"),
                                     parameterWithName("episodeCounts")
                                             .attributes(field("constraints", "EpisodeCountEnum의 리스트. UNDER_TWELVE, UNDER_TWENTY_FOUR, UNDER_FORTY_EIGHT, UNDER_HUNDRED, OVER_HUNDRED를 허용"))
                                             .optional()
@@ -106,7 +106,7 @@ public class AnimeControllerTest {
                                     parameterWithName("years")
                                             .attributes(field("constraints", "년도의 리스트. 현재 년도는 내부 로직으로 걸러집니다."))
                                             .optional()
-                                            .description("년도 리스트"),
+                                            .description("년도의 리스트. 현재 년도는 내부 로직으로 걸러집니다."),
                                     parameterWithName("quarters")
                                             .attributes(field("constraints", "Quarter의 리스트. Quarters가 null이거나 empty하지 않으면 자동으로 <최신 년도+분기>로 예상하고 로직을 수행합니다. 예를 들어 2023년에 클라이언트가 Q1으로 요청하면, 서버에 Q1만 보내도 자동으로 2023년은 내부 로직으로 계산합니다."))
                                             .optional()
