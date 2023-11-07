@@ -9,8 +9,7 @@ import io.oduck.api.domain.member.repository.MemberProfileRepository;
 import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.domain.review.dto.ShortReviewDslDto.ShortReviewDsl;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto;
-import io.oduck.api.domain.review.dto.ShortReviewReqDto.PatchShortReviewReq;
-import io.oduck.api.domain.review.dto.ShortReviewReqDto.PostShortReviewReq;
+import io.oduck.api.domain.review.dto.ShortReviewReqDto.ShortReviewReq;
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewRes;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.review.repository.ShortReviewRepository;
@@ -42,7 +41,7 @@ public class ShortReviewServiceImpl implements ShortReviewService{
 
     @Override
     @Transactional
-    public void save(Long memberId, PostShortReviewReq shortReviewReq) {
+    public void save(Long memberId, ShortReviewReq shortReviewReq) {
         ShortReview shortReview = ShortReview
                                       .builder()
                                       .content(shortReviewReq.getContent())
@@ -59,7 +58,7 @@ public class ShortReviewServiceImpl implements ShortReviewService{
         //회원 입력
         Member member = memberRepository.findById(memberId)
                             .orElseThrow(
-                                () -> new NotFoundException("Memebr")
+                                () -> new NotFoundException("Member")
                             );
         shortReview.relateMember(member);
 
@@ -100,7 +99,7 @@ public class ShortReviewServiceImpl implements ShortReviewService{
     }
 
     @Override
-    public void update(Long memberId, Long reviewId, PatchShortReviewReq req) {
+    public void update(Long memberId, Long reviewId, ShortReviewReq req) {
         ShortReview findShortReview = getShortReview(reviewId);
         Long findMemberId = findShortReview.getMember().getId();
         //리뷰 작성자 인지 확인
