@@ -13,21 +13,7 @@ public class ShortReviewReqDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class PostShortReviewReq{
-        private Long animeId;
-        private String name;
-        private boolean hasSpoiler;
-        @NotBlank
-        @Length(min = 10, max = 100,
-            message = "최소 10에서 100자 까지 입력 가능합니다.")
-        private String content;
-    }
-
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class PatchShortReviewReq{
+    public static class ShortReviewReq{
         private Long animeId;
         private String name;
         private boolean hasSpoiler;
