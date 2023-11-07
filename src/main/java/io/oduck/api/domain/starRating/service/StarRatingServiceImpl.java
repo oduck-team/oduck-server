@@ -58,6 +58,21 @@ public class StarRatingServiceImpl implements StarRatingService {
             .build();
     }
 
+    @Override
+    public boolean updateScore(Long memberId, Long animeId, int score) {
+        StarRating foundStarRating = findByMemberIdAndAnimeId(memberId, animeId)
+            .orElseThrow(() -> new NotFoundException("StarRating"));
+
+        if (foundStarRating.getScore() == score) {
+            return false;
+        }
+
+        foundStarRating.updateScore(score);
+
+        starRatingRepository.save(foundStarRating);
+        return true;
+    }
+
     private Optional<StarRating> findByMemberIdAndAnimeId(Long memberId, Long animeId) {
         return starRatingRepository.findByMemberIdAndAnimeId(memberId, animeId);
     }
