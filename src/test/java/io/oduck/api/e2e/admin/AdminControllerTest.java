@@ -908,7 +908,7 @@ public class AdminControllerTest {
         @DisplayName("조회 성공 시 Http status 200 반환")
         void getGenres() throws Exception {
             ResultActions actions = mockMvc.perform(
-                    RestDocumentationRequestBuilders.get(ADMIN_URL+"/genres")
+                    RestDocumentationRequestBuilders.get("/genres")
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
             );
