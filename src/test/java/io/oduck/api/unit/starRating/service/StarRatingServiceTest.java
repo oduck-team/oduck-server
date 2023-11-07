@@ -147,4 +147,61 @@ public class StarRatingServiceTest {
             assertThrows(NotFoundException.class, () -> starRatingService.checkRated(memberId, animeId));
         }
     }
+
+    @Nested
+    @DisplayName("별점 수정")
+    class UpdateScore {
+        Long memberId = 1L;
+        Long animeId = 1L;
+        int score = 2;
+
+        Member member = Member.builder()
+            .id(memberId)
+            .build();
+        Anime anime = Anime.builder()
+            .id(animeId)
+            .build();
+
+        @Test
+        @DisplayName("별점 수정 성공")
+        void updateScore() {
+            // given
+            StarRating starRating = StarRating.builder()
+                .member(member)
+                .anime(anime)
+                .score(score)
+                .build();
+
+            given(starRatingRepository.findByMemberIdAndAnimeId(memberId, animeId))
+                .willReturn(Optional.ofNullable(starRating));
+
+            // when
+            boolean result = starRatingService.updateScore(memberId, animeId, 5);
+
+            // then
+            assertDoesNotThrow(() -> starRatingService.updateScore(memberId, animeId, score));
+            assertTrue(result);
+        }
+
+        @Test
+        @DisplayName("별점 수정 실패")
+        void updateScoreIfNotExist() {
+            // given
+            StarRating starRating = StarRating.builder()
+                .member(member)
+                .anime(anime)
+                .score(score)
+                .build();
+
+            given(starRatingRepository.findByMemberIdAndAnimeId(memberId, animeId))
+                .willReturn(Optional.ofNullable(starRating));
+
+            // when
+            boolean result = starRatingService.updateScore(memberId, animeId, score);
+
+            // then
+            assertDoesNotThrow(() -> starRatingService.updateScore(memberId, animeId, score));
+            assertFalse(result);
+        }
+    }
 }
