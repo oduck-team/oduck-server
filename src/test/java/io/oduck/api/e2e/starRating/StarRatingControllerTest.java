@@ -4,12 +4,14 @@ import static io.oduck.api.global.config.RestDocsConfig.field;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
@@ -155,5 +157,96 @@ public class StarRatingControllerTest {
                     )
                 );
         }
+    }
+
+    @Nested
+    @DisplayName("GET /ratings/{animeId}")
+    class GetScore {
+        @Test
+        @DisplayName("평점이 없을 때 평점을 조회하면 200 OK를 반환")
+        @WithCustomMockMember(id = 1L, email = "admin", password = "Qwer!234", role = Role.MEMBER)
+        void checkRatedExist() throws Exception {
+            // given
+            Long animeId = 1L;
+
+            // when
+            ResultActions actions = mockMvc.perform(
+                get(BASE_URL + "/{animeId}", animeId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+            );
+
+            // then
+            actions
+                .andExpect(status().isOk())
+                .andDo(
+                    document("starRating/checkRated/exist",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                            parameterWithName("animeId")
+                                .description("애니메 id")
+                        ),
+                        requestHeaders(
+                            headerWithName(HttpHeaders.COOKIE)
+                                .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                .description("Header Cookie, 세션 쿠키")
+                        ),
+                        responseFields(
+                            attributes(key("title")
+                                .value("Fields for starRating get")),
+                            fieldWithPath("createdAt")
+                                .description("별점 생성일")
+                        )
+                    )
+                );
+        }
+
+        @Test
+        @DisplayName("평점이 없을 때 평점을 조회하면 404 Not Found를 반환")
+        @WithCustomMockMember(id = 3L, email = "david", password = "Qwer!234", role = Role.MEMBER)
+        void checkRatedNotExist() throws Exception {
+            // given
+            Long animeId = 2L;
+
+            // when
+            ResultActions actions = mockMvc.perform(
+                get(BASE_URL + "/{animeId}", animeId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+            );
+
+            // then
+            actions
+                .andExpect(status().isNotFound())
+                .andDo(
+                    document("starRating/checkRated/notExist",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                            parameterWithName("animeId")
+                                .description("애니메 id")
+                        ),
+                        requestHeaders(
+                            headerWithName(HttpHeaders.COOKIE)
+                                .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                .description("Header Cookie, 세션 쿠키")
+                        ),
+                        responseFields(
+                            attributes(key("title")
+                                .value("Fields for bookmark creation")),
+                            fieldWithPath("message")
+                                .description("에러 메시지"),
+                            fieldWithPath("fieldErrors")
+                                .description("필드 에러 목록"),
+                            fieldWithPath("violationErrors")
+                                .description("위반 에러 목록")
+                        )
+                    )
+                );
+        }
+
     }
 }

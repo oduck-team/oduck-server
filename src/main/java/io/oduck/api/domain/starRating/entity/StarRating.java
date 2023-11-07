@@ -11,10 +11,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Getter
@@ -36,6 +38,10 @@ public class StarRating extends BaseEntity {
 
   @Column(nullable = false)
   private int score;
+
+  @CreationTimestamp
+  @Column(nullable = false, updatable = false)
+  protected LocalDateTime createdAt;
 
   public void relateMember(Member member) {
     this.member = member;
