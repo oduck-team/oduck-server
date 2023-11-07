@@ -5,6 +5,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -20,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.google.gson.Gson;
 import io.oduck.api.domain.member.entity.Role;
-import io.oduck.api.domain.starRating.dto.StarRatingReqDto.CreateReq;
+import io.oduck.api.domain.starRating.dto.StarRatingReqDto.CreateAndPatchReq;
 import io.oduck.api.global.mockMember.WithCustomMockMember;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -64,7 +65,7 @@ public class StarRatingControllerTest {
             Long animeId = 2L;
             int score = 5;
 
-            CreateReq body = CreateReq.builder()
+            CreateAndPatchReq body = CreateAndPatchReq.builder()
                 .score(score)
                 .build();
 
@@ -115,7 +116,7 @@ public class StarRatingControllerTest {
             Long animeId = 1L;
             int score = 5;
 
-            CreateReq body = CreateReq.builder()
+            CreateAndPatchReq body = CreateAndPatchReq.builder()
                 .score(score)
                 .build();
 
@@ -247,6 +248,111 @@ public class StarRatingControllerTest {
                     )
                 );
         }
+    }
 
+    @Nested
+    @DisplayName("PATCH /ratings/{animeId}")
+    class PatchScore {
+        @Test
+        @DisplayName("평점 수정 성공시 204 No Content 반환")
+        @WithCustomMockMember(id = 2L, email = "john", password = "Qwer!234", role = Role.MEMBER)
+        void patchScore() throws Exception {
+            // given
+            Long animeId = 1L;
+            int score = 5;
+
+            CreateAndPatchReq body = CreateAndPatchReq.builder()
+                .score(score)
+                .build();
+
+            String content = gson.toJson(body);
+
+            // when
+            ResultActions actions = mockMvc.perform(
+                patch(BASE_URL + "/{animeId}", animeId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+                    .content(content)
+            );
+
+            // then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(document("starRating/patchScore/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                            parameterWithName("animeId")
+                                .description("애니메이션 식별자")
+                        ),
+                        requestHeaders(
+                            headerWithName(HttpHeaders.COOKIE)
+                                .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                .optional()
+                                .description("Header Cookie, 세션 쿠키")
+                        ),
+                        requestFields(
+                            attributes(key("title")
+                                .value("Fields for starRating creation")),
+                            fieldWithPath("score")
+                                .type(JsonFieldType.NUMBER)
+                                .attributes(field("constraints", "1~10 사이의 정수"))
+                                .description("애니메 별점")
+                        )
+                    )
+                );
+        }
+
+        @Test
+        @DisplayName("기존 평점과 동일하다면 없다면 409 Conflict 반환")
+        @WithCustomMockMember(id = 3L, email = "john", password = "Qwer!234", role = Role.MEMBER)
+        void patchScoreIfNotExist() throws Exception {
+            // given
+            Long animeId = 1L;
+            int score = 3;
+
+            CreateAndPatchReq body = CreateAndPatchReq.builder()
+                .score(score)
+                .build();
+
+            String content = gson.toJson(body);
+
+            // when
+            ResultActions actions = mockMvc.perform(
+                patch(BASE_URL + "/{animeId}", animeId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+                    .content(content)
+            );
+
+            // then
+            actions
+                .andExpect(status().isConflict())
+                .andDo(document("starRating/patchScore/failure",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                            parameterWithName("animeId")
+                                .description("애니메이션 식별자")
+                        ),
+                        requestHeaders(
+                            headerWithName(HttpHeaders.COOKIE)
+                                .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                .optional()
+                                .description("Header Cookie, 세션 쿠키")
+                        ),
+                        requestFields(
+                            attributes(key("title")
+                                .value("Fields for starRating creation")),
+                            fieldWithPath("score")
+                                .type(JsonFieldType.NUMBER)
+                                .attributes(field("constraints", "1~10 사이의 정수"))
+                                .description("애니메 별점")
+                        )
+                    )
+                );
+        }
     }
 }
