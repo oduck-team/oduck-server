@@ -164,12 +164,12 @@ public class AnimeServiceImpl implements AnimeService{
     }
 
     @Override
-    public void update(Long animeId, PatchAnimeReq req) {
+    public void update(Long animeId, PatchAnimeReq patchReq) {
         Anime anime = findAnime(animeId);
 
         anime.update(
-            req.getTitle(), req.getSummary(), req.getBroadcastType(), req.getEpisodeCount(), req.getThumbnail(), req.getYear(),
-            req.getQuarter(), req.getRating(), req.getStatus(), req.isReleased()
+            patchReq.getTitle(), patchReq.getSummary(), patchReq.getBroadcastType(), patchReq.getEpisodeCount(), patchReq.getThumbnail(), patchReq.getYear(),
+            patchReq.getQuarter(), patchReq.getRating(), patchReq.getStatus(), patchReq.isReleased()
         );
     }
 
