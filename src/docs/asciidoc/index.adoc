@@ -268,6 +268,298 @@ include::{snippets}/getAnimeById/success/response-body.adoc[]
 include::{snippets}/getAnimeById/success/response-fields.adoc[]
 ==== 실패 시
 
+= oDuckio Documentation
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: API 목록
+:source-highlighter: prettify
+
+== auth
+=== POST api/v1/auth/login
+.curl-request
+include::{snippets}/postLogin/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/postLogin/success/http-request.adoc[]
+
+.request-body
+include::{snippets}/postLogin/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/postLogin/success/request-fields.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/postLogin/success/http-response.adoc[]
+
+.response-headers
+include::{snippets}/postLogin/success/response-headers.adoc[]
+
+==== 실패시
+
+=== GET api/v1/auth/status
+.curl-request
+include::{snippets}/getStatus/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getStatus/success/http-request.adoc[]
+
+.request-headers
+include::{snippets}/getStatus/success/request-headers.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/getStatus/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getStatus/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getStatus/success/response-fields.adoc[]
+
+==== 실패시
+
+== members
+=== POST api/v1/members
+.curl-request
+include::{snippets}/postMember/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/postMember/success/http-request.adoc[]
+
+.request-body
+include::{snippets}/postMember/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/postMember/success/request-fields.adoc[]
+==== 성공시
+
+.http-response
+include::{snippets}/postMember/success/http-response.adoc[]
+
+==== 실패시
+
+=== GET api/v1/members/:name
+
+.curl-request
+include::{snippets}/getProfileByName/successIfMine/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getProfileByName/successIfMine/http-request.adoc[]
+
+.request-param
+include::{snippets}/getProfileByName/successIfMine/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/getProfileByName/successIfMine/request-headers.adoc[]
+
+==== 성공시(본인 프로필 조회)
+.http-response
+include::{snippets}/getProfileByName/successIfMine/http-response.adoc[]
+
+.response-body
+include::{snippets}/getProfileByName/successIfMine/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getProfileByName/successIfMine/response-fields.adoc[]
+
+==== 성공시(타인 프로필 조회)
+.http-response
+include::{snippets}/getProfileByName/successIfOthers/http-response.adoc[]
+
+.response-body
+include::{snippets}/getProfileByName/successIfOthers/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getProfileByName/successIfOthers/response-fields.adoc[]
+
+==== 실패시(존재하지 않는 회원 조회)
+.http-response
+include::{snippets}/getProfileByName/failure/http-response.adoc[]
+
+.response-body
+include::{snippets}/getProfileByName/failure/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getProfileByName/failure/response-fields.adoc[]
+
+=== PATCH api/v1/members
+.curl-request
+include::{snippets}/patchProfile/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchProfile/success/http-request.adoc[]
+
+.request-header
+include::{snippets}/patchProfile/success/request-headers.adoc[]
+
+.request-body
+include::{snippets}/patchProfile/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/patchProfile/success/request-fields.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/patchProfile/success/http-response.adoc[]
+
+==== 실패시(이름 중복시)
+.http-response
+include::{snippets}/patchProfile/failureWhenSameNameAsAlreadyExist/http-response.adoc[]
+
+=== GET api/v1/members/:name/bookmarks
+==== 성공시, cursor가 없을 경우
+.curl-request
+include::{snippets}/getBookmarks/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getBookmarks/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/getBookmarks/success/path-parameters.adoc[]
+
+.query-parameters
+include::{snippets}/getBookmarks/success/query-parameters.adoc[]
+
+.http-response
+include::{snippets}/getBookmarks/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getBookmarks/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getBookmarks/success/response-fields.adoc[]
+
+==== 성공시, cursor가 있을 경우
+.curl-request
+include::{snippets}/getBookmarks/successWithCursor/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getBookmarks/successWithCursor/http-request.adoc[]
+
+.request-param
+include::{snippets}/getBookmarks/successWithCursor/path-parameters.adoc[]
+
+.query-parameters
+include::{snippets}/getBookmarks/successWithCursor/query-parameters.adoc[]
+
+.http-response
+include::{snippets}/getBookmarks/successWithCursor/http-response.adoc[]
+
+.response-body
+include::{snippets}/getBookmarks/successWithCursor/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getBookmarks/successWithCursor/response-fields.adoc[]==== 성공시, cursor가 없을 경우
+.curl-request
+include::{snippets}/getBookmarks/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getBookmarks/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/getBookmarks/success/path-parameters.adoc[]
+
+.query-parameters
+include::{snippets}/getBookmarks/success/query-parameters.adoc[]
+
+.http-response
+include::{snippets}/getBookmarks/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getBookmarks/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getBookmarks/success/response-fields.adoc[]
+
+==== 성공시, cursor가 있을 경우
+.curl-request
+include::{snippets}/getBookmarks/successWithCursor/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getBookmarks/successWithCursor/http-request.adoc[]
+
+.request-param
+include::{snippets}/getBookmarks/successWithCursor/path-parameters.adoc[]
+
+.query-parameters
+include::{snippets}/getBookmarks/successWithCursor/query-parameters.adoc[]
+
+.http-response
+include::{snippets}/getBookmarks/successWithCursor/http-response.adoc[]
+
+.response-body
+include::{snippets}/getBookmarks/successWithCursor/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getBookmarks/successWithCursor/response-fields.adoc[]sho
+
+== animes
+=== GET api/v1/animes
+.curl-request
+include::{snippets}/getAnimes/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getAnimes/success/http-request.adoc[]
+
+.query-parameters
+include::{snippets}/getAnimes/success/query-parameters.adoc[]
+
+.http-response
+include::{snippets}/getAnimes/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getAnimes/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getAnimes/success/response-fields.adoc[]
+
+
+=== GET api/v1/animes/:id
+
+.curl-request
+include::{snippets}/getAnimeById/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getAnimeById/success/http-request.adoc[]
+
+include::{snippets}/getAnimeById/success/path-parameters.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/getAnimeById/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getAnimeById/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getAnimeById/success/response-fields.adoc[]
+==== 실패 시
+
+== genres
+
+=== GET api/v1/genres
+
+.curl-request
+include::{snippets}/getGenres//success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getGenres/success/http-request.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/getGenres/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getGenres/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getGenres/success/response-fields.adoc[]
+
+==== 실패 시
+
 == bookmark
 === POST api/v1/bookmarks
 .curl-request
@@ -877,26 +1169,6 @@ include::{snippets}/deleteStudio/success/path-parameters.adoc[]
 include::{snippets}/deleteStudio/success/http-response.adoc[]
 
 ==== 실패시
-
-=== GET api/v1/oduckdmin/genres
-
-.curl-request
-include::{snippets}/getGenres//success/curl-request.adoc[]
-
-.http-request
-include::{snippets}/getGenres/success/http-request.adoc[]
-
-==== 성공시
-.http-response
-include::{snippets}/getGenres/success/http-response.adoc[]
-
-.response-body
-include::{snippets}/getGenres/success/response-body.adoc[]
-
-.response-fields
-include::{snippets}/getGenres/success/response-fields.adoc[]
-
-==== 실패 시
 
 === POST api/v1/oduckdmin/genres
 .curl-request

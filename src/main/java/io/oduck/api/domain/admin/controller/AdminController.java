@@ -3,7 +3,6 @@ package io.oduck.api.domain.admin.controller;
 import io.oduck.api.domain.anime.dto.AnimeReq;
 import io.oduck.api.domain.anime.service.AnimeService;
 import io.oduck.api.domain.genre.dto.GenreReq;
-import io.oduck.api.domain.genre.dto.GenreRes;
 import io.oduck.api.domain.genre.service.GenreService;
 import io.oduck.api.domain.originalAuthor.dto.OriginalAuthorReq;
 import io.oduck.api.domain.originalAuthor.dto.OriginalAuthorRes;
@@ -18,13 +17,19 @@ import io.oduck.api.domain.voiceActor.dto.VoiceActorReq;
 import io.oduck.api.domain.voiceActor.dto.VoiceActorRes;
 import io.oduck.api.domain.voiceActor.service.VoiceActorService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
@@ -261,15 +266,6 @@ public class AdminController {
         genreService.save(req);
 
         return ResponseEntity.noContent().build();
-    }
-
-    // 장르 조회
-    @GetMapping("/genres")
-    public ResponseEntity<Object> getGenres(){
-
-        List<GenreRes> genres = genreService.getGenres();
-
-        return ResponseEntity.ok(genres);
     }
 
     // 장르 수정
