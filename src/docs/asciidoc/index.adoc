@@ -1367,3 +1367,30 @@ include::{snippets}/starRating/checkRated/notExist/response-body.adoc[]
 
 .response-fields
 include::{snippets}/starRating/checkRated/notExist/response-fields.adoc[]
+
+=== PATCH api/v1/ratings/:animeId
+.curl-request
+include::{snippets}/starRating/patchScore/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/starRating/patchScore/success/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/starRating/patchScore/success/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/starRating/patchScore/success/request-headers.adoc[]
+
+.request-body
+include::{snippets}/starRating/patchScore/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/starRating/patchScore/success/request-fields.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/starRating/patchScore/success/http-response.adoc[]
+
+==== 실패시
+.http-response
+include::{snippets}/starRating/patchScore/failure/http-response.adoc[]
