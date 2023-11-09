@@ -10,24 +10,26 @@ public class ShortReviewDslDto {
     @Getter
     @NoArgsConstructor
     public static class ShortReviewDsl{
+        private Long reviewId;
         private Long animeId;
         private String name;
         private String thumbnail;
         private Integer score;
         private String content;
-        private boolean hasSpoiler;
+        private boolean isSpoiler;
         private Long likeCount;
         private LocalDateTime createdAt;
 
         @Builder
-        public ShortReviewDsl(Long animeId, String name, String thumbnail, Integer score, String content,
-            boolean hasSpoiler, Long likeCount, LocalDateTime createdAt) {
+        public ShortReviewDsl(Long reviewId,Long animeId, String name, String thumbnail, Integer score, String content,
+            boolean isSpoiler, Long likeCount, LocalDateTime createdAt) {
+            this.reviewId = reviewId;
             this.animeId = animeId;
             this.name = name;
             this.thumbnail = thumbnail;
             this.score = score;
             this.content = content;
-            this.hasSpoiler = hasSpoiler;
+            this.isSpoiler = isSpoiler;
             this.likeCount = likeCount;
             this.createdAt = createdAt;
         }
