@@ -10,6 +10,7 @@ import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.domain.review.dto.ShortReviewDslDto.ShortReviewDsl;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto.ShortReviewReq;
+
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewRes;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.review.repository.ShortReviewRepository;
@@ -33,7 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ShortReviewServiceImpl implements ShortReviewService{
 
     private final ShortReviewRepository shortReviewRepository;
-    private final MemberProfileRepository memberProfileRepository;
     private final MemberRepository memberRepository;
 
     private final AnimeRepository animeRepository;
@@ -75,7 +75,7 @@ public class ShortReviewServiceImpl implements ShortReviewService{
             sort.getSort()
         );
 
-        if(sort == ShortReviewReqDto.Sort.LIKE){
+        if(sort == ShortReviewReqDto.Sort.LIKE_COUNT){
             sortList = sortList.and(Sort.by(Direction.DESC, "createdAt"));
         }else if(sort == ShortReviewReqDto.Sort.SCORE){
             sortList = sortList.and(Sort.by(Direction.DESC, "createdAt"));
