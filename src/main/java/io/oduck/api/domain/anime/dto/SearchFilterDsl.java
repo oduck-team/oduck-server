@@ -4,6 +4,7 @@ import static io.oduck.api.domain.anime.dto.AnimeReq.EpisodeCountEnum;
 
 import io.oduck.api.domain.anime.entity.BroadcastType;
 import io.oduck.api.domain.anime.entity.Quarter;
+import io.oduck.api.domain.anime.entity.Status;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,9 +17,10 @@ public class SearchFilterDsl {
     List<EpisodeCountEnum> episodeCountEnums;
     List<Integer> years;
     List<Quarter> quarters;
+    List<Status> statuses;
 
     public SearchFilterDsl(List<Long> genreIds, List<BroadcastType> broadcastTypes,
-        List<EpisodeCountEnum> episodeCountEnums, List<Integer> years, List<Quarter> quarters) {
+        List<EpisodeCountEnum> episodeCountEnums, List<Integer> years, List<Quarter> quarters, List<Status> statuses) {
         this.genreIds = genreIds;
         this.broadcastTypes = broadcastTypes;
         this.episodeCountEnums = episodeCountEnums;
@@ -29,5 +31,7 @@ public class SearchFilterDsl {
             .collect(Collectors.toList());
 
         this.quarters = quarters;
+
+        this.statuses = statuses;
     }
 }

@@ -133,8 +133,8 @@ public class AnimeServiceImpl implements AnimeService{
 
     @Override
     @Transactional(readOnly = true)
-    public SliceResponse<SearchResult> getAnimesByCondition(String query, String cursor, Sort sort, OrderDirection order, int size, SearchFilterDsl searchFilterDsl) {
-        Slice<SearchResult> slice = animeRepository.findAnimesByCondition(
+    public SliceResponse<SearchResult> getSliceByCondition(String query, String cursor, Sort sort, OrderDirection order, int size, SearchFilterDsl searchFilterDsl) {
+        Slice<SearchResult> slice = animeRepository.findSliceByCondition(
             query,
             cursor,
             PagingUtils.applyPageableForNonOffset(

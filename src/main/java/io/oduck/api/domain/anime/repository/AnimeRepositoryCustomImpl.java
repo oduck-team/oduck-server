@@ -36,32 +36,33 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<SearchResult> findAnimesByCondition(String query, String cursor, Pageable pageable, SearchFilterDsl searchFilterDsl) {
+    public Slice<SearchResult> findSliceByCondition(String query, String cursor, Pageable pageable, SearchFilterDsl searchFilterDsl) {
         JPAQuery<SearchResult> jpaQuery = queryFactory
-                .select(
-                        Projections.constructor(
-                                SearchResult.class,
-                                anime.id,
-                                anime.title,
-                                anime.thumbnail,
-                                anime.starRatingScoreTotal,
-                                anime.starRatingCount
-                        )
+            .select(
+                Projections.constructor(
+                    SearchResult.class,
+                    anime.id,
+                    anime.title,
+                    anime.thumbnail,
+                    anime.starRatingScoreTotal,
+                    anime.starRatingCount
                 )
-                .from(anime)
-                .leftJoin(anime.animeGenres, animeGenre)
-                .where(
-                        titleEq(query),
-                        genreIdsIn(searchFilterDsl.getGenreIds()),
-                        broadcastTypesIn(searchFilterDsl.getBroadcastTypes()),
-                        compareEpisodeCount(searchFilterDsl.getEpisodeCountEnums()),
-                        yearFilters(searchFilterDsl.getQuarters(), searchFilterDsl.getYears()),
-                        cursorCondition(cursor, pageable),
-                        isReleased(true),
-                        notDeleted()
-                )
-                .groupBy(anime.id)
-                .limit(pageable.getPageSize());
+            )
+            .from(anime)
+            .leftJoin(anime.animeGenres, animeGenre)
+            .where(
+                titleEq(query),
+                genreIdsIn(searchFilterDsl.getGenreIds()),
+                broadcastTypesIn(searchFilterDsl.getBroadcastTypes()),
+                compareEpisodeCount(searchFilterDsl.getEpisodeCountEnums()),
+                yearFilters(searchFilterDsl.getQuarters(), searchFilterDsl.getYears()),
+                statusIn(searchFilterDsl.getStatuses()),
+                cursorCondition(cursor, pageable),
+                isReleased(true),
+                notDeleted()
+            )
+            .groupBy(anime.id)
+            .limit(pageable.getPageSize());
 
         return fetchSliceByCursor(sortPath(anime), jpaQuery, pageable);
     }
@@ -93,6 +94,10 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
         List<Path> path = new ArrayList<>();
         path.add(anime);
         return path;
+    }
+
+    private BooleanExpression statusIn(List<Status> statuses) {
+        return isListEmpty(statuses) ? null : anime.status.in(statuses);
     }
 
     private BooleanExpression genreIdsIn(List<Long> genreIds) {
