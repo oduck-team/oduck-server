@@ -204,9 +204,9 @@ public class AdminControllerTest {
                             .optional()
                             .description("검색 내용. 1-50자만 허용합니다"),
                         parameterWithName("queryType")
-                            .attributes(field("constraints", "TITLE(애니의 제목), SERIES(시리즈의 제목), ID(애니의 아이디)만 허용"))
+                            .attributes(field("constraints", "TITLE(애니의 제목), SERIES(시리즈의 제목), ID(애니의 아이디)만 허용."))
                             .optional()
-                            .description("검색 타입. TITLE(애니의 제목), SERIES(시리즈의 제목), ID(애니의 아이디)만 허용."),
+                            .description("검색 타입. TITLE(애니의 제목), SERIES(시리즈의 제목), ID(애니의 아이디)만 허용. queryType이 id로 보내면 query는 Number형으로 보내야 함. 그런데 Number가 아닌 String으로 보내면 전체 검색으로 처리"),
                         parameterWithName("size")
                             .attributes(field("constraints", "1-100, 기본 20"))
                             .optional()
