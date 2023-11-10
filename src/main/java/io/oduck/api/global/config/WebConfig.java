@@ -22,6 +22,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(new StringToBookmarkSortConverter());
         registry.addConverter(new StringToShortReviewConverter());
         registry.addConverter(new StringToAnimeSortConverter());
+        registry.addConverter(new StringToAdminQueryTypeConverter());
+        registry.addConverter(new StringToStatusConverter());
+        registry.addConverter(new StringToAdminAnimeSortConverter());
     }
 
     @Override

@@ -37,6 +37,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -160,6 +161,142 @@ public class AdminControllerTest {
                 ));
         }
         //TODO : 애니 등록 실패 시
+
+        @Test
+        @DisplayName("조회 성공 시 Http Status 200 반환")
+        void getAnimes() throws Exception {
+            //when
+            ResultActions actions = mockMvc.perform(
+                RestDocumentationRequestBuilders.get(ADMIN_URL+"/animes")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+            //then
+            actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").exists())
+                .andExpect(jsonPath("$.items[0].id").exists())
+                .andExpect(jsonPath("$.items[0].title").exists())
+                .andExpect(jsonPath("$.items[0].thumbnail").exists())
+                .andExpect(jsonPath("$.items[0].year").exists())
+                .andExpect(jsonPath("$.items[0].quarter").exists())
+                .andExpect(jsonPath("$.items[0].status").exists())
+                .andExpect(jsonPath("$.items[0].createdAt").exists())
+                .andExpect(jsonPath("$.items[0].seriesId").exists())
+                .andExpect(jsonPath("$.items[0].seriesTitle").exists())
+                .andExpect(jsonPath("$.items[0].bookmarkCount").exists())
+                .andExpect(jsonPath("$.items[0].starRatingScoreTotal").exists())
+                .andExpect(jsonPath("$.items[0].starRatingCount").exists())
+                .andExpect(jsonPath("$.items[0].starRatingAvg").exists())
+                .andExpect(jsonPath("$.items[0].reviewCount").exists())
+                .andExpect(jsonPath("$.items[0].viewCount").exists())
+                .andExpect(jsonPath("$.items[0].isReleased").exists())
+                .andExpect(jsonPath("$.page").exists())
+                .andExpect(jsonPath("$.size").exists())
+                .andExpect(jsonPath("$.totalElements").exists())
+                .andExpect(jsonPath("$.totalPages").exists())
+                .andDo(document("getAdminAnimes/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    queryParameters(
+                        parameterWithName("query")
+                            .attributes(field("constraints", "1-50자만 허용합니다"))
+                            .optional()
+                            .description("검색 내용. 1-50자만 허용합니다"),
+                        parameterWithName("queryType")
+                            .attributes(field("constraints", "TITLE(애니의 제목), SERIES(시리즈의 제목), ID(애니의 아이디)만 허용."))
+                            .optional()
+                            .description("검색 타입. TITLE(애니의 제목), SERIES(시리즈의 제목), ID(애니의 아이디)만 허용. queryType이 id로 보내면 query는 Number형으로 보내야 함. 그런데 Number가 아닌 String으로 보내면 전체 검색으로 처리"),
+                        parameterWithName("size")
+                            .attributes(field("constraints", "1-100, 기본 20"))
+                            .optional()
+                            .description("한 페이지에 보여줄 아이템의 개수. 1-100, 기본 20"),
+                        parameterWithName("sort")
+                            .attributes(field("constraints", "LATEST, SERIES, TITLE, BOOKMARK_COUNT, SCORE_TOTAL, SCORE_COUNT, REVIEW_COUNT, VIEW_COUNT"))
+                            .optional()
+                            .description("정렬 기준이다. LATEST, SERIES, TITLE, BOOKMARK_COUNT, SCORE_TOTAL, SCORE_COUNT, REVIEW_COUNT, VIEW_COUNT만 허용한다."),
+                        parameterWithName("direction")
+                            .attributes(field("constraints", "ASC, DESC"))
+                            .optional()
+                            .description("정렬 방향이다. ASC, DESC만 허용한다."),
+                        parameterWithName("statuses")
+                            .attributes(field("constraints", "Status의 리스트 ONGOING, FINISHED, UPCOMING, UNKNOWN"))
+                            .optional()
+                            .description("status의 리스트. ONGOING, FINISHED, UPCOMING, UNKNOWN"),
+                        parameterWithName("years")
+                            .attributes(field("constraints", "년도의 리스트. 현재 년도는 내부 로직으로 걸러집니다."))
+                            .optional()
+                            .description("년도의 리스트. 현재 년도는 내부 로직으로 걸러집니다.")
+                    ),
+                    responseFields(
+                        fieldWithPath("items")
+                            .type(JsonFieldType.ARRAY)
+                            .description("애니 검색 결과 리스트"),
+                        fieldWithPath("items[].id")
+                            .type(JsonFieldType.NUMBER)
+                            .description("애니의 고유 식별자"),
+                        fieldWithPath("items[].title")
+                            .type(JsonFieldType.STRING)
+                            .description("애니의 제목"),
+                        fieldWithPath("items[].thumbnail")
+                            .type(JsonFieldType.STRING)
+                            .description("애니의 이미지 경로"),
+                        fieldWithPath("items[].year")
+                            .type(JsonFieldType.NUMBER)
+                            .description("애니의 출시년도"),
+                        fieldWithPath("items[].quarter")
+                            .type(JsonFieldType.STRING)
+                            .description("애니의 출시분기"),
+                        fieldWithPath("items[].isReleased")
+                            .type(JsonFieldType.BOOLEAN)
+                            .description("클라이언트가 애니를 열람할 수 있는지 여부"),
+                        fieldWithPath("items[].status")
+                            .type(JsonFieldType.STRING)
+                            .description("애니의 상태"),
+                        fieldWithPath("items[].createdAt")
+                            .type(JsonFieldType.STRING)
+                            .description("애니 생성 날짜"),
+                        fieldWithPath("items[].seriesId")
+                            .type(JsonFieldType.NUMBER)
+                            .description("시리즈의 식별자"),
+                        fieldWithPath("items[].seriesTitle")
+                            .type(JsonFieldType.STRING)
+                            .description("시리즈의 제목"),
+                        fieldWithPath("items[].bookmarkCount")
+                            .type(JsonFieldType.NUMBER)
+                            .description("애니를 북마크한 숫자"),
+                        fieldWithPath("items[].starRatingScoreTotal")
+                            .type(JsonFieldType.NUMBER)
+                            .description("애니 평가 점수 합산"),
+                        fieldWithPath("items[].starRatingCount")
+                            .type(JsonFieldType.NUMBER)
+                            .description("애니 평가한 횟수"),
+                        fieldWithPath("items[].starRatingAvg")
+                            .type(JsonFieldType.NUMBER)
+                            .description("애니 평가 평균(평점 평균)"),
+                        fieldWithPath("items[].reviewCount")
+                            .type(JsonFieldType.NUMBER)
+                            .description("애니 리뷰한 횟수"),
+                        fieldWithPath("items[].viewCount")
+                            .type(JsonFieldType.NUMBER)
+                            .description("애니 조회수"),
+                        fieldWithPath("page")
+                            .type(JsonFieldType.NUMBER)
+                            .description("현재 페이지의 번호. 클라이언트는 1부터 보내야 함. 음수나 0이 와도 1로 계산"),
+                        fieldWithPath("size")
+                            .type(JsonFieldType.NUMBER)
+                            .description("한 페이지에 보여줄 아이템의 개수. 1-100, 기본 20"),
+                        fieldWithPath("totalElements")
+                            .type(JsonFieldType.NUMBER)
+                            .description("총 검색된 애니의 카운트"),
+                        fieldWithPath("totalPages")
+                            .type(JsonFieldType.NUMBER)
+                            .description("페이지의 총 카운트")
+                    )
+                ));
+
+        }
+
 
         @Test
         @DisplayName("애니 수정 성공 시 Http Status 204 반환")
@@ -908,7 +1045,7 @@ public class AdminControllerTest {
         @DisplayName("조회 성공 시 Http status 200 반환")
         void getGenres() throws Exception {
             ResultActions actions = mockMvc.perform(
-                    RestDocumentationRequestBuilders.get(ADMIN_URL+"/genres")
+                    RestDocumentationRequestBuilders.get("/genres")
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
             );

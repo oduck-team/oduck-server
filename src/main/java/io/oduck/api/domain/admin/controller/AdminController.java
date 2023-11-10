@@ -1,9 +1,13 @@
 package io.oduck.api.domain.admin.controller;
 
+import static io.oduck.api.domain.admin.dto.AdminReq.SearchFilter;
+
+import io.oduck.api.domain.admin.dto.AdminReq;
+import io.oduck.api.domain.admin.dto.AdminReq.QueryType;
+import io.oduck.api.domain.admin.dto.AdminRes;
 import io.oduck.api.domain.anime.dto.AnimeReq;
 import io.oduck.api.domain.anime.service.AnimeService;
 import io.oduck.api.domain.genre.dto.GenreReq;
-import io.oduck.api.domain.genre.dto.GenreRes;
 import io.oduck.api.domain.genre.service.GenreService;
 import io.oduck.api.domain.originalAuthor.dto.OriginalAuthorReq;
 import io.oduck.api.domain.originalAuthor.dto.OriginalAuthorRes;
@@ -17,14 +21,26 @@ import io.oduck.api.domain.studio.service.StudioService;
 import io.oduck.api.domain.voiceActor.dto.VoiceActorReq;
 import io.oduck.api.domain.voiceActor.dto.VoiceActorRes;
 import io.oduck.api.domain.voiceActor.service.VoiceActorService;
+import io.oduck.api.global.common.OrderDirection;
+import io.oduck.api.global.common.PageResponse;
+import io.oduck.api.global.exception.BadRequestException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
@@ -49,17 +65,51 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
-    // 관리자 애니 조회 (isReleased = false도 조회)
-//    @GetMapping("/animes")
-//    public ResponseEntity<Object> getAnimes(
-//        Pageable pageable, String query, SearchCondition condition
-//    ){
-//
-//        //TODO: 애니 조회 로직 구현.
-//        Page<GetAnime> res = adminAnimeService.getAnimes(pageable, query, condition);
-//        return ResponseEntity
-//            .ok(PageResponse.of(null));
-//    }
+    // 관리자 애니 조회
+    @GetMapping("/animes")
+    public ResponseEntity<Object> getAnimes(
+        @RequestParam(required = false) String query,
+        QueryType queryType,
+        @RequestParam(required = false, defaultValue = "latest") AdminReq.Sort sort,
+        @RequestParam(required = false, defaultValue = "DESC") OrderDirection order,
+        @RequestParam(required = false, defaultValue = "1") int page,
+        @RequestParam(required = false, defaultValue = "20") @Min(1) @Max(100) int size,
+        SearchFilter searchFilter
+    ){
+
+        validateQueryLength(query, 50);
+
+        int validatedPage = validatePage(page);
+
+        PageResponse<AdminRes.SearchResult> res = animeService.getPageByCondition(
+            query,
+            queryType,
+            validatedPage,
+            size,
+            sort,
+            order,
+            searchFilter
+        );
+
+        return ResponseEntity.ok(res);
+    }
+
+    private void validateQueryLength(String query, int maxLength) {
+        if(query != null) {
+            if(query.length() > maxLength){
+                throw new BadRequestException("글자수는 50자를 넘을 수 없습니다.");
+            }
+        }
+    }
+
+    private int validatePage(int page) {
+        // 클라이언트는 페이지 번호를 1부터 시작, 서버에서는 0부터 시작
+        if(page <= 1) {
+            return 0;
+        }else {
+            return page - 1;
+        }
+    }
 
     //애니 관련 수정
     @PatchMapping("/animes/{animeId}")
@@ -71,7 +121,6 @@ public class AdminController {
 
         return ResponseEntity.noContent().build();
     }
-
 
     // 애니 삭제
     @DeleteMapping("/animes/{animeId}")
@@ -261,15 +310,6 @@ public class AdminController {
         genreService.save(req);
 
         return ResponseEntity.noContent().build();
-    }
-
-    // 장르 조회
-    @GetMapping("/genres")
-    public ResponseEntity<Object> getGenres(){
-
-        List<GenreRes> genres = genreService.getGenres();
-
-        return ResponseEntity.ok(genres);
     }
 
     // 장르 수정

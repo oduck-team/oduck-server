@@ -49,4 +49,8 @@ public class StarRating extends BaseEntity {
   public void relateAnime(Anime anime) {
       this.anime = anime;
   }
+
+  public void updateScore(int score) {
+    this.score = score;
+  }
 }

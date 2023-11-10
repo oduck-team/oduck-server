@@ -8,6 +8,8 @@ import com.querydsl.jpa.impl.JPAQuery;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -28,6 +30,17 @@ public class QueryDslUtils {
             .fetch();
 
         return new SliceImpl<>(content, pageable, isHasNext(pageSize, content));
+    }
+
+    public static <T> Page<T> fetchPage(List<Path> paths, JPAQuery<T> query, long total, Pageable pageable) {
+        Sort sort = pageable.getSort();
+
+        List<T> content = query
+            .orderBy(getAllOrderSpecifiers(sort, paths))
+            .limit(pageable.getPageSize())
+            .offset(pageable.getOffset())
+            .fetch();
+        return new PageImpl<>(content, pageable, total);
     }
 
     // sort.order 객체로 OrderSpecifier를 생성하여 반환.

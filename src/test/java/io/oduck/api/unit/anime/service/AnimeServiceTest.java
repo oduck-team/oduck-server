@@ -42,6 +42,7 @@ import io.oduck.api.domain.anime.entity.AnimeStudio;
 import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
 import io.oduck.api.domain.anime.entity.BroadcastType;
 import io.oduck.api.domain.anime.entity.Quarter;
+import io.oduck.api.domain.anime.entity.Status;
 import io.oduck.api.domain.anime.repository.AnimeGenreRepository;
 import io.oduck.api.domain.anime.repository.AnimeOriginalAuthorRepository;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
@@ -120,6 +121,7 @@ public class AnimeServiceTest {
         List<EpisodeCountEnum> episodeCountEnums = new ArrayList<>();
         List<Integer> years = new ArrayList<>();
         List<Quarter> quarters = new ArrayList<>();
+        List<Status> statuses = new ArrayList<>();
 
         @Test
         @DisplayName("애니 제목 검색")
@@ -130,7 +132,7 @@ public class AnimeServiceTest {
             int size = 10;
             Sort sort = Sort.LATEST;
             OrderDirection order = OrderDirection.DESC;
-            SearchFilterDsl searchFilter = new SearchFilterDsl(genreIds, broadcastTypes, episodeCountEnums, years, quarters);
+            SearchFilterDsl searchFilter = new SearchFilterDsl(genreIds, broadcastTypes, episodeCountEnums, years, quarters, statuses);
 
             List<SearchResult> content = new ArrayList<>();
             Slice<SearchResult> searchResults = new SliceImpl<>(content);
@@ -142,7 +144,7 @@ public class AnimeServiceTest {
             );
 
             given(
-                animeRepository.findAnimesByCondition(
+                animeRepository.findSliceByCondition(
                     query,
                     cursor,
                     pageable,
@@ -151,13 +153,13 @@ public class AnimeServiceTest {
             ).willReturn(searchResults);
 
             //when
-            animeService.getAnimesByCondition(query, cursor, sort, order, size, searchFilter);
+            animeService.getSliceByCondition(query, cursor, sort, order, size, searchFilter);
 
             //then
             assertThatNoException();
 
             //verify
-            verify(animeRepository, times(1)).findAnimesByCondition(query, cursor, pageable, searchFilter);
+            verify(animeRepository, times(1)).findSliceByCondition(query, cursor, pageable, searchFilter);
         }
 
         @Test
