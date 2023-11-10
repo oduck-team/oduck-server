@@ -4,6 +4,7 @@ import io.oduck.api.domain.anime.dto.AnimeRes;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.domain.anime.entity.BroadcastType;
 import io.oduck.api.domain.anime.entity.Quarter;
+import io.oduck.api.domain.anime.entity.Status;
 import io.oduck.api.domain.anime.service.AnimeService;
 import io.oduck.api.global.common.OrderDirection;
 import io.oduck.api.global.common.SliceResponse;
@@ -57,9 +58,11 @@ public class AnimeController {
         List<Quarter> quarters = searchFilter.getQuarters();
         validateDuplicateQuarters(quarters);
 
-        SearchFilterDsl searchFilterDsl = new SearchFilterDsl(genreIds, broadcastTypes, episodeCountEnums, years, quarters);
+        List<Status> statuses = searchFilter.getStatuses();
 
-        SliceResponse<AnimeRes.SearchResult> res = animeService.getAnimesByCondition(query, cursor,  sort,
+        SearchFilterDsl searchFilterDsl = new SearchFilterDsl(genreIds, broadcastTypes, episodeCountEnums, years, quarters, statuses);
+
+        SliceResponse<AnimeRes.SearchResult> res = animeService.getSliceByCondition(query, cursor,  sort,
             order, size, searchFilterDsl);
         return ResponseEntity.ok(res);
     }
