@@ -388,6 +388,33 @@ include::{snippets}/postShortReview/success/http-response.adoc[]
 
 ==== 실패시
 
+=== shortReview/getAttractionPoint api/v1/short-reviews//attraction-points
+
+.curl-request
+include::{snippets}/shortReview/getAttractionPoints/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/shortReview/getAttractionPoints/success/http-request.adoc[]
+
+.httpie-request
+include::{snippets}/shortReview/getAttractionPoints/success/httpie-request.adoc[]
+
+.request-headers
+include::{snippets}/shortReview/getAttractionPoints/success/request-headers.adoc[]
+
+.response-body
+include::{snippets}/shortReview/getAttractionPoints/success/response-body.adoc[]
+
+.query-parameters
+include::{snippets}/shortReview/getAttractionPoints/success/query-parameters.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/shortReview/getAttractionPoints/success/http-response.adoc[]
+
+.response-fields
+include::{snippets}/shortReview/getAttractionPoints/success/response-fields.adoc[]
+
 === PATCH api/v1/short-reviews/1
 
 .curl-request
@@ -408,9 +435,6 @@ include::{snippets}/patchShortReview/success/request-fields.adoc[]
 ==== 성공시
 .http-response
 include::{snippets}/patchShortReview/success/http-response.adoc[]
-
-.response-body
-include::{snippets}/patchShortReview/success/response-body.adoc[]
 
 .response-fields
 include::{snippets}/patchShortReview/success/response-fields.adoc[]
