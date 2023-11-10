@@ -1,5 +1,8 @@
 package io.oduck.api.domain.anime.service;
 
+import io.oduck.api.domain.admin.dto.AdminReq;
+import io.oduck.api.domain.admin.dto.AdminReq.QueryType;
+import io.oduck.api.domain.admin.dto.AdminRes;
 import io.oduck.api.domain.anime.dto.AnimeVoiceActorReq;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.domain.anime.entity.*;
@@ -15,6 +18,7 @@ import io.oduck.api.domain.studio.repository.StudioRepository;
 import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.domain.voiceActor.repository.VoiceActorRepository;
 import io.oduck.api.global.common.OrderDirection;
+import io.oduck.api.global.common.PageResponse;
 import io.oduck.api.global.common.SliceResponse;
 import io.oduck.api.global.exception.NotFoundException;
 import io.oduck.api.global.utils.PagingUtils;
@@ -148,6 +152,23 @@ public class AnimeServiceImpl implements AnimeService{
         List<SearchResult> items = slice.getContent();
 
         return SliceResponse.of(slice, items, sort.getSort());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<AdminRes.SearchResult> getPageByCondition(String query, QueryType queryType,
+        int page, int size, AdminReq.Sort sort, OrderDirection order, AdminReq.SearchFilter searchFilter) {
+        return animeRepository.findPageByCondition(
+            query,
+            queryType,
+            PagingUtils.applyPageableForOffset(
+                page,
+                sort.getSort(),
+                order.getOrder(),
+                size
+            ),
+            searchFilter
+        );
     }
 
     private Series findSeriesWhenIdNotNull(Long seriesId, boolean isSeriesIdNull) {

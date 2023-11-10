@@ -11,8 +11,13 @@ import static io.oduck.api.domain.anime.dto.AnimeReq.Sort;
 import static io.oduck.api.domain.anime.dto.AnimeRes.DetailResult;
 import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
 
+import io.oduck.api.domain.admin.dto.AdminReq;
+import io.oduck.api.domain.admin.dto.AdminReq.QueryType;
+import io.oduck.api.domain.admin.dto.AdminReq.SearchFilter;
+import io.oduck.api.domain.admin.dto.AdminRes;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.global.common.OrderDirection;
+import io.oduck.api.global.common.PageResponse;
 import io.oduck.api.global.common.SliceResponse;
 
 public interface AnimeService {
@@ -39,7 +44,22 @@ public interface AnimeService {
      * @param searchFilterDsl 검색 필터 dto;
      * @return SliceResponse non-offset 페이징 dto
      */
-    SliceResponse<SearchResult> getAnimesByCondition(String query, String cursor, Sort sort, OrderDirection order, int size, SearchFilterDsl searchFilterDsl);
+    SliceResponse<SearchResult> getSliceByCondition(String query, String cursor, Sort sort, OrderDirection order, int size, SearchFilterDsl searchFilterDsl);
+
+    /**
+     * 애니 검색 결과 조회이다.
+     *
+     * @param query        제목 검색 내용;
+     * @param queryType    검색의 타입이며 타입에 따라 쿼리의 질의가 다름;
+     * @param page         현재 페이지의 번호;
+     * @param size         하나의 페이지에 포함될 콘텐츠 사이즈;
+     * @param sort
+     * @param order
+     * @param searchFilter 검색 필터;
+     * @return PageResponse offset 페이징 dto
+     */
+    PageResponse<AdminRes.SearchResult> getPageByCondition(String query, QueryType queryType, int page, int size,
+        AdminReq.Sort sort, OrderDirection order, SearchFilter searchFilter);
 
     /**
      * 애니 수정 로직이다.
