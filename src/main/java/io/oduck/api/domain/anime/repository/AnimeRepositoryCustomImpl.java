@@ -13,10 +13,16 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.util.StringUtils;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import io.oduck.api.domain.admin.dto.AdminReq.QueryType;
+import io.oduck.api.domain.admin.dto.AdminReq.SearchFilter;
+import io.oduck.api.domain.admin.dto.AdminRes;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.domain.anime.entity.BroadcastType;
 import io.oduck.api.domain.anime.entity.QAnime;
 import io.oduck.api.domain.anime.entity.Quarter;
+import io.oduck.api.domain.anime.entity.Status;
+import io.oduck.api.global.common.PageResponse;
+import io.oduck.api.global.utils.QueryDslUtils;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +73,87 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
         return fetchSliceByCursor(sortPath(anime), jpaQuery, pageable);
     }
 
+    @Override
+    public PageResponse<AdminRes.SearchResult> findPageByCondition(String query,
+        QueryType queryType, Pageable pageable, SearchFilter searchFilter) {
+        JPAQuery<AdminRes.SearchResult> jpaQuery = queryFactory
+            .select(
+                Projections.constructor(
+                    AdminRes.SearchResult.class,
+                    anime.id,
+                    anime.title,
+                    anime.thumbnail,
+                    anime.year,
+                    anime.quarter,
+                    anime.isReleased,
+                    anime.status,
+                    anime.createdAt,
+                    anime.series.id,
+                    anime.series.title,
+                    anime.bookmarkCount,
+                    anime.starRatingScoreTotal,
+                    anime.starRatingCount,
+                    anime.reviewCount,
+                    anime.viewCount
+                )
+            )
+            .from(anime)
+            .leftJoin(anime.series)
+            .where(
+                queryEq(query, queryType),
+                isReleased(searchFilter.getIsReleased()),
+                yearsIn(searchFilter.getYears()),
+                statusIn(searchFilter.getStatuses()),
+                notDeleted()
+            );
+
+        //TODO: 페이징 요청마다 total 쿼리를 구함 -> 디비 부하
+        Long total = queryFactory
+            .select(
+                anime.count()
+            )
+            .from(anime)
+            .where(
+                queryEq(query, queryType),
+                isReleased(searchFilter.getIsReleased()),
+                yearsIn(searchFilter.getYears()),
+                statusIn(searchFilter.getStatuses()),
+                notDeleted()
+            )
+            .fetchOne();
+
+        return PageResponse.of(
+            QueryDslUtils.fetchPage(
+                sortPath(anime), jpaQuery, total, pageable
+            )
+        );
+    }
+
+    private BooleanExpression queryEq(String query, QueryType queryType) {
+        if(StringUtils.isNullOrEmpty(query)) {
+            return null;
+        }
+
+        if(queryType == null) {
+            queryType = QueryType.TITLE;
+        }
+
+        // 쿼리 타입 계산
+        if(queryType == QueryType.TITLE) {
+            return titleEq(query);
+        } else if(queryType == QueryType.SERIES) {
+            return anime.series.title.contains(query);
+        } else {
+            // 그 외 모두 아이디 검색으로 로직 수행
+            try {
+                return anime.id.eq(Long.parseLong(query));
+                // 숫자가 아닌 문자열이 올 경우 null 반환
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+    }
+
     private BooleanExpression yearFilters(List<Quarter> quarters, List<Integer> years) {
         BooleanExpression firstExpression = currentYearsAndQuarters(quarters);
         BooleanExpression secondExpression  = yearsIn(years);
@@ -86,8 +173,9 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
         return firstExpression.or(secondExpression);
     }
 
-    private BooleanExpression isReleased(boolean isReleased) {
-        return anime.isReleased.eq(isReleased);
+    private BooleanExpression isReleased(Boolean isReleased) {
+
+        return isReleased == null ? null : anime.isReleased.eq(isReleased);
     }
 
     private List<Path> sortPath(QAnime anime) {
