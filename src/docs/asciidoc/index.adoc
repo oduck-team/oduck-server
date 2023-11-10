@@ -781,6 +781,26 @@ include::{snippets}/postAnime/success/http-response.adoc[]
 
 ==== 실패시
 
+=== GET api/v1/oduckdmin/animes
+.curl-request
+include::{snippets}/getAdminAnimes/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getAdminAnimes/success/http-request.adoc[]
+
+.query-parameters
+include::{snippets}/getAdminAnimes/success/query-parameters.adoc[]
+
+.http-response
+include::{snippets}/getAdminAnimes/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getAdminAnimes/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getAdminAnimes/success/response-fields.adoc[]
+
+
 === PATCH api/v1/oduckdmin/animes/:id
 .curl-request
 include::{snippets}/patchAnime/success/curl-request.adoc[]
