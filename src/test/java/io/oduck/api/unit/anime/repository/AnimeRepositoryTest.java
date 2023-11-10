@@ -508,6 +508,8 @@ public class AnimeRepositoryTest {
         List<EpisodeCountEnum> episodeCountEnums = new ArrayList<>();
         List<Integer> years = new ArrayList<>();
         List<Quarter> quarters = new ArrayList<>();
+        List<Status> statuses = new ArrayList<>();
+
         @Test
         @DisplayName("애니 조회 성공")
         void getAnimes() {
@@ -524,10 +526,10 @@ public class AnimeRepositoryTest {
                     order.getOrder()
             );
 
-            SearchFilterDsl searchFilter = new SearchFilterDsl(genreIds, broadcastTypes, episodeCountEnums, years, quarters);
+            SearchFilterDsl searchFilter = new SearchFilterDsl(genreIds, broadcastTypes, episodeCountEnums, years, quarters, statuses);
 
             //when
-            Slice<SearchResult> animes = animeRepository.findAnimesByCondition(
+            Slice<SearchResult> animes = animeRepository.findSliceByCondition(
                     query, cursor, pageable, searchFilter
             );
 

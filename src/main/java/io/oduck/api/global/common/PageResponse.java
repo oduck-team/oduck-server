@@ -9,12 +9,17 @@ import org.springframework.data.domain.Page;
 public class PageResponse<T> {
 
     private final List<T> items;
-    private final PageInfo pageInfo;
+    private int page;
+    private int size;
+    private long totalElements;
+    private int totalPages;
 
     public PageResponse(Page<T> page) {
         this.items = page.getContent();
-        this.pageInfo = new PageInfo(page.getNumber() + 1,
-            page.getSize(), page.getTotalElements(), page.getTotalPages());
+        this.page = page.getNumber() + 1;
+        this.size = page.getSize();
+        this.totalElements = page.getTotalElements();
+        this.totalPages = page.getTotalPages();
     }
 
     public static <T> PageResponse<T> of(Page<T> page) {
