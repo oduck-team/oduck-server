@@ -54,4 +54,12 @@ public class ShortReviewResDto {;
             };
         }
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ShortReviewCountRes {
+        private Long count;
+    }
 }
