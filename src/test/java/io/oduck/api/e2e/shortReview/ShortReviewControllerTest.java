@@ -22,8 +22,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 
 import com.google.gson.Gson;
 import io.oduck.api.domain.member.entity.Role;
-import io.oduck.api.domain.review.dto.ShortReviewReqDto.PatchShortReviewReq;
-import io.oduck.api.domain.review.dto.ShortReviewReqDto.PostShortReviewReq;
+import io.oduck.api.domain.review.dto.ShortReviewReqDto.ShortReviewReq;
 import io.oduck.api.global.mockMember.WithCustomMockMember;
 import io.oduck.api.global.utils.ShortReviewTestUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -67,7 +66,7 @@ public class ShortReviewControllerTest {
         @WithCustomMockMember(id = 2L, email = "john", password = "Qwer!234", role = Role.MEMBER)
         void postShortReview() throws Exception{
             //given
-            PostShortReviewReq req = ShortReviewTestUtils.createPostShoreReviewReq();
+            ShortReviewReq req = ShortReviewTestUtils.createPostShoreReviewReq();
             String content = gson.toJson(req);
 
             //when
@@ -84,11 +83,12 @@ public class ShortReviewControllerTest {
                 .andDo(document("postShortReview/success",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                        headerWithName(HttpHeaders.COOKIE)
-                            .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
-                            .description("Header Cookie, 세션 쿠키")
-                    ),
+                        requestHeaders(
+                            headerWithName(HttpHeaders.COOKIE)
+                                .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                .optional()
+                                .description("Header Cookie, 세션 쿠키")
+                        ),
                         requestFields(attributes(key("title").value("Fields for shortReview creation")),
                         fieldWithPath("animeId")
                             .type(JsonFieldType.NUMBER)
@@ -122,12 +122,12 @@ public class ShortReviewControllerTest {
             //given
             Long animeId = 1L;
             int size = 2;
-            String sort = "created_at";
+            String sort = "like_count";
             String order = "desc";
 
             //when
             ResultActions actions = mockMvc.perform(
-                get(BASE_URL+ "/{animeId}", animeId)
+                get(BASE_URL+ "/animes/{animeId}", animeId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .param("size", String.valueOf(size))
@@ -139,13 +139,14 @@ public class ShortReviewControllerTest {
             actions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items").isArray())
+                .andExpect(jsonPath("$.items[0].reviewId").exists())
                 .andExpect(jsonPath("$.items[0].animeId").exists())
                 .andExpect(jsonPath("$.items[0].name").exists())
                 .andExpect(jsonPath("$.items[0].thumbnail").exists())
                 .andExpect(jsonPath("$.items[0].score").exists())
                 .andExpect(jsonPath("$.items[0].content").exists())
-                .andExpect(jsonPath("$.items[0].hasSpoiler").exists())
-                .andExpect(jsonPath("$.items[0].hasLike").exists())
+                .andExpect(jsonPath("$.items[0].isSpoiler").exists())
+                .andExpect(jsonPath("$.items[0].isLike").exists())
                 .andExpect(jsonPath("$.items[0].likeCount").exists())
                 .andExpect(jsonPath("$.items[0].createdAt").exists())
                 .andExpect(jsonPath("$.size").exists())
@@ -179,6 +180,9 @@ public class ShortReviewControllerTest {
                         fieldWithPath("items")
                             .type(JsonFieldType.ARRAY)
                             .description("조회 데이터"),
+                        fieldWithPath("items[].reviewId")
+                            .type(JsonFieldType.NUMBER)
+                            .description("리뷰 고유 식별자"),
                         fieldWithPath("items[].animeId")
                             .type(JsonFieldType.NUMBER)
                             .description("애니 고유 식별자"),
@@ -194,10 +198,10 @@ public class ShortReviewControllerTest {
                         fieldWithPath("items[].content")
                             .type(JsonFieldType.STRING)
                             .description("짧은 리뷰 내용"),
-                        fieldWithPath("items[].hasSpoiler")
+                        fieldWithPath("items[].isSpoiler")
                             .type(JsonFieldType.BOOLEAN)
                             .description("스포일러 유무"),
-                        fieldWithPath("items[].hasLike")
+                        fieldWithPath("items[].isLike")
                             .type(JsonFieldType.BOOLEAN)
                             .description("짧은 리뷰 좋아요 유무"),
                         fieldWithPath("items[].likeCount")
@@ -233,7 +237,7 @@ public class ShortReviewControllerTest {
 
             //when
             ResultActions actions = mockMvc.perform(
-                get(BASE_URL+ "/{animeId}", animeId)
+                get(BASE_URL+ "/animes/{animeId}", animeId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .param("size", String.valueOf(size))
@@ -246,13 +250,14 @@ public class ShortReviewControllerTest {
             actions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items").isArray())
+                .andExpect(jsonPath("$.items[0].reviewId").exists())
                 .andExpect(jsonPath("$.items[0].animeId").exists())
                 .andExpect(jsonPath("$.items[0].name").exists())
                 .andExpect(jsonPath("$.items[0].thumbnail").exists())
                 .andExpect(jsonPath("$.items[0].score").exists())
                 .andExpect(jsonPath("$.items[0].content").exists())
-                .andExpect(jsonPath("$.items[0].hasSpoiler").exists())
-                .andExpect(jsonPath("$.items[0].hasLike").exists())
+                .andExpect(jsonPath("$.items[0].isSpoiler").exists())
+                .andExpect(jsonPath("$.items[0].isLike").exists())
                 .andExpect(jsonPath("$.items[0].likeCount").exists())
                 .andExpect(jsonPath("$.items[0].createdAt").exists())
                 .andExpect(jsonPath("$.size").exists())
@@ -286,6 +291,9 @@ public class ShortReviewControllerTest {
                         fieldWithPath("items")
                             .type(JsonFieldType.ARRAY)
                             .description("조회 데이터"),
+                        fieldWithPath("items[].reviewId")
+                            .type(JsonFieldType.NUMBER)
+                            .description("리뷰 고유 식별자"),
                         fieldWithPath("items[].animeId")
                             .type(JsonFieldType.NUMBER)
                             .description("애니 고유 식별자"),
@@ -301,10 +309,10 @@ public class ShortReviewControllerTest {
                         fieldWithPath("items[].content")
                             .type(JsonFieldType.STRING)
                             .description("짧은 리뷰 내용"),
-                        fieldWithPath("items[].hasSpoiler")
+                        fieldWithPath("items[].isSpoiler")
                             .type(JsonFieldType.BOOLEAN)
                             .description("스포일러 유무"),
-                        fieldWithPath("items[].hasLike")
+                        fieldWithPath("items[].isLike")
                             .type(JsonFieldType.BOOLEAN)
                             .description("짧은 리뷰 좋아요 유무"),
                         fieldWithPath("items[].likeCount")
@@ -330,27 +338,25 @@ public class ShortReviewControllerTest {
 
     }
 
-
     @Nested
-    @DisplayName("짧은 리뷰 수정")
-    class PatchShortReview{
-
-        @DisplayName("짧은 리뷰 수정 성공시 Http Status 200 반환")
+    @DisplayName("입덕포인트 조회")
+    class getAttractionPoint{
+        @DisplayName("애니아이디와 회원이름으로 입덕포인트 조회")
         @Test
         @WithCustomMockMember(id = 1L, email = "john", password = "Qwer!234", role = Role.MEMBER)
-        void patchShortReview() throws Exception{
+        void getAttractionPointsShortReview() throws Exception{
             //given
-            Long reviewId = 1L;
-            PatchShortReviewReq req = ShortReviewTestUtils.createPatchShortReview();
-            String content = gson.toJson(req);
+            String animeId = "1";
+            String name = "회원 이름";
 
             //when
             ResultActions actions = mockMvc.perform(
-                patch(BASE_URL +"/{reviewId}", reviewId)
+                get(BASE_URL + "/attraction-points")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
-                    .content(content)
+                    .param("animeId", animeId)
+                    .param("name", name)
             );
 
             //then
@@ -361,7 +367,7 @@ public class ShortReviewControllerTest {
                 .andExpect(jsonPath("$.music").exists())
                 .andExpect(jsonPath("$.character").exists())
                 .andExpect(jsonPath("$.voiceActor").exists())
-                .andDo(document("patchShortReview/success",
+                .andDo(document("shortReview/getAttractionPoints/success",
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
@@ -369,9 +375,16 @@ public class ShortReviewControllerTest {
                             .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
                             .description("Header Cookie, 세션 쿠키")
                     ),
-                    pathParameters(
-                        parameterWithName("reviewId")
-                            .description("리뷰 식별자")),
+                    queryParameters(
+                        parameterWithName("animeId")
+                            .attributes(field("constraints","애니메 ID, NotNull, Min(1)"))
+                            .optional()
+                            .description("애니 고유의 식별자"),
+                        parameterWithName("name")
+                            .attributes(field("constraints","회원 이름"))
+                            .optional()
+                            .description("회원 이름")
+                    ),
                     responseFields(
                         fieldWithPath("drawing")
                             .type(JsonFieldType.BOOLEAN)
@@ -388,6 +401,64 @@ public class ShortReviewControllerTest {
                         fieldWithPath("voiceActor")
                             .type(JsonFieldType.BOOLEAN)
                             .description("성우 입덕포인트"))
+                ));
+        }
+    }
+
+    @Nested
+    @DisplayName("짧은 리뷰 수정")
+    class PatchShortReview{
+        
+
+        @DisplayName("짧은 리뷰 수정 성공시 Http Status 204 반환")
+        @Test
+        @WithCustomMockMember(id = 1L, email = "john", password = "Qwer!234", role = Role.MEMBER)
+        void patchShortReview() throws Exception{
+            //given
+            Long reviewId = 1L;
+            ShortReviewReq req = ShortReviewTestUtils.createPatchShortReview();
+            String content = gson.toJson(req);
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                patch(BASE_URL +"/{reviewId}", reviewId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+                    .content(content)
+            );
+
+            //then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(document("patchShortReview/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    requestHeaders(
+                        headerWithName(HttpHeaders.COOKIE)
+                            .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                            .description("Header Cookie, 세션 쿠키")
+                    ),
+                    pathParameters(
+                        parameterWithName("reviewId")
+                            .description("리뷰 식별자")),
+                    requestFields(attributes(key("title").value("Fields for shortReview creation")),
+                        fieldWithPath("animeId")
+                            .type(JsonFieldType.NUMBER)
+                            .attributes(field("constraints","애니메 ID, NotNull, Min(1)"))
+                            .description("리뷰를 등록할 애니 고유 식별 번호"),
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "String만 가능합니다"))
+                            .description("리뷰를 등록할 회원의 이름"),
+                        fieldWithPath("hasSpoiler")
+                            .type(JsonFieldType.BOOLEAN)
+                            .attributes(field("constraints", "true 또는 false."))
+                            .description("스포일러 유무"),
+                        fieldWithPath("content")
+                            .type(JsonFieldType.STRING)
+                            .attributes(field("constraints", "최소 10에서 100자 까지 입력 가능합니다."))
+                            .description("짧은 리뷰 내용"))
                 ));
         }
 //        @DisplayName("짧은 리뷰 수정 기존 내용과 동일할 시 400 BadRequest 응답")
