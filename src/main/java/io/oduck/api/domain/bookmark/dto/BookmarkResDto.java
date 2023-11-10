@@ -12,6 +12,13 @@ import lombok.NoArgsConstructor;
 public class BookmarkResDto {
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BookmarkCountRes {
+        private Long count;
+    }
+    @Getter
+    @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class BookmarkRes implements EntityBased {
