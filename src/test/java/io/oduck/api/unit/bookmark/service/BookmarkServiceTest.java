@@ -17,6 +17,7 @@ import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
 import io.oduck.api.domain.bookmark.dto.BookmarkDslDto.BookmarkDsl;
 import io.oduck.api.domain.bookmark.dto.BookmarkReqDto.Sort;
+import io.oduck.api.domain.bookmark.dto.BookmarkResDto.BookmarkCountRes;
 import io.oduck.api.domain.bookmark.dto.BookmarkResDto.BookmarkRes;
 import io.oduck.api.domain.bookmark.dto.BookmarkResDto.BookmarkedDateTimeRes;
 import io.oduck.api.domain.bookmark.entity.Bookmark;
@@ -131,6 +132,24 @@ public class BookmarkServiceTest {
             assertEquals(sampleSlice.getSize(), result.getItems().size());
             assertNotNull(result.getCursor());
             assertFalse(result.isHasNext());
+        }
+    }
+
+    @DisplayName("회원의 북마크 갯수 조회")
+    @Nested
+    class GetBookmarkCountByMemberId {
+        @DisplayName("회원의 북마크 갯수 조회 성공")
+        @Test
+        void getBookmarkCountByMemberIdSuccess() {
+            Long memberId = 1L;
+            Long count = 3L;
+
+            when(bookmarkRepository.countByMemberId(memberId)).thenReturn(count);
+
+            BookmarkCountRes result = bookmarkService.getBookmarksCountByMemberId(memberId);
+
+            assertNotNull(result);
+            assertEquals(count, result.getCount());
         }
     }
 
