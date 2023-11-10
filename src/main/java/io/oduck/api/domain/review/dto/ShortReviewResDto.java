@@ -21,8 +21,8 @@ public class ShortReviewResDto {;
         private String thumbnail;
         private Integer score;
         private String content;
-        private boolean isSpoiler;
-        private boolean isLike;
+        private Boolean isSpoiler;
+        private Boolean isLike;
         @Builder.Default
         private Long likeCount = 0L;
         private LocalDateTime createdAt;
@@ -30,7 +30,7 @@ public class ShortReviewResDto {;
         //카운트가 없으면 hasLike false
         @Builder
         public static ShortReviewRes of(ShortReviewDsl shortReviewDsl){
-            boolean isLike = shortReviewDsl.getLikeCount() != null;
+            Boolean isLike = shortReviewDsl.getLikeCount() != null;
             Long likeCount = isLike ? shortReviewDsl.getLikeCount() : 0L ;
             return ShortReviewRes
                        .builder()
@@ -40,7 +40,7 @@ public class ShortReviewResDto {;
                        .thumbnail(shortReviewDsl.getThumbnail())
                        .score(shortReviewDsl.getScore())
                        .content(shortReviewDsl.getContent())
-                       .isSpoiler(shortReviewDsl.isHasSpoiler())
+                       .isSpoiler(shortReviewDsl.getIsSpoiler())
                        .isLike(isLike)
                        .likeCount(likeCount)
                        .createdAt(shortReviewDsl.getCreatedAt())

@@ -16,13 +16,13 @@ public class ShortReviewDslDto {
         private String thumbnail;
         private Integer score;
         private String content;
-        private boolean isSpoiler;
+        private Boolean isSpoiler;
         private Long likeCount;
         private LocalDateTime createdAt;
 
         @Builder
-        public ShortReviewDsl(Long reviewId,Long animeId, String name, String thumbnail, Integer score, String content,
-            boolean isSpoiler, Long likeCount, LocalDateTime createdAt) {
+        public ShortReviewDsl(Long reviewId, Long animeId, String name, String thumbnail, Integer score, String content,
+            Boolean isSpoiler, Long likeCount, LocalDateTime createdAt) {
             this.reviewId = reviewId;
             this.animeId = animeId;
             this.name = name;
