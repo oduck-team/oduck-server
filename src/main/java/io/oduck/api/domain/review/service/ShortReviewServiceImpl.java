@@ -11,6 +11,7 @@ import io.oduck.api.domain.review.dto.ShortReviewDslDto.ShortReviewDsl;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto.PatchShortReviewReq;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto.PostShortReviewReq;
+import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewCountRes;
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewRes;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.review.repository.ShortReviewRepository;
@@ -97,6 +98,14 @@ public class ShortReviewServiceImpl implements ShortReviewService{
                                        .toList();
 
         return SliceResponse.of(shortReviews, res, sort.getSort());
+    }
+
+    @Override
+    public ShortReviewCountRes getShortReviewCountByMemberId(Long memberId) {
+        Long count = shortReviewRepository.countByMemberId(memberId);
+        return ShortReviewCountRes.builder()
+                   .count(count)
+                   .build();
     }
 
     @Override
