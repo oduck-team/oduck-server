@@ -35,7 +35,6 @@ public class ShortReviewServiceImpl implements ShortReviewService{
 
     private final ShortReviewRepository shortReviewRepository;
     private final MemberRepository memberRepository;
-
     private final AnimeRepository animeRepository;
 
 
