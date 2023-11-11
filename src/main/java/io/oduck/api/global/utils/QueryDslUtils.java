@@ -4,6 +4,7 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -66,6 +67,12 @@ public class QueryDslUtils {
     }
 
     private static OrderSpecifier<?> createOrderSpecifier(Order order, Path<?> parent, String fieldName) {
+        // count 메소드 컬럼을 기준으로 할 때의 OrderSpecifier
+        if (fieldName.equals("quantity") || fieldName.equals("likeCount")) {
+            NumberPath<Long> aliasQuantity = Expressions.numberPath(Long.class, fieldName);
+
+            return new OrderSpecifier(order, aliasQuantity);
+        }
         // 일반 컬럼을 기준으로 할때의 OrderSpecifier
         Path<Object> fieldPath = Expressions.path(Object.class, parent, fieldName);
 
