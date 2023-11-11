@@ -30,6 +30,7 @@ import jakarta.validation.constraints.Min;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -68,7 +69,7 @@ public class AdminController {
     // 관리자 애니 조회
     @GetMapping("/animes")
     public ResponseEntity<Object> getAnimes(
-        @RequestParam(required = false) String query,
+        @RequestParam(required = false) @Length(min = 0, max = 50) String query,
         QueryType queryType,
         @RequestParam(required = false, defaultValue = "latest") AdminReq.Sort sort,
         @RequestParam(required = false, defaultValue = "DESC") OrderDirection order,
@@ -76,9 +77,6 @@ public class AdminController {
         @RequestParam(required = false, defaultValue = "20") @Min(1) @Max(100) int size,
         SearchFilter searchFilter
     ){
-
-        validateQueryLength(query, 50);
-
         int validatedPage = validatePage(page);
 
         PageResponse<AdminRes.SearchResult> res = animeService.getPageByCondition(
