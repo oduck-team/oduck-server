@@ -14,6 +14,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -71,6 +72,15 @@ public class AnimeController {
     public ResponseEntity<Object> getAnimeById(@PathVariable Long animeId){
         
         DetailResult res = animeService.getAnimeById(animeId);
+
+        return ResponseEntity.ok(res);
+    }
+
+    // 애니 평가 평균 조회
+    @GetMapping("/{animeId}/ratings/average")
+    public ResponseEntity<Object> getStarRatingAvg(@PathVariable Long animeId){
+
+        StarRatingAvg res = animeService.getStarRatingAverage(animeId);
 
         return ResponseEntity.ok(res);
     }
