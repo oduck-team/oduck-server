@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Repository;
@@ -59,8 +58,8 @@ public class ShortReviewRepositoryImpl implements ShortReviewRepositoryCustom{
                                                     .leftJoin(shortReviewLike).on(shortReview.id.eq(shortReviewLike.shortReview.id))
                                                     .leftJoin(starRating).on(starRating.anime.id.eq(shortReview.anime.id).and(starRating.member.id.eq(shortReview.member.id)))
                                                     .where(anime.id.eq(animeId))
-                                                    .where(cursorCondition(cursor, pageable))
                                                     .groupBy(shortReview.id, member.id)
+                                                    .having(cursorCondition(cursor, pageable))
                                                     .limit(pageable.getPageSize());
 
         return fetchSliceByCursor(sortPath(property), shortReviews, pageable );
@@ -80,13 +79,13 @@ public class ShortReviewRepositoryImpl implements ShortReviewRepositoryCustom{
                 LocalDateTime likeCountCreateAt = LocalDateTime.parse(likeCountAndCreateAt[1]);
 
                 if(direction == Direction.ASC) {
-                    return shortReviewLike.id.count().as("likeCount").gt(likeCount)
-                               .or(shortReviewLike.id.count().as("likeCount").goe(likeCount).and(shortReview.createdAt.lt(likeCountCreateAt)))//조회할 좋아요가 크거나 같으면, 첫 커서의 날짜가 크면
-                               .or(shortReviewLike.id.count().as("likeCount").isNotNull().and(shortReview.createdAt.lt(likeCountCreateAt)));
+                    return shortReviewLike.id.count().gt(likeCount)
+                               .or(shortReviewLike.id.count().goe(likeCount).and(shortReview.createdAt.lt(likeCountCreateAt)))//조회할 좋아요가 크거나 같으면, 첫 커서의 날짜가 크면
+                               .or(shortReviewLike.id.count().isNotNull().and(shortReview.createdAt.lt(likeCountCreateAt)));
                 } else{
-                    return shortReviewLike.id.count().as("likeCount").lt(likeCount)
-                               .or(shortReviewLike.id.count().as("likeCount").loe(likeCount).and(shortReview.createdAt.lt(likeCountCreateAt)))//조회할 좋아요가 크거나 같으면, 첫 커서의 날짜가 크면
-                               .or(shortReviewLike.id.count().as("likeCount").isNotNull().and(shortReview.createdAt.lt(likeCountCreateAt)));
+                    return shortReviewLike.id.count().lt(likeCount)
+                               .or(shortReviewLike.id.count().loe(likeCount).and(shortReview.createdAt.lt(likeCountCreateAt)))//조회할 좋아요가 크거나 같으면, 첫 커서의 날짜가 크면
+                               .or(shortReviewLike.id.count().isNotNull().and(shortReview.createdAt.lt(likeCountCreateAt)));
                 }
 
             case "score":
