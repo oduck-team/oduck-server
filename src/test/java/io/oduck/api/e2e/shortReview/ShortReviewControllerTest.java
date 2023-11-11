@@ -230,10 +230,10 @@ public class ShortReviewControllerTest {
         void getShortReviewsWithCursor() throws Exception{
             //given
             Long animeId = 1L;
-            int size = 1;
-            String sort = "created_at";
+            int size = 2;
+            String sort = "like_count";
             String order = "desc";
-            String cursor = "2023-10-11T21:05:31.859";
+            String cursor = "1, 2023-10-11T21:05:31.859";
 
             //when
             ResultActions actions = mockMvc.perform(
