@@ -23,7 +23,7 @@ public class AnimeReq {
         private String title;
 
         @NotBlank
-        @Length(min = 1, max = 255, message = "글자 수는 0~255를 허용합니다.")
+        @Length(min = 1, max = 600, message = "글자 수는 0~255를 허용합니다.")
         private String summary;
 
         @NotNull
