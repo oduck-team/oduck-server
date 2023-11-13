@@ -5,14 +5,11 @@ import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
 import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
 import io.oduck.api.domain.member.entity.Member;
-import io.oduck.api.domain.member.repository.MemberProfileRepository;
 import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.domain.review.dto.ShortReviewDslDto.ShortReviewDsl;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto.ShortReviewReq;
 
-import io.oduck.api.domain.review.dto.ShortReviewReqDto.PatchShortReviewReq;
-import io.oduck.api.domain.review.dto.ShortReviewReqDto.PostShortReviewReq;
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewCountRes;
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewRes;
 import io.oduck.api.domain.review.entity.ShortReview;
@@ -101,16 +98,14 @@ public class ShortReviewServiceImpl implements ShortReviewService{
     }
 
     @Override
-    public void update(Long memberId, Long reviewId, ShortReviewReq req) {
     public ShortReviewCountRes getShortReviewCountByMemberId(Long memberId) {
         Long count = shortReviewRepository.countByMemberId(memberId);
         return ShortReviewCountRes.builder()
                    .count(count)
                    .build();
     }
-
     @Override
-    public void update(Long memberId, Long reviewId, PatchShortReviewReq req) {
+    public void update(Long memberId, Long reviewId, ShortReviewReq req) {
         ShortReview findShortReview = getShortReview(reviewId);
         Long findMemberId = findShortReview.getMember().getId();
         //리뷰 작성자 인지 확인
