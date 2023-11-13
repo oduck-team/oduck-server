@@ -1,6 +1,7 @@
 package io.oduck.api.unit.bookmark.repository;
 
 import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import io.oduck.api.domain.bookmark.dto.BookmarkDslDto.BookmarkDsl;
@@ -22,7 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 public class BookmarkRepositoryTest {
     @Autowired
-    BookmarkRepository memberRepository;
+    BookmarkRepository bookmarkRepository;
 
     @DisplayName("회원 북마크 애니 목록 조회")
     @Nested
@@ -36,7 +37,7 @@ public class BookmarkRepositoryTest {
             Pageable pageable = applyPageableForNonOffset(10, "createdAt", "desc");
 
             // when
-            Slice<BookmarkDsl> bookmarks = memberRepository.selectBookmarks(memberId, null, pageable);
+            Slice<BookmarkDsl> bookmarks = bookmarkRepository.selectBookmarks(memberId, null, pageable);
 
             assertNotNull(bookmarks);
             assertNotNull(bookmarks.getContent().get(0).getAnimeId());
@@ -45,4 +46,21 @@ public class BookmarkRepositoryTest {
         }
     }
 
+    @DisplayName("회원 북마크 애니 갯수 조회")
+    @Nested
+    class selectBookmarkCount {
+        @DisplayName("회원 ID로 회원이 북마크한 애니 갯수 조회 성공")
+        @Test
+        void selectBookmarkCountSuccess() {
+            // given
+            Long memberId = 1L;
+
+            // when
+            Long bookmarkCount = bookmarkRepository.countByMemberId(memberId);
+
+            // then
+            assertNotNull(bookmarkCount);
+            assertEquals(3L, bookmarkCount);
+        }
+    }
 }

@@ -11,6 +11,9 @@ import io.oduck.api.domain.review.dto.ShortReviewDslDto.ShortReviewDsl;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto.ShortReviewReq;
 
+import io.oduck.api.domain.review.dto.ShortReviewReqDto.PatchShortReviewReq;
+import io.oduck.api.domain.review.dto.ShortReviewReqDto.PostShortReviewReq;
+import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewCountRes;
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewRes;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.review.repository.ShortReviewRepository;
@@ -99,6 +102,15 @@ public class ShortReviewServiceImpl implements ShortReviewService{
 
     @Override
     public void update(Long memberId, Long reviewId, ShortReviewReq req) {
+    public ShortReviewCountRes getShortReviewCountByMemberId(Long memberId) {
+        Long count = shortReviewRepository.countByMemberId(memberId);
+        return ShortReviewCountRes.builder()
+                   .count(count)
+                   .build();
+    }
+
+    @Override
+    public void update(Long memberId, Long reviewId, PatchShortReviewReq req) {
         ShortReview findShortReview = getShortReview(reviewId);
         Long findMemberId = findShortReview.getMember().getId();
         //리뷰 작성자 인지 확인

@@ -633,5 +633,81 @@ public class MemberControllerTest {
         }
     }
 
+    @DisplayName("회원의 북마크 애니 갯수 조회")
+    @Nested
+    class GetBookmarkCount {
+        @DisplayName("회원의 북마크 애니 갯수 조회 성공시 200 OK 응답")
+        @Test
+        void getBookmarkCountSuccess() throws Exception {
+            // given
+            // 회원의 북마크 애니 갯수 조회에 필요한 데이터
+            Long memberId = 1L;
+
+            // when
+            ResultActions actions = mockMvc.perform(
+                get(BASE_URL + "/{memberId}/bookmarks/count", memberId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+
+            // then
+            actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count").exists())
+                .andDo(
+                    document("getBookmarkCount/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                            parameterWithName("memberId")
+                                .description("회원 id")),
+                        responseFields(
+                            fieldWithPath("count")
+                                .type(JsonFieldType.NUMBER)
+                                .description("회원의 북마크 애니 갯수")
+                        )
+                    )
+                );
+        }
+    }
+
     // TODO: 회원 리뷰 목록 조회
+
+    @DisplayName("회원의 리뷰 갯수 조회")
+    @Nested
+    class GetReviewCount {
+        @DisplayName("회원의 리뷰 갯수 조회 성공시 200 OK 응답")
+        @Test
+        void getReviewCountSuccess() throws Exception {
+            // given
+            // 회원의 리뷰 갯수 조회에 필요한 데이터
+            Long memberId = 1L;
+
+            // when
+            ResultActions actions = mockMvc.perform(
+                get(BASE_URL + "/{memberId}/short-reviews/count", memberId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+
+            // then
+            actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count").exists())
+                .andDo(
+                    document("getReviewCount/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                            parameterWithName("memberId")
+                                .description("회원 id")),
+                        responseFields(
+                            fieldWithPath("count")
+                                .type(JsonFieldType.NUMBER)
+                                .description("회원의 리뷰 갯수")
+                        )
+                    )
+                );
+        }
+    }
 }

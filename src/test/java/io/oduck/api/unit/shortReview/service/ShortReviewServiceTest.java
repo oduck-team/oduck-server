@@ -7,6 +7,7 @@ import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.domain.review.dto.ShortReviewDslDto.ShortReviewDsl;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto.ShortReviewReq;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto.Sort;
+import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewCountRes;
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewRes;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.review.repository.ShortReviewRepository;
@@ -140,6 +141,27 @@ public class ShortReviewServiceTest {
 
             //then
             verify(shortReviewRepository, times(1)).findById(anyLong());
+        }
+    }
+
+    @DisplayName("회원 ID로 짧은 리뷰 갯수 조회")
+    @Nested
+    class GetShortReviewCountByMemberId {
+
+        @Test
+        @DisplayName("회원 ID로 짧은 리뷰 갯수 조회 성공")
+        void getShortReviewCountByMemberId() {
+            //given
+            Long memberId = 1L;
+            Long count = 1L;
+
+            given(shortReviewRepository.countByMemberId(memberId)).willReturn(count);
+
+            //when
+            ShortReviewCountRes result = shortReviewService.getShortReviewCountByMemberId(memberId);
+
+            //then
+            assertEquals(count, result.getCount());
         }
     }
 }

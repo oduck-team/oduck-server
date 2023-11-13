@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ShortReviewRepository extends JpaRepository<ShortReview,Long>, ShortReviewRepositoryCustom {
-
-
+    Long countByMemberId(Long memberId);
 }
