@@ -157,6 +157,12 @@ public class Anime extends BaseEntity {
   }
 
   public void delete() {
+    this.animeOriginalAuthors.clear();
+    this.animeVoiceActors.clear();
+    this.animeGenres.clear();
+    this.animeStudios.clear();
+    this.series = null;
+
     this.deletedAt = LocalDateTime.now();
   }
 
