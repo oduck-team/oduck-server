@@ -96,11 +96,11 @@ public class ShortReviewRepositoryImpl implements ShortReviewRepositoryCustom{
                 if(direction == Direction.ASC) {
                     return starRating.score.gt(score)
                                .or(starRating.score.goe(score).and(shortReview.createdAt.lt(scoreCreateAt)))
-                               .or(starRating.score.isNotNull().and(shortReview.createdAt.lt(scoreCreateAt)));
+                               .or(starRating.score.isNull().and(shortReview.createdAt.lt(scoreCreateAt)));
                 } else{
                     return starRating.score.lt(score)
                                .or(starRating.score.loe(score).and(shortReview.createdAt.lt(scoreCreateAt)))
-                               .or(starRating.score.isNotNull().and(shortReview.createdAt.lt(scoreCreateAt)));
+                               .or(starRating.score.isNull().and(shortReview.createdAt.lt(scoreCreateAt)));
                 }
             default:
                 if (direction == Direction.ASC) {
