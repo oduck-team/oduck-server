@@ -6,6 +6,7 @@ import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
 import io.oduck.api.domain.bookmark.dto.BookmarkDslDto.BookmarkDsl;
 import io.oduck.api.domain.bookmark.dto.BookmarkReqDto;
+import io.oduck.api.domain.bookmark.dto.BookmarkResDto.BookmarkCountRes;
 import io.oduck.api.domain.bookmark.dto.BookmarkResDto.BookmarkRes;
 import io.oduck.api.domain.bookmark.dto.BookmarkResDto.BookmarkedDateTimeRes;
 import io.oduck.api.domain.bookmark.entity.Bookmark;
@@ -72,6 +73,14 @@ public class BookmarkServiceImpl implements BookmarkService {
         }
 
         throw new NotFoundException("bookmark");
+    }
+
+    @Override
+    public BookmarkCountRes getBookmarksCountByMemberId(Long memberId) {
+        Long count = bookmarkRepository.countByMemberId(memberId);
+        return BookmarkCountRes.builder()
+            .count(count)
+            .build();
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookmarkRepository extends JpaRepository<Bookmark,Long>, BookmarkRepositoryCustom {
+    Long countByMemberId(Long memberId);
     Optional<Bookmark> findByMemberIdAndAnimeId(Long memberId, Long animeId);
 
 }

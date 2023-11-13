@@ -496,6 +496,46 @@ include::{snippets}/getBookmarks/successWithCursor/response-body.adoc[]
 .response-fields
 include::{snippets}/getBookmarks/successWithCursor/response-fields.adoc[]sho
 
+=== GET api/v1/members/:id/bookmarks/count
+
+.curl-request
+include::{snippets}/getBookmarkCount/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getBookmarkCount/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/getBookmarkCount/success/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/getBookmarkCount/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getBookmarkCount/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getBookmarkCount/success/response-fields.adoc[]
+
+=== GET api/v1/members/:id/short-reviews/count
+
+.curl-request
+include::{snippets}/getReviewCount/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getReviewCount/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/getReviewCount/success/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/getReviewCount/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getReviewCount/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getReviewCount/success/response-fields.adoc[]
+
 == animes
 === GET api/v1/animes
 .curl-request

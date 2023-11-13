@@ -195,4 +195,22 @@ public class ShortReviewRepositoryTest {
             assertEquals(updateShortReview.isHasSpoiler(), hasSpoiler);
         }
     }
+
+    @DisplayName("회원 작성한 리뷰 갯수 조회")
+    @Nested
+    class selectShortReviewsCount {
+        @DisplayName("회원 ID로 회원이 작성한 리뷰 갯수 조회 성공")
+        @Test
+        void selectShortReviewsCountSuccess() {
+            // given
+            Long memberId = 1L;
+
+            // when
+            Long shortReviewsCount = shortReviewRepository.countByMemberId(memberId);
+
+            // then
+            assertNotNull(shortReviewsCount);
+            assertEquals(2L, shortReviewsCount);
+        }
+    }
 }
