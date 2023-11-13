@@ -233,7 +233,7 @@ public class ShortReviewControllerTest {
             int size = 2;
             String sort = "like_count";
             String order = "desc";
-            String cursor = "1, 2023-10-11T21:05:31.859";
+            String cursor = "0, 2023-10-11T21:05:31.859";
 
             //when
             ResultActions actions = mockMvc.perform(
