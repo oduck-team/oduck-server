@@ -104,9 +104,9 @@ logging:
     name: ./logs/oDuck.log
   logback:
     rollingpolicy:
-      max-file-size: 10MB #default 10MB
-      max-history: 30 #default 7
-      file-name-pattern: oDuck.%d{yyyy-MM-dd}.%i.gz
+      max-file-size: 10MB   #default 10MB
+      max-history: 30       #default 7
+      file-name-pattern: ./logs/oDuck.%d{yyyy-MM-dd}.%i.gz
 
 config:
   base:
