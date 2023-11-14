@@ -19,6 +19,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,17 +60,6 @@ public class MemberController {
         return ResponseEntity.ok(res);
     }
 
-    // 회원 프로필 수정
-    @PatchMapping
-    public ResponseEntity<?> patchProfile(
-        @RequestBody @Valid PatchReq body,
-        @LoginUser AuthUser user
-    ) {
-        // TODO: 회원 정보 수정 로직 구현
-        memberService.updateProfile(body, user.getId());
-
-        return ResponseEntity.noContent().build();
-    }
 
     @GetMapping("/{id}/bookmarks")
     public ResponseEntity<?> getBookmaks(
@@ -103,5 +93,26 @@ public class MemberController {
         @PathVariable("id") @Positive Long id
     ) {
         return ResponseEntity.ok(shortReviewService.getShortReviewCountByMemberId(id));
+    }
+
+    // 회원 프로필 수정
+    @PatchMapping
+    public ResponseEntity<?> patchProfile(
+        @RequestBody @Valid PatchReq body,
+        @LoginUser AuthUser user
+    ) {
+        // TODO: 회원 정보 수정 로직 구현
+        memberService.updateProfile(body, user.getId());
+
+        return ResponseEntity.noContent().build();
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping()
+    public ResponseEntity<?> deleteMember(
+        @LoginUser AuthUser user
+    ) {
+        memberService.withdrawMember(user.getId());
+        return ResponseEntity.noContent().build();
     }
 }
