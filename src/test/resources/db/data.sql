@@ -70,7 +70,11 @@ INSERT INTO star_rating(score, anime_id, created_at, member_id, updated_at) VALU
 INSERT INTO star_rating(score, anime_id, created_at, member_id, updated_at) VALUES(3, 1, '2023-10-13 21:05:31.859', 3, '2023-10-13 21:05:31.859');
 
 INSERT INTO short_review(has_spoiler, anime_id, created_at, member_id, updated_at, content) VALUES(0, 1, '2023-10-10 21:05:31.859', 1, '2023-10-10 21:05:31.859', '최고');
-INSERT INTO short_review(has_spoiler, anime_id, created_at, member_id, updated_at, content) VALUES(0, 2, '2023-10-11 21:05:31.859', 1, '2023-10-11 21:05:31.859', '힐링');
+INSERT INTO short_review(has_spoiler, anime_id, created_at, member_id, updated_at, content) VALUES(0, 2, '2023-10-10 21:05:31.859', 1, '2023-10-10 21:05:31.859', '최고');
+INSERT INTO short_review(has_spoiler, anime_id, created_at, member_id, updated_at, content) VALUES(0, 3, '2023-10-10 21:05:31.859', 1, '2023-10-10 21:05:31.859', '최고');
+INSERT INTO short_review(has_spoiler, anime_id, created_at, member_id, updated_at, content) VALUES(0, 1, '2023-10-10 21:05:31.859', 2, '2023-10-10 21:05:31.859', '최고');
+INSERT INTO short_review(has_spoiler, anime_id, created_at, member_id, updated_at, content) VALUES(0, 2, '2023-10-11 21:05:31.859', 2, '2023-10-11 21:05:31.859', '힐링');
+INSERT INTO short_review(has_spoiler, anime_id, created_at, member_id, updated_at, content) VALUES(0, 3, '2023-10-12 21:05:31.859', 2, '2023-10-13 21:05:31.859', '힐링');
 
 INSERT INTO short_review_like(created_at, member_id, short_review_id, updated_at) VALUES('2023-10-10 21:05:31.859', 1, 1, '2023-10-10 21:05:31.859');
 INSERT INTO short_review_like(created_at, member_id, short_review_id, updated_at) VALUES('2023-10-11 21:05:31.859', 1, 2, '2023-10-11 21:05:31.859');
