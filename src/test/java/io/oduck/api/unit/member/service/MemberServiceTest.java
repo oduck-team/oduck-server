@@ -167,4 +167,34 @@ public class MemberServiceTest {
     }
 
     // TODO: 회원 북마크 애니 목록
+
+    // 회원 탈퇴
+    @DisplayName("회원 탈퇴")
+    @Nested
+    class DeleteMember {
+        @DisplayName("회원 탈퇴 성공")
+        @Test
+        void deleteMemberSuccess() {
+            // given
+            Member member = new MemberStub().getMember();
+            given(memberRepository.findByIdAndDeletedAtIsNull(anyLong())).willReturn(Optional.ofNullable(member));
+
+            // when
+            // then
+            assertDoesNotThrow(() -> memberService.withdrawMember(1L));
+        }
+
+        @DisplayName("회원 탈퇴 실패. 존재하지 않는 회원")
+        @Test
+        void deleteMemberFailureWhenNotExist() {
+            // given
+            given(memberRepository.findByIdAndDeletedAtIsNull(anyLong())).willReturn(Optional.empty());
+
+            // when
+            // then
+            assertThrows(NotFoundException.class,
+                () -> memberService.withdrawMember(1L)
+            );
+        }
+    }
 }
