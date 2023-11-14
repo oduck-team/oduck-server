@@ -67,7 +67,8 @@ public class Member extends BaseEntity {
   private List<AttractionPoint> attractionPoints;
 
   @Builder
-  public Member(Long id, Role role, LoginType loginType, AuthSocial authSocial,  AuthLocal authLocal, MemberProfile memberProfile) {
+  public Member(Long id, Role role, LoginType loginType, AuthSocial authSocial, AuthLocal authLocal,
+      MemberProfile memberProfile) {
     this.id = id;
     this.role = role;
     this.loginType = loginType;
@@ -79,21 +80,21 @@ public class Member extends BaseEntity {
   // TODO: set 말고 다른 이름으로 변경하기
   public void relateAuthSocial(AuthSocial authSocial) {
     this.authSocial = authSocial;
-    if(authSocial != null) {
+    if (authSocial != null) {
       authSocial.relateMember(this);
     }
   }
 
   public void relateAuthLocal(AuthLocal authLocal) {
     this.authLocal = authLocal;
-    if(authLocal != null) {
+    if (authLocal != null) {
       authLocal.relateMember(this);
     }
   }
 
   public void relateMemberProfile(MemberProfile memberProfile) {
     this.memberProfile = memberProfile;
-    if(memberProfile != null) {
+    if (memberProfile != null) {
       memberProfile.relateMember(this);
     }
   }
@@ -102,7 +103,7 @@ public class Member extends BaseEntity {
     this.deletedAt = LocalDateTime.now();
     this.memberProfile.delete();
 
-    if(this.authLocal != null) {
+    if (this.authLocal != null) {
       this.authLocal.delete();
     }
 

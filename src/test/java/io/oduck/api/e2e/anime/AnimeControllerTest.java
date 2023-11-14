@@ -42,7 +42,7 @@ public class AnimeControllerTest {
 
     @Nested
     @DisplayName("조회")
-    class GetAnime{
+    class GetAnime {
 
         @Test
         @DisplayName("애니 검색 조회 성공 시 Http Status 200 반환")
@@ -245,6 +245,43 @@ public class AnimeControllerTest {
                 ));
 
             //TODO : 조회 실패 시
+        }
+    }
+
+    @Nested
+    @DisplayName("애니 평점")
+    class GetAnimeScoreAvg {
+        @Test
+        @DisplayName("애니 평가 평균 조회 성공 시 Http Status 200 반환")
+        void getAnimeScoreAvg() throws Exception {
+            //given
+            Long animeId = 1L;
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                RestDocumentationRequestBuilders.get("/animes/"+"{animeId}"+"/ratings/average", animeId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+
+            //then
+            actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.starRatingAvg").exists())
+                .andDo(document("getAnimeScoreAvg/success",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
+                    pathParameters(
+                        parameterWithName("animeId")
+                            .description("애니의 고유 식별자")
+                    ),
+                    responseFields(
+                        fieldWithPath("starRatingAvg")
+                            .type(JsonFieldType.NUMBER)
+                            .description("애니의 평가 평균")
+                    )
+                ));
+
         }
     }
 }

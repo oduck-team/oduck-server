@@ -1,12 +1,32 @@
 package io.oduck.api.domain.anime.service;
 
+import static io.oduck.api.domain.anime.dto.AnimeReq.PatchAnimeReq;
+import static io.oduck.api.domain.anime.dto.AnimeReq.PatchGenreIdsReq;
+import static io.oduck.api.domain.anime.dto.AnimeReq.PatchOriginalAuthorIdsReq;
+import static io.oduck.api.domain.anime.dto.AnimeReq.PatchSeriesIdReq;
+import static io.oduck.api.domain.anime.dto.AnimeReq.PatchStudioIdsReq;
+import static io.oduck.api.domain.anime.dto.AnimeReq.PatchVoiceActorIdsReq;
+import static io.oduck.api.domain.anime.dto.AnimeReq.PostReq;
+import static io.oduck.api.domain.anime.dto.AnimeReq.Sort;
+import static io.oduck.api.domain.anime.dto.AnimeRes.DetailResult;
+import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
+
 import io.oduck.api.domain.admin.dto.AdminReq;
 import io.oduck.api.domain.admin.dto.AdminReq.QueryType;
 import io.oduck.api.domain.admin.dto.AdminRes;
+import io.oduck.api.domain.anime.dto.AnimeRes.StarRatingAvg;
 import io.oduck.api.domain.anime.dto.AnimeVoiceActorReq;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
-import io.oduck.api.domain.anime.entity.*;
-import io.oduck.api.domain.anime.repository.*;
+import io.oduck.api.domain.anime.entity.Anime;
+import io.oduck.api.domain.anime.entity.AnimeGenre;
+import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
+import io.oduck.api.domain.anime.entity.AnimeStudio;
+import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
+import io.oduck.api.domain.anime.repository.AnimeGenreRepository;
+import io.oduck.api.domain.anime.repository.AnimeOriginalAuthorRepository;
+import io.oduck.api.domain.anime.repository.AnimeRepository;
+import io.oduck.api.domain.anime.repository.AnimeStudioRepository;
+import io.oduck.api.domain.anime.repository.AnimeVoiceActorRepository;
 import io.oduck.api.domain.genre.entity.Genre;
 import io.oduck.api.domain.genre.repository.GenreRepository;
 import io.oduck.api.domain.originalAuthor.entity.OriginalAuthor;
@@ -22,19 +42,14 @@ import io.oduck.api.global.common.PageResponse;
 import io.oduck.api.global.common.SliceResponse;
 import io.oduck.api.global.exception.NotFoundException;
 import io.oduck.api.global.utils.PagingUtils;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import static io.oduck.api.domain.anime.dto.AnimeReq.*;
-import static io.oduck.api.domain.anime.dto.AnimeRes.DetailResult;
-import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
 
 @Service
 @RequiredArgsConstructor
@@ -279,6 +294,14 @@ public class AnimeServiceImpl implements AnimeService{
         Anime anime = findAnime(animeId);
 
         anime.delete();
+    }
+
+    @Override
+    public StarRatingAvg getStarRatingAverage(Long animeId) {
+
+        Anime anime = findAnime(animeId);
+
+        return new StarRatingAvg(anime.getStarRatingScoreTotal(), anime.getStarRatingCount());
     }
 
     @Transactional(readOnly = true)
