@@ -1,6 +1,7 @@
 package io.oduck.api.domain.anime.controller;
 
 import io.oduck.api.domain.anime.dto.AnimeRes;
+import io.oduck.api.domain.anime.dto.AnimeRes.StarRatingAvg;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.domain.anime.entity.BroadcastType;
 import io.oduck.api.domain.anime.entity.Quarter;
@@ -13,6 +14,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,15 +40,13 @@ public class AnimeController {
     // 애니 검색 조회
     @GetMapping
     public ResponseEntity<Object> getAnimesBySearchCondition(
-            @RequestParam(required = false) String query,
+            @RequestParam(required = false) @Length(min = 0, max = 50) String query,
             @RequestParam(required = false) String cursor,
             @RequestParam(required = false, defaultValue = "latest") Sort sort,
             @RequestParam(required = false, defaultValue = "DESC") OrderDirection order,
             @RequestParam(required = false, defaultValue = "10") @Min(1) @Max(100) int size,
             @ModelAttribute SearchFilter searchFilter
     ){
-
-        validateQueryLength(query, 50);
 
         List<Long> genreIds = searchFilter.getGenreIds();
         List<BroadcastType> broadcastTypes = searchFilter.getBroadcastTypes();
@@ -76,12 +76,13 @@ public class AnimeController {
         return ResponseEntity.ok(res);
     }
 
-    private void validateQueryLength(String query, int maxLength) {
-        if(query != null) {
-            if(query.length() > maxLength){
-                throw new BadRequestException("글자수는 50자를 넘을 수 없습니다.");
-            }
-        }
+    // 애니 평가 평균 조회
+    @GetMapping("/{animeId}/ratings/average")
+    public ResponseEntity<Object> getStarRatingAvg(@PathVariable Long animeId){
+
+        StarRatingAvg res = animeService.getStarRatingAverage(animeId);
+
+        return ResponseEntity.ok(res);
     }
 
     private List<Integer> extractCurrentYearsNotInCurrentYear(List<Integer> years) {
