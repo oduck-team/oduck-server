@@ -15,6 +15,7 @@ import io.oduck.api.domain.admin.dto.AdminReq;
 import io.oduck.api.domain.admin.dto.AdminReq.QueryType;
 import io.oduck.api.domain.admin.dto.AdminReq.SearchFilter;
 import io.oduck.api.domain.admin.dto.AdminRes;
+import io.oduck.api.domain.anime.dto.AnimeRes.StarRatingAvg;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.global.common.OrderDirection;
 import io.oduck.api.global.common.PageResponse;
@@ -108,4 +109,11 @@ public interface AnimeService {
      * @param animeId 애니의 고유 식별자;
      */
     void delete(Long animeId);
+
+    /**
+     * 애니의 평가 평균 가져오는 기준이다.
+     * @param animeId 애니의 고유 식별자;
+     * @return StarRatingAvg 애니의 평가 평균 dto;
+     */
+    StarRatingAvg getStarRatingAverage(Long animeId);
 }
