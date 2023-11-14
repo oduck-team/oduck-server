@@ -210,7 +210,7 @@ public class ShortReviewRepositoryTest {
 
             // then
             assertNotNull(shortReviewsCount);
-            assertEquals(2L, shortReviewsCount);
+            assertEquals(3L, shortReviewsCount);
         }
     }
 }
