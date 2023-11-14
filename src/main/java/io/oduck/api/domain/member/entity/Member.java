@@ -10,6 +10,7 @@ import io.oduck.api.global.security.auth.entity.AuthLocal;
 import io.oduck.api.global.security.auth.entity.AuthSocial;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -95,5 +96,20 @@ public class Member extends BaseEntity {
     if(memberProfile != null) {
       memberProfile.relateMember(this);
     }
+  }
+
+  public void delete() {
+    this.deletedAt = LocalDateTime.now();
+    this.memberProfile.delete();
+
+    if(this.authLocal != null) {
+      this.authLocal.delete();
+    }
+
+    if (this.authSocial != null) {
+      this.authSocial.delete();
+    }
+
+    this.role = Role.WITHDRAWAL;
   }
 }

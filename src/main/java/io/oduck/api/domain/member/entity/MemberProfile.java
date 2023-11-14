@@ -3,14 +3,13 @@ package io.oduck.api.domain.member.entity;
 import io.oduck.api.global.audit.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -70,5 +69,9 @@ public class MemberProfile extends BaseEntity {
   }
   public void updateInfo(String info) {
     this.info = info;
+  }
+
+  public void delete() {
+    this.deletedAt = LocalDateTime.now();
   }
 }
