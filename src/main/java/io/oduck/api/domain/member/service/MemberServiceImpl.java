@@ -125,6 +125,21 @@ public class MemberServiceImpl implements MemberService{
         memberProfileRepository.save(memberProfile);
     }
 
+    @Override
+    @Transactional
+    public void withdrawMember(Long memberId) {
+        Member member = getMemberById(memberId);
+        member.delete();
+        memberRepository.save(member);
+    }
+
+    private Member getMemberById(Long memberId) {
+        return memberRepository.findByIdAndDeletedAtIsNull(memberId)
+            .orElseThrow(
+                () -> new NotFoundException("Member")
+            );
+    }
+
     private MemberProfile getProfileByMemberId(Long memberId) {
         return memberProfileRepository.findByMemberId(memberId)
             .orElseThrow(

@@ -13,4 +13,7 @@ public interface MemberService {
 
     // 회원 정보 수정 로직
     void updateProfile(PatchReq body, Long memberId);
+
+    // 회원 탈퇴 로직
+    void withdrawMember(Long memberId);
 }
