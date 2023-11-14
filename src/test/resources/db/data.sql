@@ -10,6 +10,10 @@ INSERT INTO member(created_at, updated_at, login_type, `role`) VALUES('2023-10-1
 INSERT INTO auth_local(created_at, member_id, updated_at, password, email) VALUES('2023-10-12 21:05:31.859', 3, '2023-10-12 21:05:31.859', '{bcrypt}$2a$10$C0G6uQz.MzfsSH7BZFRBz.MPBmFSV2zAloqqBIwaUpxnmMgCQK..i', 'david@gmail.com');
 INSERT INTO member_profile (created_at, member_id, updated_at, name, info, thumbnail) VALUES('2023-10-12 21:05:31.859', 3, '2023-10-12 21:05:31.859', 'david', 'david info', 'http://thumbnail.com');
 
+INSERT INTO member(created_at, updated_at, login_type, `role`) VALUES('2023-10-13 21:05:31.859', '2023-10-13 21:05:31.859', 'LOCAL', 'MEMBER');
+INSERT INTO auth_local(created_at, member_id, updated_at, password, email) VALUES('2023-10-13 21:05:31.859', 4, '2023-10-13 21:05:31.859', '{bcrypt}$2a$10$C0G6uQz.MzfsSH7BZFRBz.MPBmFSV2zAloqqBIwaUpxnmMgCQK..i', 'reina@gmail.com');
+INSERT INTO member_profile (created_at, member_id, updated_at, name, info, thumbnail) VALUES('2023-10-13 21:05:31.859', 4, '2023-10-13 21:05:31.859', 'reina', 'reina info', 'http://thumbnail.com');
+
 INSERT INTO series(created_at, title, updated_at) VALUES('2023-10-10 21:05:31.859', '귀멸의 칼날', '2023-10-10 21:05:31.859');
 INSERT INTO series(created_at, title, updated_at) VALUES('2023-10-10 21:05:31.859', '원피스', '2023-10-10 21:05:31.859');
 INSERT INTO series(created_at, title, updated_at) VALUES('2023-10-10 21:05:31.859', '나루토', '2023-10-10 21:05:31.859');
