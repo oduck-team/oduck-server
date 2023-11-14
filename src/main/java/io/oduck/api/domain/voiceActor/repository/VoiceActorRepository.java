@@ -7,12 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface VoiceActorRepository extends JpaRepository<VoiceActor, Long> {
-
-  boolean existsByName(String name);
+public interface VoiceActorRepository extends JpaRepository<VoiceActor, Long>, VoiceActorRepositoryCustom {
 
   List<VoiceActor> findAllByDeletedAtIsNull();
 
-  @Query("select distinct va from VoiceActor va join fetch va.animeVoiceActors where va.id = :id")
+  @Query("select distinct va from VoiceActor va left join fetch va.animeVoiceActors where va.id = :id and va.deletedAt = null")
   Optional<VoiceActor> findByIdAndDeletedAtIsNull(@Param("id") Long voiceActorId);
 }
