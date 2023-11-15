@@ -19,11 +19,11 @@ public class AnimeReq {
     @Getter
     public static class PostReq {
         @NotBlank
-        @Length(min = 1, max = 50, message = "글자 수는 0~50을 허용합니다.")
+        @Length(min = 1, max = 50, message = "글자 수는 1~50을 허용합니다.")
         private String title;
 
         @NotBlank
-        @Length(min = 1, max = 600, message = "글자 수는 0~255를 허용합니다.")
+        @Length(min = 1, max = 600, message = "글자 수는 1~600자를 허용합니다.")
         private String summary;
 
         @NotNull
