@@ -10,7 +10,8 @@ public class StarRatingResDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class RatedDateTimeRes {
+    public static class RatedRes {
+        private int score;
         private String createdAt;
     }
 
