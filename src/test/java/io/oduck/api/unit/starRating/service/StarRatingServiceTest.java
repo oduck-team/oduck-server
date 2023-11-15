@@ -1,6 +1,7 @@
 package io.oduck.api.unit.starRating.service;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -11,7 +12,7 @@ import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
-import io.oduck.api.domain.starRating.dto.StarRatingResDto.RatedDateTimeRes;
+import io.oduck.api.domain.starRating.dto.StarRatingResDto.RatedRes;
 import io.oduck.api.domain.starRating.entity.StarRating;
 import io.oduck.api.domain.starRating.repository.StarRatingRepository;
 import io.oduck.api.domain.starRating.service.StarRatingServiceImpl;
@@ -125,14 +126,12 @@ public class StarRatingServiceTest {
                 .willReturn(Optional.ofNullable(starRating));
 
             // when
-            StarRating foundStarRating = starRatingRepository.findByMemberIdAndAnimeId(memberId, animeId)
-                .orElseThrow(() -> new RuntimeException("StarRating"));
-
-            RatedDateTimeRes createdAtScore = starRatingService.checkRated(memberId, animeId);
+            RatedRes foundStarRating = starRatingService.checkRated(memberId, animeId);
 
             // then
             assertDoesNotThrow(() -> starRatingService.checkRated(memberId, animeId));
-            assertNotNull(createdAtScore);
+            assertNotNull(foundStarRating);
+            assertEquals(starRating.getScore(), foundStarRating.getScore());
         }
 
         @DisplayName("별점 조회 실패")

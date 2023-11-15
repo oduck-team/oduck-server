@@ -4,7 +4,7 @@ import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
-import io.oduck.api.domain.starRating.dto.StarRatingResDto.RatedDateTimeRes;
+import io.oduck.api.domain.starRating.dto.StarRatingResDto.RatedRes;
 import io.oduck.api.domain.starRating.entity.StarRating;
 import io.oduck.api.domain.starRating.repository.StarRatingRepository;
 import io.oduck.api.global.exception.NotFoundException;
@@ -49,11 +49,12 @@ public class StarRatingServiceImpl implements StarRatingService {
     }
 
     @Override
-    public RatedDateTimeRes checkRated(Long memberId, Long animeId) {
+    public RatedRes checkRated(Long memberId, Long animeId) {
         StarRating foundStarRating = findByMemberIdAndAnimeId(memberId, animeId)
             .orElseThrow(() -> new NotFoundException("StarRating"));
 
-        return RatedDateTimeRes.builder()
+        return RatedRes.builder()
+            .score(foundStarRating.getScore())
             .createdAt(foundStarRating.getCreatedAt().toString())
             .build();
     }

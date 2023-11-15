@@ -197,6 +197,8 @@ public class StarRatingControllerTest {
                         responseFields(
                             attributes(key("title")
                                 .value("Fields for starRating get")),
+                            fieldWithPath("score")
+                                .description("별점 점수"),
                             fieldWithPath("createdAt")
                                 .description("별점 생성일")
                         )
