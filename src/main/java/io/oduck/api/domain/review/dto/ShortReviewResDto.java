@@ -15,13 +15,14 @@ public class ShortReviewResDto {;
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class ShortReviewRes implements EntityBased {
+        private Long reviewId;
         private Long animeId;
         private String name;
         private String thumbnail;
         private Integer score;
         private String content;
-        private boolean hasSpoiler;
-        private boolean hasLike;
+        private Boolean isSpoiler;
+        private Boolean isLike;
         @Builder.Default
         private Long likeCount = 0L;
         private LocalDateTime createdAt;
@@ -29,17 +30,18 @@ public class ShortReviewResDto {;
         //카운트가 없으면 hasLike false
         @Builder
         public static ShortReviewRes of(ShortReviewDsl shortReviewDsl){
-            boolean hasLike = shortReviewDsl.getLikeCount() != null;
-            Long likeCount = hasLike ? shortReviewDsl.getLikeCount() : 0L ;
+            Boolean isLike = shortReviewDsl.getLikeCount() != null;
+            Long likeCount = isLike ? shortReviewDsl.getLikeCount() : 0L ;
             return ShortReviewRes
                        .builder()
+                       .reviewId(shortReviewDsl.getReviewId())
                        .animeId(shortReviewDsl.getAnimeId())
                        .name(shortReviewDsl.getName())
                        .thumbnail(shortReviewDsl.getThumbnail())
                        .score(shortReviewDsl.getScore())
                        .content(shortReviewDsl.getContent())
-                       .hasSpoiler(shortReviewDsl.isHasSpoiler())
-                       .hasLike(hasLike)
+                       .isSpoiler(shortReviewDsl.getIsSpoiler())
+                       .isLike(isLike)
                        .likeCount(likeCount)
                        .createdAt(shortReviewDsl.getCreatedAt())
                        .build();

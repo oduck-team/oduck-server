@@ -5,6 +5,7 @@ import static io.oduck.api.domain.member.entity.QMember.member;
 import static io.oduck.api.domain.review.entity.QShortReview.shortReview;
 import static io.oduck.api.domain.reviewLike.entity.QShortReviewLike.shortReviewLike;
 import static io.oduck.api.domain.starRating.entity.QStarRating.starRating;
+
 import static io.oduck.api.global.utils.QueryDslUtils.fetchSliceByCursor;
 
 import com.querydsl.core.types.Path;
@@ -30,15 +31,17 @@ import org.springframework.stereotype.Repository;
 public class ShortReviewRepositoryImpl implements ShortReviewRepositoryCustom{
 
     private final JPAQueryFactory query;
+
+
     @Override
     public Slice<ShortReviewDsl> selectShortReviews(Long animeId, String cursor,
         Pageable pageable) {
         String property = pageable.getSort().get().toList().get(0).getProperty();
-
         JPAQuery<ShortReviewDsl> shortReviews = query
                                                     .select(
                                                         Projections.constructor(
                                                             ShortReviewDsl.class,
+                                                            shortReview.id,
                                                             anime.id,
                                                             member.memberProfile.name,
                                                             member.memberProfile.thumbnail,
@@ -52,13 +55,14 @@ public class ShortReviewRepositoryImpl implements ShortReviewRepositoryCustom{
                                                     .from(shortReview)
                                                     .join(member).on(member.id.eq(shortReview.member.id))
                                                     .join(anime).on(anime.id.eq(shortReview.anime.id))
-                                                    .join(shortReviewLike).on(shortReviewLike.shortReview.id.eq(shortReview.id))
-                                                    .leftJoin(starRating).on(starRating.anime.id.eq(anime.id).and(starRating.member.id.eq(member.id)))
+                                                    .leftJoin(shortReviewLike).on(shortReview.id.eq(shortReviewLike.shortReview.id))
+                                                    .join(starRating).on(starRating.anime.id.eq(shortReview.anime.id).and(starRating.member.id.eq(shortReview.member.id)))
                                                     .where(anime.id.eq(animeId))
-                                                    .where(cursorCondition(cursor, pageable))
+                                                    .groupBy(shortReview.id, member.id)
+                                                    .having(cursorCondition(cursor, pageable))
                                                     .limit(pageable.getPageSize());
 
-        return fetchSliceByCursor(sortPath(property),shortReviews, pageable);
+        return fetchSliceByCursor(sortPath(property), shortReviews, pageable );
     }
 
     private BooleanExpression cursorCondition(String cursor, Pageable pageable){
@@ -69,6 +73,7 @@ public class ShortReviewRepositoryImpl implements ShortReviewRepositoryCustom{
         String property = orderList.get(0).getProperty();
 
         switch (property){
+
             case "likeCount":
                 String[] likeCountAndCreateAt = cursor.split(", ");
                 int likeCount = Integer.parseInt(likeCountAndCreateAt[0]);
@@ -77,11 +82,11 @@ public class ShortReviewRepositoryImpl implements ShortReviewRepositoryCustom{
                 if(direction == Direction.ASC) {
                     return shortReviewLike.id.count().gt(likeCount)
                                .or(shortReviewLike.id.count().goe(likeCount).and(shortReview.createdAt.lt(likeCountCreateAt)))//조회할 좋아요가 크거나 같으면, 첫 커서의 날짜가 크면
-                               .or(shortReviewLike.id.count().isNotNull().and(shortReview.createdAt.lt(likeCountCreateAt)));
+                               .or(shortReviewLike.id.count().isNull().and(shortReview.createdAt.lt(likeCountCreateAt)));
                 } else{
                     return shortReviewLike.id.count().lt(likeCount)
                                .or(shortReviewLike.id.count().loe(likeCount).and(shortReview.createdAt.lt(likeCountCreateAt)))//조회할 좋아요가 크거나 같으면, 첫 커서의 날짜가 크면
-                               .or(shortReviewLike.id.count().isNotNull().and(shortReview.createdAt.lt(likeCountCreateAt)));
+                               .or(shortReviewLike.id.count().isNull().and(shortReview.createdAt.lt(likeCountCreateAt)));
                 }
 
             case "score":
@@ -91,12 +96,10 @@ public class ShortReviewRepositoryImpl implements ShortReviewRepositoryCustom{
 
                 if(direction == Direction.ASC) {
                     return starRating.score.gt(score)
-                               .or(starRating.score.goe(score).and(shortReview.createdAt.lt(scoreCreateAt)))//조회할 좋아요가 크거나 같으면, 첫 커서의 날짜가 크면
-                               .or(starRating.score.isNotNull().and(shortReview.createdAt.lt(scoreCreateAt)));
+                               .or(starRating.score.goe(score).and(shortReview.createdAt.lt(scoreCreateAt)));
                 } else{
-                    return shortReviewLike.id.count().lt(score)
-                               .or(shortReviewLike.id.count().loe(score).and(shortReview.createdAt.lt(scoreCreateAt)))//조회할 좋아요가 크거나 같으면, 첫 커서의 날짜가 크면
-                               .or(shortReviewLike.id.count().isNotNull().and(shortReview.createdAt.lt(scoreCreateAt)));
+                    return starRating.score.lt(score)
+                               .or(starRating.score.loe(score).and(shortReview.createdAt.lt(scoreCreateAt)));
                 }
             default:
                 if (direction == Direction.ASC) {

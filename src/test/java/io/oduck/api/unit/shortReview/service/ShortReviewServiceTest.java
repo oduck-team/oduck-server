@@ -2,12 +2,10 @@ package io.oduck.api.unit.shortReview.service;
 
 import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
-import io.oduck.api.domain.attractionPoint.dto.AttractionPointResDto;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.domain.review.dto.ShortReviewDslDto.ShortReviewDsl;
-import io.oduck.api.domain.review.dto.ShortReviewReqDto.PatchShortReviewReq;
-import io.oduck.api.domain.review.dto.ShortReviewReqDto.PostShortReviewReq;
+import io.oduck.api.domain.review.dto.ShortReviewReqDto.ShortReviewReq;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto.Sort;
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewCountRes;
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewRes;
@@ -35,7 +33,6 @@ import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
 import static io.oduck.api.global.utils.ShortReviewTestUtils.createPatchShortReview;
 import static io.oduck.api.global.utils.ShortReviewTestUtils.createPostShoreReviewReq;
 import static io.oduck.api.global.utils.ShortReviewTestUtils.createShortReview;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -71,7 +68,7 @@ public class ShortReviewServiceTest {
             //given
             Long animeId = 1L;
             Long memberId = 1L;
-            PostShortReviewReq shortReviewReq = createPostShoreReviewReq();
+            ShortReviewReq shortReviewReq = createPostShoreReviewReq();
             ShortReview shortReview = createShortReview();
 
             Anime anime = createAnime();
@@ -135,7 +132,7 @@ public class ShortReviewServiceTest {
             //given
             Long reviewId = 1L;
             Long memberId = 1L;
-            PatchShortReviewReq patchShortReviewReq = createPatchShortReview();
+            ShortReviewReq patchShortReviewReq = createPatchShortReview();
 
             given(shortReviewRepository.findById(reviewId)).willReturn(Optional.ofNullable(shortReview));
 

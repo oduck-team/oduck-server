@@ -5,12 +5,11 @@ import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
 import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
 import io.oduck.api.domain.member.entity.Member;
-import io.oduck.api.domain.member.repository.MemberProfileRepository;
 import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.domain.review.dto.ShortReviewDslDto.ShortReviewDsl;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto;
-import io.oduck.api.domain.review.dto.ShortReviewReqDto.PatchShortReviewReq;
-import io.oduck.api.domain.review.dto.ShortReviewReqDto.PostShortReviewReq;
+import io.oduck.api.domain.review.dto.ShortReviewReqDto.ShortReviewReq;
+
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewCountRes;
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewRes;
 import io.oduck.api.domain.review.entity.ShortReview;
@@ -35,15 +34,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class ShortReviewServiceImpl implements ShortReviewService{
 
     private final ShortReviewRepository shortReviewRepository;
-    private final MemberProfileRepository memberProfileRepository;
     private final MemberRepository memberRepository;
-
     private final AnimeRepository animeRepository;
 
 
     @Override
     @Transactional
-    public void save(Long memberId, PostShortReviewReq shortReviewReq) {
+    public void save(Long memberId, ShortReviewReq shortReviewReq) {
         ShortReview shortReview = ShortReview
                                       .builder()
                                       .content(shortReviewReq.getContent())
@@ -60,7 +57,7 @@ public class ShortReviewServiceImpl implements ShortReviewService{
         //회원 입력
         Member member = memberRepository.findById(memberId)
                             .orElseThrow(
-                                () -> new NotFoundException("Memebr")
+                                () -> new NotFoundException("Member")
                             );
         shortReview.relateMember(member);
 
@@ -77,7 +74,7 @@ public class ShortReviewServiceImpl implements ShortReviewService{
             sort.getSort()
         );
 
-        if(sort == ShortReviewReqDto.Sort.LIKE){
+        if(sort == ShortReviewReqDto.Sort.LIKE_COUNT){
             sortList = sortList.and(Sort.by(Direction.DESC, "createdAt"));
         }else if(sort == ShortReviewReqDto.Sort.SCORE){
             sortList = sortList.and(Sort.by(Direction.DESC, "createdAt"));
@@ -107,9 +104,8 @@ public class ShortReviewServiceImpl implements ShortReviewService{
                    .count(count)
                    .build();
     }
-
     @Override
-    public void update(Long memberId, Long reviewId, PatchShortReviewReq req) {
+    public void update(Long memberId, Long reviewId, ShortReviewReq req) {
         ShortReview findShortReview = getShortReview(reviewId);
         Long findMemberId = findShortReview.getMember().getId();
         //리뷰 작성자 인지 확인

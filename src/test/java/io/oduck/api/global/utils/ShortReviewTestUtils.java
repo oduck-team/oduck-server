@@ -2,22 +2,22 @@ package io.oduck.api.global.utils;
 
 import static io.oduck.api.global.utils.AnimeTestUtils.createAnime;
 
-import io.oduck.api.domain.review.dto.ShortReviewReqDto.PatchShortReviewReq;
-import io.oduck.api.domain.review.dto.ShortReviewReqDto.PostShortReviewReq;
+
+import io.oduck.api.domain.review.dto.ShortReviewReqDto.ShortReviewReq;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.global.stub.MemberStub;
 
 public class ShortReviewTestUtils {
 
-    public static PostShortReviewReq createPostShoreReviewReq(){
-        return new PostShortReviewReq(
+    public static ShortReviewReq createPostShoreReviewReq(){
+        return new ShortReviewReq(
             getAnimeId(),getName(),
             isHasSpoiler(),getContent()
         );
     }
 
-    public static PatchShortReviewReq createPatchShortReview(){
-        return new PatchShortReviewReq(
+    public static ShortReviewReq createPatchShortReview(){
+        return new ShortReviewReq(
             getAnimeId(), getName(), isHasSpoiler(),updateContent()
         );
     }
