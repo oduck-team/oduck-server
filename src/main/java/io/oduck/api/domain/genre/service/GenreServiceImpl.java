@@ -6,6 +6,7 @@ import io.oduck.api.domain.genre.dto.GenreRes;
 import io.oduck.api.domain.genre.entity.Genre;
 import io.oduck.api.domain.genre.repository.GenreRepository;
 import io.oduck.api.global.exception.ConflictException;
+import io.oduck.api.global.exception.NotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +41,27 @@ public class GenreServiceImpl implements GenreService{
     @Override
     @Transactional(readOnly = true)
     public List<GenreRes> getGenres() {
-        return genreRepository.findAll().stream()
+        return genreRepository.findAllByDeletedAtIsNull().stream()
                 .map(gr -> new GenreRes(gr.getId(), gr.getName()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void update(Long genreId, String name) {
+        Genre genre = findById(genreId);
+
+        genre.update(name);
+    }
+
+    @Override
+    public void delete(Long genreId) {
+        Genre genre = findById(genreId);
+
+        genre.delete();
+    }
+
+    private Genre findById(Long genreId) {
+        return genreRepository.findByIdAndDeletedAtIsNull(genreId)
+            .orElseThrow(() -> new NotFoundException("genre"));
     }
 }

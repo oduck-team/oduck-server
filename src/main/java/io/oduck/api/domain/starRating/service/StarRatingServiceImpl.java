@@ -4,6 +4,7 @@ import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
+import io.oduck.api.domain.starRating.dto.StarRatingResDto.RatedRes;
 import io.oduck.api.domain.starRating.entity.StarRating;
 import io.oduck.api.domain.starRating.repository.StarRatingRepository;
 import io.oduck.api.global.exception.NotFoundException;
@@ -24,7 +25,7 @@ public class StarRatingServiceImpl implements StarRatingService {
     @Override
     @Transactional
     public boolean createScore(Long memberId, Long animeId, int score) {
-        Optional<StarRating> foundStarRating = starRatingRepository.findByMemberIdAndAnimeId(memberId, animeId);
+        Optional<StarRating> foundStarRating = findByMemberIdAndAnimeId(memberId, animeId);
         if (foundStarRating.isPresent()) {
             return false;
         }
@@ -45,5 +46,35 @@ public class StarRatingServiceImpl implements StarRatingService {
 
         starRatingRepository.save(starRating);
         return true;
+    }
+
+    @Override
+    public RatedRes checkRated(Long memberId, Long animeId) {
+        StarRating foundStarRating = findByMemberIdAndAnimeId(memberId, animeId)
+            .orElseThrow(() -> new NotFoundException("StarRating"));
+
+        return RatedRes.builder()
+            .score(foundStarRating.getScore())
+            .createdAt(foundStarRating.getCreatedAt().toString())
+            .build();
+    }
+
+    @Override
+    public boolean updateScore(Long memberId, Long animeId, int score) {
+        StarRating foundStarRating = findByMemberIdAndAnimeId(memberId, animeId)
+            .orElseThrow(() -> new NotFoundException("StarRating"));
+
+        if (foundStarRating.getScore() == score) {
+            return false;
+        }
+
+        foundStarRating.updateScore(score);
+
+        starRatingRepository.save(foundStarRating);
+        return true;
+    }
+
+    private Optional<StarRating> findByMemberIdAndAnimeId(Long memberId, Long animeId) {
+        return starRatingRepository.findByMemberIdAndAnimeId(memberId, animeId);
     }
 }

@@ -4,10 +4,13 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -28,6 +31,17 @@ public class QueryDslUtils {
             .fetch();
 
         return new SliceImpl<>(content, pageable, isHasNext(pageSize, content));
+    }
+
+    public static <T> Page<T> fetchPage(List<Path> paths, JPAQuery<T> query, long total, Pageable pageable) {
+        Sort sort = pageable.getSort();
+
+        List<T> content = query
+            .orderBy(getAllOrderSpecifiers(sort, paths))
+            .limit(pageable.getPageSize())
+            .offset(pageable.getOffset())
+            .fetch();
+        return new PageImpl<>(content, pageable, total);
     }
 
     // sort.order 객체로 OrderSpecifier를 생성하여 반환.
@@ -53,6 +67,12 @@ public class QueryDslUtils {
     }
 
     private static OrderSpecifier<?> createOrderSpecifier(Order order, Path<?> parent, String fieldName) {
+        // count 메소드 컬럼을 기준으로 할 때의 OrderSpecifier
+        if (fieldName.equals("quantity") || fieldName.equals("likeCount")) {
+            NumberPath<Long> aliasQuantity = Expressions.numberPath(Long.class, fieldName);
+
+            return new OrderSpecifier(order, aliasQuantity);
+        }
         // 일반 컬럼을 기준으로 할때의 OrderSpecifier
         Path<Object> fieldPath = Expressions.path(Object.class, parent, fieldName);
 

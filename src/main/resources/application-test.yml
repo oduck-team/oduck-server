@@ -28,6 +28,7 @@ spring:
     password:
   sql:
     init:
+      encoding: utf-8
       mode: always
       data-locations: classpath:db/data.sql
   security:

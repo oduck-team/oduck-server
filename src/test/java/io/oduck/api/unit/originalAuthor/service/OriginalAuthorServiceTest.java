@@ -59,7 +59,7 @@ public class OriginalAuthorServiceTest {
             assertThatNoException();
 
             //verify
-            verify(originalAuthorRepository, times(1)).findAll();
+            verify(originalAuthorRepository, times(1)).findAllByDeletedAtIsNull();
         }
     }
 }

@@ -7,6 +7,7 @@ import io.oduck.api.domain.member.dto.MemberReqDto.PatchReq;
 import io.oduck.api.domain.bookmark.dto.BookmarkReqDto.Sort;
 import io.oduck.api.domain.member.dto.MemberResDto.MemberProfileRes;
 import io.oduck.api.domain.member.service.MemberService;
+import io.oduck.api.domain.review.service.ShortReviewService;
 import io.oduck.api.global.common.OrderDirection;
 import io.oduck.api.global.common.SliceResponse;
 import io.oduck.api.global.security.auth.dto.AuthUser;
@@ -14,9 +15,11 @@ import io.oduck.api.global.security.auth.dto.LoginUser;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
     private final MemberService memberService;
     private final BookmarkService bookmarkService;
+    private final ShortReviewService shortReviewService;
 
     // 로컬 회원 가입
     @PostMapping
@@ -56,6 +60,41 @@ public class MemberController {
         return ResponseEntity.ok(res);
     }
 
+
+    @GetMapping("/{id}/bookmarks")
+    public ResponseEntity<?> getBookmaks(
+        @PathVariable("id") @Positive Long id,
+        @RequestParam(required = false) String cursor,
+        @RequestParam(required = false, defaultValue = "created_at") Sort sort,
+        @RequestParam(required = false, defaultValue = "DESC") OrderDirection order,
+        @RequestParam(required = false, defaultValue = "10") @Min(1) @Max(100) int size
+        ) {
+        // TODO: slice 및 정렬 구현
+        SliceResponse<BookmarkRes> res = bookmarkService.getBookmarksByMemberId(id, cursor, sort, order, size);
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/{id}/bookmarks/count")
+    public ResponseEntity<?> getBookmarksCount(
+        @PathVariable("id") @Positive Long id
+    ) {
+        return ResponseEntity.ok(bookmarkService.getBookmarksCountByMemberId(id));
+    }
+//
+//    @GetMapping("/{name}/short-reviews")
+//    public ResponseEntity<?> getShortReviews(
+//        @LoginUser AuthUser user
+//    ) {
+//        return ResponseEntity.ok(SliceResponse.of());
+//    }
+
+    @GetMapping("/{id}/short-reviews/count")
+    public ResponseEntity<?> getShoertReviewsCount(
+        @PathVariable("id") @Positive Long id
+    ) {
+        return ResponseEntity.ok(shortReviewService.getShortReviewCountByMemberId(id));
+    }
+
     // 회원 프로필 수정
     @PatchMapping
     public ResponseEntity<?> patchProfile(
@@ -68,23 +107,12 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/bookmarks")
-    public ResponseEntity<?> getBookmaks(
-        @PathVariable("id") Long id,
-        @RequestParam(required = false) String cursor,
-        @RequestParam(required = false, defaultValue = "created_at") Sort sort,
-        @RequestParam(required = false, defaultValue = "DESC") OrderDirection order,
-        @RequestParam(required = false, defaultValue = "10") @Min(1) @Max(100) int size
-        ) {
-        // TODO: slice 및 정렬 구현
-        SliceResponse<BookmarkRes> res = bookmarkService.getBookmarksByMemberId(id, cursor, sort, order, size);
-        return ResponseEntity.ok(res);
+    // 회원 탈퇴
+    @DeleteMapping()
+    public ResponseEntity<?> deleteMember(
+        @LoginUser AuthUser user
+    ) {
+        memberService.withdrawMember(user.getId());
+        return ResponseEntity.noContent().build();
     }
-//
-//    @GetMapping("/{name}/short-reviews")
-//    public ResponseEntity<?> getShortReviews(
-//        @LoginUser AuthUser user
-//    ) {
-//        return ResponseEntity.ok(SliceResponse.of());
-//    }
 }

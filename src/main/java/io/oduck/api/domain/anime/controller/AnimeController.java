@@ -1,9 +1,11 @@
 package io.oduck.api.domain.anime.controller;
 
 import io.oduck.api.domain.anime.dto.AnimeRes;
+import io.oduck.api.domain.anime.dto.AnimeRes.StarRatingAvg;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.domain.anime.entity.BroadcastType;
 import io.oduck.api.domain.anime.entity.Quarter;
+import io.oduck.api.domain.anime.entity.Status;
 import io.oduck.api.domain.anime.service.AnimeService;
 import io.oduck.api.global.common.OrderDirection;
 import io.oduck.api.global.common.SliceResponse;
@@ -12,6 +14,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -37,15 +40,13 @@ public class AnimeController {
     // 애니 검색 조회
     @GetMapping
     public ResponseEntity<Object> getAnimesBySearchCondition(
-            @RequestParam(required = false) String query,
+            @RequestParam(required = false) @Length(min = 0, max = 50) String query,
             @RequestParam(required = false) String cursor,
             @RequestParam(required = false, defaultValue = "latest") Sort sort,
             @RequestParam(required = false, defaultValue = "DESC") OrderDirection order,
             @RequestParam(required = false, defaultValue = "10") @Min(1) @Max(100) int size,
             @ModelAttribute SearchFilter searchFilter
     ){
-
-        validateQueryLength(query, 50);
 
         List<Long> genreIds = searchFilter.getGenreIds();
         List<BroadcastType> broadcastTypes = searchFilter.getBroadcastTypes();
@@ -57,9 +58,12 @@ public class AnimeController {
         List<Quarter> quarters = searchFilter.getQuarters();
         validateDuplicateQuarters(quarters);
 
-        SearchFilterDsl searchFilterDsl = new SearchFilterDsl(genreIds, broadcastTypes, episodeCountEnums, years, quarters);
+        List<Status> statuses = searchFilter.getStatuses();
 
-        SliceResponse<AnimeRes.SearchResult> res = animeService.getAnimesByCondition(query, cursor,  sort, order, size, searchFilterDsl);
+        SearchFilterDsl searchFilterDsl = new SearchFilterDsl(genreIds, broadcastTypes, episodeCountEnums, years, quarters, statuses);
+
+        SliceResponse<AnimeRes.SearchResult> res = animeService.getSliceByCondition(query, cursor,  sort,
+            order, size, searchFilterDsl);
         return ResponseEntity.ok(res);
     }
 
@@ -72,23 +76,21 @@ public class AnimeController {
         return ResponseEntity.ok(res);
     }
 
-    private void validateQueryLength(String query, int maxLength) {
-        if(query != null) {
-            if(query.length() > maxLength){
-                throw new BadRequestException("글자수는 50자를 넘을 수 없습니다.");
-            }
-        }
+    // 애니 평가 평균 조회
+    @GetMapping("/{animeId}/ratings/average")
+    public ResponseEntity<Object> getStarRatingAvg(@PathVariable Long animeId){
+
+        StarRatingAvg res = animeService.getStarRatingAverage(animeId);
+
+        return ResponseEntity.ok(res);
     }
 
-    private void extractCurrentYearsNotInCurrentYear(List<Integer> years) {
-        if (years == null) {
-            years = null;
-        }else{
-            int currentYear = LocalDate.now().getYear();
-            years = years.stream()
-                    .filter(year -> year != currentYear)
-                    .collect(Collectors.toList());
-        }
+    private List<Integer> extractCurrentYearsNotInCurrentYear(List<Integer> years) {
+        int currentYear = LocalDate.now().getYear();
+
+        return years.stream()
+                .filter(year -> year != currentYear)
+                .collect(Collectors.toList());
     }
 
     private void validateDuplicateQuarters(List<Quarter> quarters) {

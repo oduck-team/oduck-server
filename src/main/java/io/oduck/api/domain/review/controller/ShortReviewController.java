@@ -37,13 +37,12 @@ public class ShortReviewController {
     @PostMapping
     public ResponseEntity<?> postShortReview(
         @LoginUser AuthUser user,
-        @RequestBody @Valid ShortReviewReqDto.PostShortReviewReq req)  {
+        @RequestBody @Valid ShortReviewReqDto.ShortReviewReq req)  {
         //TODO : 짧은 리뷰 작성
-        shortReviewService.save(user.getId() == null? 0L: user.getId(), req);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{animeId}")
+    @GetMapping("/animes/{animeId}")
     public ResponseEntity<?> getShortReviews(
         @PathVariable Long animeId,
         @RequestParam(required = false) String cursor,
@@ -55,15 +54,23 @@ public class ShortReviewController {
         SliceResponse<ShortReviewRes> reviewRes = shortReviewService.getShortReviews(animeId, cursor, sort, order, size);
         return ResponseEntity.ok(reviewRes);
     }
-    @PatchMapping("/{reviewId}")
+    @GetMapping("/attraction-points")
+    public ResponseEntity<?> patchShortReview(
+        @LoginUser AuthUser user,
+        @RequestParam(required = false) Long animeId,
+        @RequestParam(required = false) String name)  {
+        //TODO : 짧은 리뷰 수정, 입덕포인트 반환
+        IsAttractionPoint attractionPointRes = attractionPointService.isAttractionPoint(user.getId(), animeId);
+        return ResponseEntity.ok(attractionPointRes);
+    }
+
+      @PatchMapping("/{reviewId}")
     public ResponseEntity<?> patchShortReview(
         @LoginUser AuthUser user,
         @PathVariable Long reviewId,
-        @RequestBody @Valid ShortReviewReqDto.PatchShortReviewReq req)  {
+        @RequestBody @Valid ShortReviewReqDto.ShortReviewReq req)  {
         //TODO : 짧은 리뷰 수정
         shortReviewService.update(user.getId(), reviewId, req);
-        //입덕포인트 반환
-        IsAttractionPoint attractionPointRes = attractionPointService.isAttractionPoint(user.getId(), req.getAnimeId());
-        return ResponseEntity.ok(attractionPointRes);
+        return ResponseEntity.noContent().build();
     }
 }

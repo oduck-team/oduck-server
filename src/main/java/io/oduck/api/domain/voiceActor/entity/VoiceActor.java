@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,4 +24,12 @@ public class VoiceActor extends BaseEntity {
 
   @Column(nullable = false, length = 50, unique = true)
   private String name;
+
+  public void update(String name) {
+    this.name = name;
+  }
+
+  public void delete() {
+    this.deletedAt = LocalDateTime.now();
+  }
 }

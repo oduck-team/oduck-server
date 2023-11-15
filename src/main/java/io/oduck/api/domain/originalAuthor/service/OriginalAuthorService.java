@@ -11,4 +11,8 @@ public interface OriginalAuthorService {
     void save(PostReq req);
 
     List<OriginalAuthorRes> getOriginalAuthors();
+
+    void update(Long originalAuthorId, String name);
+
+    void delete(Long originalAuthorId);
 }

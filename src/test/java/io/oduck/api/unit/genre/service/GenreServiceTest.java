@@ -57,7 +57,7 @@ public class GenreServiceTest {
             assertThatNoException();
 
             //verify
-            verify(genreRepository, times(1)).findAll();
+            verify(genreRepository, times(1)).findAllByDeletedAtIsNull();
         }
     }
 }

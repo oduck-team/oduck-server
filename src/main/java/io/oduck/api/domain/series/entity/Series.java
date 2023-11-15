@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,4 +24,12 @@ public class Series extends BaseEntity {
 
   @Column(nullable = false, length = 50, unique = true)
   private String title;
+
+  public void update(String title) {
+    this.title = title;
+  }
+
+  public void delete() {
+    this.deletedAt = LocalDateTime.now();
+  }
 }

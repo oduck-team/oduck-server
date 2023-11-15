@@ -58,7 +58,7 @@ public class SeriesServiceTest {
             assertThatNoException();
 
             //verify
-            verify(seriesRepository, times(1)).findAll();
+            verify(seriesRepository, times(1)).findAllByDeletedAtIsNull();
         }
     }
 }

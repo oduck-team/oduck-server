@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
     private final AuthLocalRepository authLocalRepository;
     private final MemberRepository memberRepository;
@@ -46,18 +46,12 @@ public class MemberServiceImpl implements MemberService{
         try {
             String encryptedPassword = passwordEncoder.encode(createReq.getPassword());
 
-            AuthLocal authLocal = AuthLocal.builder()
-                .email(createReq.getEmail())
-                .password(encryptedPassword)
-                .build();
+            AuthLocal authLocal = AuthLocal.builder().email(createReq.getEmail())
+                    .password(encryptedPassword).build();
 
-            MemberProfile memberProfile = MemberProfile.builder()
-                .name(generateNickname())
-                .build();
+            MemberProfile memberProfile = MemberProfile.builder().name(generateNickname()).build();
 
-            Member member = Member.builder()
-                .loginType(LoginType.LOCAL)
-                .build();
+            Member member = Member.builder().loginType(LoginType.LOCAL).build();
 
             member.relateAuthLocal(authLocal);
             member.relateMemberProfile(memberProfile);
@@ -77,26 +71,19 @@ public class MemberServiceImpl implements MemberService{
             throw new NotFoundException("Member");
         }
         Long reviewsCount = memberRepository.countReviewsByMemberId(memberProfile.getMemberId());
-        Long bookmarksCount = memberRepository.countBookmarksByMemberId(memberProfile.getMemberId());
+        Long bookmarksCount =
+                memberRepository.countBookmarksByMemberId(memberProfile.getMemberId());
         Long likesCount = memberRepository.countLikesByMemberId(memberProfile.getMemberId());
 
 
-        Activity activity = Activity.builder()
-            .reviews(reviewsCount)
-            .bookmarks(bookmarksCount)
-            .likes(likesCount)
-            .point(memberProfile.getPoint())
-            .build();
+        Activity activity = Activity.builder().reviews(reviewsCount).bookmarks(bookmarksCount)
+                .likes(likesCount).point(memberProfile.getPoint()).build();
 
-        MemberProfileRes memberProfileRes = MemberProfileRes. builder()
-            .isMine(memberProfile.getMemberId().equals(memberId))
-            .memberId(memberProfile.getMemberId())
-            .name (memberProfile.getName())
-            .description(memberProfile.getDescription())
-            .thumbnail(memberProfile.getThumbnail())
-            .backgroundImage (memberProfile.getBackgroundImage())
-            .activity(activity)
-            .build();
+        MemberProfileRes memberProfileRes = MemberProfileRes.builder()
+                .isMine(memberProfile.getMemberId().equals(memberId))
+                .memberId(memberProfile.getMemberId()).name(memberProfile.getName())
+                .description(memberProfile.getDescription()).thumbnail(memberProfile.getThumbnail())
+                .backgroundImage(memberProfile.getBackgroundImage()).activity(activity).build();
 
         return memberProfileRes;
     }
@@ -106,44 +93,42 @@ public class MemberServiceImpl implements MemberService{
         MemberProfile memberProfile = getProfileByMemberId(memberId);
 
         // Null 체크
-        Optional
-            .ofNullable(body.getName())
-            .ifPresent(
-                name -> {
-                    // 이전 이름과 같은지 체크
-                    if (memberProfile.getName().equals(name)) {
-                        throw new BadRequestException("Same name as before.");
-                    }
+        String name = body.getName();
 
-                    // 이름 중복 체크
-                    checkDuplicatedName(name);
+        if (!memberProfile.getName().equals(name)) {
+            // 이름 중복 체크
+            checkDuplicatedName(name);
 
-                    memberProfile.updateName(name);
-                }
-            );
+            memberProfile.updateName(name);
+        }
 
         // Null 체크
-        Optional
-            .ofNullable(body.getDescription())
-            .ifPresent(
-                memberProfile::updateInfo
-            );
-        
+        Optional.ofNullable(body.getDescription()).ifPresent(memberProfile::updateInfo);
+
         memberProfileRepository.save(memberProfile);
+    }
+
+    @Override
+    @Transactional
+    public void withdrawMember(Long memberId) {
+        Member member = getMemberById(memberId);
+        member.delete();
+        memberRepository.save(member);
+    }
+
+    private Member getMemberById(Long memberId) {
+        return memberRepository.findByIdAndDeletedAtIsNull(memberId)
+                .orElseThrow(() -> new NotFoundException("Member"));
     }
 
     private MemberProfile getProfileByMemberId(Long memberId) {
         return memberProfileRepository.findByMemberId(memberId)
-            .orElseThrow(
-                () -> new NotFoundException("Member")
-            );
+                .orElseThrow(() -> new NotFoundException("Member"));
     }
 
     private ProfileWithoutActivity getProfileWithoutActivity(String name) {
         return memberRepository.selectProfileByName(name)
-            .orElseThrow(
-                () -> new NotFoundException("Member")
-            );
+                .orElseThrow(() -> new NotFoundException("Member"));
     }
 
     private void checkDuplicatedName(String name) {

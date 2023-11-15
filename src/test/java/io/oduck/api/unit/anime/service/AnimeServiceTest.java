@@ -1,10 +1,53 @@
 package io.oduck.api.unit.anime.service;
 
-import io.oduck.api.domain.anime.dto.AnimeReq.*;
+import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
+import static io.oduck.api.global.utils.AnimeTestUtils.createAnime;
+import static io.oduck.api.global.utils.AnimeTestUtils.createPatchAnimeRequest;
+import static io.oduck.api.global.utils.AnimeTestUtils.createPostAnimeRequest;
+import static io.oduck.api.global.utils.AnimeTestUtils.getGenreIds;
+import static io.oduck.api.global.utils.AnimeTestUtils.getGenres;
+import static io.oduck.api.global.utils.AnimeTestUtils.getOriginalAuthorIds;
+import static io.oduck.api.global.utils.AnimeTestUtils.getOriginalAuthors;
+import static io.oduck.api.global.utils.AnimeTestUtils.getSeries;
+import static io.oduck.api.global.utils.AnimeTestUtils.getSeriesId;
+import static io.oduck.api.global.utils.AnimeTestUtils.getStudioIds;
+import static io.oduck.api.global.utils.AnimeTestUtils.getStudios;
+import static io.oduck.api.global.utils.AnimeTestUtils.getVoiceActorIds;
+import static io.oduck.api.global.utils.AnimeTestUtils.getVoiceActorReqs;
+import static io.oduck.api.global.utils.AnimeTestUtils.getVoiceActors;
+import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
+import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import io.oduck.api.domain.anime.dto.AnimeReq.EpisodeCountEnum;
+import io.oduck.api.domain.anime.dto.AnimeReq.PatchAnimeReq;
+import io.oduck.api.domain.anime.dto.AnimeReq.PatchGenreIdsReq;
+import io.oduck.api.domain.anime.dto.AnimeReq.PatchOriginalAuthorIdsReq;
+import io.oduck.api.domain.anime.dto.AnimeReq.PatchSeriesIdReq;
+import io.oduck.api.domain.anime.dto.AnimeReq.PatchStudioIdsReq;
+import io.oduck.api.domain.anime.dto.AnimeReq.PatchVoiceActorIdsReq;
+import io.oduck.api.domain.anime.dto.AnimeReq.PostReq;
+import io.oduck.api.domain.anime.dto.AnimeReq.Sort;
 import io.oduck.api.domain.anime.dto.AnimeVoiceActorReq;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
-import io.oduck.api.domain.anime.entity.*;
-import io.oduck.api.domain.anime.repository.*;
+import io.oduck.api.domain.anime.entity.Anime;
+import io.oduck.api.domain.anime.entity.AnimeGenre;
+import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
+import io.oduck.api.domain.anime.entity.AnimeStudio;
+import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
+import io.oduck.api.domain.anime.entity.BroadcastType;
+import io.oduck.api.domain.anime.entity.Quarter;
+import io.oduck.api.domain.anime.entity.Status;
+import io.oduck.api.domain.anime.repository.AnimeGenreRepository;
+import io.oduck.api.domain.anime.repository.AnimeOriginalAuthorRepository;
+import io.oduck.api.domain.anime.repository.AnimeRepository;
+import io.oduck.api.domain.anime.repository.AnimeStudioRepository;
+import io.oduck.api.domain.anime.repository.AnimeVoiceActorRepository;
 import io.oduck.api.domain.anime.service.AnimeServiceImpl;
 import io.oduck.api.domain.genre.entity.Genre;
 import io.oduck.api.domain.genre.repository.GenreRepository;
@@ -18,6 +61,10 @@ import io.oduck.api.domain.voiceActor.entity.VoiceActor;
 import io.oduck.api.domain.voiceActor.repository.VoiceActorRepository;
 import io.oduck.api.global.common.OrderDirection;
 import io.oduck.api.global.utils.AnimeTestUtils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -28,24 +75,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static io.oduck.api.domain.anime.dto.AnimeRes.SearchResult;
-import static io.oduck.api.global.utils.AnimeTestUtils.*;
-import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
-import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class AnimeServiceTest {
@@ -87,6 +116,12 @@ public class AnimeServiceTest {
     @DisplayName("조회")
     class GetAnime{
         Anime anime = createAnime();
+        List<Long> genreIds = new ArrayList<>();
+        List<BroadcastType> broadcastTypes = new ArrayList<>();
+        List<EpisodeCountEnum> episodeCountEnums = new ArrayList<>();
+        List<Integer> years = new ArrayList<>();
+        List<Quarter> quarters = new ArrayList<>();
+        List<Status> statuses = new ArrayList<>();
 
         @Test
         @DisplayName("애니 제목 검색")
@@ -97,7 +132,7 @@ public class AnimeServiceTest {
             int size = 10;
             Sort sort = Sort.LATEST;
             OrderDirection order = OrderDirection.DESC;
-            SearchFilterDsl searchFilter = new SearchFilterDsl(null, null, null, null, null);
+            SearchFilterDsl searchFilter = new SearchFilterDsl(genreIds, broadcastTypes, episodeCountEnums, years, quarters, statuses);
 
             List<SearchResult> content = new ArrayList<>();
             Slice<SearchResult> searchResults = new SliceImpl<>(content);
@@ -109,7 +144,7 @@ public class AnimeServiceTest {
             );
 
             given(
-                animeRepository.findAnimesByCondition(
+                animeRepository.findSliceByCondition(
                     query,
                     cursor,
                     pageable,
@@ -118,13 +153,13 @@ public class AnimeServiceTest {
             ).willReturn(searchResults);
 
             //when
-            animeService.getAnimesByCondition(query, cursor, sort, order, size, searchFilter);
+            animeService.getSliceByCondition(query, cursor, sort, order, size, searchFilter);
 
             //then
             assertThatNoException();
 
             //verify
-            verify(animeRepository, times(1)).findAnimesByCondition(query, cursor, pageable, searchFilter);
+            verify(animeRepository, times(1)).findSliceByCondition(query, cursor, pageable, searchFilter);
         }
 
         @Test

@@ -382,71 +382,7 @@ public class MemberControllerTest {
                         )
                     );
         }
-
-        @DisplayName("회원 프로필 수정 기존 이름과 같을 시 400 BadRequest 응답")
-        @Test
-        @WithCustomMockMember(id = 1L, email = "admin", password = "Qwer!234", role = Role.MEMBER)
-        void updateProfileFailureWhenSameNameAsBefore() throws Exception {
-            PatchReq body = PatchReq.builder()
-                .name("admin")
-                .description("new admin description")
-                .build();
-
-            String content = gson.toJson(body);
-
-            // when
-            ResultActions actions = mockMvc.perform(
-                patch(BASE_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
-                    .content(content));
-
-            // then
-            actions
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").exists())
-                .andExpect(jsonPath("$.fieldErrors").value(equalTo(null)))
-                .andExpect(jsonPath("$.violationErrors").value(equalTo(null)))
-                .andDo(
-                    document("patchProfile/failureWhenSameNameAsBefore",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                            headerWithName(HttpHeaders.COOKIE)
-                                .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
-                                .description("Header Cookie, 세션 쿠키")
-                        ),
-                        requestFields(
-                            attributes(key("title")
-                                .value("Fields for member creation")),
-                            fieldWithPath("name")
-                                .type(JsonFieldType.STRING)
-                                .attributes(
-                                    field("constraints", "한,영소문자, 숫자 포함 2-10자. ^[0-9A-Za-z가-힣]{2,10}$"))
-                                .description("이름 변경시 필요한 이름"),
-                            fieldWithPath("description")
-                                .type(JsonFieldType.STRING)
-                                .attributes(field("constraints", "문자열 0-100자"))
-                                .description("자기 소개 변경시 필요한 내용")
-                        ),
-                        responseFields(
-                            attributes(key("title")
-                                .value("Fields for member creation")),
-                            fieldWithPath("message")
-                                .type(JsonFieldType.STRING)
-                                .description("예외 메시지"),
-                            fieldWithPath("fieldErrors")
-                                .type(JsonFieldType.NULL)
-                                .description("api 요청 필드 오류"),
-                            fieldWithPath("violationErrors")
-                                .type(JsonFieldType.NULL)
-                                .description("api 요청 규칙 위반 오류")
-                        )
-                    )
-                );
-        }
-
+        
         @DisplayName("회원 프로필 수정 이름 중복시 409 Confilct 응답")
         @Test
         @WithCustomMockMember(id = 3L, email = "david", password = "Qwer!234", role = Role.MEMBER)
@@ -697,5 +633,110 @@ public class MemberControllerTest {
         }
     }
 
+    @DisplayName("회원의 북마크 애니 갯수 조회")
+    @Nested
+    class GetBookmarkCount {
+        @DisplayName("회원의 북마크 애니 갯수 조회 성공시 200 OK 응답")
+        @Test
+        void getBookmarkCountSuccess() throws Exception {
+            // given
+            // 회원의 북마크 애니 갯수 조회에 필요한 데이터
+            Long memberId = 1L;
+
+            // when
+            ResultActions actions = mockMvc.perform(
+                get(BASE_URL + "/{memberId}/bookmarks/count", memberId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+
+            // then
+            actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count").exists())
+                .andDo(
+                    document("getBookmarkCount/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                            parameterWithName("memberId")
+                                .description("회원 id")),
+                        responseFields(
+                            fieldWithPath("count")
+                                .type(JsonFieldType.NUMBER)
+                                .description("회원의 북마크 애니 갯수")
+                        )
+                    )
+                );
+        }
+    }
+
     // TODO: 회원 리뷰 목록 조회
+
+    @DisplayName("회원의 리뷰 갯수 조회")
+    @Nested
+    class GetReviewCount {
+        @DisplayName("회원의 리뷰 갯수 조회 성공시 200 OK 응답")
+        @Test
+        void getReviewCountSuccess() throws Exception {
+            // given
+            // 회원의 리뷰 갯수 조회에 필요한 데이터
+            Long memberId = 1L;
+
+            // when
+            ResultActions actions = mockMvc.perform(
+                get(BASE_URL + "/{memberId}/short-reviews/count", memberId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+
+            // then
+            actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count").exists())
+                .andDo(
+                    document("getReviewCount/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                            parameterWithName("memberId")
+                                .description("회원 id")),
+                        responseFields(
+                            fieldWithPath("count")
+                                .type(JsonFieldType.NUMBER)
+                                .description("회원의 리뷰 갯수")
+                        )
+                    )
+                );
+        }
+    }
+
+    @DisplayName("회원 탈퇴")
+    @Nested
+    class DeleteWithdrawal {
+        @DisplayName("회원 탈퇴 성공시 204 NoContent 응답")
+        @Test
+        @WithCustomMockMember(id = 4L, email = "reina", password = "Qwer!234", role = Role.MEMBER)
+        void deleteWithdrawalSuccess() throws Exception {
+            // given
+
+            // when
+            ResultActions actions = mockMvc.perform(
+                delete(BASE_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+            );
+
+            // then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(
+                    document("deleteWithdrawal/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                    )
+                );
+        }
+    }
 }
