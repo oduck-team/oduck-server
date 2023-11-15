@@ -54,19 +54,17 @@ public class MemberServiceTest {
         String name = memberProfile.getName();
 
         ProfileWithoutActivity profileWithoutActivity = ProfileWithoutActivity.builder()
-            .memberId(1L)
-            .name(name)
-            .description(memberProfile.getInfo())
-            .thumbnail(memberProfile.getThumbnail())
-            .backgroundImage(memberProfile.getBackgroundImage())
-            .point(memberProfile.getPoint())
-            .build();
+                .memberId(1L).name(name).description(memberProfile.getInfo())
+                .thumbnail(memberProfile.getThumbnail())
+                .backgroundImage(memberProfile.getBackgroundImage()).point(memberProfile.getPoint())
+                .build();
 
         @DisplayName("본인 프로필 조회 성공시 오류 없이 회원 프로필 반환")
         @Test
         void getMemberByNameIfMine() {
             // given
-            given(memberRepository.selectProfileByName(anyString())).willReturn(Optional.ofNullable(profileWithoutActivity));
+            given(memberRepository.selectProfileByName(anyString()))
+                    .willReturn(Optional.ofNullable(profileWithoutActivity));
             given(memberRepository.countReviewsByMemberId(anyLong())).willReturn(1L);
             given(memberRepository.countLikesByMemberId(anyLong())).willReturn(1L);
 
@@ -75,16 +73,17 @@ public class MemberServiceTest {
 
             // then
             assertDoesNotThrow(() -> memberService.getProfileByName(name, 1L)); // 오류 없이 회원 프로필 반환
-            assertEquals(res.getName(), name);                              // 회원 프로필의 이름이 요청한 이름과 같은지 확인
+            assertEquals(res.getName(), name); // 회원 프로필의 이름이 요청한 이름과 같은지 확인
             assertTrue(res.getIsMine());
-            assertNotNull(res.getActivity());                               // 회원 프로필의 활동 정보가 null이 아닌지 확인
+            assertNotNull(res.getActivity()); // 회원 프로필의 활동 정보가 null이 아닌지 확인
         }
 
         @DisplayName("타 회원 프로필 조회 성공시 오류 없이 회원 프로필 반환, isMine = false")
         @Test
         void getMemberByNameIfOthers() {
             // given
-            given(memberRepository.selectProfileByName(anyString())).willReturn(Optional.ofNullable(profileWithoutActivity));
+            given(memberRepository.selectProfileByName(anyString()))
+                    .willReturn(Optional.ofNullable(profileWithoutActivity));
             given(memberRepository.countReviewsByMemberId(anyLong())).willReturn(1L);
             given(memberRepository.countLikesByMemberId(anyLong())).willReturn(1L);
 
@@ -93,9 +92,9 @@ public class MemberServiceTest {
 
             // then
             assertDoesNotThrow(() -> memberService.getProfileByName(name, 1L)); // 오류 없이 회원 프로필 반환
-            assertEquals(res.getName(), name);                              // 회원 프로필의 이름이 요청한 이름과 같은지 확인
+            assertEquals(res.getName(), name); // 회원 프로필의 이름이 요청한 이름과 같은지 확인
             assertFalse(res.getIsMine());
-            assertNotNull(res.getActivity());                               // 회원 프로필의 활동 정보가 null이 아닌지 확인
+            assertNotNull(res.getActivity()); // 회원 프로필의 활동 정보가 null이 아닌지 확인
         }
 
         @DisplayName("존재하지 않는 회원 프로필 조회시 NotFoundException 발생")
@@ -108,8 +107,7 @@ public class MemberServiceTest {
             // when
             // then
             assertThrows(NotFoundException.class,
-                () -> memberService.getProfileByName(notExistName, 1L)
-            );
+                    () -> memberService.getProfileByName(notExistName, 1L));
         }
     }
 
@@ -122,47 +120,38 @@ public class MemberServiceTest {
             // given
             Member member = new MemberStub().getMember();
             MemberProfile memberProfile = member.getMemberProfile();
-            PatchReq patchReq = PatchReq.builder()
-                .name("newName")
-                .description("newDescription")
-                .build();
-            MemberProfile updatedMemberProfile = MemberProfile.builder()
-                .member(member)
-                .name(patchReq.getName())
-                .info(patchReq.getDescription())
-                .build();
+            PatchReq patchReq =
+                    PatchReq.builder().name("newName").description("newDescription").build();
+            MemberProfile updatedMemberProfile = MemberProfile.builder().member(member)
+                    .name(patchReq.getName()).info(patchReq.getDescription()).build();
 
-            given(memberProfileRepository.findByMemberId(anyLong())).willReturn(Optional.ofNullable(memberProfile));
+            given(memberProfileRepository.findByMemberId(anyLong()))
+                    .willReturn(Optional.ofNullable(memberProfile));
             given(memberProfileRepository.existsByName(anyString())).willReturn(false);
 
             // when
             // then
             assertDoesNotThrow(() -> memberService.updateProfile(patchReq, 1L));
         }
+
         @DisplayName("회원 프로필 수정시 실패. 중복 이름 존재시")
         @Test
         void updateProfileFailureWhenSameNameAsAlreadyExist() {
             // given
             Member member = new MemberStub().getMember();
             MemberProfile memberProfile = member.getMemberProfile();
-            PatchReq patchReq = PatchReq.builder()
-                .name("newName")
-                .description("newDescription")
-                .build();
-            MemberProfile updatedMemberProfile = MemberProfile.builder()
-                .member(member)
-                .name(patchReq.getName())
-                .info(patchReq.getDescription())
-                .build();
+            PatchReq patchReq =
+                    PatchReq.builder().name("newName").description("newDescription").build();
+            MemberProfile updatedMemberProfile = MemberProfile.builder().member(member)
+                    .name(patchReq.getName()).info(patchReq.getDescription()).build();
 
-            given(memberProfileRepository.findByMemberId(anyLong())).willReturn(Optional.ofNullable(memberProfile));
+            given(memberProfileRepository.findByMemberId(anyLong()))
+                    .willReturn(Optional.ofNullable(memberProfile));
             given(memberProfileRepository.existsByName(anyString())).willReturn(true);
 
             // when
             // then
-            assertThrows(ConflictException.class,
-                () -> memberService.updateProfile(patchReq, 1L)
-            );
+            assertThrows(ConflictException.class, () -> memberService.updateProfile(patchReq, 1L));
         }
     }
 
@@ -177,7 +166,8 @@ public class MemberServiceTest {
         void deleteMemberSuccess() {
             // given
             Member member = new MemberStub().getMember();
-            given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(member));
+            given(memberRepository.findByIdAndDeletedAtIsNull(anyLong()))
+                    .willReturn(Optional.ofNullable(member));
 
             // when
             // then
@@ -188,13 +178,12 @@ public class MemberServiceTest {
         @Test
         void deleteMemberFailureWhenNotExist() {
             // given
-            given(memberRepository.findById(anyLong())).willReturn(Optional.empty());
+            given(memberRepository.findByIdAndDeletedAtIsNull(anyLong()))
+                    .willReturn(Optional.empty());
 
             // when
             // then
-            assertThrows(NotFoundException.class,
-                () -> memberService.withdrawMember(1L)
-            );
+            assertThrows(NotFoundException.class, () -> memberService.withdrawMember(1L));
         }
     }
 }

@@ -42,7 +42,7 @@ public class AuthService {
             .point(memberProfile.getPoint())
             .build();
 
-        if (user.getRole().equals("ADMIN")) {
+        if (user.getRole().equals("ADMIN") || user.getRole().equals("WITHDRAWAL")) {
             status = AdminStatus.builder()
                 .status(status)
                 .role(user.getRole())
@@ -74,7 +74,7 @@ public class AuthService {
     }
 
     private String extractPasswordIfAdmin(Role role, String password) {
-        if (role.equals(Role.MEMBER)) return password;
+        if (!role.equals(Role.ADMIN)) return password;
 
         LocalTime now = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");

@@ -37,6 +37,7 @@ class MemberRepositoryImpl implements MemberRepositoryCustom {
             )
             .from(memberProfile)
             .where(memberProfile.name.eq(name))
+            .where(memberProfile.deletedAt.isNull())
             .fetchOne());
     }
 
