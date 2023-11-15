@@ -1,17 +1,8 @@
 package io.oduck.api.unit.attractionPoint.repository;
 
-import static io.oduck.api.global.utils.AnimeTestUtils.getBroadcastType;
-import static io.oduck.api.global.utils.AnimeTestUtils.getEpisodeCount;
-import static io.oduck.api.global.utils.AnimeTestUtils.getQuarter;
-import static io.oduck.api.global.utils.AnimeTestUtils.getRating;
-import static io.oduck.api.global.utils.AnimeTestUtils.getStatus;
-import static io.oduck.api.global.utils.AnimeTestUtils.getSummary;
-import static io.oduck.api.global.utils.AnimeTestUtils.getThumbnail;
-import static io.oduck.api.global.utils.AnimeTestUtils.getTitle;
-import static io.oduck.api.global.utils.AnimeTestUtils.getYear;
-import static io.oduck.api.global.utils.AnimeTestUtils.isReleased;
+import static io.oduck.api.global.utils.AnimeTestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.entity.AnimeGenre;
@@ -25,6 +16,8 @@ import io.oduck.api.domain.attractionPoint.repository.AttractionPointRepository;
 import io.oduck.api.domain.member.entity.Member;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.oduck.api.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -43,23 +36,25 @@ public class AttractionPointRepositoryTest {
 
     @Autowired
     private AnimeRepository animeRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
 
     @Nested
     @DisplayName("애니 입덕 포인트 조회")
-    class isAttractionPoint{
+    class isAttractionPoint {
 
         @Test
         @DisplayName("입덕포인트 조회 성공")
-        void isAttactionPoint(){
+        void isAttractionPoint() {
             //given
             //회원 생성
             Long memberId = 1L;
             Long pointId1 = 1L;
             Long pointId2 = 2L;
             Member member = Member.builder()
-                                .id(memberId)
-                                .build();
+                    .id(memberId)
+                    .build();
 
             // 애니 생성
             List<AnimeStudio> animeStudios = new ArrayList<>();
@@ -68,9 +63,9 @@ public class AttractionPointRepositoryTest {
             List<AnimeOriginalAuthor> animeOriginalAuthors = new ArrayList<>();
 
             Anime createAnime = Anime.createAnime(
-                getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
-                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
+                    getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
+                    getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                    animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
             );
 
             Anime anime = animeRepository.saveAndFlush(createAnime);
@@ -78,19 +73,19 @@ public class AttractionPointRepositoryTest {
 
             //입덕포인트 등록
             AttractionPoint drawing = AttractionPoint
-                                        .builder()
-                                        .id(pointId1)
-                                        .member(member)
-                                        .anime(anime)
-                                        .attractionElement(AttractionElement.DRAWING)
-                                        .build();
+                    .builder()
+                    .id(pointId1)
+                    .member(member)
+                    .anime(anime)
+                    .attractionElement(AttractionElement.DRAWING)
+                    .build();
             AttractionPoint story = AttractionPoint
-                                        .builder()
-                                        .id(pointId2)
-                                        .member(member)
-                                        .anime(anime)
-                                        .attractionElement(AttractionElement.STORY)
-                                        .build();
+                    .builder()
+                    .id(pointId2)
+                    .member(member)
+                    .anime(anime)
+                    .attractionElement(AttractionElement.STORY)
+                    .build();
 
             AttractionPoint saveDrawing = attractionPointRepository.save(drawing);
             AttractionPoint saveStory = attractionPointRepository.save(story);
@@ -108,6 +103,54 @@ public class AttractionPointRepositoryTest {
             assertThat(findDrawing).isEqualTo(saveDrawing.getAttractionElement());
             assertThat(findStory).isEqualTo(saveStory.getAttractionElement());
         }
+    }
+        @Nested
+        @DisplayName("애니 입덕 포인트 생성")
+        class PostAttractionPoint{
+
+            @Test
+            @DisplayName("입덕포인트 추가 성공 시 status 200 반환")
+            void saveAttractionPoint(){
+                //given
+
+                //회원 생성
+                Long memberId = 1L;
+                Member member = Member.builder()
+                        .id(memberId)
+                        .build();
+
+                // 애니 생성
+                Anime anime = animeRepository.saveAndFlush(createAnime());
+                memberRepository.save(member);
+
+                List<AttractionPoint> find = attractionPointRepository.findAllByAnimeIdAndMemberId(memberId, anime.getId());
+
+                //입덕포인트 등록
+                AttractionPoint drawing = AttractionPoint
+                        .builder()
+                        .member(member)
+                        .anime(anime)
+                        .attractionElement(AttractionElement.DRAWING)
+                        .build();
+                AttractionPoint story = AttractionPoint
+                        .builder()
+                        .member(member)
+                        .anime(anime)
+                        .attractionElement(AttractionElement.STORY)
+                        .build();
+
+                //when
+                AttractionPoint saveDrawing = attractionPointRepository.save(drawing);
+                AttractionPoint saveStory = attractionPointRepository.save(story);
+
+                //then
+                assertNotNull(anime);
+                assertNotNull(member);
+                assertTrue(find.isEmpty());
+                assertThat(saveDrawing.getAttractionElement()).isEqualTo(drawing.getAttractionElement());
+                assertThat(saveStory.getAttractionElement()).isEqualTo(story.getAttractionElement());
+            }
+
     }
 
 
