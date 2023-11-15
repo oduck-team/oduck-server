@@ -51,6 +51,8 @@ public class AttractionPoint extends BaseEntity {
   }
 
   public void updateElement(AttractionElement attractionElement){
-    this.attractionElement = attractionElement;
+    if(!this.attractionElement.equals(attractionElement)){
+      this.attractionElement = attractionElement;
+    }
   }
 }
