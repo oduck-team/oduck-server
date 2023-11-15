@@ -1,12 +1,19 @@
 package io.oduck.api.domain.anime.dto;
 
-import io.oduck.api.domain.anime.entity.*;
+import io.oduck.api.domain.anime.entity.Anime;
+import io.oduck.api.domain.anime.entity.AnimeGenre;
+import io.oduck.api.domain.anime.entity.AnimeOriginalAuthor;
+import io.oduck.api.domain.anime.entity.AnimeStudio;
+import io.oduck.api.domain.anime.entity.AnimeVoiceActor;
+import io.oduck.api.domain.anime.entity.BroadcastType;
+import io.oduck.api.domain.anime.entity.Quarter;
+import io.oduck.api.domain.anime.entity.Rating;
+import io.oduck.api.domain.anime.entity.Status;
 import io.oduck.api.global.common.EntityBased;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class AnimeRes {
 
@@ -84,6 +91,23 @@ public class AnimeRes {
         @Override
         public String bringCursor(String property) {
             return title;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class StarRatingAvg {
+        private Double starRatingAvg;
+
+        public StarRatingAvg(Long starRatingScoreTotal, Long starRatingCount) {
+            this.starRatingAvg = calculateAvg(starRatingScoreTotal, starRatingCount);
+        }
+
+        private double calculateAvg(Long starRatingScoreTotal, Long starRatingCount) {
+            if(starRatingCount <= 0) {
+                return 0;
+            }
+            return starRatingScoreTotal / starRatingCount;
         }
     }
 

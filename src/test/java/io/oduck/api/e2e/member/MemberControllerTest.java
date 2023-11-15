@@ -710,4 +710,33 @@ public class MemberControllerTest {
                 );
         }
     }
+
+    @DisplayName("회원 탈퇴")
+    @Nested
+    class DeleteWithdrawal {
+        @DisplayName("회원 탈퇴 성공시 204 NoContent 응답")
+        @Test
+        @WithCustomMockMember(id = 4L, email = "reina", password = "Qwer!234", role = Role.MEMBER)
+        void deleteWithdrawalSuccess() throws Exception {
+            // given
+
+            // when
+            ResultActions actions = mockMvc.perform(
+                delete(BASE_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+            );
+
+            // then
+            actions
+                .andExpect(status().isNoContent())
+                .andDo(
+                    document("deleteWithdrawal/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                    )
+                );
+        }
+    }
 }
