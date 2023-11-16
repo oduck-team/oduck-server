@@ -31,11 +31,13 @@ import static io.oduck.api.global.config.RestDocsConfig.field;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -108,6 +110,48 @@ class AttractionPointControllerTest {
                                                     .description("입덕포인트 리스트")
                                     ))
                     );
+        }
+
+    }
+
+    @Nested
+    @DisplayName("입덕포인트 존재 유무")
+    class GetAttractionPoint {
+
+        @Test
+        @DisplayName("입덕포인트 존재 시 false")
+        @WithCustomMockMember(id = 2L, email = "john", password = "Qwer!234", role = Role.MEMBER)
+        void checkAttractionPoint() throws Exception{
+            //given
+            Long animeId = 1L;
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                    get(BASE_URL + "/{animeId}", animeId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+            );
+            //then
+            actions.andExpect(status().isOk())
+                    .andDo(document("checkAttractionPoint/isCheck",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            requestHeaders(
+                                    headerWithName(HttpHeaders.COOKIE)
+                                            .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                            .description("Header Cookie, 세션 쿠키")
+                            ),
+                            pathParameters(
+                                    parameterWithName("animeId")
+                                            .description("애니 고유 식별자")
+                            ),
+                            responseFields(
+                                    fieldWithPath("isAttractionPoint")
+                                            .type(JsonFieldType.BOOLEAN)
+                                            .description("입덕포인트 존재 시 true, 부재 시 false"))
+                    ));
+
         }
     }
 
