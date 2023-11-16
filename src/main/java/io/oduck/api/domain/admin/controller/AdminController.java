@@ -149,6 +149,7 @@ public class AdminController {
 
         return ResponseEntity.noContent().build();
     }
+
     // 애니의 성우 수정
     @PatchMapping("/animes/{animeId}/voice-actors")
     public ResponseEntity<Object> patchAnimeVoiceActors(
