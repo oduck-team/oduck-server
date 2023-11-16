@@ -58,7 +58,7 @@ public class AttractionPointServiceImpl implements AttractionPointService {
     @Override
     @Transactional
     public void save(Long memberId, AttractionPointReq req) {
-        if(!checkAttractionPoint(memberId, req.getAnimeId())){
+        if(checkAttractionPoint(memberId, req.getAnimeId()).getIsAttractionPoint()){
             throw new BadRequestException("AttractionPoint is already exists.");
         }
 
@@ -81,8 +81,11 @@ public class AttractionPointServiceImpl implements AttractionPointService {
     }
 
     @Override
-    public boolean checkAttractionPoint(Long memberId, Long animeId) {
+    public CheckAttractionPoint checkAttractionPoint(Long memberId, Long animeId) {
         List<AttractionPoint> findPoint = attractionPointRepository.findAllByAnimeIdAndMemberId(memberId, animeId);
-        return findPoint.isEmpty();
+        return CheckAttractionPoint
+                .builder()
+                .isAttractionPoint(!findPoint.isEmpty())
+                .build();
     }
 }
