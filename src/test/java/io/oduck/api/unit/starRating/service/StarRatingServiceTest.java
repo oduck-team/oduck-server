@@ -63,7 +63,7 @@ public class StarRatingServiceTest {
                 .willReturn(Optional.empty());
             given(memberRepository.findById(memberId))
                 .willReturn(Optional.ofNullable(member));
-            given(animeRepository.findById(animeId))
+            given(animeRepository.findByIdForUpdate(animeId))
                 .willReturn(Optional.ofNullable(anime));
 
             // when
@@ -173,6 +173,8 @@ public class StarRatingServiceTest {
 
             given(starRatingRepository.findByMemberIdAndAnimeId(memberId, animeId))
                 .willReturn(Optional.ofNullable(starRating));
+            given(animeRepository.findByIdForUpdate(animeId))
+                .willReturn(Optional.ofNullable(anime));
 
             // when
             boolean result = starRatingService.updateScore(memberId, animeId, 5);
@@ -194,6 +196,8 @@ public class StarRatingServiceTest {
 
             given(starRatingRepository.findByMemberIdAndAnimeId(memberId, animeId))
                 .willReturn(Optional.ofNullable(starRating));
+            given(animeRepository.findByIdForUpdate(animeId))
+                .willReturn(Optional.ofNullable(anime));
 
             // when
             boolean result = starRatingService.updateScore(memberId, animeId, score);
