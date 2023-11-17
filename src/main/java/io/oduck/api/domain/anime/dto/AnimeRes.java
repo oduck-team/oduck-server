@@ -90,7 +90,7 @@ public class AnimeRes {
 
         @Override
         public String bringCursor(String property) {
-            return title;
+            return id.toString();
         }
     }
 
