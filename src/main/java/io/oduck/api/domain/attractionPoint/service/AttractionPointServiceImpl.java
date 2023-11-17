@@ -6,12 +6,12 @@ import io.oduck.api.domain.attractionPoint.dto.AttractionPointReqDto.*;
 import io.oduck.api.domain.attractionPoint.dto.AttractionPointResDto.*;
 import io.oduck.api.domain.attractionPoint.entity.AttractionPoint;
 import io.oduck.api.domain.attractionPoint.repository.AttractionPointRepository;
+
 import java.util.List;
-import java.util.Optional;
 
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
-import io.oduck.api.global.exception.BadRequestException;
+import io.oduck.api.global.exception.ConflictException;
 import io.oduck.api.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +59,7 @@ public class AttractionPointServiceImpl implements AttractionPointService {
     @Transactional
     public void save(Long memberId, AttractionPointReq req) {
         if(checkAttractionPoint(memberId, req.getAnimeId()).getIsAttractionPoint()){
-            throw new BadRequestException("AttractionPoint is already exists.");
+            throw new ConflictException("AttractionPoint");
         }
 
         Member member = memberRepository.findById(memberId)
@@ -68,16 +68,16 @@ public class AttractionPointServiceImpl implements AttractionPointService {
         Anime anime = animeRepository.findById(req.getAnimeId())
                 .orElseThrow(() -> new NotFoundException("Anime"));
 
+        req.getAttractionElements()
+                .stream()
+                .map(attractionElement -> AttractionPoint
+                        .builder()
+                        .member(member)
+                        .anime(anime)
+                        .attractionElement(attractionElement)
+                        .build())
+                .forEach(attractionPointRepository::save);
 
-        for(int i = 0; i < req.getAttractionElements().size(); i++){
-            AttractionPoint attractionPoint = AttractionPoint
-                                                .builder()
-                                                .member(member)
-                                                .anime(anime)
-                                                .attractionElement(req.getAttractionElements().get(i))
-                                                .build();
-            attractionPointRepository.save(attractionPoint);
-        }
     }
 
     @Override
