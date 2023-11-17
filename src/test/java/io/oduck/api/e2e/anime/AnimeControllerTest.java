@@ -113,7 +113,7 @@ public class AnimeControllerTest {
                                             .description("Quarter의 리스트. Quarters가 null이거나 empty하지 않으면 자동으로 <최신 년도+분기>로 예상하고 로직을 수행합니다. 예를 들어 2023년에 클라이언트가 Q1으로 요청하면, 서버에 Q1만 보내도 자동으로 2023년은 내부 로직으로 계산합니다."),
                                     parameterWithName("cursor")
                                             .optional()
-                                            .description("마지막 아이템 제목")
+                                            .description("마지막 아이템의 고유 식별자")
                             ),
                             responseFields(
                                     fieldWithPath("items")
@@ -139,7 +139,7 @@ public class AnimeControllerTest {
                                             .description("마지막 페이지 여부"),
                                     fieldWithPath("cursor")
                                             .type(JsonFieldType.STRING)
-                                            .description("마지막 아이템의 제목, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 \"\"")
+                                            .description("마지막 아이템의 고유 식별자, 다음 페이지 요청시 cursor로 사용. 다음 페이지가 없다면 \"\". 숫자가 아닌 형태가 온다면 입력하지 않는 것으로 처리된다.")
                             )
                     ));
 
