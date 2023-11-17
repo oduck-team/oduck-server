@@ -33,7 +33,7 @@ public class StarRatingServiceImpl implements StarRatingService {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException("Member"));
 
-        Anime anime = animeRepository.findById(animeId)
+        Anime anime = animeRepository.findByIdForUpdate(animeId)
             .orElseThrow(() -> new NotFoundException("Anime"));
 
         anime.increaseStarRatingScore(score);
@@ -60,15 +60,24 @@ public class StarRatingServiceImpl implements StarRatingService {
     }
 
     @Override
+    @Transactional
     public boolean updateScore(Long memberId, Long animeId, int score) {
         StarRating foundStarRating = findByMemberIdAndAnimeId(memberId, animeId)
             .orElseThrow(() -> new NotFoundException("StarRating"));
 
-        if (foundStarRating.getScore() == score) {
+        int prevScore = foundStarRating.getScore();
+
+        Anime anime = animeRepository.findByIdForUpdate(animeId)
+            .orElseThrow(() -> new NotFoundException("Anime"));
+
+        if (prevScore == score) {
             return false;
         }
 
+        anime.decreaseStarRatingScore(prevScore);
+
         foundStarRating.updateScore(score);
+        anime.increaseStarRatingScore(score);
 
         starRatingRepository.save(foundStarRating);
         return true;
