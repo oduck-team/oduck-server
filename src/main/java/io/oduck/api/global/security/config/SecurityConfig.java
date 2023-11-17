@@ -2,9 +2,9 @@ package io.oduck.api.global.security.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.oduck.api.domain.member.entity.Role;
 //import io.oduck.api.global.security.filter.LocalAuthenticationFilter;
+import io.oduck.api.global.security.filter.HTTPLoggingFilter;
 import io.oduck.api.global.security.handler.ForbiddenHandler;
 import io.oduck.api.global.security.handler.LoginFailureHandler;
 import io.oduck.api.global.security.handler.LoginSuccessHandler;
@@ -24,6 +24,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 //import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 //import org.springframework.security.web.context.SecurityContextRepository;
@@ -34,13 +35,14 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 public class SecurityConfig {
 
-//    private final ObjectMapper objectMapper;
+    //    private final ObjectMapper objectMapper;
     private final LogoutHandler logoutHandler;
     private final SocialLoginService socialLoginService;
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
     private final ForbiddenHandler forbiddenHandler;
     private final UnauthorizedHandler unauthorizedHandler;
+    private final HTTPLoggingFilter HTTPLoggingFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -75,15 +77,17 @@ public class SecurityConfig {
         // 인가 설정
         http
             .authorizeHttpRequests((authorizeRequests) ->
-                authorizeRequests
-                    // .requestMatchers("docs/index.html").hasAuthority(Role.ADMIN.name())
-                    .requestMatchers("/auth/status").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
-                    .requestMatchers(HttpMethod.PUT, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
-                    .requestMatchers(HttpMethod.PATCH, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
-                    .requestMatchers(HttpMethod.DELETE, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
-                    .requestMatchers( "/bookmarks/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                    authorizeRequests
+                        // .requestMatchers("docs/index.html").hasAuthority(Role.ADMIN.name())
+                        .requestMatchers("/auth/status").hasAnyAuthority(Role.WITHDRAWAL.name(), Role.MEMBER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PATCH, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/bookmarks/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/ratings/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PATCH, "/ratings/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
 //                    .requestMatchers("/oduckdmin/**").hasAuthority(Role.ADMIN.name())
-                    .anyRequest().permitAll()
+                        .anyRequest().permitAll()
             );
 
         // 로그아웃 설정
@@ -104,12 +108,12 @@ public class SecurityConfig {
         http
             .oauth2Login((oauth2Login) ->
                 oauth2Login
-                .userInfoEndpoint((userInfoEndpoint) ->
-                    userInfoEndpoint
-                        .userService(socialLoginService)
-                )
-                .successHandler(loginSuccessHandler)
-                .failureHandler(loginFailureHandler)
+                    .userInfoEndpoint((userInfoEndpoint) ->
+                        userInfoEndpoint
+                            .userService(socialLoginService)
+                    )
+                    .successHandler(loginSuccessHandler)
+                    .failureHandler(loginFailureHandler)
             );
 
         // 예외 처리 설정
@@ -120,6 +124,9 @@ public class SecurityConfig {
                     .authenticationEntryPoint(unauthorizedHandler)
                     .accessDeniedHandler(forbiddenHandler)
             );
+
+        http
+            .addFilterBefore(HTTPLoggingFilter, LogoutFilter.class);
 
         return http.build();
     }
@@ -142,10 +149,10 @@ public class SecurityConfig {
 
 //    // Custom Configurer : CustomFilterConfigurer 는 직접 구현한 필터인 JwtAuthenticationFilter 를 등록하는 역할
 //    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
-        // AbstractHttpConfigurer 를 상속하여 구현
-        // AbstractHttpConfigurer<AbstractHttpConfigurer 를 상속하는 타입, HttpSecurityBuilder 를 상속하는 타입> 을 지정
+    // AbstractHttpConfigurer 를 상속하여 구현
+    // AbstractHttpConfigurer<AbstractHttpConfigurer 를 상속하는 타입, HttpSecurityBuilder 를 상속하는 타입> 을 지정
 
-        // configure() 메서드를 오버라이드해서 Configuration 을 커스터마이징
+    // configure() 메서드를 오버라이드해서 Configuration 을 커스터마이징
 //        @Override
 //        public void configure(HttpSecurity builder) throws Exception {
 //
