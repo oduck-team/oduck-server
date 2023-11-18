@@ -80,9 +80,12 @@ public class SecurityConfig {
                     authorizeRequests
                         // .requestMatchers("docs/index.html").hasAuthority(Role.ADMIN.name())
                         .requestMatchers("/auth/status").hasAnyAuthority(Role.WITHDRAWAL.name(), Role.MEMBER.name(), Role.ADMIN.name())
-                        .requestMatchers("/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
-                        .requestMatchers("/ratings/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
-                        .requestMatchers("/bookmarks/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PATCH, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/bookmarks/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                        .requestMatchers( "/ratings/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                        .requestMatchers( "/bookmarks/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
 //                    .requestMatchers("/oduckdmin/**").hasAuthority(Role.ADMIN.name())
                         .anyRequest().permitAll()
             );
