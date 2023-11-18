@@ -59,7 +59,7 @@ public class HTTPLoggingFilter extends OncePerRequestFilter {
         log.info("Request : \n {} {} uri=[{}]\n content-type[{}]\n client-ip[{}]\n user-agent[{}]",
             request.getProtocol(),
             request.getMethod(),
-            queryString == null ? request.getRequestURI() : request.getRequestURI() + queryString,
+            queryString == null ? request.getRequestURI() : request.getRequestURI() + "?" + queryString,
             request.getContentType(), getClientIP(request), request.getHeader("User-Agent"));
         logPayload("Request", request.getContentType(), request.getContentAsByteArray());
     }
