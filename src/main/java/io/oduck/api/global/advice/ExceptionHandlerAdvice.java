@@ -109,6 +109,16 @@ public class ExceptionHandlerAdvice {
     return new ResponseEntity<>(response, HttpStatus.valueOf(e.getStatus()));
   }
 
+  @ExceptionHandler(NullPointerException.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  protected ErrorResponse handleNullPointerException(HttpServletRequest req, NullPointerException e) {
+    log.error("handleNullPointerException", e);
+    // Discord WebHook에 보낼 때 "가 있으면 json 파싱 에러가 발생함.
+    // NPE 메시지에서 "를 사용함. -> Discord WebHook에 보낼 때 " -> \" 로 치환
+    webHookService.sendMsg(new NullPointerException(e.getMessage().replace("\"", "\\\"")), req);
+    return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
   // 위에서 지정한 예외 외의 서버 로직 예외에 대한 예외 처리.
   // 예상하지 못한 서버 예외
   // 운영에 치명적일 수 있음.
