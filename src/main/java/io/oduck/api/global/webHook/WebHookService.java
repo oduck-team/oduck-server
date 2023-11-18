@@ -2,7 +2,6 @@ package io.oduck.api.global.webHook;
 
 import static io.oduck.api.global.utils.HttpHeaderUtils.getClientIP;
 
-import io.oduck.api.global.exception.CustomException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.awt.Color;
 import java.io.IOException;
@@ -47,7 +46,9 @@ public class WebHookService {
         try{
             webhook.execute();
         } catch (IOException exception) {
-            throw new CustomException("Discord WebHook Error");
+            if (url.equals("dev")) {
+                log.error("Discord WebHook Error");
+            }
         }
     }
 }
