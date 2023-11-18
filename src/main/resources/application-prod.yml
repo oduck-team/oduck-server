@@ -45,6 +45,7 @@ spring:
         format_sql: false
         show_sql: false
         default_batch_fetch_size: 100
+    open-in-view: false
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://${.db.host}:${.db.port}/${.db.name}?useSSL=false&serverTimezone=UTC
@@ -102,11 +103,24 @@ logging:
     root: INFO
   file:
     name: ./logs/oDuck.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%-5level) %magenta(${PID:- }) [%t]  %cyan(%logger{0})  : %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%-5level) %magenta(${PID:- }) [%t]  %cyan(%logger{0}) : %msg%n"
   logback:
     rollingpolicy:
       max-file-size: 10MB   #default 10MB
       max-history: 30       #default 7
       file-name-pattern: ./logs/oDuck.%d{yyyy-MM-dd}.%i.gz
+
+conversion-word:
+  clr: "org.springframework.boot.logging.logback.ColorConverter"
+  option:
+    STYLE: "BOLD"
+    trace: "WHITE"
+    debug: "BLUE"
+    info: "GREEN"
+    warn: "YELLOW"
+    error: "RED"
 
 config:
   base:
