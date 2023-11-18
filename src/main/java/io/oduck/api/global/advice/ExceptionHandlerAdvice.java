@@ -116,8 +116,8 @@ public class ExceptionHandlerAdvice {
   @ExceptionHandler
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ErrorResponse handleException(HttpServletRequest req, Exception e) {
-    webHookService.sendMsg(e, req);
     log.error("# Uncaught exceptions, which can be fatal to the server", e);
+    webHookService.sendMsg(e, req);
     return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

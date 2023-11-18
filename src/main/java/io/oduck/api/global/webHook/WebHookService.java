@@ -46,9 +46,7 @@ public class WebHookService {
         try{
             webhook.execute();
         } catch (IOException exception) {
-            if (url.equals("dev")) {
-                log.error("Discord WebHook Error");
-            }
+            log.error("Discord WebHook Error");
         }
     }
 }
