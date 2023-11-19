@@ -1498,3 +1498,53 @@ include::{snippets}/starRating/patchScore/success/http-response.adoc[]
 ==== 실패시
 .http-response
 include::{snippets}/starRating/patchScore/failure/http-response.adoc[]
+
+
+== AttractionPoint
+=== POST api/v1/attraction-points
+.curl-request
+include::{snippets}/postAttractionPoint/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/postAttractionPoint/success/http-request.adoc[]
+
+.request-header
+include::{snippets}/postAttractionPoint/success/request-headers.adoc[]
+
+.request-body
+include::{snippets}/postAttractionPoint/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/postAttractionPoint/success/request-fields.adoc[]
+
+==== 저장 성공시
+.http-response
+include::{snippets}/likes/shortReview/save/success/http-response.adoc[]
+
+==== 삭제 성공시
+.http-response
+include::{snippets}/likes/shortReview/delete/success/http-response.adoc[]
+
+== 입덕포인트 존재 여부
+=== GET api/v1/attraction-points/:animeId
+.curl-request
+include::{snippets}/checkAttractionPoint/isCheck/curl-request.adoc[]
+
+.http-request
+include::{snippets}/checkAttractionPoint/isCheck/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/checkAttractionPoint/isCheck/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/checkAttractionPoint/isCheck/request-headers.adoc[]
+
+=== 짧은 리뷰 좋아요 존재 여부
+.http-response
+include::{snippets}/checkAttractionPoint/isCheck/http-response.adoc[]
+
+.response-body
+include::{snippets}/checkAttractionPoint/isCheck/response-body.adoc[]
+
+.response-fields
+include::{snippets}/checkAttractionPoint/isCheck/response-fields.adoc[]

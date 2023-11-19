@@ -1,7 +1,9 @@
 package io.oduck.api.domain.attractionPoint.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
@@ -16,4 +18,11 @@ public class AttractionPointResDto {
         private boolean voiceActor;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CheckAttractionPoint{
+        private Boolean isAttractionPoint;
+    }
 }

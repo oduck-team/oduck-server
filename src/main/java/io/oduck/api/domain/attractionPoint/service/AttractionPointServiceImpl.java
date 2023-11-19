@@ -1,12 +1,24 @@
 package io.oduck.api.domain.attractionPoint.service;
 
-import io.oduck.api.domain.attractionPoint.dto.AttractionPointResDto.IsAttractionPoint;
+import io.oduck.api.domain.anime.entity.Anime;
+import io.oduck.api.domain.anime.repository.AnimeRepository;
+import io.oduck.api.domain.attractionPoint.dto.AttractionPointReqDto.*;
+import io.oduck.api.domain.attractionPoint.dto.AttractionPointResDto.*;
 import io.oduck.api.domain.attractionPoint.entity.AttractionPoint;
 import io.oduck.api.domain.attractionPoint.repository.AttractionPointRepository;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import io.oduck.api.domain.member.entity.Member;
+import io.oduck.api.domain.member.repository.MemberRepository;
+import io.oduck.api.global.exception.ConflictException;
+import io.oduck.api.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -14,6 +26,9 @@ import org.springframework.stereotype.Service;
 public class AttractionPointServiceImpl implements AttractionPointService {
 
     private final AttractionPointRepository attractionPointRepository;
+    private final MemberRepository memberRepository;
+    private final AnimeRepository animeRepository;
+
     @Override
     public IsAttractionPoint isAttractionPoint(Long memberId, Long animeId) {
         boolean drawing = false;
@@ -40,5 +55,39 @@ public class AttractionPointServiceImpl implements AttractionPointService {
                       .character(character)
                       .voiceActor(voiceActor)
                       .build();
+    }
+
+    @Override
+    @Transactional
+    public void save(Long memberId, AttractionPointReq req) {
+        if(checkAttractionPoint(memberId, req.getAnimeId()).getIsAttractionPoint()){
+            throw new ConflictException("AttractionPoint");
+        }
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException("Member"));
+
+        Anime anime = animeRepository.findById(req.getAnimeId())
+                .orElseThrow(() -> new NotFoundException("Anime"));
+
+        List<AttractionPoint> points = req.getAttractionElements()
+                .stream()
+                .map(attractionElement -> AttractionPoint
+                        .builder()
+                        .member(member)
+                        .anime(anime)
+                        .attractionElement(attractionElement)
+                        .build())
+                        .toList();
+        attractionPointRepository.saveAll(points);
+    }
+
+    @Override
+    public CheckAttractionPoint checkAttractionPoint(Long memberId, Long animeId) {
+        List<AttractionPoint> findPoint = attractionPointRepository.findAllByAnimeIdAndMemberId(memberId, animeId);
+        return CheckAttractionPoint
+                .builder()
+                .isAttractionPoint(!findPoint.isEmpty())
+                .build();
     }
 }
