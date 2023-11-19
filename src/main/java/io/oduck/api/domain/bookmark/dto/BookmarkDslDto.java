@@ -15,6 +15,8 @@ public class BookmarkDslDto {
         private Long animeId;
         private String title;
         private String thumbnail;
+        private Long starRatingScoreTotal;
+        private Long starRatingCount;
         private Integer myScore;
         private LocalDateTime createdAt;
     }
