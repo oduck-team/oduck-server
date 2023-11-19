@@ -7,7 +7,9 @@ import io.oduck.api.domain.attractionPoint.dto.AttractionPointResDto.*;
 import io.oduck.api.domain.attractionPoint.entity.AttractionPoint;
 import io.oduck.api.domain.attractionPoint.repository.AttractionPointRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
@@ -68,7 +70,7 @@ public class AttractionPointServiceImpl implements AttractionPointService {
         Anime anime = animeRepository.findById(req.getAnimeId())
                 .orElseThrow(() -> new NotFoundException("Anime"));
 
-        req.getAttractionElements()
+        List<AttractionPoint> points = req.getAttractionElements()
                 .stream()
                 .map(attractionElement -> AttractionPoint
                         .builder()
@@ -76,8 +78,8 @@ public class AttractionPointServiceImpl implements AttractionPointService {
                         .anime(anime)
                         .attractionElement(attractionElement)
                         .build())
-                .forEach(attractionPointRepository::save);
-
+                        .toList();
+        attractionPointRepository.saveAll(points);
     }
 
     @Override
