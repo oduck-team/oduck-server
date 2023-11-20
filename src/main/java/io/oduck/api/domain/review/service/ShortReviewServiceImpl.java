@@ -49,9 +49,9 @@ public class ShortReviewServiceImpl implements ShortReviewService{
 
         //애니 입력
         Anime anime = animeRepository.findByIdForUpdate(shortReviewReq.getAnimeId())
-                             .orElseThrow(
-                                 () -> new NotFoundException("Anime")
-                             );
+                .orElseThrow(
+                        () -> new NotFoundException("Anime")
+                        );
         shortReview.relateAnime(anime);
 
         //회원 입력
@@ -61,13 +61,14 @@ public class ShortReviewServiceImpl implements ShortReviewService{
                             );
         shortReview.relateMember(member);
 
-        ShortReview saveShortReview = shortReviewRepository.save(shortReview);
         anime.increaseReviewCount();
+        shortReviewRepository.save(shortReview);
 
         //log.info("ShortReview Crated! {}", saveShortReview.getId());
     }
 
     @Override
+    @Transactional
     public SliceResponse<ShortReviewRes> getShortReviews(Long animeId, String cursor,ShortReviewReqDto.Sort sort, OrderDirection order, int size) {
         Sort sortList = Sort.by(
             Direction.fromString(order.getOrder()),
@@ -105,9 +106,17 @@ public class ShortReviewServiceImpl implements ShortReviewService{
                    .build();
     }
     @Override
+    @Transactional
     public void update(Long memberId, Long reviewId, ShortReviewReq req) {
         ShortReview findShortReview = getShortReview(reviewId);
         Long findMemberId = findShortReview.getMember().getId();
+
+        Anime findAnime = animeRepository.findByIdForUpdate(req.getAnimeId())
+                .orElseThrow(
+                        () -> new NotFoundException("Anime")
+                );
+        findAnime.decreaseReviewCount();
+
         //리뷰 작성자 인지 확인
         Optional
             .ofNullable(findMemberId)
@@ -120,6 +129,8 @@ public class ShortReviewServiceImpl implements ShortReviewService{
                     findShortReview.updateSpoiler(req.isHasSpoiler());
                 }
             );
+        findAnime.increaseReviewCount();
+        shortReviewRepository.save(findShortReview);
     }
 
 
