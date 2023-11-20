@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,6 +20,9 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 @Slf4j
 @Component
 public class HTTPLoggingFilter extends OncePerRequestFilter {
+
+    @Value("${spring.config.activate.on-profile}")
+    private String activeProfile;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -35,19 +39,27 @@ public class HTTPLoggingFilter extends OncePerRequestFilter {
     protected void doFilterWrapped(ContentCachingRequestWrapper request,
         ContentCachingResponseWrapper response,
         FilterChain filterChain) throws IOException, ServletException {
-        try {
+
+        if(!(activeProfile.equals("prod") && request.getRequestURI().contains("actuator/"))) {
+            try {
+                filterChain.doFilter(request, response);
+                logRequest(request);
+            } finally {
+                logResponse(response);
+                response.copyBodyToResponse();
+            }
+        } else {
             filterChain.doFilter(request, response);
-            logRequest(request);
-        } finally {
-            logResponse(response);
             response.copyBodyToResponse();
         }
     }
 
     private static void logRequest(ContentCachingRequestWrapper request) throws IOException {
         String queryString = request.getQueryString();
-        log.info("Request : \n {} uri=[{}]\n content-type[{}]\n client-ip[{}]\n user-agent[{}]", request.getMethod(),
-            queryString == null ? request.getRequestURI() : request.getRequestURI() + queryString,
+        log.info("Request : \n {} {} uri=[{}]\n content-type[{}]\n client-ip[{}]\n user-agent[{}]",
+            request.getProtocol(),
+            request.getMethod(),
+            queryString == null ? request.getRequestURI() : request.getRequestURI() + "?" + queryString,
             request.getContentType(), getClientIP(request), request.getHeader("User-Agent"));
         logPayload("Request", request.getContentType(), request.getContentAsByteArray());
     }
