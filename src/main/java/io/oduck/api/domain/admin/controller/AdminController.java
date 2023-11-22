@@ -129,59 +129,6 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
-    // 애니의 원작 작가 수정
-    @PatchMapping("/animes/{animeId}/original-authors")
-    public ResponseEntity<Object> patchAnimeOriginalAuthors(
-        @PathVariable Long animeId, @RequestBody AnimeReq.PatchOriginalAuthorIdsReq req
-    ){
-        animeService.updateAnimeOriginalAuthors(animeId, req);
-
-        return ResponseEntity.noContent().build();
-    }
-
-    // 애니의 스튜디오 수정
-    @PatchMapping("/animes/{animeId}/studios")
-    public ResponseEntity<Object> patchAnimeStudios(
-        @PathVariable Long animeId, @RequestBody AnimeReq.PatchStudioIdsReq req
-    ){
-
-        animeService.updateAnimeStudios(animeId, req);
-
-        return ResponseEntity.noContent().build();
-    }
-
-    // 애니의 성우 수정
-    @PatchMapping("/animes/{animeId}/voice-actors")
-    public ResponseEntity<Object> patchAnimeVoiceActors(
-        @PathVariable Long animeId, @RequestBody AnimeReq.PatchVoiceActorIdsReq req
-    ){
-        animeService.updateAnimeVoiceActors(animeId, req);
-
-        return ResponseEntity.noContent().build();
-    }
-
-    // 애니의 장르 수정
-    @PatchMapping("/animes/{animeId}/genres")
-    public ResponseEntity<Object> patchAnimeGenres(
-        @PathVariable Long animeId, @RequestBody AnimeReq.PatchGenreIdsReq req
-    ){
-
-        animeService.updateAnimeGenres(animeId, req);
-
-        return ResponseEntity.noContent().build();
-    }
-
-    // 애니의 시리즈 수정
-    @PatchMapping("/animes/{animeId}/series")
-    public ResponseEntity<Object> patchAnimeSeries(
-        @PathVariable Long animeId, @RequestBody AnimeReq.PatchSeriesIdReq req
-    ){
-
-        animeService.updateSeries(animeId, req);
-
-        return ResponseEntity.noContent().build();
-    }
-
     // 원작 작가 추가
     @PostMapping("/original-authors")
     public ResponseEntity<Object> postOriginalAuthor(@RequestBody @Valid OriginalAuthorReq.PostReq req) {
