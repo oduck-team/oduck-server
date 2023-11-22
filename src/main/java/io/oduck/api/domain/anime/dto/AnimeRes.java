@@ -104,10 +104,12 @@ public class AnimeRes {
         }
 
         private double calculateAvg(Long starRatingScoreTotal, Long starRatingCount) {
-            if(starRatingCount <= 0) {
-                return 0;
+
+            if (starRatingCount <= 0) {
+                return 0.0;
             }
-            return starRatingScoreTotal / starRatingCount;
+
+            return Double.valueOf(starRatingScoreTotal) / starRatingCount;
         }
     }
 
