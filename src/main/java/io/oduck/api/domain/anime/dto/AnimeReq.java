@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 public class AnimeReq {
@@ -143,9 +142,18 @@ public class AnimeReq {
 
         private boolean isReleased = false;
 
+        private List<Long> originalAuthorIds;
+        private List<Long> studioIds;
+        private List<AnimeVoiceActorReq> voiceActors;
+        private List<Long> genreIds;
+        private Long seriesId;
+
+
         public PatchAnimeReq(String title, String summary, BroadcastType broadcastType,
-            int episodeCount, String thumbnail, int year, Quarter quarter, Rating rating, Status status,
-            Boolean isReleased) {
+            int episodeCount, String thumbnail, int year, Quarter quarter, Rating rating, Status status, Boolean isReleased,
+            List<Long> originalAuthorIds, List<Long> studioIds,List<AnimeVoiceActorReq> voiceActors, List<Long> genreIds,
+            Long seriesId
+        ) {
             this.title = title;
             this.summary = summary;
             this.broadcastType = broadcastType;
@@ -158,71 +166,28 @@ public class AnimeReq {
             if(isReleased != null){
                 this.isReleased = isReleased;
             }
-        }
-    }
-
-    @Getter
-    @NoArgsConstructor
-    public static class PatchOriginalAuthorIdsReq {
-        private List<Long> originalAuthorIds;
-
-        public PatchOriginalAuthorIdsReq(List<Long> originalAuthorIds) {
             if(originalAuthorIds == null){
                 this.originalAuthorIds = new ArrayList<>();
             }else{
                 this.originalAuthorIds = originalAuthorIds;
             }
-        }
-    }
-
-    @Getter
-    @NoArgsConstructor
-    public static class PatchStudioIdsReq {
-        private List<Long> studioIds;
-
-        public PatchStudioIdsReq(List<Long> studioIds) {
             if(studioIds == null){
                 this.studioIds = new ArrayList<>();
             }else{
                 this.studioIds = studioIds;
             }
-        }
-
-    }
-
-    @Getter
-    @NoArgsConstructor
-    public static class PatchVoiceActorIdsReq {
-        private List<AnimeVoiceActorReq> voiceActors;
-
-        public PatchVoiceActorIdsReq(List<AnimeVoiceActorReq> voiceActors) {
             if(voiceActors == null){
                 this.voiceActors = new ArrayList<>();
             }else{
                 this.voiceActors = voiceActors;
             }
-        }
-    }
-
-    @Getter
-    @NoArgsConstructor
-    public static class PatchGenreIdsReq {
-        private List<Long> genreIds;
-
-        public PatchGenreIdsReq(List<Long> genreIds) {
             if(genreIds == null){
                 this.genreIds = new ArrayList<>();
             }else{
                 this.genreIds = genreIds;
             }
+            this.seriesId = seriesId;
         }
-    }
-
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class PatchSeriesIdReq{
-        private Long seriesId;
     }
 
     @Getter
