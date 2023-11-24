@@ -2,6 +2,7 @@ package io.oduck.api.global.security.filter;
 
 import static io.oduck.api.global.utils.HttpHeaderUtils.getClientIP;
 
+import io.oduck.api.global.security.auth.dto.AuthUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,11 +57,11 @@ public class HTTPLoggingFilter extends OncePerRequestFilter {
 
     private static void logRequest(ContentCachingRequestWrapper request) throws IOException {
         String queryString = request.getQueryString();
-        log.info("Request : \n {} {} uri=[{}]\n content-type[{}]\n client-ip[{}]\n user-agent[{}]",
+        log.info("Request : \n {} {} uri=[{}]\n content-type[{}]\n client-ip[{}]\n user-id[{}]\n user-agent[{}]",
             request.getProtocol(),
             request.getMethod(),
             queryString == null ? request.getRequestURI() : request.getRequestURI() + "?" + queryString,
-            request.getContentType(), getClientIP(request), request.getHeader("User-Agent"));
+            request.getContentType(), getClientIP(request), getAuthUserId(request), request.getHeader("User-Agent"));
         logPayload("Request", request.getContentType(), request.getContentAsByteArray());
     }
 
@@ -96,5 +97,10 @@ public class HTTPLoggingFilter extends OncePerRequestFilter {
 
         return VISIBLE_TYPES.stream()
             .anyMatch(visibleType -> visibleType.includes(mediaType));
+    }
+
+    private static Long getAuthUserId(HttpServletRequest request) {
+        AuthUser user = (AuthUser) request.getSession() .getAttribute("user");
+        return user == null ? null : user.getId();
     }
 }
