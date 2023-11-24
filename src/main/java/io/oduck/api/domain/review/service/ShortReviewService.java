@@ -16,6 +16,8 @@ public interface ShortReviewService {
     SliceResponse<ShortReviewRes> getShortReviews(Long animeId, String cursor, Sort sort, OrderDirection order, int size);
     ShortReviewCountRes getShortReviewCountByMemberId(Long memberId);
 
+    SliceResponse<ShortReviewRes> getShortReviewsByMemberId(Long memberId, String cursor, Sort sort, OrderDirection order, int size);
+
     //애니 리뷰 수정
     void update(Long memberId, Long reviewId, ShortReviewReq req);
 
