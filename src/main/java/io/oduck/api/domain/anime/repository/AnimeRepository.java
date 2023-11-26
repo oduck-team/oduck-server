@@ -16,7 +16,7 @@ public interface AnimeRepository extends JpaRepository<Anime,Long>, AnimeReposit
 
     @Query("select a from Anime a where a.id = :id and a.deletedAt is null")
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="3000")})
+    @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value ="3000")})
     Optional<Anime> findByIdForUpdate(@Param("id")Long id);
 
     @Query("select a from Anime a where a.id = :id and a.deletedAt = null and a.isReleased = :isReleased")

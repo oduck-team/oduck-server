@@ -106,6 +106,36 @@ public class ShortReviewServiceImpl implements ShortReviewService{
                    .count(count)
                    .build();
     }
+
+    @Override
+    public SliceResponse<ShortReviewRes> getShortReviewsByMemberId(Long memberId, String cursor,
+        ShortReviewReqDto.Sort sort, OrderDirection order, int size) {
+        Sort sortList = Sort.by(
+            Direction.fromString(order.getOrder()),
+            sort.getSort()
+        );
+
+        if(sort.equals(ShortReviewReqDto.Sort.LIKE_COUNT)  || sort.equals(ShortReviewReqDto.Sort.SCORE)){
+            sortList = sortList.and(Sort.by(Direction.DESC, "createdAt"));
+        }
+
+        Slice<ShortReviewDsl> shortReviews = shortReviewRepository.selectShortReviewsByMemberId(
+            memberId,
+            cursor,
+            applyPageableForNonOffset(
+                size,
+                sortList
+            )
+        );
+
+        List<ShortReviewRes> res = shortReviews.getContent()
+            .stream()
+            .map(ShortReviewRes::of)
+            .toList();
+
+        return SliceResponse.of(shortReviews, res, sort.getSort());
+    }
+
     @Override
     @Transactional
     public void update(Long memberId, Long reviewId, ShortReviewReq req) {

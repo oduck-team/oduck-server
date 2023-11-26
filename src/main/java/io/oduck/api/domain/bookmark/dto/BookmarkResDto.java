@@ -25,7 +25,7 @@ public class BookmarkResDto {
         private Long animeId;
         private String title;
         private String thumbnail;
-        private double avgScore;
+        private Double avgScore;
         private Integer myScore;
         private LocalDateTime createdAt;
 
