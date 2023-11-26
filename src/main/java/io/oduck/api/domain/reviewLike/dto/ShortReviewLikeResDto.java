@@ -11,7 +11,7 @@ public class ShortReviewLikeResDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class HasLikeRes{
-        private boolean hasLike;
+    public static class IsLikeRes{
+        private Boolean isLike;
     }
 }

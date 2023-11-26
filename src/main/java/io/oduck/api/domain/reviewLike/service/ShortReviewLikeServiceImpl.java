@@ -5,7 +5,7 @@ import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.review.repository.ShortReviewRepository;
 import io.oduck.api.domain.reviewLike.dto.ShortReviewLikeReqDto.ShortReviewLikeReq;
-import io.oduck.api.domain.reviewLike.dto.ShortReviewLikeResDto.HasLikeRes;
+import io.oduck.api.domain.reviewLike.dto.ShortReviewLikeResDto.IsLikeRes;
 import io.oduck.api.domain.reviewLike.entity.ShortReviewLike;
 import io.oduck.api.domain.reviewLike.repository.ShortReviewLikeRepository;
 import io.oduck.api.global.exception.NotFoundException;
@@ -48,11 +48,11 @@ public class ShortReviewLikeServiceImpl implements ShortReviewLikeService{
     }
 
     @Override
-    public HasLikeRes checkReviewLike(Long shortReviewId, Long memberId) {
+    public IsLikeRes checkReviewLike(Long shortReviewId, Long memberId) {
         Optional<ShortReviewLike> optionalLike = getShortReviewLike(memberId, shortReviewId);
-        return HasLikeRes
+        return IsLikeRes
                    .builder()
-                   .hasLike(optionalLike.isPresent())
+                   .isLike(optionalLike.isPresent())
                    .build();
     }
 
