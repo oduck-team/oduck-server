@@ -41,25 +41,26 @@ public class ShortReviewServiceImpl implements ShortReviewService{
     @Override
     @Transactional
     public void save(Long memberId, ShortReviewReq shortReviewReq) {
-        ShortReview shortReview = ShortReview
-                                      .builder()
-                                      .content(shortReviewReq.getContent())
-                                      .hasSpoiler(shortReviewReq.isHasSpoiler())
-                                      .build();
 
         //애니 입력
         Anime anime = animeRepository.findByIdForUpdate(shortReviewReq.getAnimeId())
                 .orElseThrow(
                         () -> new NotFoundException("Anime")
                         );
-        shortReview.relateAnime(anime);
 
         //회원 입력
         Member member = memberRepository.findById(memberId)
                             .orElseThrow(
                                 () -> new NotFoundException("Member")
                             );
-        shortReview.relateMember(member);
+
+        ShortReview shortReview = ShortReview
+                .builder()
+                .anime(anime)
+                .member(member)
+                .content(shortReviewReq.getContent())
+                .hasSpoiler(shortReviewReq.isHasSpoiler())
+                .build();
 
         anime.increaseReviewCount();
         shortReviewRepository.save(shortReview);
