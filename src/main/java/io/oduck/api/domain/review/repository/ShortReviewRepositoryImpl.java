@@ -14,6 +14,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.oduck.api.domain.review.dto.ShortReviewDslDto.ShortReviewDsl;
+import io.oduck.api.domain.review.dto.ShortReviewDslDto.ShortReviewDslWithTitle;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,17 +68,17 @@ public class ShortReviewRepositoryImpl implements ShortReviewRepositoryCustom {
     }
 
     @Override
-    public Slice<ShortReviewDsl> selectShortReviewsByMemberId(Long memberId, String cursor,
+    public Slice<ShortReviewDslWithTitle> selectShortReviewsByMemberId(Long memberId, String cursor,
         Pageable pageable) {
         String property = pageable.getSort().get().toList().get(0).getProperty();
-        JPAQuery<ShortReviewDsl> shortReviews = query
+        JPAQuery<ShortReviewDslWithTitle> shortReviews = query
             .select(
                 Projections.constructor(
-                    ShortReviewDsl.class,
+                    ShortReviewDslWithTitle.class,
                     shortReview.id,
                     anime.id,
-                    member.memberProfile.name,
-                    member.memberProfile.thumbnail,
+                    anime.title,
+                    anime.thumbnail,
                     starRating.score,
                     shortReview.content,
                     shortReview.hasSpoiler,
@@ -86,7 +87,6 @@ public class ShortReviewRepositoryImpl implements ShortReviewRepositoryCustom {
                 )
             )
             .from(shortReview)
-            .join(member).on(member.id.eq(shortReview.member.id))
             .join(anime).on(anime.id.eq(shortReview.anime.id))
             .leftJoin(starRating).on(starRating.anime.id.eq(shortReview.anime.id)
                 .and(starRating.member.id.eq(shortReview.member.id)))
