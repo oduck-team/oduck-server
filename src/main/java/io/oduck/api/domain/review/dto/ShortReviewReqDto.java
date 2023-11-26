@@ -33,4 +33,15 @@ public class ShortReviewReqDto {
 
         private final String sort;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public enum SortForProfile{
+        //제목, 최신순, 평점 높은순
+        CREATED_AT("createdAt"),
+        TITLE("title"),
+        SCORE("score");
+
+        private final String sort;
+    }
 }
