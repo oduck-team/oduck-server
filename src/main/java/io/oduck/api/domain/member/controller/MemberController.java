@@ -9,6 +9,7 @@ import io.oduck.api.domain.member.dto.MemberResDto.MemberProfileRes;
 import io.oduck.api.domain.member.service.MemberService;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto;
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewRes;
+import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewResWithTitle;
 import io.oduck.api.domain.review.service.ShortReviewService;
 import io.oduck.api.global.common.OrderDirection;
 import io.oduck.api.global.common.SliceResponse;
@@ -87,11 +88,11 @@ public class MemberController {
     public ResponseEntity<?> getShortReviews(
         @PathVariable("id") @Positive Long id,
         @RequestParam(required = false) String cursor,
-        @RequestParam(required = false, defaultValue = "created_at") ShortReviewReqDto.Sort sort,
+        @RequestParam(required = false, defaultValue = "created_at") ShortReviewReqDto.SortForProfile sort,
         @RequestParam(required = false, defaultValue = "DESC") OrderDirection order,
         @RequestParam(required = false, defaultValue = "10") @Min(1) @Max(100) int size
     ) {
-        SliceResponse<ShortReviewRes> res = shortReviewService.getShortReviewsByMemberId(id, cursor, sort, order, size);
+        SliceResponse<ShortReviewResWithTitle> res = shortReviewService.getShortReviewsByMemberId(id, cursor, sort, order, size);
         return ResponseEntity.ok(res);
     }
 
