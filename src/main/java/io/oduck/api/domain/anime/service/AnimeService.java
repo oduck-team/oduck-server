@@ -1,11 +1,6 @@
 package io.oduck.api.domain.anime.service;
 
 import static io.oduck.api.domain.anime.dto.AnimeReq.PatchAnimeReq;
-import static io.oduck.api.domain.anime.dto.AnimeReq.PatchGenreIdsReq;
-import static io.oduck.api.domain.anime.dto.AnimeReq.PatchOriginalAuthorIdsReq;
-import static io.oduck.api.domain.anime.dto.AnimeReq.PatchSeriesIdReq;
-import static io.oduck.api.domain.anime.dto.AnimeReq.PatchStudioIdsReq;
-import static io.oduck.api.domain.anime.dto.AnimeReq.PatchVoiceActorIdsReq;
 import static io.oduck.api.domain.anime.dto.AnimeReq.PostReq;
 import static io.oduck.api.domain.anime.dto.AnimeReq.Sort;
 import static io.oduck.api.domain.anime.dto.AnimeRes.DetailResult;
@@ -68,41 +63,6 @@ public interface AnimeService {
      * @param patchReq 애니 수정 dto;
      */
     void update(Long animeId, PatchAnimeReq patchReq);
-
-    /**
-     * 애니 원작 작가 수정 로직이다.
-     * @param animeId 애니의 고유 식별자;
-     * @param patchReq 애니 원작 작가 수정 dto;
-     */
-    void updateAnimeOriginalAuthors(Long animeId, PatchOriginalAuthorIdsReq patchReq);
-
-    /**
-     * 애니 스튜디오 수정 로직이다.
-     * @param animeId 애니의 고유 식별자;
-     * @param patchReq 애니 스튜디오 수정 dto;
-     */
-    void updateAnimeStudios(Long animeId, PatchStudioIdsReq patchReq);
-
-    /**
-     * 애니 성우 수정 로직이다.
-     * @param animeId 애니의 고유 식별자;
-     * @param patchReq 애니 성우 수정 dto;
-     */
-    void updateAnimeVoiceActors(Long animeId, PatchVoiceActorIdsReq patchReq);
-
-    /**
-     * 애니 장르 수정 로직이다.
-     * @param animeId 애니의 고유 식별자;
-     * @param patchReq 애니 장르 수정 dto;
-     */
-    void updateAnimeGenres(Long animeId, PatchGenreIdsReq patchReq);
-
-    /**
-     * 애니 시리즈 수정 로직이다.
-     * @param animeId 애니의 고유 식별자;
-     * @param patchReq 애니 시리즈 수정 dto;
-     */
-    void updateSeries(Long animeId, PatchSeriesIdReq patchReq);
 
     /**
      * 애니 삭제 로직이다.

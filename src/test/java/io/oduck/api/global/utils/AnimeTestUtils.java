@@ -27,7 +27,9 @@ public class AnimeTestUtils {
     public static PatchAnimeReq createPatchAnimeRequest(){
         return new PatchAnimeReq(
             getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(),
-            getThumbnail(), getYear(), getQuarter(), getRating(), getStatus(), isReleased());
+            getThumbnail(), getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+            getOriginalAuthorIds(), getStudioIds(), getVoiceActorReqs(), getGenreIds(), getSeriesId()
+        );
     }
 
     public static long getSeriesId() {

@@ -1,8 +1,27 @@
 package io.oduck.api.e2e.admin;
 
+import static io.oduck.api.global.config.RestDocsConfig.field;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.snippet.Attributes.attributes;
+import static org.springframework.restdocs.snippet.Attributes.key;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.google.gson.Gson;
-import io.oduck.api.domain.anime.dto.AnimeReq.*;
-import io.oduck.api.domain.anime.dto.AnimeVoiceActorReq;
+import io.oduck.api.domain.anime.dto.AnimeReq.PatchAnimeReq;
+import io.oduck.api.domain.anime.dto.AnimeReq.PostReq;
 import io.oduck.api.domain.genre.dto.GenreReq;
 import io.oduck.api.domain.originalAuthor.dto.OriginalAuthorReq;
 import io.oduck.api.domain.originalAuthor.dto.OriginalAuthorReq.PatchReq;
@@ -27,21 +46,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
-import static io.oduck.api.global.config.RestDocsConfig.field;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
-import static org.springframework.restdocs.snippet.Attributes.attributes;
-import static org.springframework.restdocs.snippet.Attributes.key;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
@@ -160,7 +164,6 @@ public class AdminControllerTest {
                     )
                 ));
         }
-        //TODO : 애니 등록 실패 시
 
         @Test
         @DisplayName("조회 성공 시 Http Status 200 반환")
@@ -363,206 +366,44 @@ public class AdminControllerTest {
                                     fieldWithPath("isReleased")
                                         .type(JsonFieldType.BOOLEAN)
                                         .attributes(field("constraints", "true, false만 허용합니다. null일 시 false로 초기화합니다."))
-                                        .description("클라이언트가 애니를 열람할 수 있는지 여부")
-                            )
-                    ));
-
-        }
-        //TODO: 수정 실패 시
-
-        @Test
-        @DisplayName("애니 원작 작가 수정 성공 시 Http Status 204 반환")
-        void patchAnimeOriginalAuthors() throws Exception {
-            //given
-            Long animeId = 1L;
-            List<Long> originalAuthorIds = AnimeTestUtils.getOriginalAuthorIds();
-
-            PatchOriginalAuthorIdsReq req = new PatchOriginalAuthorIdsReq(originalAuthorIds);
-            String content = gson.toJson(req);
-
-            //when
-            ResultActions actions = mockMvc.perform(
-                    patch(ADMIN_URL+"/animes/{animeId}/original-authors", animeId)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .content(content)
-            );
-
-            //then
-            actions
-                    .andDo(document("patchAnimeOriginalAuthors/success",
-                            preprocessRequest(prettyPrint()),
-                            preprocessResponse(prettyPrint()),
-                            pathParameters(
-                                    parameterWithName("animeId").description("애니의 식별자")
-                            ),
-                            requestFields(attributes(key("title").value("Fields for anime creation")),
+                                        .description("클라이언트가 애니를 열람할 수 있는지 여부"),
                                     fieldWithPath("originalAuthorIds")
-                                            .type(JsonFieldType.ARRAY)
-                                            .description("원작 작가들 아이디 리스트")
-                                            .attributes(field("constraints", "List만 허용합니다."))
-                                            .optional()
-                            )
-                    ));
-
-        }
-        //TODO: 수정 실패 시
-
-        @Test
-        @DisplayName("애니 원작 작가 수정 성공 시 Http Status 204 반환")
-        void patchAnimeStudios() throws Exception {
-            //given
-            Long animeId = 1L;
-            List<Long> studioIds = AnimeTestUtils.getStudioIds();
-
-            PatchStudioIdsReq req = new PatchStudioIdsReq(studioIds);
-            String content = gson.toJson(req);
-
-            //when
-            ResultActions actions = mockMvc.perform(
-                    patch(ADMIN_URL+"/animes/{animeId}/studios", animeId)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .content(content)
-            );
-
-            //then
-            actions
-                    .andDo(document("patchAnimeStudios/success",
-                            preprocessRequest(prettyPrint()),
-                            preprocessResponse(prettyPrint()),
-                            pathParameters(
-                                    parameterWithName("animeId").description("애니의 식별자")
-                            ),
-                            requestFields(attributes(key("title").value("Fields for anime creation")),
+                                        .type(JsonFieldType.ARRAY)
+                                        .description("원작 작가들 아이디 리스트")
+                                        .attributes(field("constraints", "List만 허용합니다."))
+                                        .optional(),
                                     fieldWithPath("studioIds")
-                                            .type(JsonFieldType.ARRAY)
-                                            .description("스튜디오 아이디 리스트")
-                                            .attributes(field("constraints", "List만 허용합니다."))
-                                            .optional()
-                            )
-                    ));
-
-        }
-        //TODO: 수정 실패 시
-
-        @Test
-        @DisplayName("애니 성우 수정 성공 시 Http Status 204 반환")
-        void patchAnimeVoiceActors() throws Exception {
-            //given
-            Long animeId = 1L;
-            List<AnimeVoiceActorReq> voiceActors = AnimeTestUtils.getVoiceActorReqs();
-
-            PatchVoiceActorIdsReq req = new PatchVoiceActorIdsReq(voiceActors);
-            String content = gson.toJson(req);
-
-            //when
-            ResultActions actions = mockMvc.perform(
-                    put(ADMIN_URL+"/animes/{animeId}/voice-actors", animeId)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .content(content)
-            );
-
-            //then
-            actions
-                    .andDo(document("patchAnimeVoiceActors/success",
-                            preprocessRequest(prettyPrint()),
-                            preprocessResponse(prettyPrint()),
-                            pathParameters(
-                                    parameterWithName("animeId").description("애니의 식별자")
-                            ),
-                            requestFields(attributes(key("title").value("Fields for anime creation")),
+                                        .type(JsonFieldType.ARRAY)
+                                        .description("스튜디오 아이디 리스트")
+                                        .attributes(field("constraints", "List만 허용합니다."))
+                                        .optional(),
                                     fieldWithPath("voiceActors")
-                                            .type(JsonFieldType.ARRAY)
-                                            .description("애니 성우 리스트")
-                                            .attributes(field("constraints", "List만 허용합니다."))
-                                            .optional(),
+                                        .type(JsonFieldType.ARRAY)
+                                        .description("애니 성우 리스트")
+                                        .attributes(field("constraints", "List만 허용합니다."))
+                                        .optional(),
                                     fieldWithPath("voiceActors[].id")
-                                            .type(JsonFieldType.NUMBER)
-                                            .description("성우의 아이디")
-                                            .attributes(field("constraints", "숫자만 허용합니다.")),
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("성우의 아이디")
+                                        .attributes(field("constraints", "숫자만 허용합니다.")),
                                     fieldWithPath("voiceActors[].part")
-                                            .type(JsonFieldType.STRING)
-                                            .description("성우의 역할")
-                                            .attributes(field("constraints", "100자 이하만 허용합니다."))
-                            )
-                    ));
-        }
-        //TODO: 수정 실패 시
-
-        @Test
-        @DisplayName("애니 장르 수정 성공 시 Http Status 204 반환")
-        void patchAnimeGenres() throws Exception {
-            //given
-            Long animeId = 1L;
-            List<Long> genreIds = AnimeTestUtils.getGenreIds();
-
-            PatchGenreIdsReq req = new PatchGenreIdsReq(genreIds);
-            String content = gson.toJson(req);
-
-            //when
-            ResultActions actions = mockMvc.perform(
-                    put(ADMIN_URL+"/animes/{animeId}/genres", animeId)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .content(content)
-            );
-
-            //then
-            actions
-                    .andDo(document("patchAnimeGenres/success",
-                            preprocessRequest(prettyPrint()),
-                            preprocessResponse(prettyPrint()),
-                            pathParameters(
-                                    parameterWithName("animeId").description("애니의 식별자")
-                            ),
-                            requestFields(attributes(key("title").value("Fields for anime creation")),
+                                        .type(JsonFieldType.STRING)
+                                        .description("성우의 역할")
+                                        .attributes(field("constraints", "100자 이하만 허용합니다.")),
                                     fieldWithPath("genreIds")
-                                            .type(JsonFieldType.ARRAY)
-                                            .description("애니 장르 아이디 리스트")
-                                            .attributes(field("constraints", "List만 허용합니다."))
-                                            .optional()
-                            )
-                    ));
-        }
-        //TODO: 수정 실패 시
-
-        @Test
-        @DisplayName("시리즈 수정 성공 시 Http Status 204 반환")
-        void patchAnimeSeries() throws Exception {
-            //given
-            Long animeId = 1L;
-            PatchSeriesIdReq req = new PatchSeriesIdReq(AnimeTestUtils.getSeriesId());
-            String content = gson.toJson(req);
-
-            //when
-            ResultActions actions = mockMvc.perform(
-                    patch(ADMIN_URL+"/animes/{animeId}/series", animeId)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .content(content)
-            );
-
-            //then
-            actions
-                    .andExpect(status().isNoContent())
-                    .andDo(document("patchAnimeSeries/success",
-                            preprocessRequest(prettyPrint()),
-                            preprocessResponse(prettyPrint()),
-                            pathParameters(
-                                    parameterWithName("animeId").description("애니의 식별자")
-                            ),
-                            requestFields(attributes(key("title").value("Fields for anime creation")),
+                                        .type(JsonFieldType.ARRAY)
+                                        .description("애니 장르 아이디 리스트")
+                                        .attributes(field("constraints", "List만 허용합니다."))
+                                        .optional(),
                                     fieldWithPath("seriesId")
-                                            .type(JsonFieldType.NUMBER)
-                                            .description("애니 시리즈 아이디")
-                                            .attributes(field("constraints", "숫자만 허용합니다."))
-                                            .optional()
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("애니 시리즈 아이디")
+                                        .attributes(field("constraints", "숫자만 허용합니다."))
+                                        .optional()
+
                             )
                     ));
         }
-        //TODO: 수정 실패 시
 
         @Test
         @DisplayName("애니 삭제 성공 시 Http Status 204 반환")
@@ -1037,7 +878,6 @@ public class AdminControllerTest {
         }
     }
 
-
     @Nested
     @DisplayName("장르")
     class GenreTest{
@@ -1187,7 +1027,6 @@ public class AdminControllerTest {
         }
     }
 
-
     @Nested
     @DisplayName("시리즈")
     class SeriesTest{
@@ -1336,5 +1175,4 @@ public class AdminControllerTest {
                 ));
         }
     }
-
 }
