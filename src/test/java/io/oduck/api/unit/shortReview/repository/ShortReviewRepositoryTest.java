@@ -62,13 +62,6 @@ public class ShortReviewRepositoryTest {
         @DisplayName("리뷰 등록 성공")
         void saveShortReview(){
             //given
-            //리뷰 생성
-            ShortReview shortReview = ShortReview
-                                          .builder()
-                                          .content("애니리뷰내용")
-                                          .hasSpoiler(false)
-                                          .build();
-
             //회원 생성
             Member member = Member.builder()
                                 .build();
@@ -89,9 +82,14 @@ public class ShortReviewRepositoryTest {
 
             Anime anime = animeRepository.saveAndFlush(createAnime);
             Long animeId = anime.getId();
-
-            shortReview.relateMember(member);
-            shortReview.relateAnime(anime);
+            //리뷰 생성
+            ShortReview shortReview = ShortReview
+                    .builder()
+                    .member(member)
+                    .anime(anime)
+                    .content("애니리뷰내용")
+                    .hasSpoiler(false)
+                    .build();
 
             //when
             ShortReview saveShortReview = shortReviewRepository.save(shortReview);
