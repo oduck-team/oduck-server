@@ -94,10 +94,6 @@ public class ShortReviewControllerTest {
                             .type(JsonFieldType.NUMBER)
                             .attributes(field("constraints","애니메 ID, NotNull, Min(1)"))
                             .description("리뷰를 등록할 애니 고유 식별 번호"),
-                        fieldWithPath("name")
-                            .type(JsonFieldType.STRING)
-                            .attributes(field("constraints", "String만 가능합니다"))
-                            .description("리뷰를 등록할 회원의 이름"),
                         fieldWithPath("hasSpoiler")
                             .type(JsonFieldType.BOOLEAN)
                             .attributes(field("constraints", "true 또는 false."))
@@ -447,10 +443,6 @@ public class ShortReviewControllerTest {
                             .type(JsonFieldType.NUMBER)
                             .attributes(field("constraints","애니메 ID, NotNull, Min(1)"))
                             .description("리뷰를 등록할 애니 고유 식별 번호"),
-                        fieldWithPath("name")
-                            .type(JsonFieldType.STRING)
-                            .attributes(field("constraints", "String만 가능합니다"))
-                            .description("리뷰를 등록할 회원의 이름"),
                         fieldWithPath("hasSpoiler")
                             .type(JsonFieldType.BOOLEAN)
                             .attributes(field("constraints", "true 또는 false."))
