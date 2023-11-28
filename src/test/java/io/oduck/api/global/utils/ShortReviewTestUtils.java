@@ -11,14 +11,14 @@ public class ShortReviewTestUtils {
 
     public static ShortReviewReq createPostShoreReviewReq(){
         return new ShortReviewReq(
-            getAnimeId(),getName(),
+            getAnimeId(),
             isHasSpoiler(),getContent()
         );
     }
 
     public static ShortReviewReq createPatchShortReview(){
         return new ShortReviewReq(
-            getAnimeId(), getName(), isHasSpoiler(),updateContent()
+            getAnimeId(), isHasSpoiler(),updateContent()
         );
     }
 
