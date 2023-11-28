@@ -1,11 +1,6 @@
 package io.oduck.api.domain.anime.service;
 
 import static io.oduck.api.domain.anime.dto.AnimeReq.PatchAnimeReq;
-import static io.oduck.api.domain.anime.dto.AnimeReq.PatchGenreIdsReq;
-import static io.oduck.api.domain.anime.dto.AnimeReq.PatchOriginalAuthorIdsReq;
-import static io.oduck.api.domain.anime.dto.AnimeReq.PatchSeriesIdReq;
-import static io.oduck.api.domain.anime.dto.AnimeReq.PatchStudioIdsReq;
-import static io.oduck.api.domain.anime.dto.AnimeReq.PatchVoiceActorIdsReq;
 import static io.oduck.api.domain.anime.dto.AnimeReq.PostReq;
 import static io.oduck.api.domain.anime.dto.AnimeReq.Sort;
 import static io.oduck.api.domain.anime.dto.AnimeRes.DetailResult;
@@ -203,31 +198,12 @@ public class AnimeServiceImpl implements AnimeService{
     public void update(Long animeId, PatchAnimeReq patchReq) {
         Anime anime = findAnime(animeId);
 
-        anime.update(
-            patchReq.getTitle(), patchReq.getSummary(), patchReq.getBroadcastType(), patchReq.getEpisodeCount(), patchReq.getThumbnail(), patchReq.getYear(),
-            patchReq.getQuarter(), patchReq.getRating(), patchReq.getStatus(), patchReq.isReleased()
-        );
-    }
-
-    @Override
-    public void updateAnimeOriginalAuthors(Long animeId,
-        PatchOriginalAuthorIdsReq patchReq) {
-
-        Anime anime = findAnime(animeId);
-
         List<Long> originalAuthorIds = patchReq.getOriginalAuthorIds();
         List<OriginalAuthor> originalAuthors = originalAuthorRepository.findAllById(originalAuthorIds);
-
         List<AnimeOriginalAuthor> animeOriginalAuthors = originalAuthors.stream()
             .map(AnimeOriginalAuthor::createAnimeOriginalAuthor)
             .collect(Collectors.toList());
 
-        anime.updateAnimeOriginalAuthors(animeOriginalAuthors);
-    }
-
-    @Override
-    public void updateAnimeStudios(Long animeId, PatchStudioIdsReq patchReq) {
-        Anime anime = findAnime(animeId);
         List<Long> studioIds = patchReq.getStudioIds();
 
         List<Studio> studios = studioRepository.findAllById(studioIds);
@@ -235,24 +211,14 @@ public class AnimeServiceImpl implements AnimeService{
             .map(AnimeStudio::createAnimeStudio)
             .collect(Collectors.toList());
 
-        anime.updateAnimeStudios(animeStudios);
-    }
-
-    @Override
-    public void updateAnimeVoiceActors(Long animeId, PatchVoiceActorIdsReq patchReq) {
-        Anime anime = findAnime(animeId);
-
-        // 애니에 참여한 성우 리스트
         List<AnimeVoiceActorReq> voiceActorDtoList = patchReq.getVoiceActors();
 
-        // 성우의 아이디 리스트 구하기
         List<Long> voiceActorIds = voiceActorDtoList.stream()
             .map(AnimeVoiceActorReq::getId)
             .collect(Collectors.toList());
 
         List<VoiceActor> voiceActors = voiceActorRepository.findAllById(voiceActorIds);
 
-        // Id와 Part로 구성된 map 생성
         Map<Long, String> voiceActorDtoMap = voiceActorDtoList.stream()
             .collect(Collectors.toMap(AnimeVoiceActorReq::getId, AnimeVoiceActorReq::getPart));
 
@@ -261,13 +227,6 @@ public class AnimeServiceImpl implements AnimeService{
             .map(voiceActor -> AnimeVoiceActor.createAnimeVoiceActor(voiceActorDtoMap.get(voiceActor.getId()), voiceActor))
             .collect(Collectors.toList());
 
-        anime.updateAnimeVoiceActors(animeVoiceActors);
-    }
-
-    @Override
-    public void updateAnimeGenres(Long animeId, PatchGenreIdsReq patchReq) {
-        Anime anime = findAnime(animeId);
-
         List<Long> genreIds = patchReq.getGenreIds();
         List<Genre> genres = genreRepository.findAllById(genreIds);
 
@@ -275,18 +234,14 @@ public class AnimeServiceImpl implements AnimeService{
             .map(AnimeGenre::createAnimeGenre)
             .collect(Collectors.toList());
 
-        anime.updateAnimeGenre(animeGenres);
-    }
-
-    @Override
-    public void updateSeries(Long animeId, PatchSeriesIdReq patchReq) {
-        Anime anime = findAnime(animeId);
-
         Long seriesId = patchReq.getSeriesId();
         Series series = seriesRepository.findById(seriesId)
             .orElseThrow(() -> new NotFoundException("Series"));
 
-        anime.update(series);
+        anime.update(
+            patchReq.getTitle(), patchReq.getSummary(), patchReq.getBroadcastType(), patchReq.getEpisodeCount(), patchReq.getThumbnail(), patchReq.getYear(),
+            patchReq.getQuarter(), patchReq.getRating(), patchReq.getStatus(), patchReq.isReleased(), animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, series
+        );
     }
 
     @Override

@@ -13,7 +13,6 @@ import static io.oduck.api.global.utils.AnimeTestUtils.getSeriesId;
 import static io.oduck.api.global.utils.AnimeTestUtils.getStudioIds;
 import static io.oduck.api.global.utils.AnimeTestUtils.getStudios;
 import static io.oduck.api.global.utils.AnimeTestUtils.getVoiceActorIds;
-import static io.oduck.api.global.utils.AnimeTestUtils.getVoiceActorReqs;
 import static io.oduck.api.global.utils.AnimeTestUtils.getVoiceActors;
 import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
 import static org.assertj.core.api.Assertions.assertThatNoException;
@@ -26,14 +25,8 @@ import static org.mockito.Mockito.verify;
 
 import io.oduck.api.domain.anime.dto.AnimeReq.EpisodeCountEnum;
 import io.oduck.api.domain.anime.dto.AnimeReq.PatchAnimeReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchGenreIdsReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchOriginalAuthorIdsReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchSeriesIdReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchStudioIdsReq;
-import io.oduck.api.domain.anime.dto.AnimeReq.PatchVoiceActorIdsReq;
 import io.oduck.api.domain.anime.dto.AnimeReq.PostReq;
 import io.oduck.api.domain.anime.dto.AnimeReq.Sort;
-import io.oduck.api.domain.anime.dto.AnimeVoiceActorReq;
 import io.oduck.api.domain.anime.dto.SearchFilterDsl;
 import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.entity.AnimeGenre;
@@ -64,7 +57,6 @@ import io.oduck.api.global.utils.AnimeTestUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -255,9 +247,11 @@ public class AnimeServiceTest {
         void updateAnime(){
             //given
             Long animeId = 1L;
+            Long seriesId = 1L;
             PatchAnimeReq patchAnimeRequest = createPatchAnimeRequest();
 
             given(animeRepository.findById(animeId)).willReturn(Optional.ofNullable(anime));
+            given(seriesRepository.findById(seriesId)).willReturn(Optional.ofNullable(series));
 
             //when
             animeService.update(animeId, patchAnimeRequest);
@@ -267,124 +261,6 @@ public class AnimeServiceTest {
 
             //verify
             verify(animeRepository, times(1)).findById(anyLong());
-        }
-
-        @Test
-        @DisplayName("애니의 원작 작가 수정")
-        void updateAnimeAuthor(){
-            //given
-            Long animeId = 1L;
-
-            List originalAuthorIds = getOriginalAuthorIds();
-            PatchOriginalAuthorIdsReq patchReq = new PatchOriginalAuthorIdsReq(originalAuthorIds);
-
-            given(animeRepository.findById(animeId)).willReturn(Optional.ofNullable(anime));
-            given(originalAuthorRepository.findAllById(originalAuthorIds)).willReturn(originalAuthors);
-
-            //when
-            animeService.updateAnimeOriginalAuthors(animeId, patchReq);
-
-            //then
-            assertThatNoException();
-
-            //verify
-            verify(animeRepository, times(1)).findById(anyLong());
-            verify(originalAuthorRepository, times(1)).findAllById(anyList());
-        }
-
-        @Test
-        @DisplayName("애니의 스튜디오 수정")
-        void updateAnimeStudios(){
-            //given
-            Long animeId = 1L;
-
-            List studioIds = getStudioIds();
-            PatchStudioIdsReq patchReq = new PatchStudioIdsReq(studioIds);
-
-            given(animeRepository.findById(animeId)).willReturn(Optional.ofNullable(anime));
-            given(studioRepository.findAllById(studioIds)).willReturn(studios);
-
-            //when
-            animeService.updateAnimeStudios(animeId, patchReq);
-
-            //then
-            assertThatNoException();
-
-            //verify
-            verify(animeRepository, times(1)).findById(anyLong());
-            verify(studioRepository, times(1)).findAllById(anyList());
-        }
-
-        @Test
-        @DisplayName("애니의 성우 수정")
-        void updateAnimeVoiceActors(){
-            //given
-            Long animeId = 1L;
-
-            List<AnimeVoiceActorReq> patchReqs = getVoiceActorReqs();
-            List<Long> voiceActorIds = patchReqs.stream().map(AnimeVoiceActorReq::getId)
-                .collect(Collectors.toList());
-
-            PatchVoiceActorIdsReq patchReq = new PatchVoiceActorIdsReq(patchReqs);
-
-            given(animeRepository.findById(animeId)).willReturn(Optional.ofNullable(anime));
-            given(voiceActorRepository.findAllById(voiceActorIds)).willReturn(voiceActors);
-
-            //when
-            animeService.updateAnimeVoiceActors(animeId, patchReq);
-
-            //then
-            assertThatNoException();
-
-            //verify
-            verify(animeRepository, times(1)).findById(anyLong());
-            verify(voiceActorRepository, times(1)).findAllById(anyList());
-        }
-
-        @Test
-        @DisplayName("애니의 장르 수정")
-        void updateAnimeGenres(){
-            //given
-            Long animeId = 1L;
-
-            List genreIds = getGenreIds();
-            PatchGenreIdsReq patchReq = new PatchGenreIdsReq(genreIds);
-
-            given(animeRepository.findById(animeId)).willReturn(Optional.ofNullable(anime));
-            given(genreRepository.findAllById(genreIds)).willReturn(genres);
-
-            //when
-            animeService.updateAnimeGenres(animeId, patchReq);
-
-            //then
-            assertThatNoException();
-
-            //verify
-            verify(animeRepository, times(1)).findById(anyLong());
-            verify(genreRepository, times(1)).findAllById(anyList());
-        }
-
-        @Test
-        @DisplayName("애니의 시리즈 수정")
-        void updateSeries(){
-            //given
-            Long animeId = 1L;
-
-            Long seriesId = getSeriesId();
-            PatchSeriesIdReq patchReq = new PatchSeriesIdReq(seriesId);
-
-            given(animeRepository.findById(animeId)).willReturn(Optional.ofNullable(anime));
-            given(seriesRepository.findById(seriesId)).willReturn(Optional.ofNullable(series));
-
-            //when
-            animeService.updateSeries(animeId, patchReq);
-
-            //then
-            assertThatNoException();
-
-            //verify
-            verify(animeRepository, times(1)).findById(anyLong());
-            verify(seriesRepository, times(1)).findById(anyLong());
         }
     }
 
