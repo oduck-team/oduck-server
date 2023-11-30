@@ -12,7 +12,7 @@ import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.review.repository.ShortReviewRepository;
 import io.oduck.api.domain.reviewLike.dto.ShortReviewLikeReqDto.ShortReviewLikeReq;
-import io.oduck.api.domain.reviewLike.dto.ShortReviewLikeResDto.HasLikeRes;
+import io.oduck.api.domain.reviewLike.dto.ShortReviewLikeResDto.IsLikeRes;
 import io.oduck.api.domain.reviewLike.entity.ShortReviewLike;
 import io.oduck.api.domain.reviewLike.repository.ShortReviewLikeRepository;
 import io.oduck.api.domain.reviewLike.service.ShortReviewLikeServiceImpl;
@@ -103,10 +103,10 @@ public class ShortReviewLikeServiceTest {
         void checkShortReviewLikeTrue(){
             given(shortReviewLikeRepository.findByMemberIdAndShortReviewId(member.getId(), shortReview.getId())).willReturn(Optional.of(shortReviewLike));
 
-            HasLikeRes hasLikeRes = shortReviewLikeService.checkReviewLike(shortReview.getId(), member.getId());
+            IsLikeRes hasLikeRes = shortReviewLikeService.checkReviewLike(shortReview.getId(), member.getId());
 
             assertNotNull(hasLikeRes);
-            assertTrue(hasLikeRes.isHasLike());
+            assertTrue(hasLikeRes.getIsLike());
         }
 
         @Test
@@ -114,10 +114,10 @@ public class ShortReviewLikeServiceTest {
         void checkShortReviewLikeFalse(){
             given(shortReviewLikeRepository.findByMemberIdAndShortReviewId(member.getId(), shortReview.getId())).willReturn(Optional.empty());
 
-            HasLikeRes hasLikeRes = shortReviewLikeService.checkReviewLike(shortReview.getId(), member.getId());
+            IsLikeRes hasLikeRes = shortReviewLikeService.checkReviewLike(shortReview.getId(), member.getId());
 
             assertNotNull(hasLikeRes);
-            assertFalse(hasLikeRes.isHasLike());
+            assertFalse(hasLikeRes.getIsLike());
         }
     }
 }
