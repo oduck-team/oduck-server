@@ -167,7 +167,7 @@ public class ShortReviewLikeControllerTest {
             //then
             actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.hasLike").exists())
+                .andExpect(jsonPath("$.isLike").exists())
                 .andDo(document("likes/shortReview/checkLike/success",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -181,7 +181,7 @@ public class ShortReviewLikeControllerTest {
                                 .description("짧은 리뷰 고유 식별자")
                         ),
                         responseFields(
-                            fieldWithPath("hasLike")
+                            fieldWithPath("isLike")
                                 .type(JsonFieldType.BOOLEAN)
                                 .description("짧은 리뷰 좋아요 존재 시 true, 부재 시 false"))
                     )
