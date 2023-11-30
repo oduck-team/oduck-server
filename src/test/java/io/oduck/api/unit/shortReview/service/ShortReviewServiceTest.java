@@ -133,8 +133,10 @@ public class ShortReviewServiceTest {
             Long reviewId = 1L;
             Long memberId = 1L;
             ShortReviewReq patchShortReviewReq = createPatchShortReview();
+            Anime anime = createAnime();
 
             given(shortReviewRepository.findById(reviewId)).willReturn(Optional.ofNullable(shortReview));
+            given(animeRepository.findByIdForUpdate(reviewId)).willReturn(Optional.of(anime));
 
             //when
             shortReviewService.update(memberId, reviewId, patchShortReviewReq);
