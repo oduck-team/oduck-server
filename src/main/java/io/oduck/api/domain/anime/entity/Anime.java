@@ -258,7 +258,9 @@ public class Anime extends BaseEntity {
   }
 
   public void update(String title, String summary, BroadcastType broadcastType, int episodeCount,
-      String thumbnail, int year, Quarter quarter, Rating rating, Status status, boolean isReleased){
+      String thumbnail, int year, Quarter quarter, Rating rating, Status status, boolean isReleased,
+      List<AnimeOriginalAuthor> animeOriginalAuthors, List<AnimeStudio> animeStudios,
+      List<AnimeVoiceActor> animeVoiceActors, List<AnimeGenre> animeGenres, Series series){
     this.title = title;
     this.summary = summary;
     this.broadcastType = broadcastType;
@@ -269,9 +271,10 @@ public class Anime extends BaseEntity {
     this.rating = rating;
     this.status = status;
     this.isReleased = isReleased;
-  }
-
-  public void update(Series series){
+    this.animeOriginalAuthors = animeOriginalAuthors;
+    this.animeStudios = animeStudios;
+    this.animeVoiceActors = animeVoiceActors;
+    this.animeGenres = animeGenres;
     this.series = series;
   }
 

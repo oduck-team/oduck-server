@@ -44,34 +44,36 @@ public class ShortReviewServiceImpl implements ShortReviewService{
     @Override
     @Transactional
     public void save(Long memberId, ShortReviewReq shortReviewReq) {
-        ShortReview shortReview = ShortReview
-                                      .builder()
-                                      .content(shortReviewReq.getContent())
-                                      .hasSpoiler(shortReviewReq.isHasSpoiler())
-                                      .build();
 
         //애니 입력
         Anime anime = animeRepository.findByIdForUpdate(shortReviewReq.getAnimeId())
-                             .orElseThrow(
-                                 () -> new NotFoundException("Anime")
-                             );
-        shortReview.relateAnime(anime);
+                .orElseThrow(
+                        () -> new NotFoundException("Anime")
+                        );
 
         //회원 입력
         Member member = memberRepository.findById(memberId)
                             .orElseThrow(
                                 () -> new NotFoundException("Member")
                             );
-        shortReview.relateMember(member);
 
-        ShortReview saveShortReview = shortReviewRepository.save(shortReview);
+        ShortReview shortReview = ShortReview
+                .builder()
+                .anime(anime)
+                .member(member)
+                .content(shortReviewReq.getContent())
+                .hasSpoiler(shortReviewReq.isHasSpoiler())
+                .build();
+
         anime.increaseReviewCount();
+        shortReviewRepository.save(shortReview);
 
         //log.info("ShortReview Crated! {}", saveShortReview.getId());
     }
 
     @Override
-    public SliceResponse<ShortReviewRes> getShortReviews(Long animeId, String cursor, ShortReviewReqDto.Sort sort, OrderDirection order, int size) {
+    @Transactional
+    public SliceResponse<ShortReviewRes> getShortReviews(Long animeId, String cursor,ShortReviewReqDto.Sort sort, OrderDirection order, int size) {
         Sort sortList = Sort.by(
             Direction.fromString(order.getOrder()),
             sort.getSort()
@@ -138,9 +140,17 @@ public class ShortReviewServiceImpl implements ShortReviewService{
     }
 
     @Override
+    @Transactional
     public void update(Long memberId, Long reviewId, ShortReviewReq req) {
         ShortReview findShortReview = getShortReview(reviewId);
         Long findMemberId = findShortReview.getMember().getId();
+
+        Anime findAnime = animeRepository.findByIdForUpdate(req.getAnimeId())
+                .orElseThrow(
+                        () -> new NotFoundException("Anime")
+                );
+        findAnime.decreaseReviewCount();
+
         //리뷰 작성자 인지 확인
         Optional
             .ofNullable(findMemberId)
@@ -153,6 +163,8 @@ public class ShortReviewServiceImpl implements ShortReviewService{
                     findShortReview.updateSpoiler(req.isHasSpoiler());
                 }
             );
+        findAnime.increaseReviewCount();
+        shortReviewRepository.save(findShortReview);
     }
 
 
