@@ -7,11 +7,14 @@ import io.oduck.api.domain.anime.repository.AnimeRepository;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.domain.review.dto.ShortReviewDslDto.ShortReviewDsl;
+import io.oduck.api.domain.review.dto.ShortReviewDslDto.ShortReviewDslWithTitle;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto.ShortReviewReq;
 
+import io.oduck.api.domain.review.dto.ShortReviewReqDto.SortForProfile;
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewCountRes;
 import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewRes;
+import io.oduck.api.domain.review.dto.ShortReviewResDto.ShortReviewResWithTitle;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.review.repository.ShortReviewRepository;
 import io.oduck.api.global.common.OrderDirection;
@@ -108,18 +111,18 @@ public class ShortReviewServiceImpl implements ShortReviewService{
     }
 
     @Override
-    public SliceResponse<ShortReviewRes> getShortReviewsByMemberId(Long memberId, String cursor,
-        ShortReviewReqDto.Sort sort, OrderDirection order, int size) {
+    public SliceResponse<ShortReviewResWithTitle> getShortReviewsByMemberId(Long memberId, String cursor,
+        ShortReviewReqDto.SortForProfile sort, OrderDirection order, int size) {
         Sort sortList = Sort.by(
             Direction.fromString(order.getOrder()),
             sort.getSort()
         );
 
-        if(sort.equals(ShortReviewReqDto.Sort.LIKE_COUNT)  || sort.equals(ShortReviewReqDto.Sort.SCORE)){
+        if(sort.equals(SortForProfile.TITLE)  || sort.equals(SortForProfile.SCORE)){
             sortList = sortList.and(Sort.by(Direction.DESC, "createdAt"));
         }
 
-        Slice<ShortReviewDsl> shortReviews = shortReviewRepository.selectShortReviewsByMemberId(
+        Slice<ShortReviewDslWithTitle> shortReviews = shortReviewRepository.selectShortReviewsByMemberId(
             memberId,
             cursor,
             applyPageableForNonOffset(
@@ -128,9 +131,9 @@ public class ShortReviewServiceImpl implements ShortReviewService{
             )
         );
 
-        List<ShortReviewRes> res = shortReviews.getContent()
+        List<ShortReviewResWithTitle> res = shortReviews.getContent()
             .stream()
-            .map(ShortReviewRes::of)
+            .map(ShortReviewResWithTitle::of)
             .toList();
 
         return SliceResponse.of(shortReviews, res, sort.getSort());
