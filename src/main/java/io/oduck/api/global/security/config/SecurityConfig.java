@@ -48,56 +48,68 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // 헤더 보안 설정
         http
-            .headers((headers) ->
-                headers
-                    .contentTypeOptions(withDefaults())
-                    .xssProtection(withDefaults())
-                    .cacheControl(withDefaults())
-                    .httpStrictTransportSecurity(withDefaults())
-                    .frameOptions(withDefaults())
-            );
+                .headers((headers) ->
+                        headers
+                                .contentTypeOptions(withDefaults())
+                                .xssProtection(withDefaults())
+                                .cacheControl(withDefaults())
+                                .httpStrictTransportSecurity(withDefaults())
+                                .frameOptions(withDefaults())
+                );
 
         // csrf 비활성, cors 기본 설정
         http
-            .csrf(AbstractHttpConfigurer::disable)
-            .cors(withDefaults());
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(withDefaults());
 
         // form 로그인 비활성, httpBasic 비활성
         http
-            .formLogin(AbstractHttpConfigurer::disable)
-            .httpBasic(AbstractHttpConfigurer::disable);
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable);
 
         // 세션 설정
         http
-            .sessionManagement((sessionManagement) ->
-                sessionManagement
-                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-            );
+                .sessionManagement((sessionManagement) ->
+                        sessionManagement
+                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                );
 
         // 인가 설정
         http
-            .authorizeHttpRequests((authorizeRequests) ->
-                    authorizeRequests
-                        // .requestMatchers("docs/index.html").hasAuthority(Role.ADMIN.name())
-                        .requestMatchers("/auth/status").hasAnyAuthority(Role.WITHDRAWAL.name(), Role.MEMBER.name(), Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.PUT, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.PATCH, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.DELETE, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
-                        .requestMatchers("/bookmarks/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
-                        .requestMatchers("/ratings/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                .authorizeHttpRequests((authorizeRequests) ->
+                                authorizeRequests
+                                        // .requestMatchers("docs/index.html").hasAuthority(Role.ADMIN.name())
+                                        .requestMatchers("/auth/status").hasAnyAuthority(Role.WITHDRAWAL.name(), Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.PUT, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.PATCH, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.DELETE, "/members/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers("/bookmarks/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.PUT, "/short-reviews/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.POST, "/short-reviews/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.PATCH, "/short-reviews/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.DELETE, "/short-reviews/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.PUT, "/attraction-points/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.POST, "/attraction-points/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.PATCH, "/attraction-points/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.DELETE, "/attraction-points/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.PUT, "/likes/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.POST, "/likes/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.PATCH, "/likes/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.DELETE, "/likes/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers("/ratings/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
 //                    .requestMatchers("/oduckdmin/**").hasAuthority(Role.ADMIN.name())
-                        .anyRequest().permitAll()
-            );
+                                        .anyRequest().permitAll()
+                );
 
         // 로그아웃 설정
         http
-            .logout((logout) ->
-                logout
-                    .logoutUrl("/auth/logout")
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))
-                    .logoutSuccessHandler(logoutHandler).deleteCookies("oDuckio.sid")
-                    .invalidateHttpSession(true).permitAll(false)
-            );
+                .logout((logout) ->
+                        logout
+                                .logoutUrl("/auth/logout")
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))
+                                .logoutSuccessHandler(logoutHandler).deleteCookies("oDuckio.sid")
+                                .invalidateHttpSession(true).permitAll(false)
+                );
 
         // Custom Configurer : LocalAuthenticationFilter 를 등록하는 역할
 //        http
@@ -105,27 +117,27 @@ public class SecurityConfig {
 
         // OAuth2 로그인 설정
         http
-            .oauth2Login((oauth2Login) ->
-                oauth2Login
-                    .userInfoEndpoint((userInfoEndpoint) ->
-                        userInfoEndpoint
-                            .userService(socialLoginService)
-                    )
-                    .successHandler(loginSuccessHandler)
-                    .failureHandler(loginFailureHandler)
-            );
+                .oauth2Login((oauth2Login) ->
+                        oauth2Login
+                                .userInfoEndpoint((userInfoEndpoint) ->
+                                        userInfoEndpoint
+                                                .userService(socialLoginService)
+                                )
+                                .successHandler(loginSuccessHandler)
+                                .failureHandler(loginFailureHandler)
+                );
 
         // 예외 처리 설정
         // 인증 인가 예외 처리
         http
-            .exceptionHandling((exceptionHandling) ->
-                exceptionHandling
-                    .authenticationEntryPoint(unauthorizedHandler)
-                    .accessDeniedHandler(forbiddenHandler)
-            );
+                .exceptionHandling((exceptionHandling) ->
+                        exceptionHandling
+                                .authenticationEntryPoint(unauthorizedHandler)
+                                .accessDeniedHandler(forbiddenHandler)
+                );
 
         http
-            .addFilterBefore(HTTPLoggingFilter, LogoutFilter.class);
+                .addFilterBefore(HTTPLoggingFilter, LogoutFilter.class);
 
         return http.build();
     }
@@ -142,7 +154,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(
-        AuthenticationConfiguration authenticationConfiguration) throws Exception {
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
