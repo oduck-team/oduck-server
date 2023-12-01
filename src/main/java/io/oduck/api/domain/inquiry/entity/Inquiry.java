@@ -1,27 +1,34 @@
 package io.oduck.api.domain.inquiry.entity;
 
+import io.oduck.api.domain.member.entity.Member;
+import io.oduck.api.global.audit.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDateTime;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class Inquiry {
+@AllArgsConstructor
+@Builder
+public class Inquiry extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, length = 100)
-  private String email;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "member_id")
+  private Member member;
 
   @Column(nullable = false, length = 100)
   private String title;
@@ -29,13 +36,20 @@ public class Inquiry {
   @Column(nullable = false, length = 1000)
   private String content;
 
-  @Enumerated(EnumType.STRING)
-  private Status status;
+  private InquiryType type;
 
-  @Enumerated(EnumType.STRING)
-  private Result result;
+  private boolean answer = false;
+  private boolean check = false;
 
-  @CreationTimestamp
-  @Column(nullable = false, updatable = false)
-  protected LocalDateTime createdAt;
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "inquiry_answer_id")
+  private InquiryAnswer inquiryAnswer;
+
+  public void checkAnswer() {
+    check = true;
+  }
+
+  public void feedback(FeedbackType helpful) {
+    inquiryAnswer.feedback(helpful);
+  }
 }
