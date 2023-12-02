@@ -3,7 +3,6 @@ package io.oduck.api.domain.inquiry.service;
 import static io.oduck.api.domain.inquiry.dto.ContactReq.PostReq;
 import static io.oduck.api.domain.inquiry.dto.ContactRes.MyInquiry;
 
-import io.oduck.api.domain.admin.repository.AdminRepository;
 import io.oduck.api.domain.inquiry.dto.AnswerFeedback;
 import io.oduck.api.domain.inquiry.dto.ContactId;
 import io.oduck.api.domain.inquiry.dto.ContactRequestHolder;
@@ -28,7 +27,6 @@ public class ContactServiceImpl implements ContactService {
 
     private final MemberRepository memberRepository;
     private final ContactRepository contactRepository;
-    private final AdminRepository adminRepository;
 
     private final ContactPolicy contactPolicy;
 
