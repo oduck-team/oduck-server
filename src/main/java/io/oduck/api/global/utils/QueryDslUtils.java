@@ -68,7 +68,8 @@ public class QueryDslUtils {
 
     private static OrderSpecifier<?> createOrderSpecifier(Order order, Path<?> parent, String fieldName) {
         // count 메소드 컬럼을 기준으로 할 때의 OrderSpecifier
-        if (fieldName.equals("quantity") || fieldName.equals("likeCount")) {
+        // enum 값을 돌면서 해당 enum이 존재하는지 확인하고 존재하면 해당 enum에 맞는 컬럼을 기준으로 정렬걸로 수정하기.
+        if (fieldName.equals("rankScore") || fieldName.equals("likeCount")) {
             NumberPath<Long> aliasQuantity = Expressions.numberPath(Long.class, fieldName);
 
             return new OrderSpecifier(order, aliasQuantity);
