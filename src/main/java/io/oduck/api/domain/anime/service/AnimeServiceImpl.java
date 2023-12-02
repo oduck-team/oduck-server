@@ -129,7 +129,7 @@ public class AnimeServiceImpl implements AnimeService{
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public DetailResult getAnimeById(Long animeId) {
 
         Anime anime = animeRepository.findAnimeByConditions(animeId, true)
