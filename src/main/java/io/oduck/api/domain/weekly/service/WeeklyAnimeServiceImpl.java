@@ -31,4 +31,14 @@ public class WeeklyAnimeServiceImpl implements WeeklyAnimeService{
         }
         return animeRes;
     }
+
+    @Override
+    public void reset() {
+        try{
+            weeklyAnimeRepository.deleteAll();
+        } catch (Exception e) {
+            log.error("Weekly anime delete all failed", e);
+            throw new RuntimeException(e);
+        }
+    }
 }
