@@ -39,6 +39,7 @@ public class ShortReviewController {
         @LoginUser AuthUser user,
         @RequestBody @Valid ShortReviewReqDto.ShortReviewReq req)  {
         //TODO : 짧은 리뷰 작성
+        shortReviewService.save(user.getId(), req);
         return ResponseEntity.ok().build();
     }
 

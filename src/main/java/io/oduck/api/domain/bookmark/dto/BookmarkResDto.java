@@ -25,18 +25,27 @@ public class BookmarkResDto {
         private Long animeId;
         private String title;
         private String thumbnail;
-        @Builder.Default
-        private double avgScore = 0.0;
+        private Double avgScore;
         private Integer myScore;
         private LocalDateTime createdAt;
 
         public static BookmarkRes of(BookmarkDsl bookmarkDsl) {
             Integer myScore = bookmarkDsl.getMyScore();
+            Long starRatingScoreTotal = bookmarkDsl.getStarRatingScoreTotal();
+            Long starRatingCount = bookmarkDsl.getStarRatingCount();
 
-            return BookmarkRes.builder().animeId(bookmarkDsl.getAnimeId())
-                    .title(bookmarkDsl.getTitle()).thumbnail(bookmarkDsl.getThumbnail())
-                    .myScore(myScore == null ? -1 : myScore).createdAt(bookmarkDsl.getCreatedAt())
-                    .build();
+            BookmarkRes bookmarkRes = BookmarkRes.builder().animeId(bookmarkDsl.getAnimeId())
+                .title(bookmarkDsl.getTitle()).thumbnail(bookmarkDsl.getThumbnail())
+                .myScore(myScore == null ? -1 : myScore).createdAt(bookmarkDsl.getCreatedAt())
+                .build();
+
+            if (starRatingCount <= 0) {
+                bookmarkRes.avgScore = 0.0;
+            } else {
+                bookmarkRes.avgScore = Double.valueOf(starRatingScoreTotal) / starRatingCount;
+            }
+
+            return bookmarkRes;
         }
 
         @Override

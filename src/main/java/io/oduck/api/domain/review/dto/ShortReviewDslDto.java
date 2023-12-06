@@ -1,6 +1,8 @@
 package io.oduck.api.domain.review.dto;
 
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,5 +35,21 @@ public class ShortReviewDslDto {
             this.likeCount = likeCount;
             this.createdAt = createdAt;
         }
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ShortReviewDslWithTitle {
+        private Long reviewId;
+        private Long animeId;
+        private String title;
+        private String thumbnail;
+        private Integer score;
+        private String content;
+        private Boolean isSpoiler;
+        private Long likeCount;
+        private LocalDateTime createdAt;
     }
 }

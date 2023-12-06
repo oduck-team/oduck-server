@@ -198,13 +198,28 @@ public class AnimeRepositoryCustomImpl implements AnimeRepositoryCustom{
             return null;
         }
 
+        if(isParsableAsLong(cursor) == false) {
+            return null;
+        }
+
+        Long id = Long.parseLong(cursor);
+
         List<Sort.Order> orders = pageable.getSort().get().collect(Collectors.toList());
         Direction direction = orders.get(0).getDirection();
 
         if (direction == Direction.ASC) {
-            return anime.title.gt(cursor);
+            return anime.id.gt(id);
         }else{
-            return anime.title.lt(cursor);
+            return anime.id.lt(id);
+        }
+    }
+
+    private boolean isParsableAsLong(String cursor) {
+        try {
+            Long.parseLong(cursor);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 

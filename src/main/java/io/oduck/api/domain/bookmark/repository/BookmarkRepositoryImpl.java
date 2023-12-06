@@ -39,6 +39,8 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom{
                     anime.id,
                     anime.title,
                     anime.thumbnail,
+                    anime.starRatingScoreTotal,
+                    anime.starRatingCount,
                     starRating.score,
                     bookmark.createdAt
                 )

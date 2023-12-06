@@ -2,17 +2,17 @@ package io.oduck.api.domain.member.entity;
 
 import io.oduck.api.domain.attractionPoint.entity.AttractionPoint;
 import io.oduck.api.domain.bookmark.entity.Bookmark;
+import io.oduck.api.domain.inquiry.dto.AnswerFeedback;
+import io.oduck.api.domain.inquiry.dto.ContactId;
+import io.oduck.api.domain.inquiry.dto.ContactRequestHolder;
+import io.oduck.api.domain.inquiry.entity.Contact;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.reviewLike.entity.ShortReviewLike;
 import io.oduck.api.domain.starRating.entity.StarRating;
 import io.oduck.api.global.audit.BaseEntity;
+import io.oduck.api.global.exception.NotFoundException;
 import io.oduck.api.global.security.auth.entity.AuthLocal;
 import io.oduck.api.global.security.auth.entity.AuthSocial;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import java.time.LocalDateTime;
-import java.util.List;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,6 +20,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -65,6 +70,9 @@ public class Member extends BaseEntity {
 
   @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
   private List<AttractionPoint> attractionPoints;
+
+  @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
+  private List<Contact> contacts = new ArrayList<>();
 
   @Builder
   public Member(Long id, Role role, LoginType loginType, AuthSocial authSocial, AuthLocal authLocal,
@@ -112,5 +120,29 @@ public class Member extends BaseEntity {
     }
 
     this.role = Role.WITHDRAWAL;
+  }
+
+  public void inquiry(ContactRequestHolder holder) {
+    Contact contact = holder.getContact();
+
+    this.contacts.add(contact);
+  }
+
+  public void checkAnswer(ContactId request) {
+    Contact contact = contacts.stream()
+        .filter(i -> i.getId() == request.getContactId())
+        .findFirst()
+        .orElseThrow(() -> new NotFoundException("inquiry"));
+
+    contact.getAnswer().check();
+  }
+
+  public void feedbackAnswer(AnswerFeedback feedback) {
+    Contact contact = contacts.stream()
+        .filter(i -> i.getId() == feedback.getInquiryId())
+        .findFirst()
+        .orElseThrow(() -> new NotFoundException("inquiry"));
+
+    contact.feedback(feedback.getHelpful());
   }
 }
