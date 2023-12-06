@@ -1,12 +1,12 @@
 package io.oduck.api.domain.inquiry.service;
 
-import io.oduck.api.domain.inquiry.dto.InquiryReq.PostReq;
-import io.oduck.api.domain.inquiry.dto.InquiryRes.DetailRes;
-import io.oduck.api.domain.inquiry.dto.InquiryRes.MyInquiry;
+import io.oduck.api.domain.inquiry.dto.ContactReq.PostReq;
+import io.oduck.api.domain.inquiry.dto.ContactRes.DetailRes;
+import io.oduck.api.domain.inquiry.dto.ContactRes.MyInquiry;
 import io.oduck.api.domain.inquiry.entity.FeedbackType;
 import io.oduck.api.global.common.PageResponse;
 
-public interface InquiryService {
+public interface ContactService {
     void inquiry(Long memberId, PostReq request);
 
     PageResponse<MyInquiry> getAllByMemberId(Long memberId, int page, int size);
@@ -19,7 +19,7 @@ public interface InquiryService {
 
 //    Page<?> getAll();
 //
-//    void answer();
+//    void answer(Long adminId, AnswerReq request);
 //
 //    void update(Long id);
 }

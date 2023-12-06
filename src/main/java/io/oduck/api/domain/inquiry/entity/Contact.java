@@ -2,8 +2,11 @@ package io.oduck.api.domain.inquiry.entity;
 
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.global.audit.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Inquiry extends BaseEntity {
+public class Contact extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -36,20 +39,16 @@ public class Inquiry extends BaseEntity {
   @Column(nullable = false, length = 1000)
   private String content;
 
+  @Enumerated(value = EnumType.STRING)
   private InquiryType type;
 
-  private boolean answer = false;
-  private boolean check = false;
+  private boolean answered = false;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "inquiry_answer_id")
-  private InquiryAnswer inquiryAnswer;
-
-  public void checkAnswer() {
-    check = true;
-  }
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+  @JoinColumn(name = "answer_id")
+  private Answer answer;
 
   public void feedback(FeedbackType helpful) {
-    inquiryAnswer.feedback(helpful);
+    answer.feedback(helpful);
   }
 }

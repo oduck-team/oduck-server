@@ -6,10 +6,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class CheckAnswerRequest {
-    private Long inquiryId;
+public class ContactId {
+    private Long contactId;
 
-    public static CheckAnswerRequest from(Long inquiryId) {
-        return new CheckAnswerRequest(inquiryId);
+    public static ContactId from(Long inquiryId) {
+        return new ContactId(inquiryId);
     }
 }
