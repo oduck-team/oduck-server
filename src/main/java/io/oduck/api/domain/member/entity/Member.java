@@ -2,10 +2,10 @@ package io.oduck.api.domain.member.entity;
 
 import io.oduck.api.domain.attractionPoint.entity.AttractionPoint;
 import io.oduck.api.domain.bookmark.entity.Bookmark;
-import io.oduck.api.domain.inquiry.dto.CheckAnswerRequest;
-import io.oduck.api.domain.inquiry.dto.InquiryFeedback;
-import io.oduck.api.domain.inquiry.dto.InquiryRequestHolder;
-import io.oduck.api.domain.inquiry.entity.Inquiry;
+import io.oduck.api.domain.inquiry.dto.AnswerFeedback;
+import io.oduck.api.domain.inquiry.dto.ContactId;
+import io.oduck.api.domain.inquiry.dto.ContactRequestHolder;
+import io.oduck.api.domain.inquiry.entity.Contact;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.reviewLike.entity.ShortReviewLike;
 import io.oduck.api.domain.starRating.entity.StarRating;
@@ -72,7 +72,7 @@ public class Member extends BaseEntity {
   private List<AttractionPoint> attractionPoints;
 
   @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
-  private List<Inquiry> inquiries = new ArrayList<>();
+  private List<Contact> contacts = new ArrayList<>();
 
   @Builder
   public Member(Long id, Role role, LoginType loginType, AuthSocial authSocial, AuthLocal authLocal,
@@ -122,27 +122,27 @@ public class Member extends BaseEntity {
     this.role = Role.WITHDRAWAL;
   }
 
-  public void inquiry(InquiryRequestHolder holder) {
-    Inquiry inquiry = holder.getInquiry();
+  public void inquiry(ContactRequestHolder holder) {
+    Contact contact = holder.getContact();
 
-    this.inquiries.add(inquiry);
+    this.contacts.add(contact);
   }
 
-  public void checkAnswer(CheckAnswerRequest request) {
-    Inquiry inquiry = inquiries.stream()
-        .filter(i -> i.getId() == request.getInquiryId())
+  public void checkAnswer(ContactId request) {
+    Contact contact = contacts.stream()
+        .filter(i -> i.getId() == request.getContactId())
         .findFirst()
         .orElseThrow(() -> new NotFoundException("inquiry"));
 
-    inquiry.checkAnswer();
+    contact.getAnswer().check();
   }
 
-  public void feedbackInquiry(InquiryFeedback feedback) {
-    Inquiry inquiry = inquiries.stream()
+  public void feedbackAnswer(AnswerFeedback feedback) {
+    Contact contact = contacts.stream()
         .filter(i -> i.getId() == feedback.getInquiryId())
         .findFirst()
         .orElseThrow(() -> new NotFoundException("inquiry"));
 
-    inquiry.feedback(feedback.getHelpful());
+    contact.feedback(feedback.getHelpful());
   }
 }

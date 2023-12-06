@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
-public class InquiryReq {
+public class ContactReq {
     @Getter
     @AllArgsConstructor
     public static class PostReq {
@@ -19,6 +19,17 @@ public class InquiryReq {
         @Length(min = 1, max = 50,
             message = "글자 수는 1~50을 허용합니다.")
         private String title;
+
+        @NotBlank
+        @Length(min = 1, max = 1000,
+            message = "글자 수는 1~1000를 허용합니다.")
+        private String content;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class AnswerReq {
+        private Long id;
 
         @NotBlank
         @Length(min = 1, max = 1000,

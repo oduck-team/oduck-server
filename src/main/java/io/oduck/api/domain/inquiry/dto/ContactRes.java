@@ -1,12 +1,12 @@
 package io.oduck.api.domain.inquiry.dto;
 
-import io.oduck.api.domain.inquiry.entity.Inquiry;
+import io.oduck.api.domain.inquiry.entity.Contact;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-public class InquiryRes {
+public class ContactRes {
 
     @Getter
     @AllArgsConstructor
@@ -31,8 +31,8 @@ public class InquiryRes {
         private LocalDate localDate;
         private boolean answer;
 
-        public static DetailRes from(Inquiry inquiry) {
-            return new DetailRes(inquiry.getTitle(), inquiry.getCreatedAt().toLocalDate(), inquiry.isAnswer());
+        public static DetailRes from(Contact contact) {
+            return new DetailRes(contact.getTitle(), contact.getCreatedAt().toLocalDate(), contact.isAnswered());
         }
     }
 }

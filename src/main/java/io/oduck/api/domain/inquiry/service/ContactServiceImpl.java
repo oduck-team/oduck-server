@@ -1,15 +1,15 @@
 package io.oduck.api.domain.inquiry.service;
 
-import static io.oduck.api.domain.inquiry.dto.InquiryReq.PostReq;
-import static io.oduck.api.domain.inquiry.dto.InquiryRes.MyInquiry;
+import static io.oduck.api.domain.inquiry.dto.ContactReq.PostReq;
+import static io.oduck.api.domain.inquiry.dto.ContactRes.MyInquiry;
 
-import io.oduck.api.domain.inquiry.dto.CheckAnswerRequest;
-import io.oduck.api.domain.inquiry.dto.InquiryFeedback;
-import io.oduck.api.domain.inquiry.dto.InquiryRequestHolder;
-import io.oduck.api.domain.inquiry.dto.InquiryRes.DetailRes;
+import io.oduck.api.domain.inquiry.dto.AnswerFeedback;
+import io.oduck.api.domain.inquiry.dto.ContactId;
+import io.oduck.api.domain.inquiry.dto.ContactRequestHolder;
+import io.oduck.api.domain.inquiry.dto.ContactRes.DetailRes;
+import io.oduck.api.domain.inquiry.entity.Contact;
 import io.oduck.api.domain.inquiry.entity.FeedbackType;
-import io.oduck.api.domain.inquiry.entity.Inquiry;
-import io.oduck.api.domain.inquiry.repository.InquiryRepository;
+import io.oduck.api.domain.inquiry.repository.ContactRepository;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.global.common.PageResponse;
@@ -18,82 +18,88 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class InquiryServiceImpl implements InquiryService{
+public class ContactServiceImpl implements ContactService {
 
     private final MemberRepository memberRepository;
-    private final InquiryRepository inquiryRepository;
+    private final ContactRepository contactRepository;
 
-    private final InquiryPolicy inquiryPolicy;
+    private final ContactPolicy contactPolicy;
 
     @Override
+    @Transactional
     public void inquiry(Long memberId, PostReq request) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException("member"));
 
-        member.inquiry(InquiryRequestHolder.from(request, member));
+        member.inquiry(ContactRequestHolder.from(request, member));
     }
 
     @Override
     public PageResponse<MyInquiry> getAllByMemberId(Long memberId, int page, int size) {
-        Page<MyInquiry> myInquiries = inquiryRepository.getAllByMemberId(memberId,
+        Page<MyInquiry> myInquiries = contactRepository.getAllByMemberId(memberId,
             PageRequest.of(page, size));
         return PageResponse.of(myInquiries);
     }
 
     @Override
     public DetailRes getByMemberId(Long id, Long memberId) {
-        Inquiry inquiry = inquiryRepository.findWithMemberById(id)
+        Contact contact = contactRepository.findWithMemberById(id)
             .orElseThrow(() -> new NotFoundException("inquiry"));
 
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException("member"));
 
-        inquiryPolicy.isAccessOwnInquiry(inquiry, member);
+        contactPolicy.isAccessOwnInquiry(contact, member);
 
-        member.checkAnswer(CheckAnswerRequest.from(inquiry.getId()));
-        return DetailRes.from(inquiry);
+        member.checkAnswer(ContactId.from(contact.getId()));
+        return DetailRes.from(contact);
     }
 
     @Override
+    @Transactional
     public boolean hasNotCheckedAnswer(Long id, Long memberId) {
-        Inquiry inquiry = inquiryRepository.findWithMemberById(id)
+        Contact contact = contactRepository.findWithMemberById(id)
             .orElseThrow(() -> new NotFoundException("inquiry"));
 
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException("member"));
 
-        inquiryPolicy.isAccessOwnInquiry(inquiry, member);
+        contactPolicy.isAccessOwnInquiry(contact, member);
 
-        return inquiryRepository.existsByIdAndCheck(id, false);
+        return contactRepository.existsByIdAndCheck(id, false);
     }
 
     @Override
+    @Transactional
     public void feedbackAnswer(Long id, Long memberId, FeedbackType helpful) {
-        Inquiry inquiry = inquiryRepository.findWithMemberById(id)
+        Contact contact = contactRepository.findWithMemberById(id)
             .orElseThrow(() -> new NotFoundException("inquiry"));
 
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException("member"));
 
-        inquiryPolicy.isAccessOwnInquiry(inquiry, member);
+        contactPolicy.isAccessOwnInquiry(contact, member);
 
-        member.feedbackInquiry(InquiryFeedback.from(id, helpful));
+        member.feedbackAnswer(AnswerFeedback.from(id, helpful));
     }
 
 //    @Override
 //    public Page<?> getAll() {
 //        return null;
 //    }
-//
+
 //    @Override
-//    public void answer() {
-//
+//    @Transactional
+//    public void answer(Long adminId, AnswerReq request) {
 //    }
-//
+
 //    @Override
+//    @Transactional
 //    public void update(Long id) {
 //
 //    }
