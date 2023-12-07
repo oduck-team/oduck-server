@@ -82,3 +82,6 @@ INSERT INTO short_review(has_spoiler, anime_id, created_at, member_id, updated_a
 
 INSERT INTO short_review_like(created_at, member_id, short_review_id, updated_at) VALUES('2023-10-10 21:05:31.859', 1, 1, '2023-10-10 21:05:31.859');
 INSERT INTO short_review_like(created_at, member_id, short_review_id, updated_at) VALUES('2023-10-11 21:05:31.859', 1, 2, '2023-10-11 21:05:31.859');
+
+INSERT INTO attraction_point(created_at, member_id, anime_id, attraction_element, updated_at) VALUES('2023-11-10 21:05:31.859', 2, 1, 'DRAWING','2023-11-15 21:05:31.859');
+INSERT INTO attraction_point(created_at, member_id, anime_id, attraction_element, updated_at) VALUES('2023-11-10 21:05:31.859', 2, 1, 'STORY','2023-11-15 21:05:31.859');
