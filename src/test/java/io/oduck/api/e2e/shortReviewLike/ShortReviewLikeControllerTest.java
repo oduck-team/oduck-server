@@ -155,14 +155,20 @@ public class ShortReviewLikeControllerTest {
         @WithCustomMockMember(id = 1L, email = "john", password = "Qwer!234", role = Role.MEMBER)
         void checkShortReviewLike() throws Exception{
             //given
-            Long shortReviewId = 1L;
+            ShortReviewLikeReq req = ShortReviewLikeReq
+                    .builder()
+                    .shortReviewId(1L)
+                    .build();
+
+            String content = gson.toJson(req);
 
             //when
             ResultActions actions = mockMvc.perform(
-                get(BASE_URL + "/{shortReviewId}", shortReviewId)
+                get(BASE_URL)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}"));
+                    .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+                    .content(content));
 
             //then
             actions
@@ -176,10 +182,11 @@ public class ShortReviewLikeControllerTest {
                                 .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
                                 .description("Header Cookie, 세션 쿠키")
                         ),
-                        pathParameters(
-                            parameterWithName("shortReviewId")
-                                .description("짧은 리뷰 고유 식별자")
-                        ),
+                        requestFields(attributes(key("title").value("Fields for shortReviewLike creation")),
+                                fieldWithPath("shortReviewId")
+                                        .type(JsonFieldType.NUMBER)
+                                        .attributes(field("constraints", "짧은 리뷰 아이디, NotNull, Min(1)"))
+                                        .description("짧은 리뷰 좋아요를 등록할 리뷰 고유 식별 번호")),
                         responseFields(
                             fieldWithPath("isLike")
                                 .type(JsonFieldType.BOOLEAN)

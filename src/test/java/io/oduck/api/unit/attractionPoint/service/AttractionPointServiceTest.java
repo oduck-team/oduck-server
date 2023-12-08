@@ -1,7 +1,7 @@
 package io.oduck.api.unit.attractionPoint.service;
 
 import static io.oduck.api.global.utils.AnimeTestUtils.createAnime;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
@@ -80,7 +80,7 @@ public class AttractionPointServiceTest {
 
     @Nested
     @DisplayName("입덕 포인트 조회")
-    class getAttractionPoint{
+    class GetAttractionPoint{
 
         @Test
         @DisplayName("입덕 포인트 존재 시 true, false 판별")
@@ -94,6 +94,67 @@ public class AttractionPointServiceTest {
 
             //then
             assertDoesNotThrow(() -> attractionPointService.isAttractionPoint(memberId, animeId));
+        }
+    }
+
+    @Nested
+    @DisplayName("입덕 포인트 수정")
+    class PatchAttractionPoint{
+
+        @Test
+        @DisplayName("입덕 포인트 수정 성공")
+        void patchAttractionPointSuccess(){
+            //given
+            Long memberId = 1L;
+            Long attractionPointId = 1L;
+            AttractionPoint attractionPoint = AttractionPoint
+                    .builder()
+                    .member(member)
+                    .anime(anime)
+                    .attractionElement(AttractionElement.CHARACTER)
+                    .build();
+
+            UpdateAttractionPoint update = UpdateAttractionPoint
+                    .builder()
+                    .attractionElement(AttractionElement.STORY)
+                    .build();
+
+            given(attractionPointRepository.findById(attractionPointId)).willReturn(Optional.ofNullable(attractionPoint));
+
+
+            //when
+            boolean updateAttractionPoint = attractionPointService.update(member.getId(), attractionPointId,update);
+
+            //then
+            assertTrue(updateAttractionPoint);
+        }
+
+        @Test
+        @DisplayName("입덕 포인트 수정 실패")
+        void patchAttractionPointFalse(){
+            //given
+            Long memberId = 1L;
+            Long attractionPointId = 1L;
+            AttractionPoint attractionPoint = AttractionPoint
+                    .builder()
+                    .member(member)
+                    .anime(anime)
+                    .attractionElement(AttractionElement.CHARACTER)
+                    .build();
+
+            UpdateAttractionPoint update = UpdateAttractionPoint
+                    .builder()
+                    .attractionElement(AttractionElement.CHARACTER)
+                    .build();
+
+            given(attractionPointRepository.findById(attractionPointId)).willReturn(Optional.ofNullable(attractionPoint));
+
+
+            //when
+            boolean updateAttractionPoint = attractionPointService.update(member.getId(), attractionPointId,update);
+
+            //then
+            assertFalse(updateAttractionPoint);
         }
     }
 }

@@ -1431,3 +1431,50 @@ include::{snippets}/checkAttractionPoint/isCheck/response-body.adoc[]
 
 .response-fields
 include::{snippets}/checkAttractionPoint/isCheck/response-fields.adoc[]
+
+=== 입덕포인트 수정
+=== PATCH api/v1/attraction-points/:attractionPointId
+.curl-request
+include::{snippets}/patchAttractionPoint/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patchAttractionPoint/success/http-request.adoc[]
+
+.request-header
+include::{snippets}/patchAttractionPoint/success/request-headers.adoc[]
+
+.request-body
+include::{snippets}/patchAttractionPoint/success/request-body.adoc[]
+
+.request-fields
+include::{snippets}/patchAttractionPoint/success/request-fields.adoc[]
+
+=== 성공 시
+
+.http-response
+include::{snippets}/patchAttractionPoint/success/http-response.adoc[]
+
+=== 실패 시
+
+.http-response
+include::{snippets}/patchAttractionPoint/fail/http-response.adoc[]
+
+=== GET api/v1/attraction-points/animes/:animeId
+.curl-request
+include::{snippets}/getAttractionPointStats/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/getAttractionPointStats/success/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/getAttractionPointStats/success/path-parameters.adoc[]
+
+==== 성공시
+.http-response
+include::{snippets}/getAttractionPointStats/success/http-response.adoc[]
+
+.response-body
+include::{snippets}/getAttractionPointStats/success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/getAttractionPointStats/success/response-fields.adoc[]
