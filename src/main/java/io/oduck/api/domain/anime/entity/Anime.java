@@ -37,10 +37,10 @@ public class Anime extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, length = 50)
+  @Column(nullable = false, length = 100)
   private String title;
 
-  @Column(nullable = false, length = 600)
+  @Column(nullable = false, length = 1000)
   private String summary;
 
   @Enumerated(EnumType.STRING)
