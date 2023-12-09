@@ -7,6 +7,8 @@ import io.oduck.api.domain.anime.entity.BroadcastType;
 import io.oduck.api.domain.anime.entity.Quarter;
 import io.oduck.api.domain.anime.entity.Status;
 import io.oduck.api.domain.anime.service.AnimeService;
+import io.oduck.api.domain.weekly.dto.WeeklyRes.WeeklyAnimeRes;
+import io.oduck.api.domain.weekly.service.WeeklyAnimeService;
 import io.oduck.api.global.common.OrderDirection;
 import io.oduck.api.global.common.SliceResponse;
 import io.oduck.api.global.exception.BadRequestException;
@@ -36,6 +38,7 @@ import static io.oduck.api.domain.anime.dto.AnimeRes.DetailResult;
 public class AnimeController {
 
     private final AnimeService animeService;
+    private final WeeklyAnimeService weeklyAnimeService;
 
     // 애니 검색 조회
     @GetMapping
@@ -65,6 +68,12 @@ public class AnimeController {
         SliceResponse<AnimeRes.SearchResult> res = animeService.getSliceByCondition(query, cursor,  sort,
             order, size, searchFilterDsl);
         return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/weekly")
+    public ResponseEntity<?> getWeeklyAnimes() {
+        List<WeeklyAnimeRes> weeklyAnime = weeklyAnimeService.getWeeklyAnime();
+        return ResponseEntity.ok(weeklyAnime);
     }
 
     // 애니 아이디로 상세 조회

@@ -75,13 +75,14 @@ public class ShortReviewResDto {
         private LocalDateTime createdAt;
 
         public static ShortReviewResWithTitle of(ShortReviewDslWithTitle shortReviewDsl) {
+            Integer score = shortReviewDsl.getScore();
             return ShortReviewResWithTitle
                 .builder()
                 .reviewId(shortReviewDsl.getReviewId())
                 .animeId(shortReviewDsl.getAnimeId())
                 .title(shortReviewDsl.getTitle())
                 .thumbnail(shortReviewDsl.getThumbnail())
-                .score(shortReviewDsl.getScore())
+                .score(score != null ? score : -1)
                 .content(shortReviewDsl.getContent())
                 .isSpoiler(shortReviewDsl.getIsSpoiler())
                 .likeCount(shortReviewDsl.getLikeCount())
@@ -92,7 +93,7 @@ public class ShortReviewResDto {
         @Override
         public String bringCursor(String property) {
             return switch (property) {
-                case "title" -> this.title + ", " + this.createdAt.toString();
+                case "title" -> this.title;
                 case "score" -> this.score.toString() + ", " + this.createdAt.toString();
                 default -> this.createdAt.toString();
             };
