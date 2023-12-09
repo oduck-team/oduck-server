@@ -46,7 +46,7 @@ public class Anime extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private BroadcastType broadcastType;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private int episodeCount;
 
   @Column(nullable = true, length = 500)
