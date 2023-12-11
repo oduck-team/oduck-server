@@ -22,14 +22,4 @@ public class AttractionPointReqDto {
         @NotNull(message = "입덕포인트를 선택하세요.")
         List<AttractionElement> attractionElements;
     }
-
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class UpdateAttractionPoint{
-        @NotNull(message = "입덕포인트를 선택하세요.")
-        AttractionElement attractionElement;
-    }
-
 }
