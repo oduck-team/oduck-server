@@ -47,23 +47,23 @@ public class ShortReviewServiceImpl implements ShortReviewService{
 
         //애니 입력
         Anime anime = animeRepository.findByIdForUpdate(shortReviewReq.getAnimeId())
-                .orElseThrow(
-                        () -> new NotFoundException("Anime")
-                        );
+            .orElseThrow(
+                () -> new NotFoundException("Anime")
+            );
 
         //회원 입력
         Member member = memberRepository.findById(memberId)
-                            .orElseThrow(
-                                () -> new NotFoundException("Member")
-                            );
+            .orElseThrow(
+                () -> new NotFoundException("Member")
+            );
 
         ShortReview shortReview = ShortReview
-                .builder()
-                .anime(anime)
-                .member(member)
-                .content(shortReviewReq.getContent())
-                .hasSpoiler(shortReviewReq.isHasSpoiler())
-                .build();
+            .builder()
+            .anime(anime)
+            .member(member)
+            .content(shortReviewReq.getContent())
+            .hasSpoiler(shortReviewReq.isHasSpoiler())
+            .build();
 
         anime.increaseReviewCount();
         shortReviewRepository.save(shortReview);
@@ -95,9 +95,9 @@ public class ShortReviewServiceImpl implements ShortReviewService{
         );
 
         List<ShortReviewRes> res = shortReviews.getContent()
-                                       .stream()
-                                       .map(ShortReviewRes::of)
-                                       .toList();
+            .stream()
+            .map(ShortReviewRes::of)
+            .toList();
 
         return SliceResponse.of(shortReviews, res, sort.getSort());
     }
@@ -106,8 +106,8 @@ public class ShortReviewServiceImpl implements ShortReviewService{
     public ShortReviewCountRes getShortReviewCountByMemberId(Long memberId) {
         Long count = shortReviewRepository.countByMemberId(memberId);
         return ShortReviewCountRes.builder()
-                   .count(count)
-                   .build();
+            .count(count)
+            .build();
     }
 
     @Override
@@ -118,7 +118,7 @@ public class ShortReviewServiceImpl implements ShortReviewService{
             sort.getSort()
         );
 
-        if(sort.equals(SortForProfile.TITLE)  || sort.equals(SortForProfile.SCORE)){
+        if(sort.equals(SortForProfile.SCORE)){
             sortList = sortList.and(Sort.by(Direction.DESC, "createdAt"));
         }
 
@@ -146,9 +146,9 @@ public class ShortReviewServiceImpl implements ShortReviewService{
         Long findMemberId = findShortReview.getMember().getId();
 
         Anime findAnime = animeRepository.findByIdForUpdate(req.getAnimeId())
-                .orElseThrow(
-                        () -> new NotFoundException("Anime")
-                );
+            .orElseThrow(
+                () -> new NotFoundException("Anime")
+            );
         findAnime.decreaseReviewCount();
 
         //리뷰 작성자 인지 확인
@@ -170,8 +170,8 @@ public class ShortReviewServiceImpl implements ShortReviewService{
 
     private ShortReview getShortReview(Long reviewId){
         return shortReviewRepository.findById(reviewId)
-                   .orElseThrow(
-                       () -> new NotFoundException("shortReview")
-                   );
+            .orElseThrow(
+                () -> new NotFoundException("shortReview")
+            );
     }
 }

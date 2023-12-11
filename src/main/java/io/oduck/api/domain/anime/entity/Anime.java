@@ -1,6 +1,7 @@
 package io.oduck.api.domain.anime.entity;
 
 import io.oduck.api.domain.series.entity.Series;
+import io.oduck.api.domain.weekly.entity.WeeklyAnime;
 import io.oduck.api.global.audit.BaseEntity;
 import io.oduck.api.global.exception.BadRequestException;
 import jakarta.persistence.CascadeType;
@@ -15,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,16 +37,16 @@ public class Anime extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, length = 50)
+  @Column(nullable = false, length = 100)
   private String title;
 
-  @Column(nullable = false, length = 600)
+  @Column(nullable = false, length = 1000)
   private String summary;
 
   @Enumerated(EnumType.STRING)
   private BroadcastType broadcastType;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private int episodeCount;
 
   @Column(nullable = true, length = 500)
@@ -100,32 +102,55 @@ public class Anime extends BaseEntity {
   @Builder.Default
   private List<AnimeGenre> animeGenres = new ArrayList<>();
 
+  @OneToOne(mappedBy = "anime", cascade = CascadeType.PERSIST)
+  private WeeklyAnime weeklyAnime;
+
   /**
    * 비즈니스 메소드
    */
   // 조회수 증가
   public void increaseViewCount(){
     viewCount++;
+    if (weeklyAnime == null) {
+      weeklyAnime = WeeklyAnime.createWeeklyAnime(this);
+    }
+    weeklyAnime.increaseViewCount();
   }
 
   // 리뷰수 증가(짧은 리뷰, 장문 리뷰)
   public void increaseReviewCount(){
     reviewCount++;
+    if (weeklyAnime == null) {
+      weeklyAnime = WeeklyAnime.createWeeklyAnime(this);
+    }
+    weeklyAnime.increaseReviewCount();
   }
 
   // 리뷰수 감소(짧은 리뷰, 장문 리뷰)
   public void decreaseReviewCount(){
     reviewCount--;
+    if (weeklyAnime == null) {
+      weeklyAnime = WeeklyAnime.createWeeklyAnime(this);
+    }
+    weeklyAnime.decreaseReviewCount();
   }
 
   // 북마크수 증가
   public void increaseBookmarkCount(){
     bookmarkCount++;
+    if (weeklyAnime == null) {
+      weeklyAnime = WeeklyAnime.createWeeklyAnime(this);
+    }
+    weeklyAnime.increaseBookmarkCount();
   }
 
   // 북마크수 감소
   public void decreaseBookmarkCount(){
     bookmarkCount--;
+    if (weeklyAnime == null) {
+      weeklyAnime = WeeklyAnime.createWeeklyAnime(this);
+    }
+    weeklyAnime.decreaseBookmarkCount();
   }
 
   // 애니 공개 전환
@@ -255,6 +280,10 @@ public class Anime extends BaseEntity {
     for (AnimeGenre animeGenre : animeGenres) {
       addAnimeGenre(animeGenre);
     }
+  }
+
+  public void updateWeeklyAnime(WeeklyAnime weeklyAnime) {
+    this.weeklyAnime = weeklyAnime;
   }
 
   public void update(String title, String summary, BroadcastType broadcastType, int episodeCount,
