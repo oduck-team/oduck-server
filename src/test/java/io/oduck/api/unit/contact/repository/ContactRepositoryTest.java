@@ -1,4 +1,4 @@
-package io.oduck.api.unit.inquiry.repository;
+package io.oduck.api.unit.contact.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

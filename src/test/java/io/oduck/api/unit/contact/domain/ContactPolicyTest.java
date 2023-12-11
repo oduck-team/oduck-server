@@ -1,4 +1,4 @@
-package io.oduck.api.unit.inquiry.domain;
+package io.oduck.api.unit.contact.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
