@@ -22,10 +22,12 @@ public class GenreRepositoryCustomImpl implements GenreRepositoryCustom{
     public List<Genre> findAllByAnimeId(Long animeId) {
         JPAQuery<Genre> genreJPAQuery = queryFactory.select(genre)
             .from(genre)
-            .join(animeGenre).on(animeGenre.anime.id.eq(animeId))
+            .join(animeGenre).on(genre.id.eq(animeGenre.genre.id))
             .where(
+                animeGenre.anime.id.eq(animeId),
                 genre.deletedAt.isNull()
-            );
+            )
+            .limit(3);
         return genreJPAQuery.fetch();
     }
 
