@@ -31,7 +31,7 @@ public class Contact extends BaseEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
-  private Member member;
+  private Member customer;
 
   @Column(nullable = false, length = 100)
   private String title;

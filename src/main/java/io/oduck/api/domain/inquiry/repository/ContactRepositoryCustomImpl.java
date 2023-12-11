@@ -65,6 +65,6 @@ public class ContactRepositoryCustomImpl implements ContactRepositoryCustom {
     }
 
     private BooleanExpression memberIdEq(Long memberId) {
-        return memberId == null ? null : contact.member.id.eq(memberId);
+        return memberId == null ? null : contact.customer.id.eq(memberId);
     }
 }

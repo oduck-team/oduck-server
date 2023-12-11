@@ -17,7 +17,7 @@ public class ContactPolicyTest {
         //given
         Member writer = Member.builder().id(1L).build();
 
-        Contact contact = Contact.builder().member(writer).build();
+        Contact contact = Contact.builder().customer(writer).build();
 
         Member target = Member.builder().id(2L).build();
 

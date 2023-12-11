@@ -71,7 +71,7 @@ public class Member extends BaseEntity {
   @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
   private List<AttractionPoint> attractionPoints;
 
-  @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
+  @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
   private List<Contact> contacts = new ArrayList<>();
 
   @Builder

@@ -12,10 +12,10 @@ public class ContactPolicy {
         if(!isOwnInquiry(contact, member)) {
             throw new ForbiddenException("not has permission");
         }
-        contact.getMember().getId();
+        contact.getCustomer().getId();
     }
 
     private boolean isOwnInquiry(Contact contact, Member member) {
-        return contact.getMember().getId().equals(member.getId());
+        return contact.getCustomer().getId().equals(member.getId());
     }
 }

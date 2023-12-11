@@ -18,7 +18,7 @@ public class ContactRequestHolder {
             .content(request.getContent())
             .type(request.getType())
             .answered(false)
-            .member(member)
+            .customer(member)
             .build();
         return new ContactRequestHolder(contact);
     }

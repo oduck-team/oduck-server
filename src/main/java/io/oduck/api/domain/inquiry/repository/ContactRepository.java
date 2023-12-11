@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface ContactRepository extends JpaRepository<Contact, Long>, ContactRepositoryCustom {
 
-    @Query("select c from Contact c join fetch c.member where c.id = :id")
+    @Query("select c from Contact c join fetch c.customer where c.id = :id")
     Optional<Contact> findWithMemberById(@Param("id") Long id);
 }
