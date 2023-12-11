@@ -17,13 +17,21 @@ class AttractionPointRepositoryImpl implements AttractionPointRepositoryCustom {
 
     @Override
     public Long countElementByAnimeId(AttractionElement attractionElement, Long animeId) {
-        Long elementCount = query
-            .select(attractionPoint.attractionElement.count())
+        return query
+            .select(attractionPoint.count())
             .from(attractionPoint)
             .where(attractionPoint.attractionElement.eq(attractionElement)
                     .and(attractionPoint.anime.id.eq(animeId)))
             .fetchOne();
-        return elementCount;
+    }
+
+    @Override
+    public Long countByAnimeId(Long animeId) {
+        return query
+                .select(attractionPoint.count())
+                .from(attractionPoint)
+                .where(attractionPoint.anime.id.eq(animeId))
+                .fetchOne();
     }
 
 }
