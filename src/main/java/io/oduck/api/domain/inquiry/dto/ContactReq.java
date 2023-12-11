@@ -29,8 +29,16 @@ public class ContactReq {
     @Getter
     @AllArgsConstructor
     public static class AnswerReq {
-        private Long id;
+        @NotBlank
+        @Length(min = 1, max = 1000,
+            message = "글자 수는 1~1000를 허용합니다.")
+        private String content;
+    }
 
+
+    @Getter
+    @AllArgsConstructor
+    public static class AnswerUpdateReq {
         @NotBlank
         @Length(min = 1, max = 1000,
             message = "글자 수는 1~1000를 허용합니다.")

@@ -51,4 +51,8 @@ public class Contact extends BaseEntity {
   public void feedback(FeedbackType helpful) {
     answer.feedback(helpful);
   }
+
+  public void answer() {
+    answered = true;
+  }
 }

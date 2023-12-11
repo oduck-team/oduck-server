@@ -9,8 +9,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class AnswerHolder {
     private Contact contact;
-    private AnswerReq request;
+    private String content;
+
     public static AnswerHolder from(Contact contact, AnswerReq request) {
-        return new AnswerHolder(contact, request);
+        return new AnswerHolder(contact, request.getContent());
     }
 }
