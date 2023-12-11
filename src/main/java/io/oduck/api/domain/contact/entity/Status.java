@@ -1,4 +1,4 @@
-package io.oduck.api.domain.inquiry.entity;
+package io.oduck.api.domain.contact.entity;
 
 public enum Status {
   WAITING,

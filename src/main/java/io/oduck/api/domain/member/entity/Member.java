@@ -2,10 +2,10 @@ package io.oduck.api.domain.member.entity;
 
 import io.oduck.api.domain.attractionPoint.entity.AttractionPoint;
 import io.oduck.api.domain.bookmark.entity.Bookmark;
-import io.oduck.api.domain.inquiry.dto.AnswerFeedback;
-import io.oduck.api.domain.inquiry.dto.ContactId;
-import io.oduck.api.domain.inquiry.dto.ContactRequestHolder;
-import io.oduck.api.domain.inquiry.entity.Contact;
+import io.oduck.api.domain.contact.dto.AnswerFeedback;
+import io.oduck.api.domain.contact.dto.ContactId;
+import io.oduck.api.domain.contact.dto.ContactRequestHolder;
+import io.oduck.api.domain.contact.entity.Contact;
 import io.oduck.api.domain.review.entity.ShortReview;
 import io.oduck.api.domain.reviewLike.entity.ShortReviewLike;
 import io.oduck.api.domain.starRating.entity.StarRating;

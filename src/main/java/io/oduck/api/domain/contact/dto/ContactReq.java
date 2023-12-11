@@ -1,6 +1,6 @@
-package io.oduck.api.domain.inquiry.dto;
+package io.oduck.api.domain.contact.dto;
 
-import io.oduck.api.domain.inquiry.entity.InquiryType;
+import io.oduck.api.domain.contact.entity.InquiryType;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

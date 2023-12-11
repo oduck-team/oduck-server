@@ -2,8 +2,8 @@ package io.oduck.api.unit.inquiry.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.oduck.api.domain.inquiry.entity.Contact;
-import io.oduck.api.domain.inquiry.service.ContactPolicy;
+import io.oduck.api.domain.contact.entity.Contact;
+import io.oduck.api.domain.contact.service.ContactPolicy;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.global.exception.ForbiddenException;
 import org.junit.jupiter.api.Test;

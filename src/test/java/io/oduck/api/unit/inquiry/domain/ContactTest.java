@@ -3,14 +3,14 @@ package io.oduck.api.unit.inquiry.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.oduck.api.domain.inquiry.dto.ContactId;
-import io.oduck.api.domain.inquiry.dto.AnswerFeedback;
-import io.oduck.api.domain.inquiry.dto.ContactReq.PostReq;
-import io.oduck.api.domain.inquiry.dto.ContactRequestHolder;
-import io.oduck.api.domain.inquiry.entity.Answer;
-import io.oduck.api.domain.inquiry.entity.Contact;
-import io.oduck.api.domain.inquiry.entity.FeedbackType;
-import io.oduck.api.domain.inquiry.entity.InquiryType;
+import io.oduck.api.domain.contact.dto.ContactId;
+import io.oduck.api.domain.contact.dto.AnswerFeedback;
+import io.oduck.api.domain.contact.dto.ContactReq.PostReq;
+import io.oduck.api.domain.contact.dto.ContactRequestHolder;
+import io.oduck.api.domain.contact.entity.Answer;
+import io.oduck.api.domain.contact.entity.Contact;
+import io.oduck.api.domain.contact.entity.FeedbackType;
+import io.oduck.api.domain.contact.entity.InquiryType;
 import io.oduck.api.domain.member.entity.Member;
 import java.util.ArrayList;
 import java.util.List;

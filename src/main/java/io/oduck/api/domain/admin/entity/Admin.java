@@ -1,9 +1,9 @@
 package io.oduck.api.domain.admin.entity;
 
-import io.oduck.api.domain.inquiry.entity.Answer;
-import io.oduck.api.domain.inquiry.entity.FeedbackType;
-import io.oduck.api.domain.inquiry.service.AnswerHolder;
-import io.oduck.api.domain.inquiry.service.AnswerUpdateHolder;
+import io.oduck.api.domain.contact.entity.Answer;
+import io.oduck.api.domain.contact.entity.FeedbackType;
+import io.oduck.api.domain.contact.service.AnswerHolder;
+import io.oduck.api.domain.contact.service.AnswerUpdateHolder;
 import io.oduck.api.global.exception.BadRequestException;
 import io.oduck.api.global.exception.NotFoundException;
 import jakarta.persistence.CascadeType;

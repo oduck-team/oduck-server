@@ -1,6 +1,6 @@
-package io.oduck.api.domain.inquiry.service;
+package io.oduck.api.domain.contact.service;
 
-import io.oduck.api.domain.inquiry.dto.ContactReq.AnswerUpdateReq;
+import io.oduck.api.domain.contact.dto.ContactReq.AnswerUpdateReq;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

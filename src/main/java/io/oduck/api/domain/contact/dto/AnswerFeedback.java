@@ -1,6 +1,6 @@
-package io.oduck.api.domain.inquiry.dto;
+package io.oduck.api.domain.contact.dto;
 
-import io.oduck.api.domain.inquiry.entity.FeedbackType;
+import io.oduck.api.domain.contact.entity.FeedbackType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

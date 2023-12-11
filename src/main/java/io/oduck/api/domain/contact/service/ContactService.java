@@ -1,11 +1,11 @@
-package io.oduck.api.domain.inquiry.service;
+package io.oduck.api.domain.contact.service;
 
-import io.oduck.api.domain.inquiry.dto.ContactReq.AnswerReq;
-import io.oduck.api.domain.inquiry.dto.ContactReq.AnswerUpdateReq;
-import io.oduck.api.domain.inquiry.dto.ContactReq.PostReq;
-import io.oduck.api.domain.inquiry.dto.ContactRes.DetailRes;
-import io.oduck.api.domain.inquiry.dto.ContactRes.MyInquiry;
-import io.oduck.api.domain.inquiry.entity.FeedbackType;
+import io.oduck.api.domain.contact.dto.ContactReq.AnswerReq;
+import io.oduck.api.domain.contact.dto.ContactReq.AnswerUpdateReq;
+import io.oduck.api.domain.contact.dto.ContactReq.PostReq;
+import io.oduck.api.domain.contact.dto.ContactRes.DetailRes;
+import io.oduck.api.domain.contact.dto.ContactRes.MyInquiry;
+import io.oduck.api.domain.contact.entity.FeedbackType;
 import io.oduck.api.global.common.PageResponse;
 
 public interface ContactService {

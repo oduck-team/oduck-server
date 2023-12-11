@@ -1,4 +1,4 @@
-package io.oduck.api.domain.inquiry.dto;
+package io.oduck.api.domain.contact.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

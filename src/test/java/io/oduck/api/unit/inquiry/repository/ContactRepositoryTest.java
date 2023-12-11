@@ -2,10 +2,10 @@ package io.oduck.api.unit.inquiry.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.oduck.api.domain.inquiry.dto.ContactReq.PostReq;
-import io.oduck.api.domain.inquiry.dto.ContactRequestHolder;
-import io.oduck.api.domain.inquiry.entity.InquiryType;
-import io.oduck.api.domain.inquiry.repository.ContactRepository;
+import io.oduck.api.domain.contact.dto.ContactReq.PostReq;
+import io.oduck.api.domain.contact.dto.ContactRequestHolder;
+import io.oduck.api.domain.contact.entity.InquiryType;
+import io.oduck.api.domain.contact.repository.ContactRepository;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
 import java.util.ArrayList;

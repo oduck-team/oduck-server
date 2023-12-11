@@ -1,13 +1,13 @@
-package io.oduck.api.domain.inquiry.repository;
+package io.oduck.api.domain.contact.repository;
 
-import static io.oduck.api.domain.inquiry.entity.QAnswer.answer;
-import static io.oduck.api.domain.inquiry.entity.QContact.contact;
+import static io.oduck.api.domain.contact.entity.QAnswer.answer;
+import static io.oduck.api.domain.contact.entity.QContact.contact;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import io.oduck.api.domain.inquiry.dto.ContactRes.MyInquiry;
+import io.oduck.api.domain.contact.dto.ContactRes.MyInquiry;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

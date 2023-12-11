@@ -1,4 +1,4 @@
-package io.oduck.api.domain.inquiry.entity;
+package io.oduck.api.domain.contact.entity;
 
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.global.audit.BaseEntity;

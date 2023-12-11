@@ -1,6 +1,6 @@
-package io.oduck.api.domain.inquiry.repository;
+package io.oduck.api.domain.contact.repository;
 
-import io.oduck.api.domain.inquiry.entity.Contact;
+import io.oduck.api.domain.contact.entity.Contact;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

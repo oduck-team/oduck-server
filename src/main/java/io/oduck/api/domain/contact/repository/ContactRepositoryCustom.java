@@ -1,6 +1,6 @@
-package io.oduck.api.domain.inquiry.repository;
+package io.oduck.api.domain.contact.repository;
 
-import io.oduck.api.domain.inquiry.dto.ContactRes.MyInquiry;
+import io.oduck.api.domain.contact.dto.ContactRes.MyInquiry;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

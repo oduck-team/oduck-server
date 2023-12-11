@@ -1,19 +1,19 @@
-package io.oduck.api.domain.inquiry.service;
+package io.oduck.api.domain.contact.service;
 
-import static io.oduck.api.domain.inquiry.dto.ContactReq.PostReq;
-import static io.oduck.api.domain.inquiry.dto.ContactRes.MyInquiry;
+import static io.oduck.api.domain.contact.dto.ContactReq.PostReq;
+import static io.oduck.api.domain.contact.dto.ContactRes.MyInquiry;
 
 import io.oduck.api.domain.admin.entity.Admin;
 import io.oduck.api.domain.admin.repository.AdminRepository;
-import io.oduck.api.domain.inquiry.dto.AnswerFeedback;
-import io.oduck.api.domain.inquiry.dto.ContactId;
-import io.oduck.api.domain.inquiry.dto.ContactReq.AnswerReq;
-import io.oduck.api.domain.inquiry.dto.ContactReq.AnswerUpdateReq;
-import io.oduck.api.domain.inquiry.dto.ContactRequestHolder;
-import io.oduck.api.domain.inquiry.dto.ContactRes.DetailRes;
-import io.oduck.api.domain.inquiry.entity.Contact;
-import io.oduck.api.domain.inquiry.entity.FeedbackType;
-import io.oduck.api.domain.inquiry.repository.ContactRepository;
+import io.oduck.api.domain.contact.dto.AnswerFeedback;
+import io.oduck.api.domain.contact.dto.ContactId;
+import io.oduck.api.domain.contact.dto.ContactReq.AnswerReq;
+import io.oduck.api.domain.contact.dto.ContactReq.AnswerUpdateReq;
+import io.oduck.api.domain.contact.dto.ContactRequestHolder;
+import io.oduck.api.domain.contact.dto.ContactRes.DetailRes;
+import io.oduck.api.domain.contact.entity.Contact;
+import io.oduck.api.domain.contact.entity.FeedbackType;
+import io.oduck.api.domain.contact.repository.ContactRepository;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
 import io.oduck.api.global.common.PageResponse;

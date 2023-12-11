@@ -1,6 +1,6 @@
-package io.oduck.api.domain.inquiry.dto;
+package io.oduck.api.domain.contact.dto;
 
-import io.oduck.api.domain.inquiry.entity.Contact;
+import io.oduck.api.domain.contact.entity.Contact;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
