@@ -4,7 +4,6 @@ import static io.oduck.api.global.utils.AnimeTestUtils.createAnime;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doReturn;
 
 import io.oduck.api.domain.anime.entity.Anime;
 import io.oduck.api.domain.anime.repository.AnimeRepository;
@@ -16,7 +15,6 @@ import io.oduck.api.domain.attractionPoint.repository.AttractionPointRepository;
 import io.oduck.api.domain.attractionPoint.service.AttractionPointServiceImpl;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
-import io.oduck.api.global.stub.MemberStub;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -105,25 +103,28 @@ public class AttractionPointServiceTest {
         @DisplayName("입덕 포인트 수정 성공")
         void patchAttractionPointSuccess(){
             //given
-            Long memberId = 1L;
-            Long attractionPointId = 1L;
-            AttractionPoint attractionPoint = AttractionPoint
+            List<AttractionPoint> list = new ArrayList<>();
+            AttractionPoint point = AttractionPoint
                     .builder()
                     .member(member)
                     .anime(anime)
-                    .attractionElement(AttractionElement.CHARACTER)
+                    .attractionElement(AttractionElement.DRAWING)
                     .build();
+            list.add(point);
+            List<AttractionElement> elementList = new ArrayList<>();
+            elementList.add(AttractionElement.VOICE_ACTOR);
+            elementList.add(AttractionElement.CHARACTER);
 
-            UpdateAttractionPoint update = UpdateAttractionPoint
+            given(attractionPointRepository.findAllByAnimeIdAndMemberId(anyLong(), anyLong()))
+                    .willReturn(list);
+            AttractionPointReq update = AttractionPointReq
                     .builder()
-                    .attractionElement(AttractionElement.STORY)
+                    .animeId(1L)
+                    .attractionElements(elementList)
                     .build();
-
-            given(attractionPointRepository.findById(attractionPointId)).willReturn(Optional.ofNullable(attractionPoint));
-
 
             //when
-            boolean updateAttractionPoint = attractionPointService.update(member.getId(), attractionPointId,update);
+            boolean updateAttractionPoint = attractionPointService.update(member.getId(), update);
 
             //then
             assertTrue(updateAttractionPoint);
@@ -133,25 +134,22 @@ public class AttractionPointServiceTest {
         @DisplayName("입덕 포인트 수정 실패")
         void patchAttractionPointFalse(){
             //given
-            Long memberId = 1L;
-            Long attractionPointId = 1L;
-            AttractionPoint attractionPoint = AttractionPoint
+            List<AttractionPoint> list = new ArrayList<>();
+            List<AttractionElement> elementList = new ArrayList<>();
+            elementList.add(AttractionElement.DRAWING);
+            elementList.add(AttractionElement.STORY);
+
+            given(attractionPointRepository.findAllByAnimeIdAndMemberId(anyLong(), anyLong()))
+                    .willReturn(list);
+
+            AttractionPointReq update = AttractionPointReq
                     .builder()
-                    .member(member)
-                    .anime(anime)
-                    .attractionElement(AttractionElement.CHARACTER)
+                    .animeId(1L)
+                    .attractionElements(elementList)
                     .build();
-
-            UpdateAttractionPoint update = UpdateAttractionPoint
-                    .builder()
-                    .attractionElement(AttractionElement.CHARACTER)
-                    .build();
-
-            given(attractionPointRepository.findById(attractionPointId)).willReturn(Optional.ofNullable(attractionPoint));
-
 
             //when
-            boolean updateAttractionPoint = attractionPointService.update(member.getId(), attractionPointId,update);
+            boolean updateAttractionPoint = attractionPointService.update(member.getId(),update);
 
             //then
             assertFalse(updateAttractionPoint);
