@@ -1,5 +1,7 @@
 package io.oduck.api.domain.inquiry.service;
 
+import io.oduck.api.domain.inquiry.dto.ContactReq.AnswerReq;
+import io.oduck.api.domain.inquiry.dto.ContactReq.AnswerUpdateReq;
 import io.oduck.api.domain.inquiry.dto.ContactReq.PostReq;
 import io.oduck.api.domain.inquiry.dto.ContactRes.DetailRes;
 import io.oduck.api.domain.inquiry.dto.ContactRes.MyInquiry;
@@ -19,7 +21,7 @@ public interface ContactService {
 
 //    Page<?> getAll();
 //
-//    void answer(Long adminId, AnswerReq request);
-//
-//    void update(Long id);
+    void answer(Long id, Long adminId, AnswerReq request);
+
+    void update(Long answerId, Long adminId, AnswerUpdateReq request);
 }

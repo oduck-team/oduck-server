@@ -3,8 +3,12 @@ package io.oduck.api.domain.inquiry.service;
 import static io.oduck.api.domain.inquiry.dto.ContactReq.PostReq;
 import static io.oduck.api.domain.inquiry.dto.ContactRes.MyInquiry;
 
+import io.oduck.api.domain.admin.entity.Admin;
+import io.oduck.api.domain.admin.repository.AdminRepository;
 import io.oduck.api.domain.inquiry.dto.AnswerFeedback;
 import io.oduck.api.domain.inquiry.dto.ContactId;
+import io.oduck.api.domain.inquiry.dto.ContactReq.AnswerReq;
+import io.oduck.api.domain.inquiry.dto.ContactReq.AnswerUpdateReq;
 import io.oduck.api.domain.inquiry.dto.ContactRequestHolder;
 import io.oduck.api.domain.inquiry.dto.ContactRes.DetailRes;
 import io.oduck.api.domain.inquiry.entity.Contact;
@@ -29,6 +33,7 @@ public class ContactServiceImpl implements ContactService {
     private final ContactRepository contactRepository;
 
     private final ContactPolicy contactPolicy;
+    private final AdminRepository adminRepository;
 
     @Override
     @Transactional
@@ -93,14 +98,24 @@ public class ContactServiceImpl implements ContactService {
 //        return null;
 //    }
 
-//    @Override
-//    @Transactional
-//    public void answer(Long adminId, AnswerReq request) {
-//    }
+    @Override
+    @Transactional
+    public void answer(Long id, Long adminId, AnswerReq request) {
+        Contact contact = contactRepository.findWithMemberById(id)
+            .orElseThrow(() -> new NotFoundException("inquiry"));
 
-//    @Override
-//    @Transactional
-//    public void update(Long id) {
-//
-//    }
+        Admin admin = adminRepository.findWithAnswerById(adminId)
+            .orElseThrow(() -> new NotFoundException("admin"));
+
+        admin.answer(AnswerHolder.from(contact, request));
+    }
+
+    @Override
+    @Transactional
+    public void update(Long answerId, Long adminId, AnswerUpdateReq request) {
+        Admin admin = adminRepository.findWithAnswerById(adminId)
+            .orElseThrow(() -> new NotFoundException("admin"));
+
+        admin.updateAnswer(AnswerUpdateHolder.from(answerId, request));
+    }
 }
