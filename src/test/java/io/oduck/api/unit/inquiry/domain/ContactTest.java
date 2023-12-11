@@ -67,7 +67,7 @@ public class ContactTest {
     void 회원은_운영진의_답변에_피드백_할_수_있다() {
         //given
         Answer answer = Answer.builder()
-            .helpful(FeedbackType.NOT_SELECT)
+            .helpful(FeedbackType.NONE)
             .build();
 
         Contact contact = Contact.builder()
