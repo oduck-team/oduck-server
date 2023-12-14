@@ -9,7 +9,7 @@ import io.oduck.api.domain.contact.entity.FeedbackType;
 import io.oduck.api.global.common.PageResponse;
 
 public interface ContactService {
-    void inquiry(Long memberId, PostReq request);
+    void contact(Long memberId, PostReq request);
 
     PageResponse<MyInquiry> getAllByMemberId(Long memberId, int page, int size);
 
