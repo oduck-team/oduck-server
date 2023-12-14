@@ -29,10 +29,10 @@ public class ContactTest {
         PostReq postReq = new PostReq(ContactType.ADD_REQUEST, "이거 왜 안 됨?", "왜");
 
         //when
-        target.inquiry(ContactRequestHolder.from(postReq, target));
+        target.contact(ContactRequestHolder.from(postReq, target));
 
         //then
-        assertThat(target.getContacts().size()).isEqualTo(1);
+        assertThat(target.getContacts()).hasSize(1);
         assertThat(target.getContacts().get(0).getTitle()).isEqualTo("이거 왜 안 됨?");
         assertThat(target.getContacts().get(0).getContent()).isEqualTo("왜");
     }
