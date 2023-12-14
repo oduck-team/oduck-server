@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.oduck.api.domain.contact.dto.ContactReq.PostReq;
 import io.oduck.api.domain.contact.dto.ContactRequestHolder;
-import io.oduck.api.domain.contact.entity.InquiryType;
+import io.oduck.api.domain.contact.entity.ContactType;
 import io.oduck.api.domain.contact.repository.ContactRepository;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
@@ -36,16 +36,16 @@ public class ContactRepositoryTest {
             .build();
         Member target = memberRepository.save(member);
 
-        PostReq postReq = new PostReq(InquiryType.ADD_REQUEST, "이거 왜 안 됨?", "왜");
+        PostReq postReq = new PostReq(ContactType.ADD_REQUEST, "이거 왜 안 됨?", "왜");
 
         //when
-        target.inquiry(ContactRequestHolder.from(postReq, target));
+        target.contact(ContactRequestHolder.from(postReq, target));
 
         //then
         assertThat(target.getContacts().isEmpty()).isFalse();
         assertThat(target.getContacts().size()).isEqualTo(1L);
         assertThat(target.getContacts().get(0).getTitle()).isEqualTo("이거 왜 안 됨?");
         assertThat(target.getContacts().get(0).getContent()).isEqualTo("왜");
-        assertThat(target.getContacts().get(0).getType()).isEqualTo(InquiryType.ADD_REQUEST);
+        assertThat(target.getContacts().get(0).getType()).isEqualTo(ContactType.ADD_REQUEST);
     }
 }
