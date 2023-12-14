@@ -1,6 +1,6 @@
 package io.oduck.api.domain.contact.dto;
 
-import io.oduck.api.domain.contact.entity.InquiryType;
+import io.oduck.api.domain.contact.entity.ContactType;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ public class ContactReq {
         @NotBlank
         @Length(min = 1, max = 50,
             message = "글자 수는 1~50을 허용합니다.")
-        private InquiryType type;
+        private ContactType type;
 
         @NotBlank
         @Length(min = 1, max = 50,

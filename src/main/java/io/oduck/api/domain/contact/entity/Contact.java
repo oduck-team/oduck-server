@@ -40,7 +40,7 @@ public class Contact extends BaseEntity {
   private String content;
 
   @Enumerated(value = EnumType.STRING)
-  private InquiryType type;
+  private ContactType type;
 
   private boolean answered = false;
 
