@@ -48,8 +48,8 @@ public class ShortReviewLikeServiceImpl implements ShortReviewLikeService{
     }
 
     @Override
-    public IsLikeRes checkReviewLike(ShortReviewLikeReq req, Long memberId) {
-        Optional<ShortReviewLike> optionalLike = getShortReviewLike(memberId, req.getShortReviewId());
+    public IsLikeRes checkReviewLike(Long shortReviewId, Long memberId) {
+        Optional<ShortReviewLike> optionalLike = getShortReviewLike(memberId, shortReviewId);
         return IsLikeRes
                    .builder()
                    .isLike(optionalLike.isPresent())
