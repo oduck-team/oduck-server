@@ -10,9 +10,6 @@ public class ContactReq {
     @Getter
     @AllArgsConstructor
     public static class PostReq {
-        @NotBlank
-        @Length(min = 1, max = 50,
-            message = "글자 수는 1~50을 허용합니다.")
         private ContactType type;
 
         @NotBlank
