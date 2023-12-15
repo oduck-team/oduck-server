@@ -103,7 +103,7 @@ public class ShortReviewLikeServiceTest {
         void checkShortReviewLikeTrue(){
             given(shortReviewLikeRepository.findByMemberIdAndShortReviewId(member.getId(), shortReview.getId())).willReturn(Optional.of(shortReviewLike));
 
-            IsLikeRes isLikeRes = shortReviewLikeService.checkReviewLike(req, member.getId());
+            IsLikeRes isLikeRes = shortReviewLikeService.checkReviewLike(shortReview.getId(), member.getId());
 
             assertNotNull(isLikeRes);
             assertTrue(isLikeRes.getIsLike());
@@ -114,7 +114,7 @@ public class ShortReviewLikeServiceTest {
         void checkShortReviewLikeFalse(){
             given(shortReviewLikeRepository.findByMemberIdAndShortReviewId(member.getId(), shortReview.getId())).willReturn(Optional.empty());
 
-            IsLikeRes isLikeRes = shortReviewLikeService.checkReviewLike(req, member.getId());
+            IsLikeRes isLikeRes = shortReviewLikeService.checkReviewLike(shortReview.getId(), member.getId());
 
             assertNotNull(isLikeRes);
             assertFalse(isLikeRes.getIsLike());

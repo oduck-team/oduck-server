@@ -37,13 +37,13 @@ public class ShortReviewLikeController {
         return ResponseEntity.status(postLike ? HttpStatus.CREATED : HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping
+    @GetMapping("/{shortReviewId}")
     public ResponseEntity<?> getLike(
-        @RequestBody @Valid ShortReviewLikeReq req,
-        @LoginUser AuthUser user
+            @PathVariable("shortReviewId") Long shortReviewId,
+            @LoginUser AuthUser user
     ){
         //TODO: 좋아요한 리뷰인지 확인
-        return ResponseEntity.ok(shortReviewLikeService.checkReviewLike(req, user.getId()));
+        return ResponseEntity.ok(shortReviewLikeService.checkReviewLike(shortReviewId, user.getId()));
     }
 
 }

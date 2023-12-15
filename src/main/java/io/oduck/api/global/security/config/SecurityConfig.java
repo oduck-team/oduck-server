@@ -93,6 +93,7 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.PATCH, "/attraction-points/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
                                         .requestMatchers(HttpMethod.DELETE, "/attraction-points/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
                                         .requestMatchers(HttpMethod.PUT, "/likes/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                                        .requestMatchers(HttpMethod.GET, "/likes/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
                                         .requestMatchers(HttpMethod.POST, "/likes/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
                                         .requestMatchers(HttpMethod.PATCH, "/likes/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
                                         .requestMatchers(HttpMethod.DELETE, "/likes/**").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
