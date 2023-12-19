@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,8 +47,9 @@ public class ShortReview extends BaseEntity {
   @Column(nullable = false)
   private boolean hasSpoiler;
 
-  @OneToMany(mappedBy = "shortReview", cascade = CascadeType.PERSIST)
-  private List<ShortReviewLike> shortReviewLikes;
+  @OneToMany(mappedBy = "shortReview", cascade = CascadeType.PERSIST, orphanRemoval = true)
+  @Builder.Default
+  private List<ShortReviewLike> shortReviewLikes = new ArrayList<>();
 
 
   @Builder
@@ -74,5 +76,10 @@ public class ShortReview extends BaseEntity {
     if(this.isHasSpoiler() != hasSpoiler){
     this.hasSpoiler = hasSpoiler;
     }
+  }
+
+  public void delete(){
+    this.shortReviewLikes.clear();
+    this.deletedAt = LocalDateTime.now();
   }
 }
