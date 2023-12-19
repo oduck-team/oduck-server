@@ -59,7 +59,7 @@ public class ShortReviewRepositoryImpl implements ShortReviewRepositoryCustom {
             .leftJoin(shortReviewLike).on(shortReview.id.eq(shortReviewLike.shortReview.id))
             .join(starRating).on(starRating.anime.id.eq(shortReview.anime.id)
                 .and(starRating.member.id.eq(shortReview.member.id)))
-            .where(anime.id.eq(animeId))
+            .where(anime.id.eq(animeId).and(shortReview.deletedAt.isNull()))
             .groupBy(shortReview.id, member.id)
             .having(cursorCondition(cursor, pageable))
             .limit(pageable.getPageSize());
@@ -91,7 +91,7 @@ public class ShortReviewRepositoryImpl implements ShortReviewRepositoryCustom {
             .leftJoin(starRating).on(starRating.anime.id.eq(shortReview.anime.id)
                 .and(starRating.member.id.eq(shortReview.member.id)))
             .leftJoin(shortReviewLike).on(shortReview.id.eq(shortReviewLike.shortReview.id))
-            .where(shortReview.member.id.eq(memberId))
+            .where(shortReview.member.id.eq(memberId).and(shortReview.deletedAt.isNull()))
             .groupBy(shortReview.id)
             .having(cursorCondition(cursor, pageable))
             .limit(pageable.getPageSize());
