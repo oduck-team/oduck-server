@@ -22,6 +22,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 
 import com.google.gson.Gson;
 import io.oduck.api.domain.member.entity.Role;
+import io.oduck.api.domain.review.dto.ShortReviewReqDto;
 import io.oduck.api.domain.review.dto.ShortReviewReqDto.ShortReviewReq;
 import io.oduck.api.global.mockMember.WithCustomMockMember;
 import io.oduck.api.global.utils.ShortReviewTestUtils;
@@ -337,13 +338,16 @@ public class ShortReviewControllerTest {
     @Nested
     @DisplayName("입덕포인트 조회")
     class getAttractionPoint{
-        @DisplayName("애니아이디와 회원이름으로 입덕포인트 조회")
+        @DisplayName("애니아이디로 입덕포인트 조회")
         @Test
         @WithCustomMockMember(id = 1L, email = "john", password = "Qwer!234", role = Role.MEMBER)
         void getAttractionPointsShortReview() throws Exception{
             //given
-            String animeId = "1";
-            String name = "회원 이름";
+            ShortReviewReqDto.PatchShortReview req = ShortReviewReqDto.PatchShortReview
+                    .builder()
+                    .animeId(1L)
+                    .build();
+            String content = gson.toJson(req);
 
             //when
             ResultActions actions = mockMvc.perform(
@@ -351,8 +355,7 @@ public class ShortReviewControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
-                    .param("animeId", animeId)
-                    .param("name", name)
+                        .content(content)
             );
 
             //then
@@ -371,16 +374,11 @@ public class ShortReviewControllerTest {
                             .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
                             .description("Header Cookie, 세션 쿠키")
                     ),
-                    queryParameters(
-                        parameterWithName("animeId")
-                            .attributes(field("constraints","애니메 ID, NotNull, Min(1)"))
-                            .optional()
-                            .description("애니 고유의 식별자"),
-                        parameterWithName("name")
-                            .attributes(field("constraints","회원 이름"))
-                            .optional()
-                            .description("회원 이름")
-                    ),
+                    requestFields(attributes(key("title").value("Fields for shortReview creation")),
+                            fieldWithPath("animeId")
+                                    .type(JsonFieldType.NUMBER)
+                                    .attributes(field("constraints","애니메 ID, NotNull, Min(1)"))
+                                    .description("리뷰를 수정 할 애니 고유 식별 번호")),
                     responseFields(
                         fieldWithPath("drawing")
                             .type(JsonFieldType.BOOLEAN)
@@ -404,7 +402,7 @@ public class ShortReviewControllerTest {
     @Nested
     @DisplayName("짧은 리뷰 수정")
     class PatchShortReview{
-        
+
 
         @DisplayName("짧은 리뷰 수정 성공시 Http Status 204 반환")
         @Test
@@ -497,5 +495,44 @@ public class ShortReviewControllerTest {
 //                    )
 //                ));
 //        }
+
+    }
+    @Nested
+    @DisplayName("짧은 리뷰 삭제")
+    class DeleteShortReview{
+
+        @Test
+        @DisplayName("짧은 리뷰 삭제 성공 시 status 204반환")
+        @WithCustomMockMember(id = 1L, email = "john", password = "Qwer!234", role = Role.MEMBER)
+        void deleteShortReview() throws Exception {
+            //given
+            Long reviewId = 1L;
+
+            //when
+            ResultActions actions = mockMvc.perform(
+                    delete(BASE_URL + "/{shortReviewId}", reviewId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
+            );
+
+            //then
+
+            actions.andExpect(status().isNoContent())
+                    .andDo(document("deleteShortReview/success",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            requestHeaders(
+                                    headerWithName(HttpHeaders.COOKIE)
+                                            .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
+                                            .description("Header Cookie, 세션 쿠키")
+                            ),
+                            pathParameters(
+                                    parameterWithName("shortReviewId")
+                                            .description("리뷰 식별자"))
+//                            requestFields(attributes(key("title").value("Fields for shortReview creation")))
+
+                    ));
+        }
     }
 }
