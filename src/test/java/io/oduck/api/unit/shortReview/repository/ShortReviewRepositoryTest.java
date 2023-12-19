@@ -1,16 +1,7 @@
 
 package io.oduck.api.unit.shortReview.repository;
 
-import static io.oduck.api.global.utils.AnimeTestUtils.getBroadcastType;
-import static io.oduck.api.global.utils.AnimeTestUtils.getEpisodeCount;
-import static io.oduck.api.global.utils.AnimeTestUtils.getQuarter;
-import static io.oduck.api.global.utils.AnimeTestUtils.getRating;
-import static io.oduck.api.global.utils.AnimeTestUtils.getStatus;
-import static io.oduck.api.global.utils.AnimeTestUtils.getSummary;
-import static io.oduck.api.global.utils.AnimeTestUtils.getThumbnail;
-import static io.oduck.api.global.utils.AnimeTestUtils.getTitle;
-import static io.oduck.api.global.utils.AnimeTestUtils.getYear;
-import static io.oduck.api.global.utils.AnimeTestUtils.isReleased;
+import static io.oduck.api.global.utils.AnimeTestUtils.*;
 import static io.oduck.api.global.utils.PagingUtils.applyPageableForNonOffset;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -56,15 +48,15 @@ public class ShortReviewRepositoryTest {
 
     @Nested
     @DisplayName("리뷰 등록")
-    class PostShortReview{
+    class PostShortReview {
 
         @Test
         @DisplayName("리뷰 등록 성공")
-        void saveShortReview(){
+        void saveShortReview() {
             //given
             //회원 생성
             Member member = Member.builder()
-                                .build();
+                    .build();
             Member saveMember = memberRepository.save(member);
             Long memberId = saveMember.getId();
 
@@ -75,9 +67,9 @@ public class ShortReviewRepositoryTest {
             List<AnimeOriginalAuthor> animeOriginalAuthors = new ArrayList<>();
 
             Anime createAnime = Anime.createAnime(
-                getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
-                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
+                    getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
+                    getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                    animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
             );
 
             Anime anime = animeRepository.saveAndFlush(createAnime);
@@ -102,13 +94,14 @@ public class ShortReviewRepositoryTest {
             assertThat(saveShortReview.isHasSpoiler()).isEqualTo(shortReview.isHasSpoiler());
         }
     }
+
     @Nested
     @DisplayName("리뷰 조회")
-    class GetShortReviews{
+    class GetShortReviews {
 
         @Test
         @DisplayName("리뷰 조회 성공")
-        void getShortReviews(){
+        void getShortReviews() {
             //given
             Long animeId = 1L;
             Pageable pageable = applyPageableForNonOffset(10, "createdAt", "desc");
@@ -142,18 +135,18 @@ public class ShortReviewRepositoryTest {
 
             //회원 생성
             Member member = Member
-                                .builder()
-                                .id(memberId)
-                                .build();
+                    .builder()
+                    .id(memberId)
+                    .build();
 
             memberRepository.save(member);
 
             //리뷰 생성
             ShortReview shortReview = ShortReview
-                                          .builder()
-                                          .content("애니리뷰내용")
-                                          .hasSpoiler(hasSpoiler)
-                                          .build();
+                    .builder()
+                    .content("애니리뷰내용")
+                    .hasSpoiler(hasSpoiler)
+                    .build();
 
             //애니 생성
             List<AnimeStudio> animeStudios = new ArrayList<>();
@@ -162,9 +155,9 @@ public class ShortReviewRepositoryTest {
             List<AnimeOriginalAuthor> animeOriginalAuthors = new ArrayList<>();
 
             Anime createAnime = Anime.createAnime(
-                getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
-                getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
-                animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
+                    getTitle(), getSummary(), getBroadcastType(), getEpisodeCount(), getThumbnail(),
+                    getYear(), getQuarter(), getRating(), getStatus(), isReleased(),
+                    animeOriginalAuthors, animeStudios, animeVoiceActors, animeGenres, null
             );
 
             Anime anime = animeRepository.saveAndFlush(createAnime);
@@ -196,6 +189,7 @@ public class ShortReviewRepositoryTest {
 
     @DisplayName("회원 작성한 리뷰 갯수 조회")
     @Nested
+    @Order(2)
     class selectShortReviewsCount {
         @DisplayName("회원 ID로 회원이 작성한 리뷰 갯수 조회 성공")
         @Test
@@ -204,11 +198,55 @@ public class ShortReviewRepositoryTest {
             Long memberId = 1L;
 
             // when
-            Long shortReviewsCount = shortReviewRepository.countByMemberId(memberId);
+            Long shortReviewsCount = shortReviewRepository.countByMemberIdAndDeletedAtIsNull(memberId);
 
             // then
             assertNotNull(shortReviewsCount);
-            assertEquals(3L, shortReviewsCount);
+            assertEquals(2L, shortReviewsCount);
+        }
+    }
+
+    @Nested
+    @DisplayName("짧은 리뷰 삭제")
+    @Order(1)
+    class DeleteShortReview {
+
+        @Test
+        @DisplayName("리뷰 내용 삭제 성공")
+        void deleteShortReview() {
+            //given
+            Long reviewId = 1L;
+            Long memberId = 1L;
+            boolean hasSpoiler = true;
+
+            //회원 생성
+            Member member = Member
+                    .builder()
+                    .id(memberId)
+                    .build();
+
+            memberRepository.save(member);
+
+            //리뷰 생성
+            ShortReview shortReview = ShortReview
+                    .builder()
+                    .content("애니리뷰내용")
+                    .hasSpoiler(hasSpoiler)
+                    .build();
+
+            Anime anime = animeRepository.saveAndFlush(createAnime());
+
+            shortReview.relateMember(member);
+            shortReview.relateAnime(anime);
+
+            ShortReview saveShortReview = shortReviewRepository.save(shortReview);
+            saveShortReview.delete();
+
+            //when
+            ShortReview updateShortReview = shortReviewRepository.save(saveShortReview);
+
+            //then
+            assertNotNull(saveShortReview.getDeletedAt());
         }
     }
 }
