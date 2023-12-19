@@ -25,5 +25,5 @@ public interface ShortReviewService {
     void update(Long memberId, Long reviewId, ShortReviewReq req);
 
     //애니 리뷰 삭제
-
+    void delete(Long memberId, Long reviewId);
 }
