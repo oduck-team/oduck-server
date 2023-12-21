@@ -142,6 +142,12 @@ public class ShortReviewRepositoryImpl implements ShortReviewRepositoryCustom {
                         .or(starRating.score.loe(score)
                             .and(shortReview.createdAt.lt(scoreCreateAt)));
                 }
+            case "title":
+                if (direction == Direction.ASC) {
+                    return anime.title.gt(cursor);
+                } else {
+                    return anime.title.lt(cursor);
+                }
             default:
                 if (direction == Direction.ASC) {
                     return shortReview.createdAt.gt(LocalDateTime.parse(cursor));
@@ -160,6 +166,8 @@ public class ShortReviewRepositoryImpl implements ShortReviewRepositoryCustom {
             case "score":
                 path.add(starRating);
                 path.add(shortReview);
+            case "title":
+                path.add(anime);
             default:
                 path.add(shortReview);
         }

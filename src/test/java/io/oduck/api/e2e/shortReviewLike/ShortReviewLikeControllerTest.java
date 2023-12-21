@@ -171,15 +171,9 @@ public class ShortReviewLikeControllerTest {
                 .andDo(document("likes/shortReview/checkLike/success",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                            headerWithName(HttpHeaders.COOKIE)
-                                .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
-                                .description("Header Cookie, 세션 쿠키")
-                        ),
                         pathParameters(
-                            parameterWithName("shortReviewId")
-                                .description("짧은 리뷰 고유 식별자")
-                        ),
+                                parameterWithName("shortReviewId")
+                                        .description("짧은 리뷰 식별자")),
                         responseFields(
                             fieldWithPath("isLike")
                                 .type(JsonFieldType.BOOLEAN)
@@ -188,5 +182,4 @@ public class ShortReviewLikeControllerTest {
                 );
         }
     }
-
 }

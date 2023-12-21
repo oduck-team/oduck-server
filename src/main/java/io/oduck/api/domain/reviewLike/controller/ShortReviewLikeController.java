@@ -39,8 +39,8 @@ public class ShortReviewLikeController {
 
     @GetMapping("/{shortReviewId}")
     public ResponseEntity<?> getLike(
-        @PathVariable Long shortReviewId,
-        @LoginUser AuthUser user
+            @PathVariable("shortReviewId") Long shortReviewId,
+            @LoginUser AuthUser user
     ){
         //TODO: 좋아요한 리뷰인지 확인
         return ResponseEntity.ok(shortReviewLikeService.checkReviewLike(shortReviewId, user.getId()));

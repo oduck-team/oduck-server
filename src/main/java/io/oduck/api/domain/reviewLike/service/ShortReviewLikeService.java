@@ -10,6 +10,6 @@ public interface ShortReviewLikeService {
     Boolean postLike(Long memberId, ShortReviewLikeReq likeRes);
 
     //리뷰 좋아요 유무
-    IsLikeRes checkReviewLike(Long likeId, Long memberId);
+    IsLikeRes checkReviewLike(Long shortReviewId, Long memberId);
 
 }

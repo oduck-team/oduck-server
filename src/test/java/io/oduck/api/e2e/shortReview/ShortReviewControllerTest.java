@@ -143,7 +143,6 @@ public class ShortReviewControllerTest {
                 .andExpect(jsonPath("$.items[0].score").exists())
                 .andExpect(jsonPath("$.items[0].content").exists())
                 .andExpect(jsonPath("$.items[0].isSpoiler").exists())
-                .andExpect(jsonPath("$.items[0].isLike").exists())
                 .andExpect(jsonPath("$.items[0].likeCount").exists())
                 .andExpect(jsonPath("$.items[0].createdAt").exists())
                 .andExpect(jsonPath("$.size").exists())
@@ -198,9 +197,6 @@ public class ShortReviewControllerTest {
                         fieldWithPath("items[].isSpoiler")
                             .type(JsonFieldType.BOOLEAN)
                             .description("스포일러 유무"),
-                        fieldWithPath("items[].isLike")
-                            .type(JsonFieldType.BOOLEAN)
-                            .description("짧은 리뷰 좋아요 유무"),
                         fieldWithPath("items[].likeCount")
                             .type(JsonFieldType.NUMBER)
                             .description("짧은 리뷰 좋아요 수"),
@@ -254,7 +250,6 @@ public class ShortReviewControllerTest {
                 .andExpect(jsonPath("$.items[0].score").exists())
                 .andExpect(jsonPath("$.items[0].content").exists())
                 .andExpect(jsonPath("$.items[0].isSpoiler").exists())
-                .andExpect(jsonPath("$.items[0].isLike").exists())
                 .andExpect(jsonPath("$.items[0].likeCount").exists())
                 .andExpect(jsonPath("$.items[0].createdAt").exists())
                 .andExpect(jsonPath("$.size").exists())
@@ -309,9 +304,6 @@ public class ShortReviewControllerTest {
                         fieldWithPath("items[].isSpoiler")
                             .type(JsonFieldType.BOOLEAN)
                             .description("스포일러 유무"),
-                        fieldWithPath("items[].isLike")
-                            .type(JsonFieldType.BOOLEAN)
-                            .description("짧은 리뷰 좋아요 유무"),
                         fieldWithPath("items[].likeCount")
                             .type(JsonFieldType.NUMBER)
                             .description("짧은 리뷰 좋아요 수"),
