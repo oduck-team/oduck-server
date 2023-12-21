@@ -49,15 +49,15 @@ public class ShortReviewServiceImpl implements ShortReviewService {
 
         //애니 입력
         Anime anime = animeRepository.findByIdForUpdate(shortReviewReq.getAnimeId())
-            .orElseThrow(
-                () -> new NotFoundException("Anime")
-            );
+                .orElseThrow(
+                        () -> new NotFoundException("Anime")
+                );
 
         //회원 입력
-        Member member = memberRepository.findById(memberId)
-            .orElseThrow(
-                () -> new NotFoundException("Member")
-            );
+        Member member = memberRepository.findByIdAndDeletedAtIsNull(memberId)
+                .orElseThrow(
+                        () -> new NotFoundException("Member")
+                );
 
         ShortReview shortReview = ShortReview
             .builder()
