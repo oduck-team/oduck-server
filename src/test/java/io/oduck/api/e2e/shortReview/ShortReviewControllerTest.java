@@ -401,13 +401,13 @@ public class ShortReviewControllerTest {
         @WithCustomMockMember(id = 1L, email = "john", password = "Qwer!234", role = Role.MEMBER)
         void patchShortReview() throws Exception{
             //given
-            Long reviewId = 1L;
+            Long reviewId = 2L;
             ShortReviewReq req = ShortReviewTestUtils.createPatchShortReview();
             String content = gson.toJson(req);
 
             //when
             ResultActions actions = mockMvc.perform(
-                patch(BASE_URL +"/{reviewId}", reviewId)
+                patch(BASE_URL +"/{shortReviewId}", reviewId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -426,7 +426,7 @@ public class ShortReviewControllerTest {
                             .description("Header Cookie, 세션 쿠키")
                     ),
                     pathParameters(
-                        parameterWithName("reviewId")
+                        parameterWithName("shortReviewId")
                             .description("리뷰 식별자")),
                     requestFields(attributes(key("title").value("Fields for shortReview creation")),
                         fieldWithPath("animeId")
