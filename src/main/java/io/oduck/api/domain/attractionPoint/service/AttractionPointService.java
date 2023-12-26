@@ -17,7 +17,7 @@ public interface AttractionPointService {
     //입덕포인트 조회(true/false)
     IsAttractionPoint isAttractionPoint(Long memberId, Long animeId);
 
-    boolean update(Long memberId, Long attractionPointId, UpdateAttractionPoint req);
+    boolean update(Long memberId, AttractionPointReq req);
 
     AttractionPointStats getAttractionPointStats(Long anime);
 }

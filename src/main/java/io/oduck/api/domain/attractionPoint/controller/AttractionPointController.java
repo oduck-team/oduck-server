@@ -39,12 +39,11 @@ public class AttractionPointController {
         return ResponseEntity.ok(attractionPointService.checkAttractionPoint(user.getId(), animeId));
     }
 
-    @PatchMapping("/{attractionPointId}")
+    @PatchMapping
     public ResponseEntity<?> patchAttractionPoint(
             @LoginUser AuthUser user,
-            @PathVariable("attractionPointId") Long attractionPointId,
-            @RequestBody @Valid UpdateAttractionPoint req){
-        boolean update = attractionPointService.update(user.getId(), attractionPointId, req);
+            @RequestBody @Valid AttractionPointReq req){
+        boolean update = attractionPointService.update(user.getId(), req);
         return ResponseEntity.status(update? HttpStatus.NO_CONTENT : HttpStatus.CONFLICT).build();
     }
 

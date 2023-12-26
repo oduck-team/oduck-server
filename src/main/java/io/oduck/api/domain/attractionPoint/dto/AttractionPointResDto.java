@@ -1,14 +1,9 @@
 package io.oduck.api.domain.attractionPoint.dto;
 
-import io.oduck.api.domain.attractionPoint.entity.AttractionElement;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.Arrays;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Getter
 @Builder

@@ -11,6 +11,7 @@ import io.oduck.api.global.stub.MemberStub;
 import io.oduck.api.global.utils.ShortReviewTestUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,16 +165,21 @@ class AttractionPointControllerTest {
         @WithCustomMockMember(id = 2L, email = "john", password = "Qwer!234", role = Role.MEMBER)
         void patchAttractionPointSuccess() throws Exception {
             //given
-            Long attractionPointId = 1L;
-            UpdateAttractionPoint req = UpdateAttractionPoint
+            List<AttractionElement> elementList = new ArrayList<>();
+            elementList.add(AttractionElement.CHARACTER);
+            elementList.add(AttractionElement.DRAWING);
+
+            AttractionPointReq req = AttractionPointReq
                     .builder()
-                    .attractionElement(AttractionElement.VOICE_ACTOR)
+                    .animeId(1L)
+                    .attractionElements(elementList)
                     .build();
+
             String content = gson.toJson(req);
 
             //when
             ResultActions actions = mockMvc.perform(
-                    patch(BASE_URL + "/{attractionPointId}", attractionPointId)
+                    patch(BASE_URL )
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
                             .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -191,31 +197,36 @@ class AttractionPointControllerTest {
                                             .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
                                             .description("Header Cookie, 세션 쿠키")
                             ),
-                            pathParameters(
-                                    parameterWithName("attractionPointId")
-                                            .description("입덕포인트 식별자")),
                             requestFields(attributes(key("title").value("Fields for AttractionPoint creation")),
-                                    fieldWithPath("attractionElement")
-                                            .type(JsonFieldType.STRING)
-                                            .attributes(field("constraints", "DRAWING,  STORY,  MUSIC, CHARACTER, VOICE_ACTOR만 입력 가능합니다."))
-                                            .description("입덕 포인트"))
+                                    fieldWithPath("animeId")
+                                            .type(JsonFieldType.NUMBER)
+                                            .attributes(field("constraints", "애니 아이디, NotNull, Min(1)"))
+                                            .description("애니 고유 식별 번호"),
+                                    fieldWithPath("attractionElements")
+                                            .type(JsonFieldType.ARRAY)
+                                            .attributes(field("constraints", "DRAWING,  STORY,  MUSIC, CHARACTER, VOICE_ACTOR 리스트만 허용합니다. "))
+                                            .description("입덕포인트 리스트")
+                            )
                     ));
         }
-        @DisplayName("입덕포인트 수정 성공시 Http Status 409 반환")
+        @DisplayName("입덕포인트 수정 실패시 Http Status 409 반환")
         @Test
         @WithCustomMockMember(id = 2L, email = "john", password = "Qwer!234", role = Role.MEMBER)
         void patchAttractionPointFalse() throws Exception {
             //given
-            Long attractionPointId = 1L;
-            UpdateAttractionPoint req = UpdateAttractionPoint
+            List<AttractionElement> elementList = new ArrayList<>();
+            elementList.add(AttractionElement.STORY);
+
+            AttractionPointReq req = AttractionPointReq
                     .builder()
-                    .attractionElement(AttractionElement.DRAWING)
+                    .animeId(1L)
+                    .attractionElements(elementList)
                     .build();
             String content = gson.toJson(req);
 
             //when
             ResultActions actions = mockMvc.perform(
-                    patch(BASE_URL + "/{attractionPointId}", attractionPointId)
+                    patch(BASE_URL)
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
                             .header(HttpHeaders.COOKIE, "oDuckio.sid={SESSION_VALUE}")
@@ -233,14 +244,16 @@ class AttractionPointControllerTest {
                                             .attributes(field("constraints", "oDuckio.sid={SESSION_VALUE}"))
                                             .description("Header Cookie, 세션 쿠키")
                             ),
-                            pathParameters(
-                                    parameterWithName("attractionPointId")
-                                            .description("입덕포인트 식별자")),
                             requestFields(attributes(key("title").value("Fields for AttractionPoint creation")),
-                                    fieldWithPath("attractionElement")
-                                            .type(JsonFieldType.STRING)
-                                            .attributes(field("constraints", "DRAWING,  STORY,  MUSIC, CHARACTER, VOICE_ACTOR만 입력 가능합니다."))
-                                            .description("입덕 포인트"))
+                                    fieldWithPath("animeId")
+                                            .type(JsonFieldType.NUMBER)
+                                            .attributes(field("constraints", "애니 아이디, NotNull, Min(1)"))
+                                            .description("애니 고유 식별 번호"),
+                                    fieldWithPath("attractionElements")
+                                            .type(JsonFieldType.ARRAY)
+                                            .attributes(field("constraints", "DRAWING,  STORY,  MUSIC, CHARACTER, VOICE_ACTOR 리스트만 허용합니다. "))
+                                            .description("입덕포인트 리스트")
+                            )
                     ));
         }
     }

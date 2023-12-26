@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface AttractionPointRepositoryCustom {
     Long countElementByAnimeId(AttractionElement attractionElement, Long animeId);
+    Long countByAnimeId(Long animeId);
 }
