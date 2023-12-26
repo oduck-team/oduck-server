@@ -75,14 +75,14 @@ public class ShortReviewServiceTest {
             given(animeRepository.findByIdForUpdate(animeId)).willReturn(Optional.of(anime));
 
             Member member = new MemberStub().getMember();
-            given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
+            given(memberRepository.findByIdAndDeletedAtIsNull(memberId)).willReturn(Optional.of(member));
 
             //when
             shortReviewService.save(memberId,shortReviewReq);
 
             //then
             verify(animeRepository,times(1)).findByIdForUpdate(any());
-            verify(memberRepository,times(1)).findById(any());
+            verify(memberRepository,times(1)).findByIdAndDeletedAtIsNull(any());
         }
     }
 
@@ -135,14 +135,14 @@ public class ShortReviewServiceTest {
             ShortReviewReq patchShortReviewReq = createPatchShortReview();
             Anime anime = createAnime();
 
-            given(shortReviewRepository.findById(reviewId)).willReturn(Optional.ofNullable(shortReview));
+            given(shortReviewRepository.findByIdAndDeletedAtIsNull(reviewId)).willReturn(Optional.ofNullable(shortReview));
             given(animeRepository.findByIdForUpdate(reviewId)).willReturn(Optional.of(anime));
 
             //when
             shortReviewService.update(memberId, reviewId, patchShortReviewReq);
 
             //then
-            verify(shortReviewRepository, times(1)).findById(anyLong());
+            verify(shortReviewRepository, times(1)).findByIdAndDeletedAtIsNull(anyLong());
         }
     }
 
@@ -157,7 +157,7 @@ public class ShortReviewServiceTest {
             Long memberId = 1L;
             Long count = 1L;
 
-            given(shortReviewRepository.countByMemberId(memberId)).willReturn(count);
+            given(shortReviewRepository.countByMemberIdAndDeletedAtIsNull(memberId)).willReturn(count);
 
             //when
             ShortReviewCountRes result = shortReviewService.getShortReviewCountByMemberId(memberId);
@@ -166,4 +166,27 @@ public class ShortReviewServiceTest {
             assertEquals(count, result.getCount());
         }
     }
+    @Nested
+    @DisplayName("짧은 리뷰 삭제")
+    class DeleteShortReview{
+
+        ShortReview shortReview = createShortReview();
+
+        @Test
+        @DisplayName("짧은 리뷰 삭제 성공")
+        void deleteShortReview(){
+            //given
+            Long shortReviewId = 1L;
+            Long memberId = 1L;
+
+            given(shortReviewRepository.findByIdAndDeletedAtIsNull(shortReviewId)).willReturn(Optional.ofNullable(shortReview));
+
+            //when
+            shortReviewService.delete(memberId, shortReviewId);
+
+            //then
+            verify(shortReviewRepository, times(1)).findByIdAndDeletedAtIsNull(anyLong());
+        }
+    }
+
 }

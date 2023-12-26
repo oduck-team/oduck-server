@@ -21,8 +21,10 @@ import io.oduck.api.global.common.OrderDirection;
 import io.oduck.api.global.common.SliceResponse;
 import io.oduck.api.global.exception.BadRequestException;
 import io.oduck.api.global.exception.NotFoundException;
+
 import java.util.List;
 import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
@@ -34,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ShortReviewServiceImpl implements ShortReviewService{
+public class ShortReviewServiceImpl implements ShortReviewService {
 
     private final ShortReviewRepository shortReviewRepository;
     private final MemberRepository memberRepository;
@@ -47,15 +49,15 @@ public class ShortReviewServiceImpl implements ShortReviewService{
 
         //애니 입력
         Anime anime = animeRepository.findByIdForUpdate(shortReviewReq.getAnimeId())
-            .orElseThrow(
-                () -> new NotFoundException("Anime")
-            );
+                .orElseThrow(
+                        () -> new NotFoundException("Anime")
+                );
 
         //회원 입력
-        Member member = memberRepository.findById(memberId)
-            .orElseThrow(
-                () -> new NotFoundException("Member")
-            );
+        Member member = memberRepository.findByIdAndDeletedAtIsNull(memberId)
+                .orElseThrow(
+                        () -> new NotFoundException("Member")
+                );
 
         ShortReview shortReview = ShortReview
             .builder()
@@ -73,68 +75,68 @@ public class ShortReviewServiceImpl implements ShortReviewService{
 
     @Override
     @Transactional
-    public SliceResponse<ShortReviewRes> getShortReviews(Long animeId, String cursor,ShortReviewReqDto.Sort sort, OrderDirection order, int size) {
+    public SliceResponse<ShortReviewRes> getShortReviews(Long animeId, String cursor, ShortReviewReqDto.Sort sort, OrderDirection order, int size) {
         Sort sortList = Sort.by(
-            Direction.fromString(order.getOrder()),
-            sort.getSort()
+                Direction.fromString(order.getOrder()),
+                sort.getSort()
         );
 
-        if(sort == ShortReviewReqDto.Sort.LIKE_COUNT){
+        if (sort == ShortReviewReqDto.Sort.LIKE_COUNT) {
             sortList = sortList.and(Sort.by(Direction.DESC, "createdAt"));
-        }else if(sort == ShortReviewReqDto.Sort.SCORE){
+        } else if (sort == ShortReviewReqDto.Sort.SCORE) {
             sortList = sortList.and(Sort.by(Direction.DESC, "createdAt"));
         }
 
         Slice<ShortReviewDsl> shortReviews = shortReviewRepository.selectShortReviews(
-            animeId,
-            cursor,
-            applyPageableForNonOffset(
-                size,
-                sortList
-            )
+                animeId,
+                cursor,
+                applyPageableForNonOffset(
+                        size,
+                        sortList
+                )
         );
 
         List<ShortReviewRes> res = shortReviews.getContent()
-            .stream()
-            .map(ShortReviewRes::of)
-            .toList();
+                .stream()
+                .map(ShortReviewRes::of)
+                .toList();
 
         return SliceResponse.of(shortReviews, res, sort.getSort());
     }
 
     @Override
     public ShortReviewCountRes getShortReviewCountByMemberId(Long memberId) {
-        Long count = shortReviewRepository.countByMemberId(memberId);
+        Long count = shortReviewRepository.countByMemberIdAndDeletedAtIsNull(memberId);
         return ShortReviewCountRes.builder()
-            .count(count)
-            .build();
+                .count(count)
+                .build();
     }
 
     @Override
     public SliceResponse<ShortReviewResWithTitle> getShortReviewsByMemberId(Long memberId, String cursor,
-        ShortReviewReqDto.SortForProfile sort, OrderDirection order, int size) {
+                                                                            ShortReviewReqDto.SortForProfile sort, OrderDirection order, int size) {
         Sort sortList = Sort.by(
-            Direction.fromString(order.getOrder()),
-            sort.getSort()
+                Direction.fromString(order.getOrder()),
+                sort.getSort()
         );
 
-        if(sort.equals(SortForProfile.SCORE)){
+        if (sort.equals(SortForProfile.TITLE) || sort.equals(SortForProfile.SCORE)) {
             sortList = sortList.and(Sort.by(Direction.DESC, "createdAt"));
         }
 
         Slice<ShortReviewDslWithTitle> shortReviews = shortReviewRepository.selectShortReviewsByMemberId(
-            memberId,
-            cursor,
-            applyPageableForNonOffset(
-                size,
-                sortList
-            )
+                memberId,
+                cursor,
+                applyPageableForNonOffset(
+                        size,
+                        sortList
+                )
         );
 
         List<ShortReviewResWithTitle> res = shortReviews.getContent()
-            .stream()
-            .map(ShortReviewResWithTitle::of)
-            .toList();
+                .stream()
+                .map(ShortReviewResWithTitle::of)
+                .toList();
 
         return SliceResponse.of(shortReviews, res, sort.getSort());
     }
@@ -153,25 +155,32 @@ public class ShortReviewServiceImpl implements ShortReviewService{
 
         //리뷰 작성자 인지 확인
         Optional
-            .ofNullable(findMemberId)
-            .ifPresent(
-                id -> {
-                    if(!findMemberId.equals(memberId)) {
-                        throw new BadRequestException("Not the author of the review.");
-                    }
-                    findShortReview.updateContent(req.getContent());
-                    findShortReview.updateSpoiler(req.isHasSpoiler());
-                }
-            );
+                .ofNullable(findMemberId)
+                .ifPresent(
+                        id -> {
+                            if (!findMemberId.equals(memberId)) {
+                                throw new BadRequestException("Not the author of the review.");
+                            }
+                            findShortReview.updateContent(req.getContent());
+                            findShortReview.updateSpoiler(req.isHasSpoiler());
+                        }
+                );
         findAnime.increaseReviewCount();
         shortReviewRepository.save(findShortReview);
     }
 
+    @Override
+    public void delete(Long memberId, Long reviewId) {
+    ShortReview find = getShortReview(reviewId);
+        find.delete();
+        shortReviewRepository.save(find);
+    }
 
-    private ShortReview getShortReview(Long reviewId){
-        return shortReviewRepository.findById(reviewId)
-            .orElseThrow(
-                () -> new NotFoundException("shortReview")
-            );
+
+    private ShortReview getShortReview(Long reviewId) {
+        return shortReviewRepository.findByIdAndDeletedAtIsNull(reviewId)
+                .orElseThrow(
+                        () -> new NotFoundException("shortReview")
+                );
     }
 }

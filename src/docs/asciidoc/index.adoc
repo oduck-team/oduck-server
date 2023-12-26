@@ -673,7 +673,7 @@ include::{snippets}/bookmark/checkBookmarked/notExist/http-response.adoc[]
 
 == shortReview
 
-=== GET api/v1/short-reviews/animeId/1
+=== GET api/v1/short-reviews/animeId/:animeId
 ==== 성공시, cursor가 없을 경우
 .curl-request
 include::{snippets}/getShortReviews/success/curl-request.adoc[]
@@ -719,7 +719,7 @@ include::{snippets}/getShortReviews/withCursor/success/response-body.adoc[]
 include::{snippets}/getShortReviews/withCursor/success/response-fields.adoc[]
 ==== 실패시
 
-=== POST api/v1/short-reviews/1
+=== POST api/v1/short-reviews/:id
 
 .curl-request
 include::{snippets}/postShortReview/success/curl-request.adoc[]
@@ -739,7 +739,7 @@ include::{snippets}/postShortReview/success/http-response.adoc[]
 
 ==== 실패시
 
-=== shortReview/getAttractionPoint api/v1/short-reviews//attraction-points
+=== GET api/v1/short-reviews/attraction-points
 
 .curl-request
 include::{snippets}/shortReview/getAttractionPoints/success/curl-request.adoc[]
@@ -766,7 +766,7 @@ include::{snippets}/shortReview/getAttractionPoints/success/http-response.adoc[]
 .response-fields
 include::{snippets}/shortReview/getAttractionPoints/success/response-fields.adoc[]
 
-=== PATCH api/v1/short-reviews/1
+=== PATCH api/v1/short-reviews/:id
 
 .curl-request
 include::{snippets}/patchShortReview/success/curl-request.adoc[]
@@ -787,9 +787,22 @@ include::{snippets}/patchShortReview/success/request-fields.adoc[]
 .http-response
 include::{snippets}/patchShortReview/success/http-response.adoc[]
 
-.response-fields
-include::{snippets}/patchShortReview/success/response-fields.adoc[]
+==== 실패시
 
+=== DELETE api/v1/short-reivews/animes/:id
+.curl-request
+include::{snippets}/deleteShortReview/success/curl-request.adoc[]
+
+.http-request
+include::{snippets}/deleteShortReview/success/http-request.adoc[]
+
+.request-param
+include::{snippets}/deleteShortReview/success/path-parameters.adoc[]
+
+==== 성공시
+
+.http-response
+include::{snippets}/deleteShortReview/success/http-response.adoc[]
 
 ==== 실패시
 
