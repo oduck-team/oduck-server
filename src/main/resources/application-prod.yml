@@ -127,3 +127,4 @@ config:
     url: ${.base.url}
   webhook:
     url: ${.webhook.url}
+    qna: ${.webhook.qna}

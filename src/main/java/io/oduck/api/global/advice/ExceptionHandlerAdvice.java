@@ -1,5 +1,7 @@
 package io.oduck.api.global.advice;
 
+import static io.oduck.api.global.utils.HttpHeaderUtils.getClientIP;
+
 import io.oduck.api.global.common.ErrorResponse;
 import io.oduck.api.global.exception.BadRequestException;
 import io.oduck.api.global.exception.ConflictException;
@@ -7,11 +9,15 @@ import io.oduck.api.global.exception.CustomException;
 import io.oduck.api.global.exception.ForbiddenException;
 import io.oduck.api.global.exception.NotFoundException;
 import io.oduck.api.global.exception.UnauthorizedException;
-import io.oduck.api.global.webHook.WebHookService;
+import io.oduck.api.global.notification.Notifier;
+import io.oduck.api.global.notification.dto.Message;
+import io.oduck.api.global.webHook.DiscordWebhook.EmbedObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
-import lombok.RequiredArgsConstructor;
+import java.awt.Color;
+import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -22,14 +28,16 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.client.HttpClientErrorException.Forbidden;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-@RequiredArgsConstructor
 @Slf4j
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
-  private final WebHookService webHookService;
+  private final Notifier notifier;
+
+  public ExceptionHandlerAdvice(@Qualifier("exceptionNotifier") Notifier notifier) {
+    this.notifier = notifier;
+  }
 
   // 요청 바디 필드 유효성 검증 예외 처리
   @ExceptionHandler
@@ -113,9 +121,15 @@ public class ExceptionHandlerAdvice {
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   protected ErrorResponse handleNullPointerException(HttpServletRequest req, NullPointerException e) {
     log.error("handleNullPointerException", e);
+
     // Discord WebHook에 보낼 때 "가 있으면 json 파싱 에러가 발생함.
     // NPE 메시지에서 "를 사용함. -> Discord WebHook에 보낼 때 " -> \" 로 치환
-    webHookService.sendMsg(new NullPointerException(e.getMessage().replace("\"", "\\\"")), req);
+    String message = e.getMessage().replace("\"", "\\\"");
+    NullPointerException npe = new NullPointerException(message);
+
+    EmbedObject content = getMessageContent(npe.getMessage(), getStackTraceInfo(npe), req);
+
+    notifier.sendNotification(Message.from(content));
     return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
@@ -127,7 +141,44 @@ public class ExceptionHandlerAdvice {
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ErrorResponse handleException(HttpServletRequest req, Exception e) {
     log.error("# Uncaught exceptions, which can be fatal to the server", e);
-    webHookService.sendMsg(e, req);
+
+    EmbedObject content = getMessageContent(e.getMessage(), getStackTraceInfo(e), req);
+
+    notifier.sendNotification(Message.from(content));
     return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+
+  private EmbedObject getMessageContent(String message, String stackTraceInfo, HttpServletRequest req) {
+    String description = message;
+    String stackTrace = stackTraceInfo;
+    String clientIP = getClientIP(req);
+    String requestURL = req.getRequestURL().toString();
+    String requestMethod = req.getMethod();
+    String requestTime = new Date().toString();
+    String requestUserAgent = req.getHeader("User-Agent");
+
+    EmbedObject content = new EmbedObject()
+        .setTitle("** Error Stack **")
+        .setDescription(description)
+        .setColor(new Color(16711680))
+        .addField("HTTP_METHOD", requestMethod, false)
+        .addField("REQUEST_ENDPOINT", requestURL, false)
+        .addField("CLIENT_IP", clientIP, false)
+        .addField("ERROR_STACK", stackTrace, false)
+        .addField("TIME", requestTime, false)
+        .addField("USER_AGENT", requestUserAgent, false);
+    return content;
+  }
+
+  private String getStackTraceInfo(Exception e) {
+    StackTraceElement[] stackTrace = e.getStackTrace();
+
+    String stackTraceInfo = null;
+    if (stackTrace.length > 0) {
+      StackTraceElement firstElement = stackTrace[0];
+      stackTraceInfo = firstElement.getClassName() + "." + firstElement.getMethodName() + "(" + firstElement.getFileName() + ":" + firstElement.getLineNumber() + ")";
+    }
+    return stackTraceInfo;
   }
 }

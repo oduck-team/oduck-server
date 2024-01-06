@@ -10,7 +10,7 @@ import io.oduck.api.domain.contact.dto.ContactRequestHolder;
 import io.oduck.api.domain.contact.entity.Answer;
 import io.oduck.api.domain.contact.entity.Contact;
 import io.oduck.api.domain.contact.entity.FeedbackType;
-import io.oduck.api.domain.contact.entity.InquiryType;
+import io.oduck.api.domain.contact.entity.ContactType;
 import io.oduck.api.domain.member.entity.Member;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +26,13 @@ public class ContactTest {
             .contacts(new ArrayList<>())
             .build();
 
-        PostReq postReq = new PostReq(InquiryType.ADD_REQUEST, "이거 왜 안 됨?", "왜");
+        PostReq postReq = new PostReq(ContactType.ADD_REQUEST, "이거 왜 안 됨?", "왜");
 
         //when
-        target.inquiry(ContactRequestHolder.from(postReq, target));
+        target.contact(ContactRequestHolder.from(postReq, target));
 
         //then
-        assertThat(target.getContacts().size()).isEqualTo(1);
+        assertThat(target.getContacts()).hasSize(1);
         assertThat(target.getContacts().get(0).getTitle()).isEqualTo("이거 왜 안 됨?");
         assertThat(target.getContacts().get(0).getContent()).isEqualTo("왜");
     }

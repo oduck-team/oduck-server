@@ -122,7 +122,7 @@ public class Member extends BaseEntity {
     this.role = Role.WITHDRAWAL;
   }
 
-  public void inquiry(ContactRequestHolder holder) {
+  public void contact(ContactRequestHolder holder) {
     Contact contact = holder.getContact();
 
     this.contacts.add(contact);

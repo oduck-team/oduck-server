@@ -7,12 +7,14 @@ import io.oduck.api.domain.admin.entity.Admin;
 import io.oduck.api.domain.admin.repository.AdminRepository;
 import io.oduck.api.domain.contact.dto.AnswerFeedback;
 import io.oduck.api.domain.contact.dto.ContactId;
+import io.oduck.api.domain.contact.infra.event.ContactEvent;
 import io.oduck.api.domain.contact.dto.ContactReq.AnswerReq;
 import io.oduck.api.domain.contact.dto.ContactReq.AnswerUpdateReq;
 import io.oduck.api.domain.contact.dto.ContactRequestHolder;
 import io.oduck.api.domain.contact.dto.ContactRes.DetailRes;
 import io.oduck.api.domain.contact.entity.Contact;
 import io.oduck.api.domain.contact.entity.FeedbackType;
+import io.oduck.api.domain.contact.infra.event.ContactEventPublisher;
 import io.oduck.api.domain.contact.repository.ContactRepository;
 import io.oduck.api.domain.member.entity.Member;
 import io.oduck.api.domain.member.repository.MemberRepository;
@@ -31,17 +33,22 @@ public class ContactServiceImpl implements ContactService {
 
     private final MemberRepository memberRepository;
     private final ContactRepository contactRepository;
+    private final AdminRepository adminRepository;
 
     private final ContactPolicy contactPolicy;
-    private final AdminRepository adminRepository;
+    private final ContactEventPublisher eventPublisher;
+
 
     @Override
     @Transactional
-    public void inquiry(Long memberId, PostReq request) {
-        Member member = memberRepository.findById(memberId)
+    public void contact(Long memberId, PostReq request) {
+        Member member = memberRepository.findWithProfileById(memberId)
             .orElseThrow(() -> new NotFoundException("member"));
 
-        member.inquiry(ContactRequestHolder.from(request, member));
+        member.contact(ContactRequestHolder.from(request, member));
+
+        String nickname = member.getMemberProfile().getName();
+        eventPublisher.contact(ContactEvent.from(request, nickname));
     }
 
     @Override
